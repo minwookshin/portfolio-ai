@@ -111,9 +111,9 @@ export default function ChatInput({ onSend, hasStarted = true }: ChatInputProps)
 
       {/* Floating Input Container */}
       <motion.div
-        className={`w-full max-w-2xl px-3 sm:px-4 z-50 ${hasStarted ? 'fixed' : 'mx-auto'}`}
+        className={`w-full max-w-2xl px-8 sm:px-4 z-50 ${hasStarted ? 'fixed' : 'mx-auto'}`}
         style={{
-          bottom: hasStarted ? "1rem" : undefined,
+          bottom: hasStarted ? "1.5rem" : undefined,
           left: hasStarted ? "50%" : undefined,
           transform: hasStarted ? "translateX(-50%)" : undefined,
         }}
@@ -131,7 +131,7 @@ export default function ChatInput({ onSend, hasStarted = true }: ChatInputProps)
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="ask anything"
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 pr-24 sm:pr-28 bg-transparent outline-none text-[#292A2E] placeholder:text-gray-400 rounded-3xl text-sm sm:text-base"
+                className="w-full px-6 py-4 pr-28 bg-transparent outline-none text-[#292A2E] placeholder:text-gray-400 rounded-3xl text-base"
               />
             </div>
 

@@ -10,6 +10,7 @@ import FolderCard from "@/components/FolderCard";
 import ProjectDetailView from "@/components/ProjectDetailView";
 import TypewriterText from "@/components/TypewriterText";
 import RecruiterBriefing from "@/components/RecruiterBriefing";
+import ProfileCard from "@/components/ProfileCard";
 import { Project } from "@/components/ProjectCard";
 import { FolderOpen, User, Mail, Send, Linkedin, Github, Zap, FileText } from "lucide-react";
 import { useThemeStore } from "@/lib/theme-store";
@@ -153,7 +154,17 @@ export default function Home() {
   const [followUpChips, setFollowUpChips] = useState<string[]>([]);
   const [contentHistory, setContentHistory] = useState<ContentSnapshot[]>([]);
   const [showResume, setShowResume] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const { activeThemeColor, setActiveThemeColor } = useThemeStore();
 
@@ -535,26 +546,24 @@ export default function Home() {
                               ))}
                             </motion.div>
                           ) : (snapshot.contentType === "about" || snapshot.contentType === "contact") ? (
-                            <motion.div
-                              key="about-contact"
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -20 }}
-                              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                              className="bg-white border border-gray-200 rounded-[24px] p-6 shadow-sm hover:shadow-lg transition-all duration-300"
-                            >
-                              <div className="space-y-6">
-                                {/* About Section */}
-                                <div>
-                                  <h2 className="text-xl font-bold text-[#292A2E] mb-1.5">
-                                    {PERSONAL_INFO.name}
-                                  </h2>
-                                  <p className="text-sm text-gray-600 mb-4">{PERSONAL_INFO.title}</p>
-                                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
-                                    {PERSONAL_INFO.bio}
-                                  </p>
-                                </div>
+                            <div key="about-contact" className="space-y-4">
+                              {/* Profile Card with Photo */}
+                              <ProfileCard
+                                name={PERSONAL_INFO.name}
+                                title={PERSONAL_INFO.title}
+                                bio={PERSONAL_INFO.bio}
+                                email={PERSONAL_INFO.email}
+                                linkedin={PERSONAL_INFO.linkedin}
+                              />
 
+                              {/* Resume Section */}
+                              <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                                className="bg-white border border-gray-200 rounded-[24px] p-6 shadow-sm hover:shadow-lg transition-all duration-300"
+                              >
                                 {/* Resume Buttons */}
                                 <div className="space-y-4">
                                   <div className="grid grid-cols-2 gap-3">
@@ -570,15 +579,14 @@ export default function Home() {
                                     </motion.button>
                                     <motion.a
                                       href="/resume.2025dec.pdf"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
+                                      download="Minwook_Shin_Resume.pdf"
                                       whileHover={{ scale: 1.02 }}
                                       whileTap={{ scale: 0.98 }}
                                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                                       className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200/60 text-gray-700 rounded-xl font-medium transition-all duration-200"
                                     >
                                       <FileText className="w-4 h-4" />
-                                      View PDF
+                                      Download PDF
                                     </motion.a>
                                   </div>
 
@@ -603,55 +611,8 @@ export default function Home() {
                                     )}
                                   </AnimatePresence>
                                 </div>
-
-                                {/* Contact Section */}
-                                <div>
-                                  <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
-                                    get in touch
-                                  </h3>
-                                  <div className="space-y-2">
-                                    <motion.a
-                                      href={`mailto:${PERSONAL_INFO.email}`}
-                                      whileHover={{ scale: 1.01 }}
-                                      whileTap={{ scale: 0.99 }}
-                                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                      className="flex items-center gap-3 p-4 bg-gray-100 hover:bg-gray-200/60 rounded-xl transition-all duration-200"
-                                    >
-                                      <div className="w-10 h-10 bg-[#292A2E] rounded-lg flex items-center justify-center">
-                                        <Send className="w-4 h-4 text-white" />
-                                      </div>
-                                      <div>
-                                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">email</p>
-                                        <p className="text-sm text-gray-700 font-medium">
-                                          {PERSONAL_INFO.email}
-                                        </p>
-                                      </div>
-                                    </motion.a>
-                                    <motion.a
-                                      href={PERSONAL_INFO.linkedin}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      whileHover={{ scale: 1.01 }}
-                                      whileTap={{ scale: 0.99 }}
-                                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                      className="flex items-center gap-3 p-4 bg-gray-100 hover:bg-gray-200/60 rounded-xl transition-all duration-200"
-                                    >
-                                      <div className="w-10 h-10 bg-[#292A2E] rounded-lg flex items-center justify-center">
-                                        <svg className="w-4 h-4 text-white fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                        </svg>
-                                      </div>
-                                      <div>
-                                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">linkedin</p>
-                                        <p className="text-sm text-gray-700 font-medium">
-                                          let's connect!!
-                                        </p>
-                                      </div>
-                                    </motion.a>
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.div>
+                              </motion.div>
+                            </div>
                           ) : snapshot.contentType === "recruiter" ? (
                             <RecruiterBriefing key="recruiter" />
                           ) : null}
@@ -707,7 +668,7 @@ export default function Home() {
           right: hasStarted ? 0 : "auto",
         }}
         style={{
-          paddingBottom: hasStarted ? "6.5rem" : "0",
+          paddingBottom: hasStarted ? (isMobile ? "5.5rem" : "6.75rem") : "0.75rem",
           paddingTop: hasStarted ? "0" : "0",
         }}
       >
@@ -741,7 +702,7 @@ export default function Home() {
           </AnimatePresence>
 
           {/* Shortcut Buttons */}
-          <div className="flex flex-wrap gap-2 justify-center mb-6">
+          <div className={`flex flex-wrap gap-2 justify-center ${hasStarted ? 'mb-0.5 sm:mb-3' : 'mb-3'}`}>
             <motion.button
               onClick={() => handleMessage("projects")}
               whileHover={{ scale: 1.05, y: -2 }}
@@ -758,7 +719,7 @@ export default function Home() {
               className="px-5 py-2 bg-gray-50 hover:bg-black border border-gray-200 text-gray-700 hover:text-white rounded-full text-sm font-light transition-all shadow-sm hover:shadow-md flex items-center gap-2"
             >
               <User className="w-3.5 h-3.5" />
-              about minwook
+              about me
             </motion.button>
           </div>
         </div>
