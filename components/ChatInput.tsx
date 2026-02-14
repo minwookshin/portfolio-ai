@@ -146,7 +146,7 @@ export default function ChatInput({ onSend, hasStarted = true }: ChatInputProps)
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="ask anything"
+                placeholder="What projects have you built?"
                 className="w-full px-6 py-4 pr-28 bg-transparent outline-none text-[#292A2E] placeholder:text-gray-400 rounded-3xl text-base"
               />
             </div>

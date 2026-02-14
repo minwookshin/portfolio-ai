@@ -448,7 +448,7 @@ export default function Home() {
         ) : (
           <div className="text-center space-y-1 mb-6">
             <h1 className="text-3xl sm:text-4xl font-light text-[#292A2E]">hi, i'm minwook</h1>
-            <p className="text-lg sm:text-xl font-light text-[#292A2E]">meet my second brain</p>
+            <p className="text-lg sm:text-xl font-light text-[#292A2E]">meet minwook junior</p>
           </div>
         )}
       </motion.div>
