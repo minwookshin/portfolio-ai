@@ -308,12 +308,9 @@ export async function POST(req: Request) {
     // [Analytics] Log user questions
     console.log(`[LOG] New Question at ${new Date().toISOString()}: ${userQuery}`);
 
-    // Initialize Gemini AI
+    // Initialize Gemini AI with fallback models
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash",
-      systemInstruction: SYSTEM_PROMPT,
-    });
+    const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
 
     // Build conversation history for context
     const chatHistory = messages.slice(0, -1).map((msg: any) => ({
@@ -321,19 +318,29 @@ export async function POST(req: Request) {
       parts: [{ text: msg.content }]
     }));
 
-    // Start chat with history
-    const chat = model.startChat({
-      history: chatHistory,
-    });
-
-    // [Streaming] Generate content stream with conversation context
-    const result = await chat.sendMessageStream(userQuery);
+    // Try each model until one works
+    let result;
+    for (const modelName of MODELS) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: SYSTEM_PROMPT,
+        });
+        const chat = model.startChat({ history: chatHistory });
+        result = await chat.sendMessageStream(userQuery);
+        console.log(`[LOG] Using model: ${modelName}`);
+        break;
+      } catch (err: any) {
+        console.warn(`[WARN] Model ${modelName} failed: ${err.message}`);
+        if (modelName === MODELS[MODELS.length - 1]) throw err;
+      }
+    }
     const encoder = new TextEncoder();
 
     const readable = new ReadableStream({
       async start(controller) {
         try {
-          for await (const chunk of result.stream) {
+          for await (const chunk of result!.stream) {
             const text = chunk.text();
             if (text) {
               controller.enqueue(encoder.encode(text));
