@@ -43,16 +43,32 @@ export default function ChatInput({ onSend, hasStarted = true }: ChatInputProps)
       }
     }
 
+    // Cleanup function: Stop microphone when component unmounts or user leaves page
+    const handleBeforeUnload = () => {
+      if (recognitionRef.current && isListening) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
+  }, [isListening]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
+      // Stop microphone if it's still recording
+      if (recognitionRef.current && isListening) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+      }
       onSend(input.trim());
       setInput("");
     }

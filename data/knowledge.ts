@@ -17,7 +17,7 @@ export const portfolioKnowledge = {
   },
 
   skills: {
-    design: ["Figma", "UI/UX Design", "Product Design", "Prototyping", "User Research"],
+     design: ["Figma", "UI/UX Design", "Product Design", "Prototyping", "User Research"],
     engineering: ["Next.js", "React", "TypeScript", "JavaScript", "HTML/CSS", "Tailwind CSS"],
     ai: ["AI Integration", "LLM Applications", "Prompt Engineering"],
     tools: ["Git", "Framer Motion", "Responsive Design"]

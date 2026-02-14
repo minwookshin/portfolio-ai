@@ -297,9 +297,9 @@ export default function Home() {
         const responseLower = fullText.toLowerCase();
 
         // Show projects when:
-        // 1. User explicitly asks about projects/work/portfolio
+        // 1. User explicitly asks about projects/work/portfolio/design
         // 2. OR AI's response lists multiple projects
-        const userAsksProjects = /\b(projects?|my work|portfolio|what.*built|show.*work)\b/i.test(message);
+        const userAsksProjects = /\b(projects?|my work|portfolio|what.*built|show.*work|design work|what.*design|your work|examples?)\b/i.test(message);
 
         const projectIndicators = [
           'sentinel',
@@ -308,7 +308,10 @@ export default function Home() {
           'flux website',
           'which one are you interested in',
           'which project',
-          'here are my projects'
+          'here are my projects',
+          'project card below',
+          'click on the',
+          'check out the'
         ];
 
         const aiListsProjects = projectIndicators.filter(indicator =>
