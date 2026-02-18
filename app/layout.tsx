@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
-import { Urbanist } from "next/font/google";
+import { Urbanist, Playfair_Display, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-urbanist",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
   display: "swap",
 });
 
@@ -21,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={urbanist.className}>{children}</body>
+      <body className={`${urbanist.variable} ${playfair.variable} ${spaceMono.variable} ${urbanist.className}`}>{children}</body>
     </html>
   );
 }
