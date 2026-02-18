@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${urbanist.variable} ${playfair.variable} ${spaceMono.variable} ${urbanist.className}`}>{children}</body>
+      <body className={`${urbanist.variable} ${playfair.variable} ${spaceMono.variable}`}>{children}</body>
     </html>
   );
 }

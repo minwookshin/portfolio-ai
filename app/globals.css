@@ -1,3 +1,78 @@
+/* Nothing OS Design Tokens */
+:root {
+  --bg: #F2F2F2;
+  --bg-surface: #FFFFFF;
+  --card-a-bg: #0D0D0D;
+  --card-a-text: #F5F5F5;
+  --card-b-bg: #FFFFFF;
+  --card-b-text: #0D0D0D;
+  --text-primary: #0D0D0D;
+  --text-muted: #999999;
+  --border: #E0E0E0;
+  --input-bg: #FFFFFF;
+  --input-text: #0D0D0D;
+  --input-border: #E0E0E0;
+  --bubble-user-bg: #0D0D0D;
+  --bubble-user-text: #F5F5F5;
+  --bubble-ai-bg: #FFFFFF;
+  --bubble-ai-text: #0D0D0D;
+  --bubble-ai-border: #E0E0E0;
+  --btn-primary-bg: #0D0D0D;
+  --btn-primary-text: #F5F5F5;
+  --btn-secondary-bg: #F2F2F2;
+  --btn-secondary-text: #0D0D0D;
+  --btn-secondary-border: #E0E0E0;
+  --accent: #FF2D2D;
+  --gradient-fade: rgba(242, 242, 242, 0);
+}
+
+html.dark {
+  --bg: #0D0D0D;
+  --bg-surface: #1A1A1A;
+  --card-a-bg: #FFFFFF;
+  --card-a-text: #0D0D0D;
+  --card-b-bg: #1A1A1A;
+  --card-b-text: #F5F5F5;
+  --text-primary: #F5F5F5;
+  --text-muted: #666666;
+  --border: #2A2A2A;
+  --input-bg: #1A1A1A;
+  --input-text: #F5F5F5;
+  --input-border: #2A2A2A;
+  --bubble-user-bg: #F5F5F5;
+  --bubble-user-text: #0D0D0D;
+  --bubble-ai-bg: #1A1A1A;
+  --bubble-ai-text: #F5F5F5;
+  --bubble-ai-border: #2A2A2A;
+  --btn-primary-bg: #F5F5F5;
+  --btn-primary-text: #0D0D0D;
+  --btn-secondary-bg: #1A1A1A;
+  --btn-secondary-text: #F5F5F5;
+  --btn-secondary-border: #2A2A2A;
+  --accent: #FF2D2D;
+  --gradient-fade: rgba(13, 13, 13, 0);
+}
+
+/* Base font */
+body {
+  font-family: var(--font-urbanist), sans-serif;
+}
+
+/* Typography Utilities */
+.font-playfair { font-family: var(--font-playfair), Georgia, serif; }
+.font-mono-nothing { font-family: var(--font-space-mono), monospace; }
+
+/* Nothing dot-matrix accent */
+.dot-matrix {
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* Smooth theme transitions */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
