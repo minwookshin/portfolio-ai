@@ -412,7 +412,7 @@ export default function Home() {
   // Get background color with opacity based on active theme
   const getBackgroundStyle = () => {
     if (!activeThemeColor) {
-      return "bg-gray-100";
+      return "bg-surface-container";
     }
 
     // Convert hex to RGB and apply low opacity
@@ -427,7 +427,7 @@ export default function Home() {
   };
 
   return (
-    <main className="h-screen flex flex-col bg-[#F2F2F2] overflow-hidden justify-center">
+    <main className="h-screen flex flex-col bg-surface overflow-hidden justify-center">
 
       {/* Header - moves to top when chat starts */}
       <motion.div
@@ -489,14 +489,14 @@ export default function Home() {
                         }`}
                       >
                         {msg.role === "assistant" ? (
-                          <div className="prose prose-sm max-w-none prose-headings:mt-4 prose-headings:mb-2 prose-headings:font-semibold prose-headings:text-[#292A2E] prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:my-2 prose-p:text-[#292A2E] prose-p:text-sm prose-p:leading-[1.6] prose-strong:text-[#292A2E] prose-strong:font-semibold prose-code:text-[#292A2E] prose-code:bg-[#f0f0f0] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-[#f0f0f0] prose-pre:border prose-pre:border-gray-200 prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-3 prose-pre:overflow-x-auto prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-ol:text-sm prose-li:my-1 prose-li:text-[#292A2E] prose-li:leading-[1.6] prose-a:text-[#292A2E] prose-a:underline prose-a:font-medium prose-img:rounded-xl prose-img:shadow-md prose-img:my-4 prose-img:border prose-img:border-gray-200">
+                          <div className="prose prose-sm max-w-none prose-headings:mt-4 prose-headings:mb-2 prose-headings:font-semibold prose-headings:text-on-surface prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.6] prose-strong:text-on-surface prose-strong:font-semibold prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-3 prose-pre:overflow-x-auto prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-ol:text-sm prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.6] prose-a:text-on-surface prose-a:underline prose-a:font-medium prose-img:rounded-xl prose-img:shadow-md prose-img:my-4 prose-img:border prose-img:border-outline-variant">
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               components={{
                                 img: ({node, ...props}) => (
                                   <img
                                     {...props}
-                                    className="rounded-xl shadow-md border border-gray-200 my-4 w-full max-w-2xl"
+                                    className="rounded-xl shadow-md border border-outline-variant my-4 w-full max-w-2xl"
                                     loading="lazy"
                                   />
                                 )
@@ -564,7 +564,7 @@ export default function Home() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                                className="bg-white border border-gray-200 rounded-[24px] p-6 shadow-sm hover:shadow-lg transition-all duration-300"
+                                className="bg-surface-container rounded-shape-lg p-6 transition-all duration-300"
                               >
                                 {/* Resume Buttons */}
                                 <div className="space-y-4">
@@ -574,7 +574,7 @@ export default function Home() {
                                       whileHover={{ scale: 1.02 }}
                                       whileTap={{ scale: 0.98 }}
                                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#292A2E] hover:bg-[#3C3C3C] text-white rounded-xl font-medium transition-all duration-200"
+                                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-on-surface hover:opacity-90 text-surface rounded-xl font-medium transition-all duration-200"
                                     >
                                       <FileText className="w-4 h-4" />
                                       {showResume ? 'Hide Resume' : 'View Resume'}
@@ -585,7 +585,7 @@ export default function Home() {
                                       whileHover={{ scale: 1.02 }}
                                       whileTap={{ scale: 0.98 }}
                                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200/60 text-gray-700 rounded-xl font-medium transition-all duration-200"
+                                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-surface-container-high hover:opacity-90 text-on-surface rounded-shape-md font-medium transition-all duration-200"
                                     >
                                       <FileText className="w-4 h-4" />
                                       Download PDF
@@ -602,7 +602,7 @@ export default function Home() {
                                         transition={{ duration: 0.3 }}
                                         className="overflow-hidden"
                                       >
-                                        <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm bg-white">
+                                        <div className="border border-outline-variant rounded-shape-md overflow-hidden bg-surface-container-high">
                                           <img
                                             src="/resume.2025dec.jpg"
                                             alt="Resume - Minwook Shin"

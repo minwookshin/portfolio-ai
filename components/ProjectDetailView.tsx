@@ -40,14 +40,14 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         onClick={onBack}
         whileHover={{ x: -4 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="flex items-center gap-2 text-gray-600 hover:text-[#292A2E] mb-6 transition-colors"
+        className="flex items-center gap-2 text-on-surface-variant hover:text-[#292A2E] mb-6 transition-colors"
       >
         <ArrowBackIcon className="w-4 h-4" />
         <span className="text-sm font-medium">Back to projects</span>
       </motion.button>
 
       {/* Project Overview Section */}
-      <div className="bg-white border border-gray-200 rounded-[20px] sm:rounded-[24px] p-6 sm:p-8 md:p-12 mb-6 shadow-sm">
+      <div className="bg-surface-container border border-outline-variant rounded-[20px] sm:rounded-[24px] p-6 sm:p-8 md:p-12 mb-6 shadow-sm">
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
           {/* Left: Project Image */}
           <div className="relative">
@@ -62,13 +62,13 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                 <>
                   {/* Subtle pattern for placeholder */}
                   <div className="absolute inset-0 opacity-20">
-                    <div className="absolute top-8 left-8 w-32 h-32 bg-white rounded-full blur-3xl" />
-                    <div className="absolute bottom-8 right-8 w-40 h-40 bg-gray-300 rounded-full blur-3xl" />
+                    <div className="absolute top-8 left-8 w-32 h-32 bg-surface-container rounded-full blur-3xl" />
+                    <div className="absolute bottom-8 right-8 w-40 h-40 bg-outline rounded-full blur-3xl" />
                   </div>
 
                   {/* Project title overlay */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <h2 className="text-4xl font-bold text-gray-400/50">{project.title}</h2>
+                    <h2 className="text-4xl font-bold text-on-surface-variant">{project.title}</h2>
                   </div>
                 </>
               )}
@@ -81,23 +81,23 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
               Project Overview
             </h2>
 
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm text-on-surface-variant leading-relaxed">
               {project.overview || project.fullDescription || project.description}
             </p>
 
             {/* Meta Info */}
-            <div className="mt-6 pt-4 border-t border-gray-200 grid grid-cols-2 gap-4">
+            <div className="mt-6 pt-4 border-t border-outline-variant grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wider">role</p>
+                <p className="text-xs text-on-surface-variant font-medium mb-1 uppercase tracking-wider">role</p>
                 <p className="text-sm text-[#292A2E] font-medium">{project.role || "Designer & Developer"}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wider">timeline</p>
+                <p className="text-xs text-on-surface-variant font-medium mb-1 uppercase tracking-wider">timeline</p>
                 <p className="text-sm text-[#292A2E] font-medium">{project.timeline || project.date}</p>
               </div>
               {project.team && (
                 <div className="col-span-2">
-                  <p className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wider">team</p>
+                  <p className="text-xs text-on-surface-variant font-medium mb-1 uppercase tracking-wider">team</p>
                   <p className="text-sm text-[#292A2E] font-medium">{project.team}</p>
                 </div>
               )}
@@ -105,12 +105,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
             {/* Technologies */}
             <div className="mt-4">
-              <p className="text-xs text-gray-500 font-medium mb-2 uppercase tracking-wider">technologies</p>
+              <p className="text-xs text-on-surface-variant font-medium mb-2 uppercase tracking-wider">technologies</p>
               <div className="flex flex-wrap gap-2">
                 {project.tags.slice(0, 5).map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1.5 bg-gray-100 rounded-lg text-xs text-gray-700 font-medium"
+                    className="px-3 py-1.5 bg-surface-container-high rounded-lg text-xs text-on-surface font-medium"
                   >
                     {tag}
                   </span>
@@ -171,7 +171,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               transition={{ duration: 0.6, delay: 0.3 }}
                               className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-black/5 rounded-full mb-4 sm:mb-6"
                             >
-                              <span className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                              <span className="text-xs sm:text-sm font-semibold text-on-surface uppercase tracking-wide">
                                 Full-Stack Engineering Case Study
                               </span>
                             </motion.div>
@@ -180,22 +180,22 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               Portfolio AI
                             </h1>
 
-                            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-700 font-light mb-6 sm:mb-8 leading-relaxed">
+                            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-on-surface font-light mb-6 sm:mb-8 leading-relaxed">
                               A self-operating AI (me!!), built with Next.js, React, and Gemini API
                             </p>
 
                             <div className="space-y-4 mb-8">
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
-                                <p className="text-base text-gray-600">Full-Stack Developer & Designer</p>
+                                <p className="text-base text-on-surface-variant">Full-Stack Developer & Designer</p>
                               </div>
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
-                                <p className="text-base text-gray-600">Zero-latency streaming • Real-time AI responses</p>
+                                <p className="text-base text-on-surface-variant">Zero-latency streaming • Real-time AI responses</p>
                               </div>
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
-                                <p className="text-base text-gray-600">Military-grade security architecture</p>
+                                <p className="text-base text-on-surface-variant">Military-grade security architecture</p>
                               </div>
                             </div>
 
@@ -206,7 +206,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   initial={{ opacity: 0, scale: 0.9 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
-                                  className="px-5 py-2.5 bg-white/60 backdrop-blur-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700 shadow-sm"
+                                  className="px-5 py-2.5 bg-surface-container backdrop-blur-sm border border-outline-variant rounded-full text-sm font-medium text-on-surface shadow-sm"
                                 >
                                   {tag}
                                 </motion.span>
@@ -226,15 +226,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                             {/* Browser mockup */}
                             <div className="relative">
-                              <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
+                              <div className="bg-surface-container rounded-3xl shadow-2xl border border-outline-variant overflow-hidden">
                                 {/* Browser chrome */}
-                                <div className="bg-gray-100 border-b border-gray-200 px-4 py-3 flex items-center gap-2">
+                                <div className="bg-surface-container-high border-b border-outline-variant px-4 py-3 flex items-center gap-2">
                                   <div className="flex gap-2">
                                     <div className="w-3 h-3 rounded-full bg-[#D71921]" />
                                     <div className="w-3 h-3 rounded-full bg-[#F5C542]" />
                                     <div className="w-3 h-3 rounded-full bg-[#2D5C3F]" />
                                   </div>
-                                  <div className="flex-1 bg-white rounded-lg px-3 py-1.5 text-xs text-gray-500 mx-4">
+                                  <div className="flex-1 bg-surface-container rounded-lg px-3 py-1.5 text-xs text-on-surface-variant mx-4">
                                     minwook.dev
                                   </div>
                                 </div>
@@ -246,8 +246,8 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                       <div className="w-8 h-8 rounded-full bg-[#D71921] flex items-center justify-center flex-shrink-0">
                                         <FlashOnIcon className="w-4 h-4 text-white" />
                                       </div>
-                                      <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
-                                        <p className="text-sm text-gray-700 leading-relaxed">
+                                      <div className="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
+                                        <p className="text-sm text-on-surface leading-relaxed">
                                           Hey! I'm Minwook's AI. Ask me anything about his work, skills, or projects!
                                         </p>
                                       </div>
@@ -265,11 +265,11 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                       <div className="w-8 h-8 rounded-full bg-[#D71921] flex items-center justify-center flex-shrink-0 animate-pulse">
                                         <FlashOnIcon className="w-4 h-4 text-white" />
                                       </div>
-                                      <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+                                      <div className="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
                                         <div className="flex gap-1">
-                                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                          <div className="w-2 h-2 bg-outline rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                          <div className="w-2 h-2 bg-outline rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                          <div className="w-2 h-2 bg-outline rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                                         </div>
                                       </div>
                                     </div>
@@ -299,14 +299,14 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           Breaking the Static Portfolio Barrier
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           From passive documents to active intelligence
                         </p>
                       </div>
 
                       {/* Content Card */}
-                      <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-gray-200">
-                        <p className="text-lg text-gray-700 leading-relaxed">
+                      <div className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant">
+                        <p className="text-lg text-on-surface leading-relaxed">
                           Static portfolios create an information bottleneck. Recruiters need specific answers—"How did you handle state management?" or "Why Next.js?"—but they're stuck reading 15-page case studies. This AI agent solves that: natural language queries return precise, contextualized answers about my projects and design rationale in real-time.
                         </p>
                       </div>
@@ -332,7 +332,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           Technical Stack Optimized for Conversational UX
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Engineering decisions that enable sub-200ms global response times
                         </p>
                       </div>
@@ -344,12 +344,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.2 }}
-                          className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200"
+                          className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
-                          <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4">Stack Layer 01</p>
+                          <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Stack Layer 01</p>
                           <h3 className="text-xl font-bold text-[#0a0a0a] mb-4">Next.js 16 (App Router)</h3>
-                          <p className="text-sm text-gray-600 leading-relaxed">
-                            Moved data fetching to the server, reducing client-side hydration time by <span className="font-bold text-gray-800">40%</span>.
+                          <p className="text-sm text-on-surface-variant leading-relaxed">
+                            Moved data fetching to the server, reducing client-side hydration time by <span className="font-bold text-on-surface">40%</span>.
                           </p>
                         </motion.div>
 
@@ -358,12 +358,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.3 }}
-                          className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200"
+                          className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
-                          <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4">Stack Layer 02</p>
+                          <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Stack Layer 02</p>
                           <h3 className="text-xl font-bold text-[#0a0a0a] mb-4">Streaming via SSE</h3>
-                          <p className="text-sm text-gray-600 leading-relaxed">
-                            Implemented Server-Sent Events to stream Gemini responses token-by-token, creating a natural conversational rhythm <span className="font-bold text-gray-800">without loading spinners</span>.
+                          <p className="text-sm text-on-surface-variant leading-relaxed">
+                            Implemented Server-Sent Events to stream Gemini responses token-by-token, creating a natural conversational rhythm <span className="font-bold text-on-surface">without loading spinners</span>.
                           </p>
                         </motion.div>
 
@@ -372,12 +372,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.4 }}
-                          className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200"
+                          className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
-                          <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4">Stack Layer 03</p>
+                          <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Stack Layer 03</p>
                           <h3 className="text-xl font-bold text-[#0a0a0a] mb-4">Edge Runtime</h3>
-                          <p className="text-sm text-gray-600 leading-relaxed">
-                            API routes run on global Edge Network, ensuring <span className="font-bold text-gray-800">&lt;200ms response times</span> regardless of user geography.
+                          <p className="text-sm text-on-surface-variant leading-relaxed">
+                            API routes run on global Edge Network, ensuring <span className="font-bold text-on-surface">&lt;200ms response times</span> regardless of user geography.
                           </p>
                         </motion.div>
                       </div>
@@ -400,27 +400,27 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       mockup: (
                         <div className="p-6 space-y-4">
                           <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-on-surface flex items-center justify-center flex-shrink-0">
                               <FlashOnIcon className="w-4 h-4 text-white" />
                             </div>
-                            <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm flex-1">
+                            <div className="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm flex-1">
                               <div className="space-y-2">
-                                <div className="h-2 bg-gray-200 rounded-full w-full" />
-                                <div className="h-2 bg-gray-200 rounded-full w-5/6" />
+                                <div className="h-2 bg-surface-container-high rounded-full w-full" />
+                                <div className="h-2 bg-surface-container-high rounded-full w-5/6" />
                                 <div className="h-2 bg-gradient-to-r from-gray-400 to-transparent rounded-full w-2/3 animate-pulse" />
                               </div>
                             </div>
                           </div>
-                          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                            <p className="text-xs text-gray-800 font-semibold mb-1">Performance Metrics</p>
+                          <div className="bg-surface-container border border-outline-variant rounded-xl p-4">
+                            <p className="text-xs text-on-surface font-semibold mb-1">Performance Metrics</p>
                             <div className="space-y-2">
                               <div className="flex justify-between text-xs">
-                                <span className="text-gray-700">Time to First Token</span>
-                                <span className="font-bold text-gray-900">&lt;100ms</span>
+                                <span className="text-on-surface">Time to First Token</span>
+                                <span className="font-bold text-on-surface">&lt;100ms</span>
                               </div>
                               <div className="flex justify-between text-xs">
-                                <span className="text-gray-700">Streaming Rate</span>
-                                <span className="font-bold text-gray-900">~50 tokens/sec</span>
+                                <span className="text-on-surface">Streaming Rate</span>
+                                <span className="font-bold text-on-surface">~50 tokens/sec</span>
                               </div>
                             </div>
                           </div>
@@ -481,7 +481,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           Key Features
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Fluidity meets enterprise-grade security
                         </p>
                       </div>
@@ -515,7 +515,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   {feature.title}
                                 </h3>
 
-                                <p className="text-lg text-gray-600 leading-relaxed">
+                                <p className="text-lg text-on-surface-variant leading-relaxed">
                                   {feature.description}
                                 </p>
                               </motion.div>
@@ -531,7 +531,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             >
                               {/* Card */}
                               <div className="relative">
-                                <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
+                                <div className="bg-surface-container rounded-3xl shadow-2xl border border-outline-variant overflow-hidden">
                                   {feature.mockup}
                                 </div>
                               </div>
@@ -562,7 +562,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           Impact
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Bridging Design, Engineering, and Product Strategy
                         </p>
                       </div>
@@ -573,15 +573,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.2 }}
-                          className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200"
+                          className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
                           <div className="mb-4">
-                            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                              <PsychologyIcon className="w-6 h-6 text-gray-700" />
+                            <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-4">
+                              <PsychologyIcon className="w-6 h-6 text-on-surface" />
                             </div>
                           </div>
                           <h3 className="text-lg font-bold text-[#0a0a0a] mb-3">LLM Integration at Scale</h3>
-                          <p className="text-sm text-gray-600 leading-relaxed">
+                          <p className="text-sm text-on-surface-variant leading-relaxed">
                             Delivered a streaming AI chat interface with enterprise-grade security and sub-100ms latency.
                           </p>
                         </motion.div>
@@ -590,15 +590,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.3 }}
-                          className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200"
+                          className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
                           <div className="mb-4">
-                            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                              <TrendingUpIcon className="w-6 h-6 text-gray-700" />
+                            <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-4">
+                              <TrendingUpIcon className="w-6 h-6 text-on-surface" />
                             </div>
                           </div>
                           <h3 className="text-lg font-bold text-[#0a0a0a] mb-3">Cost-Efficient Architecture</h3>
-                          <p className="text-sm text-gray-600 leading-relaxed">
+                          <p className="text-sm text-on-surface-variant leading-relaxed">
                             Reduced token usage by 35% through prompt optimization, cutting API costs without sacrificing UX.
                           </p>
                         </motion.div>
@@ -607,15 +607,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.4 }}
-                          className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200"
+                          className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
                           <div className="mb-4">
-                            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                              <PaletteIcon className="w-6 h-6 text-gray-700" />
+                            <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-4">
+                              <PaletteIcon className="w-6 h-6 text-on-surface" />
                             </div>
                           </div>
                           <h3 className="text-lg font-bold text-[#0a0a0a] mb-3">Design + Engineering Fusion</h3>
-                          <p className="text-sm text-gray-600 leading-relaxed">
+                          <p className="text-sm text-on-surface-variant leading-relaxed">
                             Unified visual polish (Framer Motion) with technical rigor (RSC)—proving full-stack ownership.
                           </p>
                         </motion.div>
@@ -662,22 +662,22 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               Sentinel
                             </h1>
 
-                            <p className="text-2xl md:text-3xl text-gray-700 font-light mb-10 leading-relaxed">
+                            <p className="text-2xl md:text-3xl text-on-surface font-light mb-10 leading-relaxed">
                               Predictive home maintenance powered by climate risk AI
                             </p>
 
                             <div className="space-y-4 mb-10">
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
-                                <p className="text-base text-gray-600">UX Engineer (Design → Code)</p>
+                                <p className="text-base text-on-surface-variant">UX Engineer (Design → Code)</p>
                               </div>
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
-                                <p className="text-base text-gray-600">48-hour hackathon sprint</p>
+                                <p className="text-base text-on-surface-variant">48-hour hackathon sprint</p>
                               </div>
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
-                                <p className="text-base text-gray-600">Native iOS app (Swift + SwiftUI)</p>
+                                <p className="text-base text-on-surface-variant">Native iOS app (Swift + SwiftUI)</p>
                               </div>
                             </div>
 
@@ -688,7 +688,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   initial={{ opacity: 0, scale: 0.9 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
-                                  className="px-5 py-2.5 bg-white/60 backdrop-blur-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700 shadow-sm"
+                                  className="px-5 py-2.5 bg-surface-container backdrop-blur-sm border border-outline-variant rounded-full text-sm font-medium text-on-surface shadow-sm"
                                 >
                                   {tag}
                                 </motion.span>
@@ -735,7 +735,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           The Problem
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Climate volatility meets reactive maintenance
                         </p>
                       </div>
@@ -747,38 +747,38 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.2 }}
-                          className="md:col-span-8 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-gray-200"
+                          className="md:col-span-8 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
                             <div className="w-14 h-14 bg-[#D71921] rounded-2xl flex items-center justify-center flex-shrink-0">
                               <WarningIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
-                              <p className="text-xs text-gray-700 font-bold uppercase tracking-wider mb-1">Core Issue</p>
+                              <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-1">Core Issue</p>
                               <h3 className="text-2xl font-bold text-[#0a0a0a]">Reactive Crisis Management</h3>
                             </div>
                           </div>
 
-                          <p className="text-xl font-light text-gray-700 leading-relaxed mb-8">
-                            Homeowners manage their biggest asset based on <span className="font-bold text-gray-700">gut feeling</span>, not data.
+                          <p className="text-xl font-light text-on-surface leading-relaxed mb-8">
+                            Homeowners manage their biggest asset based on <span className="font-bold text-on-surface">gut feeling</span>, not data.
                           </p>
 
-                          <p className="text-base text-gray-700 leading-relaxed mb-6">
+                          <p className="text-base text-on-surface leading-relaxed mb-6">
                             Climate volatility is the new normal. Invisible risks are ignored until they become $200,000 disasters.
                             A simple $100 inspection ignored today leads to catastrophic failure tomorrow.
                           </p>
 
                           {/* Stats Row */}
-                          <div className="grid grid-cols-2 gap-6 pt-6 border-t border-gray-200">
+                          <div className="grid grid-cols-2 gap-6 pt-6 border-t border-outline-variant">
                             <div>
-                              <p className="text-sm text-gray-700 font-semibold mb-1 uppercase tracking-wide">Average Cost</p>
+                              <p className="text-sm text-on-surface font-semibold mb-1 uppercase tracking-wide">Average Cost</p>
                               <p className="text-3xl font-black text-[#0a0a0a]">$200K+</p>
-                              <p className="text-xs text-gray-600 mt-1">Storm damage ignored</p>
+                              <p className="text-xs text-on-surface-variant mt-1">Storm damage ignored</p>
                             </div>
                             <div>
-                              <p className="text-sm text-gray-700 font-semibold mb-1 uppercase tracking-wide">Prevention Cost</p>
-                              <p className="text-3xl font-black text-gray-900">$100</p>
-                              <p className="text-xs text-gray-600 mt-1">Basic inspection</p>
+                              <p className="text-sm text-on-surface font-semibold mb-1 uppercase tracking-wide">Prevention Cost</p>
+                              <p className="text-3xl font-black text-on-surface">$100</p>
+                              <p className="text-xs text-on-surface-variant mt-1">Basic inspection</p>
                             </div>
                           </div>
                         </motion.div>
@@ -788,34 +788,34 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.3 }}
-                          className="md:col-span-4 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200"
+                          className="md:col-span-4 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
-                          <p className="text-xs text-gray-700 font-bold uppercase tracking-wider mb-4">Target PersonIcon</p>
+                          <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-4">Target PersonIcon</p>
 
                           <div className="mb-6">
-                            <div className="w-20 h-20 rounded-full bg-gray-700 flex items-center justify-center mb-4 mx-auto">
+                            <div className="w-20 h-20 rounded-full bg-on-surface flex items-center justify-center mb-4 mx-auto">
                               <PersonIcon className="w-10 h-10 text-white" />
                             </div>
                             <h4 className="text-2xl font-bold text-[#0a0a0a] text-center mb-1">Alex, 35</h4>
-                            <p className="text-sm text-gray-700 font-semibold text-center mb-4">Doctor • New Homeowner</p>
+                            <p className="text-sm text-on-surface font-semibold text-center mb-4">Doctor • New Homeowner</p>
                           </div>
 
-                          <div className="space-y-3 pt-4 border-t border-gray-200">
+                          <div className="space-y-3 pt-4 border-t border-outline-variant">
                             <div className="flex items-start gap-2">
                               <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full mt-2 flex-shrink-0" />
-                              <p className="text-sm text-gray-700 leading-relaxed">
+                              <p className="text-sm text-on-surface leading-relaxed">
                                 Moved into 2010 home
                               </p>
                             </div>
                             <div className="flex items-start gap-2">
                               <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full mt-2 flex-shrink-0" />
-                              <p className="text-sm text-gray-700 leading-relaxed">
+                              <p className="text-sm text-on-surface leading-relaxed">
                                 Worries about hidden storm damage
                               </p>
                             </div>
                             <div className="flex items-start gap-2">
                               <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full mt-2 flex-shrink-0" />
-                              <p className="text-sm text-gray-700 leading-relaxed font-semibold">
+                              <p className="text-sm text-on-surface leading-relaxed font-semibold">
                                 Needs to stop guessing and start preventing
                               </p>
                             </div>
@@ -841,7 +841,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           The Builder Process
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Design → Code: Proving I'm a UX Engineer
                         </p>
                       </div>
@@ -862,10 +862,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             </span>
                           </div>
 
-                          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200">
+                          <div className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant">
                             <div className="space-y-3">
                               <h4 className="text-lg font-bold text-[#0a0a0a]">Rapid Visual Prototyping</h4>
-                              <p className="text-base text-gray-700 leading-relaxed">
+                              <p className="text-base text-on-surface leading-relaxed">
                                 Designed intuitive risk visualization interfaces under extreme time constraints.
                                 Focus on clarity and emotional impact for high-stakes decision-making.
                               </p>
@@ -887,10 +887,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             </span>
                           </div>
 
-                          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-gray-200">
+                          <div className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant">
                             <div className="space-y-3">
                               <h4 className="text-lg font-bold text-[#0a0a0a]">Native iOS Implementation</h4>
-                              <p className="text-base text-gray-700 leading-relaxed">
+                              <p className="text-base text-on-surface leading-relaxed">
                                 Built vulnerability scoring engine using Swift + SwiftUI. Integrated historical weather datasets
                                 to calculate predictive risk scores in real-time.
                               </p>
@@ -965,7 +965,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           Key Features
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Three pillars of predictive maintenance
                         </p>
                       </div>
@@ -999,7 +999,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   {feature.title}
                                 </h3>
 
-                                <p className="text-lg text-gray-600 leading-relaxed">
+                                <p className="text-lg text-on-surface-variant leading-relaxed">
                                   {feature.description}
                                 </p>
                               </motion.div>
@@ -1037,7 +1037,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           Product Demo
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           See Sentinel in action
                         </p>
                       </div>
@@ -1068,7 +1068,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       transition={{ duration: 0.8, delay: 0.1 }}
                       className="mb-20"
                     >
-                      <div className="bg-white rounded-[3rem] p-12 md:p-16 border border-gray-200">
+                      <div className="bg-surface-container rounded-[3rem] p-12 md:p-16 border border-outline-variant">
                         <div className="max-w-4xl">
                           {/* Icon + Badge */}
                           <motion.div
@@ -1087,14 +1087,14 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           </h2>
 
                           {/* Content */}
-                          <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+                          <div className="space-y-6 text-lg text-on-surface leading-relaxed">
                             <p>
                               <span className="font-bold text-[#0a0a0a]">Successfully shipped a fully functional iOS MVP</span> in a 48-hour hackathon sprint.
                               Validated the concept of <span className="italic">'Predictive Maintenance'</span> through real climate data integration and user testing.
                             </p>
 
                             <p>
-                              Won <span className="font-semibold text-gray-700">1st Place at Google x SCAD FLUX Hackathon 2025</span>,
+                              Won <span className="font-semibold text-on-surface">1st Place at Google x SCAD FLUX Hackathon 2025</span>,
                               demonstrating the viability of combining climate risk analytics with homeowner protection strategies.
                             </p>
                           </div>
@@ -1131,7 +1131,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               transition={{ duration: 0.6, delay: 0.3 }}
                               className="inline-block px-4 py-2 bg-black/5 rounded-full mb-6"
                             >
-                              <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                              <span className="text-sm font-semibold text-on-surface uppercase tracking-wide">
                                 Product Design Case Study
                               </span>
                             </motion.div>
@@ -1140,22 +1140,22 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               Mindline
                             </h1>
 
-                            <p className="text-2xl md:text-3xl text-gray-700 font-light mb-8 leading-relaxed">
+                            <p className="text-2xl md:text-3xl text-on-surface font-light mb-8 leading-relaxed">
                               Breaking the cycle: AI-powered intervention for betting addiction
                             </p>
 
                             <div className="space-y-4 mb-8">
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full" />
-                                <p className="text-base text-gray-600">AI UX Designer & UX Researcher</p>
+                                <p className="text-base text-on-surface-variant">AI UX Designer & UX Researcher</p>
                               </div>
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full" />
-                                <p className="text-base text-gray-600">10-week research & design sprint</p>
+                                <p className="text-base text-on-surface-variant">10-week research & design sprint</p>
                               </div>
                               <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full" />
-                                <p className="text-base text-gray-600">Target: Young adults (18-26)</p>
+                                <p className="text-base text-on-surface-variant">Target: Young adults (18-26)</p>
                               </div>
                             </div>
 
@@ -1166,7 +1166,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   initial={{ opacity: 0, scale: 0.9 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
-                                  className="px-5 py-2.5 bg-white/60 backdrop-blur-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700 shadow-sm"
+                                  className="px-5 py-2.5 bg-surface-container backdrop-blur-sm border border-outline-variant rounded-full text-sm font-medium text-on-surface shadow-sm"
                                 >
                                   {tag}
                                 </motion.span>
@@ -1213,7 +1213,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           Research Deep Dive
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Double Diamond: <span className="font-semibold">Discover & Define</span>
                         </p>
                       </div>
@@ -1225,31 +1225,31 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.2 }}
-                          className="md:col-span-7 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-gray-200"
+                          className="md:col-span-7 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
                             <div className="w-14 h-14 bg-[#D71921] rounded-2xl flex items-center justify-center flex-shrink-0">
                               <WarningIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
-                              <p className="text-xs text-gray-700 font-bold uppercase tracking-wider mb-1">The Scope</p>
+                              <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-1">The Scope</p>
                               <h3 className="text-2xl font-bold text-[#0a0a0a]">The Silent Epidemic</h3>
                             </div>
                           </div>
 
-                          <p className="text-base text-gray-700 leading-relaxed mb-8">
+                          <p className="text-base text-on-surface leading-relaxed mb-8">
                             Young adults (18-26) face betting addiction fueled by mobile accessibility and aggressive marketing.
                             Current blocking tools are ineffective — users bypass them within minutes.
                           </p>
 
                           {/* Stats Row */}
-                          <div className="grid grid-cols-2 gap-6 pt-6 border-t border-gray-200">
+                          <div className="grid grid-cols-2 gap-6 pt-6 border-t border-outline-variant">
                             <div>
-                              <p className="text-sm text-gray-700 font-semibold mb-1 uppercase tracking-wide">Primary Target</p>
+                              <p className="text-sm text-on-surface font-semibold mb-1 uppercase tracking-wide">Primary Target</p>
                               <p className="text-3xl font-bold text-[#0a0a0a]">Males 18-26</p>
                             </div>
                             <div>
-                              <p className="text-sm text-gray-700 font-semibold mb-1 uppercase tracking-wide">Access Point</p>
+                              <p className="text-sm text-on-surface font-semibold mb-1 uppercase tracking-wide">Access Point</p>
                               <p className="text-3xl font-bold text-[#0a0a0a]">Mobile Apps</p>
                             </div>
                           </div>
@@ -1260,10 +1260,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.3 }}
-                          className="md:col-span-5 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-gray-200 flex flex-col justify-between"
+                          className="md:col-span-5 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant flex flex-col justify-between"
                         >
                           <div>
-                            <p className="text-xs text-gray-700 font-bold uppercase tracking-wider mb-2">Primary Research</p>
+                            <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-2">Primary Research</p>
                             <h3 className="text-lg font-bold text-[#0a0a0a] mb-4">In-Depth PersonIcon Interviews</h3>
                           </div>
 
@@ -1275,12 +1275,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               className="inline-block"
                             >
                               <p className="text-8xl font-black text-[#0a0a0a] leading-none mb-2">6</p>
-                              <p className="text-lg text-gray-700 font-semibold">Participants</p>
+                              <p className="text-lg text-on-surface font-semibold">Participants</p>
                             </motion.div>
                           </div>
 
-                          <div className="pt-4 border-t border-gray-200">
-                            <p className="text-sm text-gray-600 leading-relaxed italic">
+                          <div className="pt-4 border-t border-outline-variant">
+                            <p className="text-sm text-on-surface-variant leading-relaxed italic">
                               "I tell myself it's just extra money, so losing doesn't feel real."
                             </p>
                           </div>
@@ -1291,10 +1291,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.4 }}
-                          className="md:col-span-5 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-gray-200 flex flex-col justify-between"
+                          className="md:col-span-5 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant flex flex-col justify-between"
                         >
                           <div>
-                            <p className="text-xs text-gray-700 font-bold uppercase tracking-wider mb-2">Demographics</p>
+                            <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-2">Demographics</p>
                             <h3 className="text-lg font-bold text-[#0a0a0a] mb-4">Target Age Range</h3>
                           </div>
 
@@ -1305,12 +1305,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
                             >
                               <p className="text-7xl font-black text-[#0a0a0a] leading-none mb-2">18–26</p>
-                              <p className="text-lg text-gray-700 font-semibold">Years Old</p>
+                              <p className="text-lg text-on-surface font-semibold">Years Old</p>
                             </motion.div>
                           </div>
 
-                          <div className="pt-4 border-t border-gray-200">
-                            <p className="text-sm text-gray-600">
+                          <div className="pt-4 border-t border-outline-variant">
+                            <p className="text-sm text-on-surface-variant">
                               Peak vulnerability period for addiction formation
                             </p>
                           </div>
@@ -1321,29 +1321,29 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: 0.5 }}
-                          className="md:col-span-7 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-gray-200"
+                          className="md:col-span-7 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
                             <div className="w-14 h-14 bg-[#D71921] rounded-2xl flex items-center justify-center flex-shrink-0">
                               <PsychologyIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
-                              <p className="text-xs text-gray-700 font-bold uppercase tracking-wider mb-1">Expert Validation</p>
+                              <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-1">Expert Validation</p>
                               <h3 className="text-2xl font-bold text-[#0a0a0a]">Psychological Insight</h3>
                             </div>
                           </div>
 
                           <div className="mb-6">
-                            <p className="text-sm text-gray-700 font-bold mb-2">Dr. Kristen Adams, Clinical Psychologist</p>
-                            <blockquote className="text-xl text-gray-700 leading-relaxed font-light italic border-l-4 border-gray-400 pl-6">
+                            <p className="text-sm text-on-surface font-bold mb-2">Dr. Kristen Adams, Clinical Psychologist</p>
+                            <blockquote className="text-xl text-on-surface leading-relaxed font-light italic border-l-4 border-outline pl-6">
                               "Social environments and peer pressure are the primary triggers for relapse.
                               We need real-time intervention, not reactive restriction."
                             </blockquote>
                           </div>
 
-                          <div className="flex items-center gap-3 pt-6 border-t border-gray-200">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full" />
-                            <p className="text-sm text-gray-600">SME Interview conducted March 2025</p>
+                          <div className="flex items-center gap-3 pt-6 border-t border-outline-variant">
+                            <div className="w-2 h-2 bg-outline rounded-full" />
+                            <p className="text-sm text-on-surface-variant">SME Interview conducted March 2025</p>
                           </div>
                         </motion.div>
                       </div>
@@ -1414,7 +1414,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           The Solution
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           Three pillars of intervention
                         </p>
                       </div>
@@ -1448,7 +1448,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   {feature.title}
                                 </h3>
 
-                                <p className="text-lg text-gray-600 leading-relaxed">
+                                <p className="text-lg text-on-surface-variant leading-relaxed">
                                   {feature.description}
                                 </p>
                               </motion.div>
@@ -1486,7 +1486,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
                           The Logic Flow
                         </h2>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-lg text-on-surface-variant">
                           From Emotion Detection → AI Analysis → Real-Time Action
                         </p>
                       </div>
@@ -1530,14 +1530,14 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="group"
                           >
-                            <div className="relative bg-white border-2 border-gray-200 rounded-3xl p-8 hover:border-gray-400 transition-all duration-300 hover:shadow-xl">
+                            <div className="relative bg-surface-container border-2 border-outline-variant rounded-3xl p-8 hover:border-outline transition-all duration-300 hover:shadow-xl">
                               {/* Step Number Badge */}
                               <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: 0.3, type: "spring" }}
-                                className="absolute -top-4 -left-4 w-12 h-12 bg-gray-700 rounded-2xl shadow-lg flex items-center justify-center"
+                                className="absolute -top-4 -left-4 w-12 h-12 bg-on-surface rounded-2xl shadow-lg flex items-center justify-center"
                               >
                                 <span className="text-white font-black text-xl">1</span>
                               </motion.div>
@@ -1547,13 +1547,13 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   <PersonIcon className="w-8 h-8 text-white" />
                                 </div>
                                 <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">Emotion Input</h4>
-                                <p className="text-base text-gray-700 leading-relaxed">
-                                  PersonIcon logs emotional state: <span className="font-semibold text-gray-700">"Anxious"</span> or <span className="font-semibold text-gray-700">"Excited"</span>
+                                <p className="text-base text-on-surface leading-relaxed">
+                                  PersonIcon logs emotional state: <span className="font-semibold text-on-surface">"Anxious"</span> or <span className="font-semibold text-on-surface">"Excited"</span>
                                 </p>
                               </div>
 
-                              <div className="pt-4 border-t border-gray-200 mt-4">
-                                <p className="text-sm text-gray-700 font-semibold">PersonIcon Action</p>
+                              <div className="pt-4 border-t border-outline-variant mt-4">
+                                <p className="text-sm text-on-surface font-semibold">PersonIcon Action</p>
                               </div>
                             </div>
                           </motion.div>
@@ -1566,14 +1566,14 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="group"
                           >
-                            <div className="relative bg-white border-2 border-gray-200 rounded-3xl p-8 hover:border-gray-400 transition-all duration-300 hover:shadow-xl">
+                            <div className="relative bg-surface-container border-2 border-outline-variant rounded-3xl p-8 hover:border-outline transition-all duration-300 hover:shadow-xl">
                               {/* Step Number Badge */}
                               <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: 0.5, type: "spring" }}
-                                className="absolute -top-4 -left-4 w-12 h-12 bg-gray-700 rounded-2xl shadow-lg flex items-center justify-center"
+                                className="absolute -top-4 -left-4 w-12 h-12 bg-on-surface rounded-2xl shadow-lg flex items-center justify-center"
                               >
                                 <span className="text-white font-black text-xl">2</span>
                               </motion.div>
@@ -1583,13 +1583,13 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   <PsychologyIcon className="w-8 h-8 text-white" />
                                 </div>
                                 <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">AI Analysis</h4>
-                                <p className="text-base text-gray-700 leading-relaxed">
-                                  System cross-references with past patterns → Detects <span className="font-semibold text-gray-700">"Social Betting Trigger"</span>
+                                <p className="text-base text-on-surface leading-relaxed">
+                                  System cross-references with past patterns → Detects <span className="font-semibold text-on-surface">"Social Betting Trigger"</span>
                                 </p>
                               </div>
 
-                              <div className="pt-4 border-t border-gray-200 mt-4">
-                                <p className="text-sm text-gray-700 font-semibold">Pattern Recognition</p>
+                              <div className="pt-4 border-t border-outline-variant mt-4">
+                                <p className="text-sm text-on-surface font-semibold">Pattern Recognition</p>
                               </div>
                             </div>
                           </motion.div>
@@ -1602,14 +1602,14 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             transition={{ duration: 0.6, delay: 0.6 }}
                             className="group"
                           >
-                            <div className="relative bg-white border-2 border-gray-200 rounded-3xl p-8 hover:border-gray-400 transition-all duration-300 hover:shadow-xl">
+                            <div className="relative bg-surface-container border-2 border-outline-variant rounded-3xl p-8 hover:border-outline transition-all duration-300 hover:shadow-xl">
                               {/* Step Number Badge */}
                               <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: 0.7, type: "spring" }}
-                                className="absolute -top-4 -left-4 w-12 h-12 bg-gray-700 rounded-2xl shadow-lg flex items-center justify-center"
+                                className="absolute -top-4 -left-4 w-12 h-12 bg-on-surface rounded-2xl shadow-lg flex items-center justify-center"
                               >
                                 <span className="text-white font-black text-xl">3</span>
                               </motion.div>
@@ -1619,13 +1619,13 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                   <GppMaybeIcon className="w-8 h-8 text-white" />
                                 </div>
                                 <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">Intervention</h4>
-                                <p className="text-base text-gray-700 leading-relaxed">
-                                  Suggests: <span className="font-semibold text-gray-700">"Activate Pause Timer"</span> or <span className="font-semibold text-gray-700">"Call Support Hotline"</span>
+                                <p className="text-base text-on-surface leading-relaxed">
+                                  Suggests: <span className="font-semibold text-on-surface">"Activate Pause Timer"</span> or <span className="font-semibold text-on-surface">"Call Support Hotline"</span>
                                 </p>
                               </div>
 
-                              <div className="pt-4 border-t border-gray-200 mt-4">
-                                <p className="text-sm text-gray-700 font-semibold">Real-Time Action</p>
+                              <div className="pt-4 border-t border-outline-variant mt-4">
+                                <p className="text-sm text-on-surface font-semibold">Real-Time Action</p>
                               </div>
                             </div>
                           </motion.div>
@@ -1638,11 +1638,11 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.8 }}
-                        className="mt-12 p-8 bg-gray-50 rounded-3xl border border-gray-200"
+                        className="mt-12 p-8 bg-surface-container rounded-3xl border border-outline-variant"
                       >
                         <div>
                           <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Why This Matters</h4>
-                          <p className="text-base text-gray-700 leading-relaxed">
+                          <p className="text-base text-on-surface leading-relaxed">
                             Unlike traditional blocking apps that are easily bypassed, Mindline leverages <span className="font-semibold">behavioral psychology</span> and <span className="font-semibold">real-time ML pattern recognition</span> to interrupt the dopamine loop <span className="font-semibold italic">before</span> impulsive action occurs.
                           </p>
                         </div>
@@ -1654,7 +1654,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0a0a0a] mb-3">
                             Additional Features
                           </h3>
-                          <p className="text-lg text-gray-600">
+                          <p className="text-lg text-on-surface-variant">
                             Supporting tools for comprehensive intervention
                           </p>
                         </div>
@@ -1677,7 +1677,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             </div>
                             <div className="text-center">
                               <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">AI Conversational Support</h4>
-                              <p className="text-base text-gray-600">Real-time emotional support through intelligent dialogue</p>
+                              <p className="text-base text-on-surface-variant">Real-time emotional support through intelligent dialogue</p>
                             </div>
                           </motion.div>
 
@@ -1698,7 +1698,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             </div>
                             <div className="text-center">
                               <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Progress CalendarTodayIcon</h4>
-                              <p className="text-base text-gray-600">Visual timeline of emotional states and betting patterns</p>
+                              <p className="text-base text-on-surface-variant">Visual timeline of emotional states and betting patterns</p>
                             </div>
                           </motion.div>
 
@@ -1719,7 +1719,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             </div>
                             <div className="text-center">
                               <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Social Context Awareness</h4>
-                              <p className="text-base text-gray-600">Identify triggers in social situations with photo logging</p>
+                              <p className="text-base text-on-surface-variant">Identify triggers in social situations with photo logging</p>
                             </div>
                           </motion.div>
 
@@ -1740,7 +1740,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             </div>
                             <div className="text-center">
                               <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Supportive Onboarding</h4>
-                              <p className="text-base text-gray-600">Welcoming experience with "Bet on yourself" messaging</p>
+                              <p className="text-base text-on-surface-variant">Welcoming experience with "Bet on yourself" messaging</p>
                             </div>
                           </motion.div>
                         </div>
@@ -1759,7 +1759,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       transition={{ duration: 0.8, delay: 0.1 }}
                       className="mb-20"
                     >
-                      <div className="bg-white rounded-[3rem] p-12 md:p-16 border border-gray-200">
+                      <div className="bg-surface-container rounded-[3rem] p-12 md:p-16 border border-outline-variant">
                         <div className="max-w-4xl">
                           {/* Icon + Badge */}
                           <motion.div
@@ -1778,13 +1778,13 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           </h2>
 
                           {/* Content */}
-                          <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+                          <div className="space-y-6 text-lg text-on-surface leading-relaxed">
                             <p>
                               <span className="font-bold text-[#0a0a0a]">Mindline shifts the paradigm</span> from <span className="italic">'restriction'</span> to <span className="italic">'awareness'</span>. Through user testing with 6 participants, the tool successfully reduced impulsive betting triggers by interrupting the dopamine loop before action occurs.
                             </p>
 
                             <p>
-                              Rather than simply blocking access (which users bypass within minutes), Mindline empowers users with <span className="font-semibold text-gray-700">self-awareness</span>, <span className="font-semibold text-gray-700">real-time emotional analysis</span>, and <span className="font-semibold text-gray-700">proactive intervention</span> — creating sustainable behavioral change.
+                              Rather than simply blocking access (which users bypass within minutes), Mindline empowers users with <span className="font-semibold text-on-surface">self-awareness</span>, <span className="font-semibold text-on-surface">real-time emotional analysis</span>, and <span className="font-semibold text-on-surface">proactive intervention</span> — creating sustainable behavioral change.
                             </p>
                           </div>
                         </div>
@@ -1814,9 +1814,9 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.1 + index * 0.02, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-white border border-gray-200 rounded-[24px] p-6 shadow-sm"
+                    className="bg-surface-container border border-outline-variant rounded-[24px] p-6 shadow-sm"
                   >
-                    <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{section.content}</p>
+                    <p className="text-sm text-on-surface-variant leading-relaxed whitespace-pre-line">{section.content}</p>
                   </motion.div>
                 );
               }
@@ -1834,7 +1834,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     return (
                       <div
                         key={imgIndex}
-                        className={`bg-white border border-gray-200 rounded-[24px] p-4 shadow-sm ${spanFull ? 'md:col-span-2' : ''}`}
+                        className={`bg-surface-container border border-outline-variant rounded-[24px] p-4 shadow-sm ${spanFull ? 'md:col-span-2' : ''}`}
                       >
                         <div className="rounded-xl bg-[#E8E8E8] overflow-hidden mb-3">
                           <img
@@ -1844,7 +1844,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           />
                         </div>
                         {img.caption && (
-                          <p className="text-xs text-gray-500 font-medium">{img.caption}</p>
+                          <p className="text-xs text-on-surface-variant font-medium">{img.caption}</p>
                         )}
                       </div>
                     );
@@ -1858,7 +1858,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.1 + index * 0.02, ease: [0.16, 1, 0.3, 1] }}
-                  className="bg-white border border-gray-200 rounded-[24px] p-4 shadow-sm"
+                  className="bg-surface-container border border-outline-variant rounded-[24px] p-4 shadow-sm"
                 >
                   <div
                     className="rounded-xl bg-[#E8E8E8] overflow-hidden mb-3"
@@ -1873,7 +1873,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     </video>
                   </div>
                   {section.caption && (
-                    <p className="text-xs text-gray-500 font-medium">{section.caption}</p>
+                    <p className="text-xs text-on-surface-variant font-medium">{section.caption}</p>
                   )}
                 </motion.div>
               );
@@ -1888,7 +1888,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
         onClick={onBack}
         whileHover={{ x: -4 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="flex items-center gap-2 text-gray-600 hover:text-[#292A2E] mt-8 transition-colors"
+        className="flex items-center gap-2 text-on-surface-variant hover:text-[#292A2E] mt-8 transition-colors"
       >
         <ArrowBackIcon className="w-4 h-4" />
         <span className="text-sm font-medium">Back to projects</span>
