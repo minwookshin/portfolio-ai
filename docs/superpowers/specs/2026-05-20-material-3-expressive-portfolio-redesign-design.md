@@ -58,7 +58,7 @@ Defined as CSS custom properties in `app/globals.css`, mirrored into `tailwind.c
 
 Accent rule: red appears at most once per view (the single primary action, or an active/error state). Everything else is monochrome.
 
-**Shape scale:** `none 0 · xs 4 · sm 8 · md 12 · lg 16 · xl 28 · full 9999` (px, except full). Buttons default to `full` (pill) and morph toward `sm`/`md` on press.
+**Shape scale:** `none 0 · xs 4 · sm 8 · md 12 · lg 16 · xl 28 · full 9999` (px, except full). Buttons default to `full` (pill) and morph toward `md` on press.
 
 **Type scale (Urbanist, weights 300–600):** Material roles `display-lg/md`, `headline-lg/md`, `title-lg/md`, `body-lg/md`, `label-lg/md/sm`. Eyebrow micro-labels use Space Mono uppercase.
 
