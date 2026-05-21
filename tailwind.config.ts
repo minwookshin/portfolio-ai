@@ -38,7 +38,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-dm-sans)"],
-        mono: ["var(--font-jetbrains-mono)"],
+        mono: ["var(--font-space-mono)", "var(--font-jetbrains-mono)", "monospace"],
       },
       boxShadow: {
         glow: "0 0 30px rgba(255, 64, 0, 0.2)",
