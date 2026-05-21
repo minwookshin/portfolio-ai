@@ -99,3 +99,31 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+/* Material 3 Expressive tokens — monochrome + Nothing-red accent (light) */
+:root {
+  --md-surface: #f2f2f2;
+  --md-surface-container: #eaeaea;
+  --md-surface-container-high: #e2e2e2;
+  --md-on-surface: #292a2e;
+  --md-on-surface-variant: #5c5c5e;
+  --md-outline: #c4c4c4;
+  --md-outline-variant: #dcdcdc;
+  --md-primary: #d71921;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #fce4e4;
+  --md-on-primary-container: #3f0709;
+
+  /* shape scale (px) */
+  --md-shape-xs: 4px;
+  --md-shape-sm: 8px;
+  --md-shape-md: 12px;
+  --md-shape-lg: 16px;
+  --md-shape-xl: 28px;
+  --md-shape-full: 9999px;
+
+  /* state layer opacities */
+  --md-state-hover: 0.08;
+  --md-state-focus: 0.1;
+  --md-state-press: 0.1;
+}
