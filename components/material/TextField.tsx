@@ -32,13 +32,13 @@ export function TextField({
       animate={reduce ? undefined : { scale: focused ? 1.01 : 1 }}
       transition={springs.spatialFast}
       className={[
-        "flex items-center gap-2 w-full bg-surface-container rounded-shape-full pl-7 pr-4 h-14",
-        "border transition-colors",
-        focused ? "border-primary" : "border-transparent",
+        "relative flex items-center gap-2 w-full bg-surface-container rounded-shape-full pl-7 pr-4 h-14",
+        "before:absolute before:inset-0 before:rounded-[inherit] before:bg-on-surface before:pointer-events-none before:transition-opacity",
+        focused ? "before:opacity-[0.06]" : "before:opacity-0",
         className,
       ].join(" ")}
     >
-      {leading && <span className="inline-flex shrink-0">{leading}</span>}
+      {leading && <span className="relative z-10 inline-flex shrink-0">{leading}</span>}
       <input
         aria-label={rest["aria-label"] ?? placeholder}
         value={value}
@@ -49,9 +49,9 @@ export function TextField({
         onKeyDown={(e) => {
           if (e.key === "Enter" && onSubmit) onSubmit();
         }}
-        className="flex-1 bg-transparent outline-none text-on-surface placeholder:text-on-surface-variant text-base"
+        className="relative z-10 flex-1 bg-transparent outline-none text-on-surface placeholder:text-on-surface-variant text-base"
       />
-      {trailing && <span className="inline-flex shrink-0 items-center gap-1">{trailing}</span>}
+      {trailing && <span className="relative z-10 inline-flex shrink-0 items-center gap-1">{trailing}</span>}
     </motion.div>
   );
 }
