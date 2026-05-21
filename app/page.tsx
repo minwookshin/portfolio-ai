@@ -476,20 +476,16 @@ export default function Home() {
                     <motion.div
                       initial={{ opacity: 0, y: 24, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{
-                        duration: 0.5,
-                        ease: appleEasing,
-                        delay: index * 0.05
-                      }}
+                      transition={{ ...springs.spatialDefault, delay: index * 0.05 }}
                       className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} mb-4`}
                     >
                       <motion.div
                         whileHover={{ scale: 1.01 }}
-                        transition={{ duration: 0.2 }}
-                        className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 sm:px-5 py-3 shadow-sm hover:shadow-md transition-all duration-300 ${
+                        transition={springs.spatialFast}
+                        className={`max-w-[85%] sm:max-w-[80%] rounded-shape-lg px-4 sm:px-5 py-3 transition-all duration-300 ${
                           msg.role === "user"
-                            ? "bg-[#292A2E] text-white"
-                            : "bg-white text-[#292A2E] border border-gray-200"
+                            ? "bg-on-surface text-surface"
+                            : "bg-surface-container text-on-surface"
                         }`}
                       >
                         {msg.role === "assistant" ? (
@@ -637,22 +633,22 @@ export default function Home() {
                     transition={{ duration: 0.3, ease: appleEasing }}
                     className="flex justify-start"
                   >
-                    <div className="bg-white rounded-2xl px-5 py-3 shadow-sm border border-gray-200">
+                    <div className="bg-surface-container rounded-shape-lg px-5 py-3">
                       <div className="flex items-center space-x-2">
                         <motion.div
                           animate={{ opacity: [0.3, 1, 0.3] }}
                           transition={{ duration: 1.5, repeat: Infinity }}
-                          className="w-2 h-2 bg-[#292A2E] rounded-full"
+                          className="w-2 h-2 bg-on-surface rounded-full"
                         />
                         <motion.div
                           animate={{ opacity: [0.3, 1, 0.3] }}
                           transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-                          className="w-2 h-2 bg-[#292A2E] rounded-full"
+                          className="w-2 h-2 bg-on-surface rounded-full"
                         />
                         <motion.div
                           animate={{ opacity: [0.3, 1, 0.3] }}
                           transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
-                          className="w-2 h-2 bg-[#292A2E] rounded-full"
+                          className="w-2 h-2 bg-on-surface rounded-full"
                         />
                       </div>
                     </div>
