@@ -1,22 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import FlashOnIcon from '@mui/icons-material/FlashOn';
-import ShieldIcon from '@mui/icons-material/Shield';
-import PaletteIcon from '@mui/icons-material/Palette';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import PersonIcon from '@mui/icons-material/Person';
-import WarningIcon from '@mui/icons-material/Warning';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import GppMaybeIcon from '@mui/icons-material/GppMaybe';
-import ChatIcon from '@mui/icons-material/Chat';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import TimerIcon from '@mui/icons-material/Timer';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {
+  ArrowLeft as ArrowBackIcon,
+  ExternalLink as OpenInNewIcon,
+  Zap as FlashOnIcon,
+  Shield as ShieldIcon,
+  Palette as PaletteIcon,
+  Trophy as EmojiEventsIcon,
+  User as PersonIcon,
+  TriangleAlert as WarningIcon,
+  CheckCircle2 as CheckCircleIcon,
+  TrendingUp as TrendingUpIcon,
+  Brain as PsychologyIcon,
+  ShieldAlert as GppMaybeIcon,
+  MessageCircle as ChatIcon,
+  Calendar as CalendarTodayIcon,
+  Timer as TimerIcon,
+  ArrowRight as ArrowForwardIcon,
+} from "lucide-react";
 import { Project } from "./ProjectCard";
 
 interface ProjectDetailViewProps {
