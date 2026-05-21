@@ -4,12 +4,17 @@ import { Button, ButtonVariant, ButtonSize } from "@/components/material/Button"
 import { IconButton } from "@/components/material/IconButton";
 import { Chip } from "@/components/material/Chip";
 import { SplitButton } from "@/components/material/SplitButton";
-import { Mic } from "lucide-react";
+import { Card } from "@/components/material/Card";
+import { TextField } from "@/components/material/TextField";
+import { Eyebrow } from "@/components/material/Eyebrow";
+import { Mic, Send } from "lucide-react";
+import { useState } from "react";
 
 const variants: ButtonVariant[] = ["elevated", "filled", "tonal", "outlined", "text"];
 const sizes: ButtonSize[] = ["xs", "sm", "md", "lg", "xl"];
 
 export default function PreviewPage() {
+  const [q, setQ] = useState("");
   return (
     <main className="min-h-screen bg-surface text-on-surface p-12 space-y-12">
       <section className="space-y-4">
@@ -55,6 +60,29 @@ export default function PreviewPage() {
             { label: "Save as draft", onSelect: () => {} },
             { label: "Save and publish", onSelect: () => {} },
           ]}
+        />
+      </section>
+
+      <section className="space-y-4">
+        <Eyebrow>meet minwook junior</Eyebrow>
+        <h2 className="text-2xl font-light">Cards</h2>
+        <div className="grid grid-cols-2 gap-4 max-w-2xl">
+          <Card>Static card</Card>
+          <Card interactive onClick={() => {}} aria-label="Interactive card">Interactive card</Card>
+        </div>
+      </section>
+
+      <section className="space-y-4 max-w-2xl">
+        <h2 className="text-2xl font-light">Text field</h2>
+        <TextField
+          value={q}
+          onChange={setQ}
+          placeholder="What projects have you built?"
+          trailing={
+            <IconButton aria-label="Send" size="sm">
+              <Send className="w-4 h-4" />
+            </IconButton>
+          }
         />
       </section>
     </main>
