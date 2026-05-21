@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { useChat } from "@ai-sdk/react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
@@ -19,12 +18,12 @@ import { Chip } from "@/components/material/Chip";
 import { springs } from "@/lib/material/motion";
 
 // Apple-style easing curves
-const appleEasing = [0.16, 1, 0.3, 1]; // Smooth ease-out
+const appleEasing = [0.16, 1, 0.3, 1] as const; // Smooth ease-out
 const appleSpring = {
   type: "spring",
   damping: 30,
   stiffness: 300,
-};
+} as const;
 
 // Main Projects Data - From GitHub Portfolio
 const MAIN_PROJECTS: Project[] = [
@@ -171,77 +170,12 @@ export default function Home() {
 
   const { activeThemeColor, setActiveThemeColor } = useThemeStore();
 
-  // Use Vercel AI SDK's useChat hook for Gemini integration
-  const { messages, setMessages, status, error } = useChat({
-    api: '/api/chat',
-    onError: (error) => {
-      console.error('Chat error:', error);
-      // Show user-friendly error message
-      const errorMessage = error.message.includes('quota')
-        ? 'AI chat is temporarily unavailable due to rate limits. Please try again in a moment.'
-        : 'Unable to connect to AI chat. Please check your connection and try again.';
-
-      // Add error message to chat
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        role: 'assistant',
-        content: errorMessage
-      }]);
-    },
-    onFinish: (message) => {
-      console.log('Message finished:', message);
-    },
-    onToolCall: ({ toolCall }) => {
-      console.log('Tool call:', toolCall);
-      // Handle tool calls from Gemini
-      if (toolCall.toolName === 'showProjects') {
-        setContentType('projects');
-        setProjects(MAIN_PROJECTS);
-        setCurrentContext('Projects');
-        setFollowUpChips(['Tell me about FLUX', 'Show me Telfair Museum', 'What technologies do you use?']);
-      } else if (toolCall.toolName === 'openProject') {
-        const projectId = toolCall.args.projectId;
-        const project = MAIN_PROJECTS.find(p => p.id === projectId);
-        if (project) {
-          setSelectedProject(project);
-          setCurrentContext(`Project: ${project.title}`);
-        }
-      } else if (toolCall.toolName === 'navigateTo') {
-        const section = toolCall.args.section;
-        setContentType(section as any);
-        setCurrentContext(section.charAt(0).toUpperCase() + section.slice(1));
-        if (section === 'about') {
-          setFollowUpChips(['See my projects', 'What technologies do you use?', 'Contact me']);
-        } else if (section === 'contact') {
-          setFollowUpChips(['View my work', 'Learn about me', 'See my skills']);
-        }
-      } else if (toolCall.toolName === 'showRecruiterInfo') {
-        setContentType('recruiter');
-        setCurrentContext('Recruiter');
-        setFollowUpChips([]);
-      }
-    },
-    onFinish: () => {
-      if (!hasStarted) {
-        setHasStarted(true);
-      }
-    }
-  });
-
-  // Debug: Log messages whenever they change
-  useEffect(() => {
-    console.log('Messages updated:', messages);
-    messages.forEach((msg, i) => {
-      console.log(`Message ${i}:`, {
-        id: msg.id,
-        role: msg.role,
-        content: msg.content,
-        contentLength: msg.content?.length
-      });
-    });
-    console.log('Status:', status);
-    console.log('Error:', error);
-  }, [messages, status, error]);
+  // Chat state. The /api/chat route streams plain text, so we manage messages
+  // directly (see handleMessage) rather than via the AI SDK's useChat, whose v5
+  // message/transport shape doesn't match this plain-text endpoint.
+  type ChatMessage = { id: string; role: 'user' | 'assistant'; content: string };
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isStreaming, setIsStreaming] = useState(false);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -262,6 +196,7 @@ export default function Home() {
     // Add user message
     const userMsg = { id: Date.now().toString(), role: 'user' as const, content: message };
     setMessages(prev => [...prev, userMsg]);
+    setIsStreaming(true);
 
     try {
       const res = await fetch('/api/chat', {
@@ -293,6 +228,8 @@ export default function Home() {
           msg.id === assistantId ? { ...msg, content: fullText } : msg
         ));
       }
+
+      setIsStreaming(false);
 
       // Check if we should show project cards or profile
       setTimeout(() => {
@@ -370,6 +307,8 @@ export default function Home() {
         role: 'assistant' as const,
         content: 'Sorry, I encountered an error. Please try again.'
       }]);
+    } finally {
+      setIsStreaming(false);
     }
   };
 
@@ -625,7 +564,7 @@ export default function Home() {
                 ))}
 
                 {/* Loading indicator */}
-                {status === 'loading' && (
+                {isStreaming && (
                   <motion.div
                     initial={{ opacity: 0, y: 24, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
