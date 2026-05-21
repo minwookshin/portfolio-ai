@@ -15,6 +15,7 @@ import { FolderOpen, User, Mail, Send, Linkedin, Github, Zap, FileText } from "l
 import { useThemeStore } from "@/lib/theme-store";
 import { Eyebrow } from "@/components/material/Eyebrow";
 import { Chip } from "@/components/material/Chip";
+import { HomeScreenGrid } from "@/components/material/HomeScreenGrid";
 import { springs } from "@/lib/material/motion";
 
 // Apple-style easing curves
@@ -65,6 +66,7 @@ const MAIN_PROJECTS: Project[] = [
     github: "https://github.com/YeYen1721/portfolio",
     date: "2025",
     image: "/projects/2.png",
+    icon: "/projects/portfolio-ai/chat-interface.png",
     themeColor: "#8B5CF6",
     overview: "A self-operating digital twin that turns a static resume into a live technical interview.",
     features: [
@@ -152,6 +154,7 @@ export default function Home() {
   const [contentType, setContentType] = useState<"projects" | "about" | "contact" | "recruiter" | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedProjectMessageId, setSelectedProjectMessageId] = useState<string | null>(null);
+  const [heroProject, setHeroProject] = useState<Project | null>(null);
   const [currentContext, setCurrentContext] = useState<string>("Home");
   const [followUpChips, setFollowUpChips] = useState<string[]>([]);
   const [contentHistory, setContentHistory] = useState<ContentSnapshot[]>([]);
@@ -341,12 +344,13 @@ export default function Home() {
 
   // Update theme when viewing a project detail
   useEffect(() => {
-    if (selectedProject && selectedProject.themeColor) {
-      setActiveThemeColor(selectedProject.themeColor);
-    } else if (!selectedProject && contentType !== "projects") {
+    const active = selectedProject ?? heroProject;
+    if (active && active.themeColor) {
+      setActiveThemeColor(active.themeColor);
+    } else if (!active && contentType !== "projects") {
       setActiveThemeColor(null);
     }
-  }, [selectedProject, contentType, setActiveThemeColor]);
+  }, [selectedProject, heroProject, contentType, setActiveThemeColor]);
 
   // Get background color with opacity based on active theme
   const getBackgroundStyle = () => {
@@ -367,6 +371,27 @@ export default function Home() {
 
   return (
     <main className="h-screen flex flex-col bg-surface overflow-hidden justify-center">
+
+      {/* Project detail opened from the home screen — full-screen overlay */}
+      <AnimatePresence>
+        {heroProject && (
+          <motion.div
+            key="hero-detail"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[60] overflow-y-auto bg-surface"
+          >
+            <div className="max-w-3xl mx-auto px-4 pt-6 pb-24">
+              <ProjectDetailView
+                project={heroProject}
+                onBack={() => setHeroProject(null)}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Header - moves to top when chat starts */}
       <motion.div
@@ -391,6 +416,15 @@ export default function Home() {
           <div className="text-center space-y-3 mb-6">
             <h1 className="text-4xl sm:text-5xl font-light text-on-surface tracking-tight">hi, i&apos;m minwook</h1>
             <Eyebrow>meet minwook junior</Eyebrow>
+            <div className="pt-8">
+              <HomeScreenGrid
+                projects={MAIN_PROJECTS}
+                onSelectProject={(project) => {
+                  setHeroProject(project);
+                  setCurrentContext(`Project: ${project.title}`);
+                }}
+              />
+            </div>
           </div>
         )}
       </motion.div>
