@@ -572,7 +572,7 @@ export default function Home() {
                     transition={{ duration: 0.3, ease: appleEasing }}
                     className="flex justify-start"
                   >
-                    <div className="bg-surface-container rounded-shape-lg px-5 py-3">
+                    <div className="px-1 py-2">
                       <div className="flex items-center space-x-2">
                         <motion.div
                           animate={{ opacity: [0.3, 1, 0.3] }}

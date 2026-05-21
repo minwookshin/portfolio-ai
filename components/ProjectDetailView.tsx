@@ -186,15 +186,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                             <div className="space-y-4 mb-8">
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">Full-Stack Developer & Designer</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">Zero-latency streaming • Real-time AI responses</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">Military-grade security architecture</p>
                               </div>
                             </div>
@@ -222,7 +222,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             className="relative"
                           >
                             {/* Floating effect background blur */}
-                            <div className="absolute inset-0 bg-[#D71921]/10 rounded-3xl blur-3xl transform scale-110" />
+                            <div className="absolute inset-0 bg-[#292A2E]/10 rounded-3xl blur-3xl transform scale-110" />
 
                             {/* Browser mockup */}
                             <div className="relative">
@@ -230,9 +230,9 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 {/* Browser chrome */}
                                 <div className="bg-surface-container-high border-b border-outline-variant px-4 py-3 flex items-center gap-2">
                                   <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-[#D71921]" />
-                                    <div className="w-3 h-3 rounded-full bg-[#F5C542]" />
-                                    <div className="w-3 h-3 rounded-full bg-[#2D5C3F]" />
+                                    <div className="w-3 h-3 rounded-full bg-[#292A2E]" />
+                                    <div className="w-3 h-3 rounded-full bg-[#5C5C5E]" />
+                                    <div className="w-3 h-3 rounded-full bg-[#5C5C5E]" />
                                   </div>
                                   <div className="flex-1 bg-surface-container rounded-lg px-3 py-1.5 text-xs text-on-surface-variant mx-4">
                                     minwook.dev
@@ -243,7 +243,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 <div className="p-6 bg-[#F5F5F0] h-96 flex flex-col">
                                   <div className="flex-1 space-y-4">
                                     <div className="flex items-start gap-3">
-                                      <div className="w-8 h-8 rounded-full bg-[#D71921] flex items-center justify-center flex-shrink-0">
+                                      <div className="w-8 h-8 rounded-full bg-[#292A2E] flex items-center justify-center flex-shrink-0">
                                         <FlashOnIcon className="w-4 h-4 text-white" />
                                       </div>
                                       <div className="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
@@ -262,7 +262,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                     </div>
 
                                     <div className="flex items-start gap-3">
-                                      <div className="w-8 h-8 rounded-full bg-[#D71921] flex items-center justify-center flex-shrink-0 animate-pulse">
+                                      <div className="w-8 h-8 rounded-full bg-[#292A2E] flex items-center justify-center flex-shrink-0 animate-pulse">
                                         <FlashOnIcon className="w-4 h-4 text-white" />
                                       </div>
                                       <div className="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
@@ -396,7 +396,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       icon: FlashOnIcon,
                       title: "Streaming Responses + Structured Data Rendering",
                       description: "Server-Sent Events deliver responses token-by-token, mimicking human typing. No \"loading...\" states—just natural flow. Responses render as Markdown with syntax-highlighted code and formatted tables, reducing cognitive load.",
-                      color: "from-yellow-500 to-orange-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="p-6 space-y-4">
                           <div className="flex items-start gap-3">
@@ -431,35 +431,35 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       icon: ShieldIcon,
                       title: "Enterprise-Ready Security Architecture",
                       description: "Keys never touch the browser; all requests route via Next.js API Routes. Implemented request throttling (10 req/min) to prevent abuse and DDoS attacks. Sensitive credentials stored in secure server-only environments, mirroring production standards.",
-                      color: "from-red-500 to-pink-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="p-6 space-y-4">
                           <div className="space-y-3">
-                            <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-xl">
-                              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <div className="flex items-center gap-3 p-3 bg-surface-container-high border border-outline-variant rounded-xl">
+                              <div className="w-8 h-8 bg-on-surface rounded-full flex items-center justify-center">
                                 <CheckCircleIcon className="w-5 h-5 text-white" />
                               </div>
                               <div className="flex-1">
-                                <p className="text-sm font-bold text-green-900">API Key Protected</p>
-                                <p className="text-xs text-green-700">Server-side only</p>
+                                <p className="text-sm font-bold text-on-surface">API Key Protected</p>
+                                <p className="text-xs text-on-surface-variant">Server-side only</p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-xl">
-                              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <div className="flex items-center gap-3 p-3 bg-surface-container-high border border-outline-variant rounded-xl">
+                              <div className="w-8 h-8 bg-on-surface rounded-full flex items-center justify-center">
                                 <CheckCircleIcon className="w-5 h-5 text-white" />
                               </div>
                               <div className="flex-1">
-                                <p className="text-sm font-bold text-green-900">Rate Limiting</p>
-                                <p className="text-xs text-green-700">Prevents abuse</p>
+                                <p className="text-sm font-bold text-on-surface">Rate Limiting</p>
+                                <p className="text-xs text-on-surface-variant">Prevents abuse</p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-xl">
-                              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <div className="flex items-center gap-3 p-3 bg-surface-container-high border border-outline-variant rounded-xl">
+                              <div className="w-8 h-8 bg-on-surface rounded-full flex items-center justify-center">
                                 <CheckCircleIcon className="w-5 h-5 text-white" />
                               </div>
                               <div className="flex-1">
-                                <p className="text-sm font-bold text-green-900">Environment Variables</p>
-                                <p className="text-xs text-green-700">.env protection</p>
+                                <p className="text-sm font-bold text-on-surface">Environment Variables</p>
+                                <p className="text-xs text-on-surface-variant">.env protection</p>
                               </div>
                             </div>
                           </div>
@@ -505,7 +505,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                               >
-                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#2C3E50]">
+                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#292A2E]">
                                   <span className="text-sm font-bold text-white uppercase tracking-wide">
                                     Feature {featureIndex + 1}
                                   </span>
@@ -650,7 +650,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.6, delay: 0.3 }}
-                              className="inline-flex items-center gap-3 px-6 py-3 bg-[#D71921] rounded-full mb-6 shadow-lg"
+                              className="inline-flex items-center gap-3 px-6 py-3 bg-[#292A2E] rounded-full mb-6 shadow-lg"
                             >
                               <EmojiEventsIcon className="w-5 h-5 text-white" />
                               <span className="text-sm font-bold text-white uppercase tracking-wide">
@@ -668,15 +668,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                             <div className="space-y-4 mb-10">
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">UX Engineer (Design → Code)</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">48-hour hackathon sprint</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">Native iOS app (Swift + SwiftUI)</p>
                               </div>
                             </div>
@@ -750,7 +750,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="md:col-span-8 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
-                            <div className="w-14 h-14 bg-[#D71921] rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <div className="w-14 h-14 bg-[#292A2E] rounded-2xl flex items-center justify-center flex-shrink-0">
                               <WarningIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
@@ -802,19 +802,19 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                           <div className="space-y-3 pt-4 border-t border-outline-variant">
                             <div className="flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full mt-2 flex-shrink-0" />
+                              <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full mt-2 flex-shrink-0" />
                               <p className="text-sm text-on-surface leading-relaxed">
                                 Moved into 2010 home
                               </p>
                             </div>
                             <div className="flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full mt-2 flex-shrink-0" />
+                              <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full mt-2 flex-shrink-0" />
                               <p className="text-sm text-on-surface leading-relaxed">
                                 Worries about hidden storm damage
                               </p>
                             </div>
                             <div className="flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-[#D71921] rounded-full mt-2 flex-shrink-0" />
+                              <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full mt-2 flex-shrink-0" />
                               <p className="text-sm text-on-surface leading-relaxed font-semibold">
                                 Needs to stop guessing and start preventing
                               </p>
@@ -856,7 +856,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           transition={{ duration: 0.6, delay: 0.2 }}
                           className="space-y-6"
                         >
-                          <div className="inline-flex items-center px-5 py-3 bg-[#2C3E50] rounded-full">
+                          <div className="inline-flex items-center px-5 py-3 bg-[#292A2E] rounded-full">
                             <span className="text-sm font-bold text-white uppercase tracking-wide">
                               Designed in Figma
                             </span>
@@ -881,7 +881,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           transition={{ duration: 0.6, delay: 0.3 }}
                           className="space-y-6"
                         >
-                          <div className="inline-flex items-center px-5 py-3 bg-[#2C3E50] rounded-full">
+                          <div className="inline-flex items-center px-5 py-3 bg-[#292A2E] rounded-full">
                             <span className="text-sm font-bold text-white uppercase tracking-wide">
                               Engineered in Swift
                             </span>
@@ -909,7 +909,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Historical Risk Timeline",
                       description: "Visualize past weather events and their financial impact on your property",
                       icon: TrendingUpIcon,
-                      color: "from-red-500 to-orange-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -924,7 +924,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Weather Alerts & Forecasting",
                       description: "Real-time weather alerts and climate forecasting to prepare for incoming storms and extreme weather events",
                       icon: ShieldIcon,
-                      color: "from-blue-500 to-indigo-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -939,7 +939,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Actionable Maintenance Tasks",
                       description: "Prioritized checklist of preventive actions based on risk severity and urgency",
                       icon: CheckCircleIcon,
-                      color: "from-emerald-500 to-teal-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -989,7 +989,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                               >
-                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#2C3E50]">
+                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#292A2E]">
                                   <span className="text-sm font-bold text-white uppercase tracking-wide">
                                     Feature {featureIndex + 1}
                                   </span>
@@ -1075,7 +1075,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-[#D71921] rounded-full shadow-lg"
+                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-[#292A2E] rounded-full shadow-lg"
                           >
                             <EmojiEventsIcon className="w-6 h-6 text-white" />
                             <span className="text-white font-bold uppercase tracking-wide">Winner • 1st Place</span>
@@ -1146,15 +1146,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                             <div className="space-y-4 mb-8">
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">AI UX Designer & UX Researcher</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">10-week research & design sprint</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
                                 <p className="text-base text-on-surface-variant">Target: Young adults (18-26)</p>
                               </div>
                             </div>
@@ -1228,7 +1228,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="md:col-span-7 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
-                            <div className="w-14 h-14 bg-[#D71921] rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <div className="w-14 h-14 bg-[#292A2E] rounded-2xl flex items-center justify-center flex-shrink-0">
                               <WarningIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
@@ -1324,7 +1324,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="md:col-span-7 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
-                            <div className="w-14 h-14 bg-[#D71921] rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <div className="w-14 h-14 bg-[#292A2E] rounded-2xl flex items-center justify-center flex-shrink-0">
                               <PsychologyIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
@@ -1358,7 +1358,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Personalized AI Suggestions",
                       description: "When high-risk triggers are detected, the AI provides personalized intervention strategies. Users receive contextual recommendations like setting pause timers, muting bet triggers during social events, or reflecting on past betting patterns—tailored to their specific emotional state and situation.",
                       icon: ChatIcon,
-                      color: "from-blue-500 to-indigo-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -1373,7 +1373,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Emotional Reflection Journaling",
                       description: "After experiencing a betting urge or relapse, users document their emotional journey through guided reflection. The app captures feelings, contexts, and outcomes, building a comprehensive emotional history that feeds into the AI's pattern recognition system.",
                       icon: CalendarTodayIcon,
-                      color: "from-emerald-500 to-teal-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -1388,7 +1388,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "AI-Powered Pattern Insights",
                       description: "Machine learning analyzes your emotional logs to identify recurring triggers and behavioral patterns. The insights dashboard reveals connections like 'High-energy social settings' or 'Post-work stress' as relapse catalysts, enabling you to recognize warning signs before they escalate.",
                       icon: TimerIcon,
-                      color: "from-amber-500 to-orange-500",
+                      color: "from-[#292a2e] to-[#3c3c3c]",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -1438,7 +1438,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                               >
-                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#2C3E50]">
+                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#292A2E]">
                                   <span className="text-sm font-bold text-white uppercase tracking-wide">
                                     Feature {featureIndex + 1}
                                   </span>
@@ -1498,7 +1498,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           {/* Arrow 1->2 */}
                           <motion.path
                             d="M 33% 50% L 40% 50%"
-                            stroke="#3B82F6"
+                            stroke="#292A2E"
                             strokeWidth="3"
                             fill="none"
                             strokeDasharray="8 4"
@@ -1510,7 +1510,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           {/* Arrow 2->3 */}
                           <motion.path
                             d="M 60% 50% L 67% 50%"
-                            stroke="#10B981"
+                            stroke="#5C5C5E"
                             strokeWidth="3"
                             fill="none"
                             strokeDasharray="8 4"
@@ -1543,7 +1543,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               </motion.div>
 
                               <div className="mb-4">
-                                <div className="w-16 h-16 bg-[#D71921] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-16 h-16 bg-[#292A2E] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                   <PersonIcon className="w-8 h-8 text-white" />
                                 </div>
                                 <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">Emotion Input</h4>
@@ -1579,7 +1579,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               </motion.div>
 
                               <div className="mb-4">
-                                <div className="w-16 h-16 bg-[#D71921] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-16 h-16 bg-[#292A2E] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                   <PsychologyIcon className="w-8 h-8 text-white" />
                                 </div>
                                 <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">AI Analysis</h4>
@@ -1615,7 +1615,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               </motion.div>
 
                               <div className="mb-4">
-                                <div className="w-16 h-16 bg-[#D71921] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-16 h-16 bg-[#292A2E] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                   <GppMaybeIcon className="w-8 h-8 text-white" />
                                 </div>
                                 <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">Intervention</h4>
@@ -1766,7 +1766,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-[#D71921] rounded-full shadow-lg"
+                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-[#292A2E] rounded-full shadow-lg"
                           >
                             <CheckCircleIcon className="w-6 h-6 text-white" />
                             <span className="text-white font-bold uppercase tracking-wide">Project Impact</span>

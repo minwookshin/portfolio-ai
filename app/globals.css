@@ -109,10 +109,10 @@ body {
   --md-on-surface-variant: #5c5c5e;
   --md-outline: #c4c4c4;
   --md-outline-variant: #dcdcdc;
-  --md-primary: #d71921;
+  --md-primary: #292a2e;
   --md-on-primary: #ffffff;
-  --md-primary-container: #fce4e4;
-  --md-on-primary-container: #3f0709;
+  --md-primary-container: #d6d6d6;
+  --md-on-primary-container: #1a1b1e;
 
   /* shape scale (px) */
   --md-shape-xs: 4px;

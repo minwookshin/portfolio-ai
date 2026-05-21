@@ -32,7 +32,7 @@ export function TextField({
       animate={reduce ? undefined : { scale: focused ? 1.01 : 1 }}
       transition={springs.spatialFast}
       className={[
-        "flex items-center gap-2 w-full bg-surface-container rounded-shape-full px-4 h-14",
+        "flex items-center gap-2 w-full bg-surface-container rounded-shape-full pl-7 pr-4 h-14",
         "border transition-colors",
         focused ? "border-primary" : "border-transparent",
         className,
