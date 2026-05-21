@@ -14,6 +14,9 @@ import ProfileCard from "@/components/ProfileCard";
 import { Project } from "@/components/ProjectCard";
 import { FolderOpen, User, Mail, Send, Linkedin, Github, Zap, FileText } from "lucide-react";
 import { useThemeStore } from "@/lib/theme-store";
+import { Eyebrow } from "@/components/material/Eyebrow";
+import { Chip } from "@/components/material/Chip";
+import { springs } from "@/lib/material/motion";
 
 // Apple-style easing curves
 const appleEasing = [0.16, 1, 0.3, 1]; // Smooth ease-out
@@ -441,14 +444,14 @@ export default function Home() {
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
             transition={appleSpring}
-            className="text-2xl font-light text-gray-900 hover:text-gray-600 transition-colors lowercase"
+            className="text-2xl font-light text-on-surface hover:text-on-surface-variant transition-colors lowercase"
           >
             minwook
           </motion.button>
         ) : (
-          <div className="text-center space-y-1 mb-6">
-            <h1 className="text-3xl sm:text-4xl font-light text-[#292A2E]">hi, i'm minwook</h1>
-            <p className="text-lg sm:text-xl font-light text-[#292A2E]">meet minwook junior</p>
+          <div className="text-center space-y-3 mb-6">
+            <h1 className="text-4xl sm:text-5xl font-light text-on-surface tracking-tight">hi, i&apos;m minwook</h1>
+            <Eyebrow>meet minwook junior</Eyebrow>
           </div>
         )}
       </motion.div>
@@ -686,19 +689,10 @@ export default function Home() {
                 transition={{ duration: 0.3 }}
                 className="flex flex-wrap gap-2 justify-center mb-6"
               >
-                {followUpChips.map((chip, index) => (
-                  <motion.button
-                    key={chip}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.2, delay: index * 0.1 }}
-                    onClick={() => handleMessage(chip)}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 bg-white hover:bg-gray-900 border border-gray-300 text-gray-700 hover:text-white rounded-full text-xs font-light transition-all shadow-sm hover:shadow-md"
-                  >
+                {followUpChips.map((chip) => (
+                  <Chip key={chip} onClick={() => handleMessage(chip)}>
                     {chip}
-                  </motion.button>
+                  </Chip>
                 ))}
               </motion.div>
             )}
@@ -706,24 +700,12 @@ export default function Home() {
 
           {/* Shortcut Buttons */}
           <div className={`flex flex-wrap gap-2 justify-center ${hasStarted ? 'mb-0.5 sm:mb-3' : 'mb-3'}`}>
-            <motion.button
-              onClick={() => handleMessage("projects")}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-5 py-2 bg-gray-50 hover:bg-black border border-gray-200 text-gray-700 hover:text-white rounded-full text-sm font-light transition-all shadow-sm hover:shadow-md flex items-center gap-2"
-            >
-              <FolderOpen className="w-3.5 h-3.5" />
+            <Chip leadingIcon={<FolderOpen className="w-3.5 h-3.5" />} onClick={() => handleMessage("projects")}>
               projects
-            </motion.button>
-            <motion.button
-              onClick={() => handleMessage("about minwook")}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-5 py-2 bg-gray-50 hover:bg-black border border-gray-200 text-gray-700 hover:text-white rounded-full text-sm font-light transition-all shadow-sm hover:shadow-md flex items-center gap-2"
-            >
-              <User className="w-3.5 h-3.5" />
+            </Chip>
+            <Chip leadingIcon={<User className="w-3.5 h-3.5" />} onClick={() => handleMessage("about minwook")}>
               about me
-            </motion.button>
+            </Chip>
           </div>
         </div>
       </motion.div>
