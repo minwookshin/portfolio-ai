@@ -62,7 +62,7 @@ export function generateAIResponse(userMessage: string): string {
 
   // Check if asking about education
   if (msg.includes("education") || msg.includes("study") || msg.includes("degree")) {
-    return `My educational background includes ${portfolioData.education.map(e => e.field).join(" and ")}. This diverse foundation allows me to approach design from multiple perspectives—scientific, technical, and creative.`;
+    return `My educational background includes ${portfolioData.education.map(e => e.field).join(" and ")}. This diverse foundation allows me to approach design from multiple perspectives-scientific, technical, and creative.`;
   }
 
   // Greetings

@@ -11,11 +11,10 @@ import TypewriterText from "@/components/TypewriterText";
 import RecruiterBriefing from "@/components/RecruiterBriefing";
 import ProfileCard from "@/components/ProfileCard";
 import { Project } from "@/components/ProjectCard";
-import { FolderOpen, User, Mail, Send, Linkedin, Github, Zap, FileText } from "lucide-react";
+import { FolderOpen, User, Mail, Send, Linkedin, Github, Zap, FileText, ArrowUpRight } from "lucide-react";
 import { useThemeStore } from "@/lib/theme-store";
-import { Eyebrow } from "@/components/material/Eyebrow";
 import { Chip } from "@/components/material/Chip";
-import { HomeScreenGrid } from "@/components/material/HomeScreenGrid";
+import { ProjectField } from "@/components/material/ProjectField";
 import { springs } from "@/lib/material/motion";
 
 // Apple-style easing curves
@@ -41,7 +40,7 @@ const MAIN_PROJECTS: Project[] = [
     github: "https://github.com/YeYen1721/sentinel",
     date: "2025",
     image: "/projects/sentinel/hero.png",
-    icon: "/projects/sentinel-icon.png",
+    icon: "/projects/sentinellogo.png",
     themeColor: "#F59E0B",
     overview: "From Idea to Native iOS App in 48 Hours. Sentinel is a predictive home maintenance app that helps homeowners move from gut feeling to data-driven decision making, preventing invisible risks before they become $200,000 disasters.",
     contentSections: [
@@ -66,7 +65,7 @@ const MAIN_PROJECTS: Project[] = [
     github: "https://github.com/YeYen1721/portfolio",
     date: "2025",
     image: "/projects/2.png",
-    icon: "/projects/portfolio-ai/chat-interface.png",
+    icon: "/icon.png",
     themeColor: "#8B5CF6",
     overview: "A self-operating digital twin that turns a static resume into a live technical interview.",
     features: [
@@ -78,14 +77,14 @@ const MAIN_PROJECTS: Project[] = [
     outcome: "Bridged the gap between high-end Product Design and complex LLM Engineering. Proves the ability to build secure, production-ready AI applications with elite UX.",
     contentSections: [
       { type: 'text', content: "Breaking the Static Portfolio Barrier" },
-      { type: 'text', content: "Static portfolios create an information bottleneck. Recruiters need specific answers—\"How did you handle state management?\" or \"Why Next.js?\"—but they're stuck reading 15-page case studies. This AI agent solves that: natural language queries return precise, contextualized answers about my projects and design rationale in real-time." },
+      { type: 'text', content: "Static portfolios create an information bottleneck. Recruiters need specific answers-\"How did you handle state management?\" or \"Why Next.js?\"-but they're stuck reading 15-page case studies. This AI agent solves that: natural language queries return precise, contextualized answers about my projects and design rationale in real-time." },
       { type: 'text', content: "Technical Stack Optimized for Conversational UX" },
       { type: 'text', content: "• **Next.js 16 (App Router):** Moved data fetching to the server, reducing client-side hydration time by 40%.\n• **Streaming via SSE:** Implemented Server-Sent Events to stream Gemini responses token-by-token, creating a natural conversational rhythm without loading spinners.\n• **Edge Runtime:** API routes run on global Edge Network, ensuring <200ms response times regardless of user geography." },
       { type: 'gallery', images: [{ image: "/projects/portfolio-ai/architecture.png", caption: "System Architecture" }] },
       { type: 'text', content: "Key Features" },
-      { type: 'text', content: "**Streaming Responses + Structured Data Rendering**\n\n• **Fluidity:** Server-Sent Events deliver responses token-by-token, mimicking human typing. No \"loading...\" states—just natural flow.\n• **Structured Output:** Responses render as Markdown with syntax-highlighted code and formatted tables. Complex technical answers become scannable, visual information, reducing cognitive load." },
+      { type: 'text', content: "**Streaming Responses + Structured Data Rendering**\n\n• **Fluidity:** Server-Sent Events deliver responses token-by-token, mimicking human typing. No \"loading...\" states-just natural flow.\n• **Structured Output:** Responses render as Markdown with syntax-highlighted code and formatted tables. Complex technical answers become scannable, visual information, reducing cognitive load." },
       { type: 'text', content: "**Enterprise-Ready Security Architecture**\n\n• **Server-Side API Key Protection:** Keys never touch the browser; all requests route via Next.js API Routes.\n• **Rate Limiting:** Implemented request throttling (10 req/min) to prevent abuse and DDoS attacks.\n• **Environment Isolation:** Sensitive credentials stored in secure server-only environments, mirroring production standards." },
-      { type: 'text', content: "**Impact: Bridging Design, Engineering, and Product Strategy**\n\n• **LLM Integration at Scale:** Delivered a streaming AI chat interface with enterprise-grade security and sub-100ms latency.\n• **Cost-Efficient Architecture:** Reduced token usage by 35% through prompt optimization, cutting API costs without sacrificing UX.\n• **Design + Engineering Fusion:** Unified visual polish (Framer Motion) with technical rigor (RSC)—proving full-stack ownership." }
+      { type: 'text', content: "**Impact: Bridging Design, Engineering, and Product Strategy**\n\n• **LLM Integration at Scale:** Delivered a streaming AI chat interface with enterprise-grade security and sub-100ms latency.\n• **Cost-Efficient Architecture:** Reduced token usage by 35% through prompt optimization, cutting API costs without sacrificing UX.\n• **Design + Engineering Fusion:** Unified visual polish (Framer Motion) with technical rigor (RSC)-proving full-stack ownership." }
     ]
   },
   {
@@ -127,6 +126,45 @@ const MAIN_PROJECTS: Project[] = [
     themeColor: "#8B5CF6",
     overview: "FLUX is a creative web project that showcases innovative UI/UX design through an interactive grid-based layout. The project emphasizes smooth user interactions, dynamic animations, and a unique circular navigation system that creates an engaging browsing experience."
   },
+  {
+    id: "5",
+    title: "Telfair Museum",
+    description: "Exhibition & digital experience design",
+    fullDescription:
+      "A digital experience design project for the Telfair Museum, reimagining how visitors discover and engage with exhibitions.",
+    tags: ["UX Design", "Digital Experience"],
+    date: "2025",
+    image: "/projects/telfair/4.png",
+    icon: "/projects/telfair/4.png",
+    overview: "Reimagining the museum visit through a thoughtful digital experience.",
+    gallery: ["/projects/telfair/4.png", "/projects/telfair/8.png", "/projects/telfair/12.png", "/projects/telfair/16.png"]
+  },
+  {
+    id: "6",
+    title: "Nest",
+    description: "Product design & branding",
+    fullDescription:
+      "Nest is a product design and branding project exploring a cohesive device and brand system.",
+    tags: ["Product Design", "Branding"],
+    date: "2025",
+    image: "/projects/nest/devicefin.png",
+    icon: "/projects/nest/branding1.png",
+    overview: "A product and brand system, from low-fi exploration to a polished device concept.",
+    gallery: ["/projects/nest/devicefin.png", "/projects/nest/branding1.png", "/projects/nest/fin1.png", "/projects/nest/hifi1.png"]
+  },
+  {
+    id: "7",
+    title: "NameMe",
+    description: "Concept design project",
+    fullDescription:
+      "NameMe is a concept design project spanning ideation, low-fi flows, and a high-fidelity concept.",
+    tags: ["UX Design", "Concept"],
+    date: "2025",
+    image: "/projects/nameme/nmmainfin.jpg",
+    icon: "/projects/nameme/nmmainfin.jpg",
+    overview: "From ideation to a high-fidelity concept.",
+    gallery: ["/projects/nameme/nmmainfin.jpg", "/projects/nameme/nmhificoncept.png", "/projects/nameme/nmmidfi.png", "/projects/nameme/nmlowfi.png"]
+  },
 ];
 
 // Personal Information
@@ -139,6 +177,15 @@ const PERSONAL_INFO = {
   github: "https://github.com/YeYen1721",
   resume: "https://drive.google.com/file/d/1DpEUz-h7ZgHIkNNdbAr6VIUho4m33v3-/view?usp=sharing",
 };
+
+// Detect what an AI message refers to, so we can offer a redirect button
+function detectTarget(text: string): Project | "profile" | null {
+  const lower = text.toLowerCase();
+  const proj = MAIN_PROJECTS.find((p) => lower.includes(p.title.toLowerCase()));
+  if (proj) return proj;
+  if (/\b(profile|resume|hire me|contact me|reach me|email me)\b/.test(lower)) return "profile";
+  return null;
+}
 
 // Interface to store content snapshot for each message
 interface ContentSnapshot {
@@ -155,6 +202,15 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedProjectMessageId, setSelectedProjectMessageId] = useState<string | null>(null);
   const [heroProject, setHeroProject] = useState<Project | null>(null);
+  const [showGlobe, setShowGlobe] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [detailFocus, setDetailFocus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1800);
+    return () => clearTimeout(t);
+  }, []);
   const [currentContext, setCurrentContext] = useState<string>("Home");
   const [followUpChips, setFollowUpChips] = useState<string[]>([]);
   const [contentHistory, setContentHistory] = useState<ContentSnapshot[]>([]);
@@ -194,6 +250,11 @@ export default function Home() {
     if (!hasStarted) {
       setHasStarted(true);
     }
+    // Sending a message returns to the conversation view (close any open overlay)
+    setShowGlobe(false);
+    setShowProfile(false);
+    setHeroProject(null);
+    setShowResume(false);
     console.log('Sending message:', message);
 
     // Add user message
@@ -339,7 +400,22 @@ export default function Home() {
       setSelectedProjectMessageId(null);
       setActiveThemeColor(null);
       setFollowUpChips([]);
+      setShowGlobe(false);
     }, 300);
+  };
+
+  // Leave the chat view but KEEP the conversation history (reload clears it)
+  const leaveChat = () => {
+    setHasStarted(false);
+    setShowGlobe(false);
+    setShowProfile(false);
+    setHeroProject(null);
+    setShowResume(false);
+  };
+
+  // Re-open the chat (with history) when the user re-engages the composer
+  const reopenChat = () => {
+    if (messages.length > 0) setHasStarted(true);
   };
 
   // Update theme when viewing a project detail
@@ -372,7 +448,62 @@ export default function Home() {
   return (
     <main className="h-screen flex flex-col bg-surface overflow-hidden justify-center">
 
-      {/* Project detail opened from the home screen — full-screen overlay */}
+      {/* Landing splash - a clean monochrome mark springs in (sticky), then launches away */}
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            key="splash"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-surface"
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -18, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
+              exit={{ scale: 1.6, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 360, damping: 11, mass: 0.9 }}
+              className="relative w-20 h-20 rounded-[22px] bg-on-surface flex items-center justify-center shadow-[0_10px_40px_rgba(0,0,0,0.18)]"
+            >
+              {/* breathing ring */}
+              <motion.span
+                animate={{ scale: [0.7, 1.05, 0.7], opacity: [0.9, 0.2, 0.9] }}
+                transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute w-9 h-9 rounded-full border-2 border-surface"
+              />
+              {/* core dot */}
+              <motion.span
+                animate={{ scale: [1, 0.6, 1] }}
+                transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
+                className="w-2.5 h-2.5 rounded-full bg-surface"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Globe-mode captions (the grid<->globe morph itself lives in the hero) */}
+      <AnimatePresence>
+        {showGlobe && !hasStarted && (
+          <motion.div
+            key="globe-captions"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="pointer-events-none"
+          >
+            <p className="fixed top-10 left-1/2 -translate-x-1/2 z-[56] font-sf-mono uppercase tracking-normal text-[11px] text-on-surface-variant">
+              {MAIN_PROJECTS.length} projects &amp; counting
+            </p>
+            <p className="fixed bottom-28 left-1/2 -translate-x-1/2 z-[56] font-sf-mono uppercase tracking-normal text-[10px] text-on-surface-variant/70">
+              drag to spin · tap to open
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Project detail opened from the home screen - full-screen overlay */}
       <AnimatePresence>
         {heroProject && (
           <motion.div
@@ -381,16 +512,98 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] overflow-y-auto bg-surface"
+            className="fixed inset-0 z-[70] overflow-y-auto bg-surface"
           >
-            <div className="max-w-3xl mx-auto px-4 pt-6 pb-24">
+            <div className="max-w-3xl mx-auto px-4 pt-16 pb-28">
               <ProjectDetailView
                 project={heroProject}
                 onBack={() => setHeroProject(null)}
+                hideBack
+                focusQuery={detailFocus}
               />
             </div>
           </motion.div>
         )}
+      </AnimatePresence>
+
+      {/* Profile - full-screen overlay */}
+      <AnimatePresence>
+        {showProfile && (() => {
+          const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
+          const vh = typeof window !== "undefined" ? window.innerHeight : 900;
+          return (
+          <motion.div
+            key="profile"
+            className="fixed z-[70] left-1/2 bottom-0 bg-surface overflow-hidden"
+            style={{ x: "-50%" }}
+            initial={{ width: 56, height: 56, borderRadius: 28 }}
+            animate={{ width: [56, vw, vw], height: [56, 56, vh], borderRadius: [28, 28, 0] }}
+            exit={{ width: [vw, vw, 56], height: [vh, 56, 56], borderRadius: [0, 28, 28], opacity: [1, 1, 0] }}
+            transition={{ duration: 0.62, times: [0, 0.45, 1], ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.28, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 overflow-y-auto"
+            >
+            <div className="max-w-2xl mx-auto px-4 pt-16 pb-28">
+
+              <ProfileCard
+                name={PERSONAL_INFO.name}
+                title={PERSONAL_INFO.title}
+                bio={PERSONAL_INFO.bio}
+                email={PERSONAL_INFO.email}
+                linkedin={PERSONAL_INFO.linkedin}
+              />
+
+              <div className="mt-4 bg-surface-container rounded-shape-lg p-6">
+                <div className="grid grid-cols-2 gap-3">
+                  <motion.button
+                    onClick={() => setShowResume(!showResume)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-on-surface text-surface rounded-shape-md font-medium transition-all"
+                  >
+                    <FileText className="w-4 h-4" />
+                    {showResume ? 'Hide Resume' : 'View Resume'}
+                  </motion.button>
+                  <motion.a
+                    href="/resume.2025dec.pdf"
+                    download="Minwook_Shin_Resume.pdf"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-surface-container-high text-on-surface rounded-shape-md font-medium transition-all"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Download PDF
+                  </motion.a>
+                </div>
+                <AnimatePresence>
+                  {showResume && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden mt-4"
+                    >
+                      <div className="border border-outline-variant rounded-shape-md overflow-hidden bg-surface-container-high">
+                        <img
+                          src="/resume.2025dec.jpg"
+                          alt="Resume - Minwook Shin"
+                          className="w-full h-auto object-contain"
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+            </motion.div>
+          </motion.div>
+          );
+        })()}
       </AnimatePresence>
 
       {/* Header - moves to top when chat starts */}
@@ -402,232 +615,130 @@ export default function Home() {
         className={`px-4 flex items-center justify-center relative z-50 ${hasStarted ? 'pt-4 pb-2' : 'pt-8 pb-0'}`}
         style={{ background: 'transparent' }}
       >
-        {hasStarted ? (
-          <motion.button
-            onClick={handleReset}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            transition={appleSpring}
-            className="text-2xl font-light text-on-surface hover:text-on-surface-variant transition-colors lowercase"
-          >
-            minwook
-          </motion.button>
-        ) : (
-          <div className="text-center space-y-3 mb-6">
-            <h1 className="text-4xl sm:text-5xl font-light text-on-surface tracking-tight">hi, i&apos;m minwook</h1>
-            <Eyebrow>meet minwook junior</Eyebrow>
-            <div className="pt-8">
-              <HomeScreenGrid
-                projects={MAIN_PROJECTS}
-                onSelectProject={(project) => {
-                  setHeroProject(project);
-                  setCurrentContext(`Project: ${project.title}`);
-                }}
-              />
-            </div>
-          </div>
-        )}
       </motion.div>
 
-      {/* Chat Messages - only visible when started */}
-      <AnimatePresence mode="wait">
-        {hasStarted && (
+      {/* Project field - always dead-center; stays visible behind the chat */}
+      <motion.div
+        animate={{ opacity: hasStarted ? 0.5 : 1, scale: hasStarted ? 0.96 : 1 }}
+        transition={springs.spatialDefault}
+        className="fixed inset-0 z-[10] flex items-center justify-center pointer-events-none"
+      >
+        <div className="pointer-events-auto">
+          <ProjectField
+            projects={MAIN_PROJECTS}
+            mode={showGlobe ? "globe" : "grid"}
+            onSelectProject={(project) => {
+              setShowProfile(false);
+              setDetailFocus(null);
+              setHeroProject(project);
+              setCurrentContext(`Project: ${project.title}`);
+            }}
+          />
+        </div>
+      </motion.div>
+
+      {/* Click-outside catcher - leaving the chat keeps history (only reload clears it) */}
+      {hasStarted && (messages.length > 0 || isStreaming) && (
+        <div className="fixed inset-0 z-[34]" onClick={leaveChat} aria-hidden />
+      )}
+
+      {/* Chat - floating capsules rising from the bottom over the page, gradient-faded at top */}
+      <AnimatePresence>
+        {hasStarted && (messages.length > 0 || isStreaming) && (
           <motion.div
             ref={chatContainerRef}
+            key="chat"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="flex-1 overflow-y-auto scroll-smooth"
+            transition={{ duration: 0.3 }}
+            className="fixed left-1/2 -translate-x-1/2 z-[35] w-full max-w-2xl px-4 overflow-y-auto scroll-smooth"
+            style={{
+              bottom: 116,
+              maxHeight: "calc(100dvh - 220px)",
+              WebkitMaskImage: "linear-gradient(to top, #000 82%, transparent 100%)",
+              maskImage: "linear-gradient(to top, #000 82%, transparent 100%)",
+            }}
           >
-            <div className="max-w-3xl mx-auto px-4 pt-0 pb-40">
-              {/* Chat Messages and Content interwoven */}
-              <div className="space-y-4 mb-8">
-                {messages.map((msg, index) => (
-                  <div key={msg.id}>
-                    {/* Message */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ ...springs.spatialDefault, delay: index * 0.05 }}
-                      className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} mb-4`}
+            <div className="flex min-h-full flex-col justify-end gap-3 pb-7">
+              {messages.map((msg, mi) => {
+                const isUser = msg.role === "user";
+                const target = !isUser ? detectTarget(msg.content) : null;
+                const question = mi > 0 ? messages[mi - 1]?.content ?? "" : "";
+                return (
+                  <motion.div
+                    key={msg.id}
+                    initial={{ opacity: 0, y: 8, filter: isUser ? "blur(0px)" : "blur(8px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className={`flex ${isUser ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-shape-lg px-4 py-2.5 shadow-[0_6px_20px_rgba(0,0,0,0.08)] ${
+                        isUser
+                          ? "bg-on-surface text-surface"
+                          : "bg-surface-container text-on-surface border border-outline-variant"
+                      }`}
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.01 }}
-                        transition={springs.spatialFast}
-                        className={`max-w-[85%] sm:max-w-[80%] rounded-shape-lg px-4 sm:px-5 py-3 transition-all duration-300 ${
-                          msg.role === "user"
-                            ? "bg-on-surface text-surface"
-                            : "bg-surface-container text-on-surface"
-                        }`}
-                      >
-                        {msg.role === "assistant" ? (
-                          <div className="prose prose-sm max-w-none prose-headings:mt-4 prose-headings:mb-2 prose-headings:font-semibold prose-headings:text-on-surface prose-h1:text-lg prose-h2:text-base prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.6] prose-strong:text-on-surface prose-strong:font-semibold prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-3 prose-pre:overflow-x-auto prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-ol:text-sm prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.6] prose-a:text-on-surface prose-a:underline prose-a:font-medium prose-img:rounded-xl prose-img:shadow-md prose-img:my-4 prose-img:border prose-img:border-outline-variant">
-                            <ReactMarkdown
-                              remarkPlugins={[remarkGfm]}
-                              components={{
-                                img: ({node, ...props}) => (
-                                  <img
-                                    {...props}
-                                    className="rounded-xl shadow-md border border-outline-variant my-4 w-full max-w-2xl"
-                                    loading="lazy"
-                                  />
-                                )
-                              }}
-                            >
+                      {isUser ? (
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                      ) : (
+                        <>
+                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-semibold prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1.5 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-semibold prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-1.5 prose-ul:text-sm prose-ol:my-1.5 prose-ol:text-sm prose-li:my-0.5 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-medium">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {msg.content}
                             </ReactMarkdown>
                           </div>
-                        ) : (
-                          <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
-                        )}
-                      </motion.div>
-                    </motion.div>
-
-                    {/* Show content from history if it exists for this message */}
-                    {msg.role === "assistant" && (() => {
-                      const snapshot = contentHistory.find(c => c.messageId === msg.id);
-                      if (!snapshot) return null;
-
-                      return (
-                        <AnimatePresence mode="wait">
-                          {selectedProject && selectedProjectMessageId === msg.id ? (
-                            <ProjectDetailView
-                              project={selectedProject}
-                              onBack={() => {
-                                setSelectedProject(null);
-                                setSelectedProjectMessageId(null);
-                              }}
-                            />
-                          ) : snapshot.contentType === "projects" && snapshot.projects && snapshot.projects.length > 0 ? (
-                            <motion.div
-                              key="projects"
-                              initial={{ opacity: 0, y: 20 }}
+                          {target && (
+                            <motion.button
+                              type="button"
+                              initial={{ opacity: 0, y: 4 }}
                               animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -20 }}
-                              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                              transition={{ delay: 0.15, duration: 0.3 }}
+                              onClick={() => {
+                                if (target === "profile") {
+                                  setShowProfile(true);
+                                } else {
+                                  setShowProfile(false);
+                                  setDetailFocus(question);
+                                  setHeroProject(target);
+                                  setCurrentContext(`Project: ${target.title}`);
+                                }
+                              }}
+                              className="mt-2.5 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-on-surface text-surface text-xs font-medium hover:opacity-90 transition-opacity"
                             >
-                              {snapshot.projects.map((project, index) => (
-                                <FolderCard
-                                  key={project.id}
-                                  project={project}
-                                  index={index}
-                                  onViewDetails={(proj) => {
-                                    setSelectedProject(proj);
-                                    setSelectedProjectMessageId(msg.id);
-                                  }}
-                                />
-                              ))}
-                            </motion.div>
-                          ) : (snapshot.contentType === "about" || snapshot.contentType === "contact") ? (
-                            <div key="about-contact" className="space-y-4">
-                              {/* Profile Card with Photo */}
-                              <ProfileCard
-                                name={PERSONAL_INFO.name}
-                                title={PERSONAL_INFO.title}
-                                bio={PERSONAL_INFO.bio}
-                                email={PERSONAL_INFO.email}
-                                linkedin={PERSONAL_INFO.linkedin}
-                              />
-
-                              {/* Resume Section */}
-                              <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                                className="bg-surface-container rounded-shape-lg p-6 transition-all duration-300"
-                              >
-                                {/* Resume Buttons */}
-                                <div className="space-y-4">
-                                  <div className="grid grid-cols-2 gap-3">
-                                    <motion.button
-                                      onClick={() => setShowResume(!showResume)}
-                                      whileHover={{ scale: 1.02 }}
-                                      whileTap={{ scale: 0.98 }}
-                                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-on-surface hover:opacity-90 text-surface rounded-xl font-medium transition-all duration-200"
-                                    >
-                                      <FileText className="w-4 h-4" />
-                                      {showResume ? 'Hide Resume' : 'View Resume'}
-                                    </motion.button>
-                                    <motion.a
-                                      href="/resume.2025dec.pdf"
-                                      download="Minwook_Shin_Resume.pdf"
-                                      whileHover={{ scale: 1.02 }}
-                                      whileTap={{ scale: 0.98 }}
-                                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-surface-container-high hover:opacity-90 text-on-surface rounded-shape-md font-medium transition-all duration-200"
-                                    >
-                                      <FileText className="w-4 h-4" />
-                                      Download PDF
-                                    </motion.a>
-                                  </div>
-
-                                  {/* Resume Display */}
-                                  <AnimatePresence>
-                                    {showResume && (
-                                      <motion.div
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: "auto" }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="overflow-hidden"
-                                      >
-                                        <div className="border border-outline-variant rounded-shape-md overflow-hidden bg-surface-container-high">
-                                          <img
-                                            src="/resume.2025dec.jpg"
-                                            alt="Resume - Minwook Shin"
-                                            className="w-full h-auto object-contain"
-                                          />
-                                        </div>
-                                      </motion.div>
-                                    )}
-                                  </AnimatePresence>
-                                </div>
-                              </motion.div>
-                            </div>
-                          ) : snapshot.contentType === "recruiter" ? (
-                            <RecruiterBriefing key="recruiter" />
-                          ) : null}
-                        </AnimatePresence>
-                      );
-                    })()}
-                  </div>
-                ))}
-
-                {/* Loading indicator */}
-                {isStreaming && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -24, scale: 0.96 }}
-                    transition={{ duration: 0.3, ease: appleEasing }}
-                    className="flex justify-start"
-                  >
-                    <div className="px-1 py-2">
-                      <div className="flex items-center space-x-2">
-                        <motion.div
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                          className="w-2 h-2 bg-on-surface rounded-full"
-                        />
-                        <motion.div
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-                          className="w-2 h-2 bg-on-surface rounded-full"
-                        />
-                        <motion.div
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
-                          className="w-2 h-2 bg-on-surface rounded-full"
-                        />
-                      </div>
+                              {target === "profile" ? "View profile" : `Open ${target.title}`}
+                              <ArrowUpRight className="w-3.5 h-3.5" />
+                            </motion.button>
+                          )}
+                        </>
+                      )}
                     </div>
                   </motion.div>
-                )}
-              </div>
+                );
+              })}
+
+              {isStreaming && (
+                <motion.div
+                  initial={{ opacity: 0, y: 18, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={springs.spatialFast}
+                  className="flex justify-start"
+                >
+                  <div className="rounded-shape-lg px-4 py-3 bg-surface-container border border-outline-variant shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
+                    <div className="flex items-center space-x-1.5">
+                      {[0, 0.2, 0.4].map((d) => (
+                        <motion.div
+                          key={d}
+                          animate={{ opacity: [0.3, 1, 0.3] }}
+                          transition={{ duration: 1.4, repeat: Infinity, delay: d }}
+                          className="w-1.5 h-1.5 bg-on-surface rounded-full"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}
@@ -667,20 +778,30 @@ export default function Home() {
             )}
           </AnimatePresence>
 
-          {/* Shortcut Buttons */}
-          <div className={`flex flex-wrap gap-2 justify-center ${hasStarted ? 'mb-0.5 sm:mb-3' : 'mb-3'}`}>
-            <Chip leadingIcon={<FolderOpen className="w-3.5 h-3.5" />} onClick={() => handleMessage("projects")}>
-              projects
-            </Chip>
-            <Chip leadingIcon={<User className="w-3.5 h-3.5" />} onClick={() => handleMessage("about minwook")}>
-              about me
-            </Chip>
-          </div>
         </div>
       </motion.div>
 
       {/* Floating Input (rendered by ChatInput component itself) */}
-      <ChatInput onSend={handleMessage} hasStarted={hasStarted} />
+      <ChatInput
+        onSend={handleMessage}
+        hasStarted={hasStarted}
+        connectorKind={heroProject ? "project" : showProfile ? "profile" : showGlobe ? "globe" : hasStarted ? "chat" : null}
+        connectorSrc={heroProject ? (heroProject.icon ?? heroProject.image) : undefined}
+        onConnector={
+          heroProject
+            ? () => setHeroProject(null)
+            : showProfile
+            ? () => { setShowProfile(false); setShowResume(false); }
+            : showGlobe
+            ? () => setShowGlobe(false)
+            : hasStarted
+            ? leaveChat
+            : undefined
+        }
+        onToggleAll={!hasStarted && !showProfile && !showGlobe && !heroProject ? () => setShowGlobe(true) : undefined}
+        onProfile={!showProfile && !showGlobe && !heroProject ? () => setShowProfile(true) : undefined}
+        onFocusInput={reopenChat}
+      />
     </main>
   );
 }

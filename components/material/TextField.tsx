@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, Ref, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { springs } from "@/lib/material/motion";
 
@@ -9,9 +9,12 @@ export interface TextFieldProps {
   onChange: (value: string) => void;
   placeholder?: string;
   onSubmit?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   trailing?: ReactNode;
   leading?: ReactNode;
   className?: string;
+  inputRef?: Ref<HTMLInputElement>;
   "aria-label"?: string;
 }
 
@@ -20,9 +23,12 @@ export function TextField({
   onChange,
   placeholder,
   onSubmit,
+  onFocus,
+  onBlur,
   trailing,
   leading,
   className = "",
+  inputRef,
   ...rest
 }: TextFieldProps) {
   const [focused, setFocused] = useState(false);
@@ -40,12 +46,13 @@ export function TextField({
     >
       {leading && <span className="relative z-10 inline-flex shrink-0">{leading}</span>}
       <input
+        ref={inputRef}
         aria-label={rest["aria-label"] ?? placeholder}
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onFocus={() => { setFocused(true); onFocus?.(); }}
+        onBlur={() => { setFocused(false); onBlur?.(); }}
         onKeyDown={(e) => {
           if (e.key === "Enter" && onSubmit) onSubmit();
         }}

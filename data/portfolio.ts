@@ -2,7 +2,7 @@ export const portfolioData = {
   name: "Minwook Shin",
   title: "Designer & Developer",
   tagline: "0 to 1 Builder",
-  bio: "More than a UI/UX designer, I'm a problem solver shaped by a diverse journey. My background includes medical studies, competitive volleyball, and computer science. Each experience has given me a unique perspective on design—understanding human needs from a scientific lens, teamwork from the court, and structured problem-solving from coding.",
+  bio: "More than a UI/UX designer, I'm a problem solver shaped by a diverse journey. My background includes medical studies, competitive volleyball, and computer science. Each experience has given me a unique perspective on design-understanding human needs from a scientific lens, teamwork from the court, and structured problem-solving from coding.",
 
   contact: {
     email: "mwshin0703@gmail.com",

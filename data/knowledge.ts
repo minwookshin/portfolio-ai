@@ -109,7 +109,7 @@ export const portfolioKnowledge = {
       "Strong in user research, prototyping, and implementation",
       "Experience bridging design and technical teams"
     ],
-    uniquePerspective: "Each experience—from medical studies to competitive volleyball to computer science—has shaped how I approach design and problem-solving."
+    uniquePerspective: "Each experience-from medical studies to competitive volleyball to computer science-has shaped how I approach design and problem-solving."
   }
 };
 

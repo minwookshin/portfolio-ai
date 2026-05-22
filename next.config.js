@@ -4,8 +4,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
+  // Pin the workspace root so Next doesn't pick a stray parent lockfile
+  turbopack: {
+    root: __dirname,
   },
 };
 

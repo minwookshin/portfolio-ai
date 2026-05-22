@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { springs } from "@/lib/material/motion";
 import {
   ArrowLeft as ArrowBackIcon,
   ExternalLink as OpenInNewIcon,
@@ -18,45 +20,114 @@ import {
   Calendar as CalendarTodayIcon,
   Timer as TimerIcon,
   ArrowRight as ArrowForwardIcon,
+  Github as GithubIcon,
+  Code2 as CodeIcon,
+  Sparkles as SparklesIcon,
+  Layers as LayersIcon,
 } from "lucide-react";
 import { Project } from "./ProjectCard";
 
 interface ProjectDetailViewProps {
   project: Project;
   onBack: () => void;
+  hideBack?: boolean;
+  focusQuery?: string | null;
 }
 
-export default function ProjectDetailView({ project, onBack }: ProjectDetailViewProps) {
+const FOCUS_STOPWORDS = new Set([
+  "what", "how", "why", "tell", "about", "your", "this", "that", "the", "and", "for",
+  "with", "did", "does", "was", "were", "you", "project", "can", "show", "of", "to",
+  "is", "it", "are", "have", "more", "give", "into", "from", "they", "their", "the",
+]);
+
+// Focus-area copy for projects that have no authored case-study sections. We
+// build the "What I focused on" grid from the project's own disciplines/tags so
+// the page stays a real case study without inventing facts that don't exist.
+type FocusKind = "design" | "code" | "brand" | "concept";
+const FOCUS_AREA_COPY: Record<string, { blurb: string; kind: FocusKind }> = {
+  "HTML": { blurb: "Semantic, hand-written markup as the structural backbone of the experience.", kind: "code" },
+  "CSS": { blurb: "Custom layout, motion and responsive behaviour tuned for every breakpoint.", kind: "code" },
+  "JavaScript": { blurb: "Interaction logic powering the dynamic, animated browsing flow.", kind: "code" },
+  "UI/UX Design": { blurb: "Interface and interaction design focused on clarity and delight.", kind: "design" },
+  "UX Design": { blurb: "Research-led flows that make the experience feel effortless.", kind: "design" },
+  "Digital Experience": { blurb: "Shaping how people discover and move through the content.", kind: "concept" },
+  "Product Design": { blurb: "End-to-end product thinking, from concept to a polished system.", kind: "design" },
+  "Branding": { blurb: "A cohesive visual identity carried across every touchpoint.", kind: "brand" },
+  "Concept": { blurb: "Exploratory ideation that frames the problem and the direction.", kind: "concept" },
+};
+const FOCUS_ICON: Record<FocusKind, typeof CodeIcon> = {
+  design: PaletteIcon,
+  code: CodeIcon,
+  brand: SparklesIcon,
+  concept: LayersIcon,
+};
+function focusAreaFor(tag: string): { blurb: string; kind: FocusKind } {
+  return FOCUS_AREA_COPY[tag] ?? { blurb: `Hands-on craft across ${tag.toLowerCase()}.`, kind: "concept" };
+}
+
+export default function ProjectDetailView({ project, onBack, hideBack = false, focusQuery }: ProjectDetailViewProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // Deep-link: scroll to and highlight the section that answers the user's question
+  useEffect(() => {
+    if (!focusQuery || !rootRef.current) return;
+    const titleWords = new Set(project.title.toLowerCase().match(/[a-z]+/g) ?? []);
+    const words = (focusQuery.toLowerCase().match(/[a-z]+/g) ?? []).filter(
+      (w) => w.length >= 4 && !FOCUS_STOPWORDS.has(w) && !titleWords.has(w)
+    );
+    if (!words.length) return;
+    const timer = setTimeout(() => {
+      const root = rootRef.current;
+      if (!root) return;
+      const headings = Array.from(root.querySelectorAll<HTMLElement>("h1, h2, h3, h4"));
+      const paras = Array.from(root.querySelectorAll<HTMLElement>("p"));
+      const matches = (el: HTMLElement) => {
+        const txt = (el.textContent ?? "").toLowerCase();
+        return words.some((w) => txt.includes(w));
+      };
+      const target = headings.find(matches) ?? paras.find(matches);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.classList.add("section-flash");
+        setTimeout(() => target.classList.remove("section-flash"), 2400);
+      }
+    }, 480);
+    return () => clearTimeout(timer);
+  }, [focusQuery, project.title]);
+
   return (
     <motion.div
+      ref={rootRef}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={springs.spatialDefault}
       className="mb-12"
     >
       {/* Back Button - at the top */}
-      <motion.button
-        onClick={onBack}
-        whileHover={{ x: -4 }}
-        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="flex items-center gap-2 text-on-surface-variant hover:text-[#292A2E] mb-6 transition-colors"
-      >
-        <ArrowBackIcon className="w-4 h-4" />
-        <span className="text-sm font-medium">Back to projects</span>
-      </motion.button>
+      {!hideBack && (
+        <motion.button
+          onClick={onBack}
+          whileHover={{ x: -4 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface mb-6 transition-colors"
+        >
+          <ArrowBackIcon className="w-4 h-4" />
+          <span className="text-sm font-medium">Back to projects</span>
+        </motion.button>
+      )}
 
       {/* Project Overview Section */}
       <div className="bg-surface-container border border-outline-variant rounded-[20px] sm:rounded-[24px] p-6 sm:p-8 md:p-12 mb-6 shadow-sm">
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
           {/* Left: Project Image */}
           <div className="relative">
-            <div className="aspect-[4/3] rounded-xl relative overflow-hidden flex items-center justify-center">
+            <div className="aspect-[4/3] rounded-xl relative overflow-hidden flex items-center justify-center bg-surface-container-high">
               {project.image ? (
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="max-w-full max-h-[70%] object-contain"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <>
@@ -68,7 +139,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                   {/* Project title overlay */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <h2 className="text-4xl font-bold text-on-surface-variant">{project.title}</h2>
+                    <h2 className="text-3xl font-bold text-on-surface-variant">{project.title}</h2>
                   </div>
                 </>
               )}
@@ -77,7 +148,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
           {/* Right: Project Overview */}
           <div className="flex flex-col justify-center">
-            <h2 className="text-xl font-bold text-[#292A2E] mb-4">
+            <h2 className="text-xl font-bold text-on-surface mb-4">
               Project Overview
             </h2>
 
@@ -89,16 +160,16 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
             <div className="mt-6 pt-4 border-t border-outline-variant grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-on-surface-variant font-medium mb-1 uppercase tracking-wider">role</p>
-                <p className="text-sm text-[#292A2E] font-medium">{project.role || "Designer & Developer"}</p>
+                <p className="text-sm text-on-surface font-medium">{project.role || "Designer & Developer"}</p>
               </div>
               <div>
                 <p className="text-xs text-on-surface-variant font-medium mb-1 uppercase tracking-wider">timeline</p>
-                <p className="text-sm text-[#292A2E] font-medium">{project.timeline || project.date}</p>
+                <p className="text-sm text-on-surface font-medium">{project.timeline || project.date}</p>
               </div>
               {project.team && (
                 <div className="col-span-2">
                   <p className="text-xs text-on-surface-variant font-medium mb-1 uppercase tracking-wider">team</p>
-                  <p className="text-sm text-[#292A2E] font-medium">{project.team}</p>
+                  <p className="text-sm text-on-surface font-medium">{project.team}</p>
                 </div>
               )}
             </div>
@@ -118,24 +189,137 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
               </div>
             </div>
 
-            {/* Action Button */}
-            {project.link && (
-              <motion.a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#292A2E] hover:bg-[#3C3C3C] text-white rounded-xl font-semibold shadow-sm hover:shadow-md transition-all duration-300 mt-8 self-start"
-              >
-                <OpenInNewIcon className="w-4 h-4" />
-                View Live Project
-              </motion.a>
+            {/* Action Buttons */}
+            {(project.link || project.github) && (
+              <div className="flex flex-wrap items-center gap-3 mt-8">
+                {project.link && (
+                  <motion.a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-on-surface hover:bg-on-surface/90 text-white rounded-xl font-semibold shadow-sm hover:shadow-md transition-all duration-300"
+                  >
+                    <OpenInNewIcon className="w-4 h-4" />
+                    View Live Project
+                  </motion.a>
+                )}
+                {project.github && (
+                  <motion.a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    aria-label="View source on GitHub"
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-xl border border-outline-variant bg-surface text-on-surface hover:bg-on-surface hover:text-white hover:border-on-surface shadow-sm hover:shadow-md transition-all duration-300"
+                  >
+                    <GithubIcon className="w-5 h-5" />
+                  </motion.a>
+                )}
+              </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Generative detail - for projects without authored content sections */}
+      {(!project.contentSections || project.contentSections.length === 0) && (
+        <div className="space-y-12 sm:space-y-16 md:space-y-24 mt-12 sm:mt-16 md:mt-24">
+          {/* Narrative lead */}
+          <motion.section
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-3xl"
+          >
+            <p className="text-xs font-medium text-on-surface-variant uppercase tracking-[0.18em] mb-4">
+              {(project.role || "Case study")} · {project.timeline || project.date}
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-on-surface mb-6 leading-tight tracking-tight">
+              {project.title}
+            </h2>
+            <p className="text-base text-on-surface-variant leading-relaxed">
+              {project.fullDescription || project.overview || project.description}
+            </p>
+          </motion.section>
+
+          {/* Focus areas - built from the project's own disciplines */}
+          {project.tags.length > 0 && (
+            <motion.section
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <p className="text-xs font-medium text-on-surface-variant uppercase tracking-[0.18em] mb-3">
+                The work
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-on-surface mb-8 leading-tight tracking-tight">
+                What I focused on
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                {project.tags.map((tag, i) => {
+                  const fa = focusAreaFor(tag);
+                  const Icon = FOCUS_ICON[fa.kind];
+                  return (
+                    <motion.div
+                      key={tag}
+                      initial={{ opacity: 0, y: 24 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-60px" }}
+                      transition={{ duration: 0.5, delay: (i % 2) * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                      className="bg-surface-container border border-outline-variant rounded-[20px] sm:rounded-3xl p-6 sm:p-8"
+                    >
+                      <div className="w-12 h-12 rounded-2xl bg-on-surface text-surface flex items-center justify-center mb-5">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-lg font-bold text-on-surface mb-2">{tag}</h3>
+                      <p className="text-sm text-on-surface-variant leading-relaxed">{fa.blurb}</p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.section>
+          )}
+
+          {/* Gallery */}
+          {project.gallery && project.gallery.length > 0 && (
+            <motion.section
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <p className="text-xs font-medium text-on-surface-variant uppercase tracking-[0.18em] mb-3">
+                Selected work
+              </p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-on-surface mb-8 leading-tight tracking-tight">
+                A closer look
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                {project.gallery.map((src, i) => (
+                  <motion.div
+                    key={src}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.55, delay: (i % 2) * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                    className="rounded-[20px] overflow-hidden bg-surface-container border border-outline-variant aspect-[4/3] flex items-center justify-center"
+                  >
+                    <img src={src} alt={`${project.title} ${i + 1}`} className="w-full h-full object-cover" />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.section>
+          )}
+
+        </div>
+      )}
 
 
       {/* Content Sections */}
@@ -169,32 +353,32 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.6, delay: 0.3 }}
-                              className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-black/5 rounded-full mb-4 sm:mb-6"
+                              className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-on-surface/5 rounded-full mb-4 sm:mb-6"
                             >
                               <span className="text-xs sm:text-sm font-semibold text-on-surface uppercase tracking-wide">
                                 Full-Stack Engineering Case Study
                               </span>
                             </motion.div>
 
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#0a0a0a] mb-4 sm:mb-6 leading-[1.1]">
+                            <h1 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-bold text-on-surface mb-4 sm:mb-6 leading-[1.1]">
                               Portfolio AI
                             </h1>
 
-                            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-on-surface font-light mb-6 sm:mb-8 leading-relaxed">
+                            <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-on-surface font-light mb-6 sm:mb-8 leading-relaxed">
                               A self-operating AI (me!!), built with Next.js, React, and Gemini API
                             </p>
 
                             <div className="space-y-4 mb-8">
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">Full-Stack Developer & Designer</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">Zero-latency streaming • Real-time AI responses</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">Military-grade security architecture</p>
                               </div>
                             </div>
@@ -222,7 +406,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             className="relative"
                           >
                             {/* Floating effect background blur */}
-                            <div className="absolute inset-0 bg-[#292A2E]/10 rounded-3xl blur-3xl transform scale-110" />
+                            <div className="absolute inset-0 bg-on-surface/10 rounded-3xl blur-3xl transform scale-110" />
 
                             {/* Browser mockup */}
                             <div className="relative">
@@ -230,9 +414,9 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 {/* Browser chrome */}
                                 <div className="bg-surface-container-high border-b border-outline-variant px-4 py-3 flex items-center gap-2">
                                   <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-[#292A2E]" />
-                                    <div className="w-3 h-3 rounded-full bg-[#5C5C5E]" />
-                                    <div className="w-3 h-3 rounded-full bg-[#5C5C5E]" />
+                                    <div className="w-3 h-3 rounded-full bg-on-surface" />
+                                    <div className="w-3 h-3 rounded-full bg-on-surface-variant" />
+                                    <div className="w-3 h-3 rounded-full bg-on-surface-variant" />
                                   </div>
                                   <div className="flex-1 bg-surface-container rounded-lg px-3 py-1.5 text-xs text-on-surface-variant mx-4">
                                     minwook.dev
@@ -240,10 +424,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 </div>
 
                                 {/* Chat interface mockup */}
-                                <div className="p-6 bg-[#F5F5F0] h-96 flex flex-col">
+                                <div className="p-6 bg-surface h-96 flex flex-col">
                                   <div className="flex-1 space-y-4">
                                     <div className="flex items-start gap-3">
-                                      <div className="w-8 h-8 rounded-full bg-[#292A2E] flex items-center justify-center flex-shrink-0">
+                                      <div className="w-8 h-8 rounded-full bg-on-surface flex items-center justify-center flex-shrink-0">
                                         <FlashOnIcon className="w-4 h-4 text-white" />
                                       </div>
                                       <div className="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
@@ -254,7 +438,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                     </div>
 
                                     <div className="flex items-end gap-3 justify-end">
-                                      <div className="bg-[#292A2E] rounded-2xl rounded-br-sm px-4 py-3 shadow-sm max-w-[75%]">
+                                      <div className="bg-on-surface rounded-2xl rounded-br-sm px-4 py-3 shadow-sm max-w-[75%]">
                                         <p className="text-sm text-white leading-relaxed">
                                           Tell me about the Sentinel project
                                         </p>
@@ -262,7 +446,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                     </div>
 
                                     <div className="flex items-start gap-3">
-                                      <div className="w-8 h-8 rounded-full bg-[#292A2E] flex items-center justify-center flex-shrink-0 animate-pulse">
+                                      <div className="w-8 h-8 rounded-full bg-on-surface flex items-center justify-center flex-shrink-0 animate-pulse">
                                         <FlashOnIcon className="w-4 h-4 text-white" />
                                       </div>
                                       <div className="bg-surface-container rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
@@ -296,18 +480,18 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-12">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           Breaking the Static Portfolio Barrier
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           From passive documents to active intelligence
                         </p>
                       </div>
 
                       {/* Content Card */}
                       <div className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant">
-                        <p className="text-lg text-on-surface leading-relaxed">
-                          Static portfolios create an information bottleneck. Recruiters need specific answers—"How did you handle state management?" or "Why Next.js?"—but they're stuck reading 15-page case studies. This AI agent solves that: natural language queries return precise, contextualized answers about my projects and design rationale in real-time.
+                        <p className="text-base text-on-surface leading-relaxed">
+                          Static portfolios create an information bottleneck. Recruiters need specific answers-"How did you handle state management?" or "Why Next.js?"-but they're stuck reading 15-page case studies. This AI agent solves that: natural language queries return precise, contextualized answers about my projects and design rationale in real-time.
                         </p>
                       </div>
                     </motion.div>
@@ -315,7 +499,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                 }
 
                 // Skip next section (the paragraph text) - it's displayed in the card above
-                if (index > 0 && project.contentSections[index - 1]?.content === "Breaking the Static Portfolio Barrier") return null;
+                if (index > 0 && project.contentSections?.[index - 1]?.content === "Breaking the Static Portfolio Barrier") return null;
 
                 // Technical Stack - Premium Architecture Cards
                 if (section.content === "Technical Stack Optimized for Conversational UX") {
@@ -329,10 +513,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-6">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           Technical Stack Optimized for Conversational UX
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Engineering decisions that enable sub-200ms global response times
                         </p>
                       </div>
@@ -347,7 +531,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
                           <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Stack Layer 01</p>
-                          <h3 className="text-xl font-bold text-[#0a0a0a] mb-4">Next.js 16 (App Router)</h3>
+                          <h3 className="text-xl font-bold text-on-surface mb-4">Next.js 16 (App Router)</h3>
                           <p className="text-sm text-on-surface-variant leading-relaxed">
                             Moved data fetching to the server, reducing client-side hydration time by <span className="font-bold text-on-surface">40%</span>.
                           </p>
@@ -361,7 +545,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
                           <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Stack Layer 02</p>
-                          <h3 className="text-xl font-bold text-[#0a0a0a] mb-4">Streaming via SSE</h3>
+                          <h3 className="text-xl font-bold text-on-surface mb-4">Streaming via SSE</h3>
                           <p className="text-sm text-on-surface-variant leading-relaxed">
                             Implemented Server-Sent Events to stream Gemini responses token-by-token, creating a natural conversational rhythm <span className="font-bold text-on-surface">without loading spinners</span>.
                           </p>
@@ -375,7 +559,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
                           <p className="text-xs text-on-surface-variant font-semibold uppercase tracking-wider mb-4">Stack Layer 03</p>
-                          <h3 className="text-xl font-bold text-[#0a0a0a] mb-4">Edge Runtime</h3>
+                          <h3 className="text-xl font-bold text-on-surface mb-4">Edge Runtime</h3>
                           <p className="text-sm text-on-surface-variant leading-relaxed">
                             API routes run on global Edge Network, ensuring <span className="font-bold text-on-surface">&lt;200ms response times</span> regardless of user geography.
                           </p>
@@ -386,8 +570,8 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                 }
 
                 // Skip next 2 sections (bullet points and gallery) as they're handled above
-                if (index > 0 && project.contentSections[index - 1]?.content === "Technical Stack Optimized for Conversational UX") return null;
-                if (index > 0 && project.contentSections[index - 2]?.content === "Technical Stack Optimized for Conversational UX") return null;
+                if (index > 0 && project.contentSections?.[index - 1]?.content === "Technical Stack Optimized for Conversational UX") return null;
+                if (index > 0 && project.contentSections?.[index - 2]?.content === "Technical Stack Optimized for Conversational UX") return null;
 
                 // Key Features - Alternating Showcase
                 if (section.content === "Key Features") {
@@ -395,8 +579,8 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     {
                       icon: FlashOnIcon,
                       title: "Streaming Responses + Structured Data Rendering",
-                      description: "Server-Sent Events deliver responses token-by-token, mimicking human typing. No \"loading...\" states—just natural flow. Responses render as Markdown with syntax-highlighted code and formatted tables, reducing cognitive load.",
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      description: "Server-Sent Events deliver responses token-by-token, mimicking human typing. No \"loading...\" states-just natural flow. Responses render as Markdown with syntax-highlighted code and formatted tables, reducing cognitive load.",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="p-6 space-y-4">
                           <div className="flex items-start gap-3">
@@ -431,7 +615,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       icon: ShieldIcon,
                       title: "Enterprise-Ready Security Architecture",
                       description: "Keys never touch the browser; all requests route via Next.js API Routes. Implemented request throttling (10 req/min) to prevent abuse and DDoS attacks. Sensitive credentials stored in secure server-only environments, mirroring production standards.",
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="p-6 space-y-4">
                           <div className="space-y-3">
@@ -478,10 +662,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-16">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           Key Features
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Fluidity meets enterprise-grade security
                         </p>
                       </div>
@@ -505,17 +689,17 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                               >
-                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#292A2E]">
+                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-on-surface">
                                   <span className="text-sm font-bold text-white uppercase tracking-wide">
                                     Feature {featureIndex + 1}
                                   </span>
                                 </div>
 
-                                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0a0a0a] mb-6">
+                                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-bold text-on-surface mb-6">
                                   {feature.title}
                                 </h3>
 
-                                <p className="text-lg text-on-surface-variant leading-relaxed">
+                                <p className="text-base text-on-surface-variant leading-relaxed">
                                   {feature.description}
                                 </p>
                               </motion.div>
@@ -544,8 +728,8 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                 }
 
                 // Skip next 2 feature sections as they're handled above
-                if (index > 0 && project.contentSections[index - 1]?.content === "Key Features") return null;
-                if (index > 0 && project.contentSections[index - 2]?.content === "Key Features") return null;
+                if (index > 0 && project.contentSections?.[index - 1]?.content === "Key Features") return null;
+                if (index > 0 && project.contentSections?.[index - 2]?.content === "Key Features") return null;
 
                 // Impact Section
                 if (section.content && section.content.includes("**Impact: Bridging Design, Engineering, and Product Strategy**")) {
@@ -559,10 +743,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-12">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           Impact
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Bridging Design, Engineering, and Product Strategy
                         </p>
                       </div>
@@ -580,7 +764,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               <PsychologyIcon className="w-6 h-6 text-on-surface" />
                             </div>
                           </div>
-                          <h3 className="text-lg font-bold text-[#0a0a0a] mb-3">LLM Integration at Scale</h3>
+                          <h3 className="text-base font-bold text-on-surface mb-3">LLM Integration at Scale</h3>
                           <p className="text-sm text-on-surface-variant leading-relaxed">
                             Delivered a streaming AI chat interface with enterprise-grade security and sub-100ms latency.
                           </p>
@@ -597,7 +781,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               <TrendingUpIcon className="w-6 h-6 text-on-surface" />
                             </div>
                           </div>
-                          <h3 className="text-lg font-bold text-[#0a0a0a] mb-3">Cost-Efficient Architecture</h3>
+                          <h3 className="text-base font-bold text-on-surface mb-3">Cost-Efficient Architecture</h3>
                           <p className="text-sm text-on-surface-variant leading-relaxed">
                             Reduced token usage by 35% through prompt optimization, cutting API costs without sacrificing UX.
                           </p>
@@ -614,9 +798,9 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               <PaletteIcon className="w-6 h-6 text-on-surface" />
                             </div>
                           </div>
-                          <h3 className="text-lg font-bold text-[#0a0a0a] mb-3">Design + Engineering Fusion</h3>
+                          <h3 className="text-base font-bold text-on-surface mb-3">Design + Engineering Fusion</h3>
                           <p className="text-sm text-on-surface-variant leading-relaxed">
-                            Unified visual polish (Framer Motion) with technical rigor (RSC)—proving full-stack ownership.
+                            Unified visual polish (Framer Motion) with technical rigor (RSC)-proving full-stack ownership.
                           </p>
                         </motion.div>
                       </div>
@@ -650,7 +834,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.6, delay: 0.3 }}
-                              className="inline-flex items-center gap-3 px-6 py-3 bg-[#292A2E] rounded-full mb-6 shadow-lg"
+                              className="inline-flex items-center gap-3 px-6 py-3 bg-on-surface rounded-full mb-6 shadow-lg"
                             >
                               <EmojiEventsIcon className="w-5 h-5 text-white" />
                               <span className="text-sm font-bold text-white uppercase tracking-wide">
@@ -658,7 +842,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               </span>
                             </motion.div>
 
-                            <h1 className="text-6xl md:text-7xl font-bold text-[#0a0a0a] mb-8 leading-[1.1]">
+                            <h1 className="text-4xl md:text-5xl font-bold text-on-surface mb-8 leading-[1.1]">
                               Sentinel
                             </h1>
 
@@ -668,15 +852,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                             <div className="space-y-4 mb-10">
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">UX Engineer (Design → Code)</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">48-hour hackathon sprint</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">Native iOS app (Swift + SwiftUI)</p>
                               </div>
                             </div>
@@ -732,10 +916,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-12">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           The Problem
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Climate volatility meets reactive maintenance
                         </p>
                       </div>
@@ -750,12 +934,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="md:col-span-8 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
-                            <div className="w-14 h-14 bg-[#292A2E] rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <div className="w-14 h-14 bg-on-surface rounded-2xl flex items-center justify-center flex-shrink-0">
                               <WarningIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
                               <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-1">Core Issue</p>
-                              <h3 className="text-2xl font-bold text-[#0a0a0a]">Reactive Crisis Management</h3>
+                              <h3 className="text-2xl font-bold text-on-surface">Reactive Crisis Management</h3>
                             </div>
                           </div>
 
@@ -772,7 +956,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           <div className="grid grid-cols-2 gap-6 pt-6 border-t border-outline-variant">
                             <div>
                               <p className="text-sm text-on-surface font-semibold mb-1 uppercase tracking-wide">Average Cost</p>
-                              <p className="text-3xl font-black text-[#0a0a0a]">$200K+</p>
+                              <p className="text-3xl font-black text-on-surface">$200K+</p>
                               <p className="text-xs text-on-surface-variant mt-1">Storm damage ignored</p>
                             </div>
                             <div>
@@ -790,31 +974,31 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           transition={{ duration: 0.6, delay: 0.3 }}
                           className="md:col-span-4 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant"
                         >
-                          <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-4">Target PersonIcon</p>
+                          <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-4">Target User</p>
 
                           <div className="mb-6">
                             <div className="w-20 h-20 rounded-full bg-on-surface flex items-center justify-center mb-4 mx-auto">
                               <PersonIcon className="w-10 h-10 text-white" />
                             </div>
-                            <h4 className="text-2xl font-bold text-[#0a0a0a] text-center mb-1">Alex, 35</h4>
+                            <h4 className="text-2xl font-bold text-on-surface text-center mb-1">Alex, 35</h4>
                             <p className="text-sm text-on-surface font-semibold text-center mb-4">Doctor • New Homeowner</p>
                           </div>
 
                           <div className="space-y-3 pt-4 border-t border-outline-variant">
                             <div className="flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full mt-2 flex-shrink-0" />
+                              <div className="w-1.5 h-1.5 bg-on-surface rounded-full mt-2 flex-shrink-0" />
                               <p className="text-sm text-on-surface leading-relaxed">
                                 Moved into 2010 home
                               </p>
                             </div>
                             <div className="flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full mt-2 flex-shrink-0" />
+                              <div className="w-1.5 h-1.5 bg-on-surface rounded-full mt-2 flex-shrink-0" />
                               <p className="text-sm text-on-surface leading-relaxed">
                                 Worries about hidden storm damage
                               </p>
                             </div>
                             <div className="flex items-start gap-2">
-                              <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full mt-2 flex-shrink-0" />
+                              <div className="w-1.5 h-1.5 bg-on-surface rounded-full mt-2 flex-shrink-0" />
                               <p className="text-sm text-on-surface leading-relaxed font-semibold">
                                 Needs to stop guessing and start preventing
                               </p>
@@ -838,10 +1022,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-16">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           The Builder Process
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Design → Code: Proving I'm a UX Engineer
                         </p>
                       </div>
@@ -856,7 +1040,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           transition={{ duration: 0.6, delay: 0.2 }}
                           className="space-y-6"
                         >
-                          <div className="inline-flex items-center px-5 py-3 bg-[#292A2E] rounded-full">
+                          <div className="inline-flex items-center px-5 py-3 bg-on-surface rounded-full">
                             <span className="text-sm font-bold text-white uppercase tracking-wide">
                               Designed in Figma
                             </span>
@@ -864,7 +1048,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                           <div className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant">
                             <div className="space-y-3">
-                              <h4 className="text-lg font-bold text-[#0a0a0a]">Rapid Visual Prototyping</h4>
+                              <h4 className="text-base font-bold text-on-surface">Rapid Visual Prototyping</h4>
                               <p className="text-base text-on-surface leading-relaxed">
                                 Designed intuitive risk visualization interfaces under extreme time constraints.
                                 Focus on clarity and emotional impact for high-stakes decision-making.
@@ -881,7 +1065,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           transition={{ duration: 0.6, delay: 0.3 }}
                           className="space-y-6"
                         >
-                          <div className="inline-flex items-center px-5 py-3 bg-[#292A2E] rounded-full">
+                          <div className="inline-flex items-center px-5 py-3 bg-on-surface rounded-full">
                             <span className="text-sm font-bold text-white uppercase tracking-wide">
                               Engineered in Swift
                             </span>
@@ -889,7 +1073,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                           <div className="bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-outline-variant">
                             <div className="space-y-3">
-                              <h4 className="text-lg font-bold text-[#0a0a0a]">Native iOS Implementation</h4>
+                              <h4 className="text-base font-bold text-on-surface">Native iOS Implementation</h4>
                               <p className="text-base text-on-surface leading-relaxed">
                                 Built vulnerability scoring engine using Swift + SwiftUI. Integrated historical weather datasets
                                 to calculate predictive risk scores in real-time.
@@ -909,7 +1093,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Historical Risk Timeline",
                       description: "Visualize past weather events and their financial impact on your property",
                       icon: TrendingUpIcon,
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -924,7 +1108,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Weather Alerts & Forecasting",
                       description: "Real-time weather alerts and climate forecasting to prepare for incoming storms and extreme weather events",
                       icon: ShieldIcon,
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -939,7 +1123,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Actionable Maintenance Tasks",
                       description: "Prioritized checklist of preventive actions based on risk severity and urgency",
                       icon: CheckCircleIcon,
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -962,10 +1146,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-16">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           Key Features
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Three pillars of predictive maintenance
                         </p>
                       </div>
@@ -989,17 +1173,17 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                               >
-                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#292A2E]">
+                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-on-surface">
                                   <span className="text-sm font-bold text-white uppercase tracking-wide">
                                     Feature {featureIndex + 1}
                                   </span>
                                 </div>
 
-                                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0a0a0a] mb-6">
+                                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-bold text-on-surface mb-6">
                                   {feature.title}
                                 </h3>
 
-                                <p className="text-lg text-on-surface-variant leading-relaxed">
+                                <p className="text-base text-on-surface-variant leading-relaxed">
                                   {feature.description}
                                 </p>
                               </motion.div>
@@ -1034,10 +1218,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-12">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           Product Demo
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           See Sentinel in action
                         </p>
                       </div>
@@ -1049,8 +1233,8 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="w-full h-full"
                           poster="/projects/sentinel/main.png"
                         >
-                          <source src="/projects/sentinel/demo.mov" type="video/quicktime" />
                           <source src="/projects/sentinel/demo.mp4" type="video/mp4" />
+                          <source src="/projects/sentinel/demo.mov" type="video/quicktime" />
                           Your browser does not support the video tag.
                         </video>
                       </div>
@@ -1075,21 +1259,21 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-[#292A2E] rounded-full shadow-lg"
+                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-on-surface rounded-full shadow-lg"
                           >
                             <EmojiEventsIcon className="w-6 h-6 text-white" />
                             <span className="text-white font-bold uppercase tracking-wide">Winner • 1st Place</span>
                           </motion.div>
 
                           {/* Title */}
-                          <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-6">
+                          <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-6">
                             Outcome & Impact
                           </h2>
 
                           {/* Content */}
-                          <div className="space-y-6 text-lg text-on-surface leading-relaxed">
+                          <div className="space-y-6 text-base text-on-surface leading-relaxed">
                             <p>
-                              <span className="font-bold text-[#0a0a0a]">Successfully shipped a fully functional iOS MVP</span> in a 48-hour hackathon sprint.
+                              <span className="font-bold text-on-surface">Successfully shipped a fully functional iOS MVP</span> in a 48-hour hackathon sprint.
                               Validated the concept of <span className="italic">'Predictive Maintenance'</span> through real climate data integration and user testing.
                             </p>
 
@@ -1129,14 +1313,14 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.6, delay: 0.3 }}
-                              className="inline-block px-4 py-2 bg-black/5 rounded-full mb-6"
+                              className="inline-block px-4 py-2 bg-on-surface/5 rounded-full mb-6"
                             >
                               <span className="text-sm font-semibold text-on-surface uppercase tracking-wide">
                                 Product Design Case Study
                               </span>
                             </motion.div>
 
-                            <h1 className="text-6xl md:text-7xl font-bold text-[#0a0a0a] mb-6 leading-[1.1]">
+                            <h1 className="text-4xl md:text-5xl font-bold text-on-surface mb-6 leading-[1.1]">
                               Mindline
                             </h1>
 
@@ -1146,15 +1330,15 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
 
                             <div className="space-y-4 mb-8">
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">AI UX Designer & UX Researcher</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">10-week research & design sprint</p>
                               </div>
                               <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 bg-[#292A2E] rounded-full" />
+                                <div className="w-1.5 h-1.5 bg-on-surface rounded-full" />
                                 <p className="text-base text-on-surface-variant">Target: Young adults (18-26)</p>
                               </div>
                             </div>
@@ -1210,10 +1394,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-12">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           Research Deep Dive
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Double Diamond: <span className="font-semibold">Discover & Define</span>
                         </p>
                       </div>
@@ -1228,29 +1412,29 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="md:col-span-7 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
-                            <div className="w-14 h-14 bg-[#292A2E] rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <div className="w-14 h-14 bg-on-surface rounded-2xl flex items-center justify-center flex-shrink-0">
                               <WarningIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
                               <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-1">The Scope</p>
-                              <h3 className="text-2xl font-bold text-[#0a0a0a]">The Silent Epidemic</h3>
+                              <h3 className="text-2xl font-bold text-on-surface">The Silent Epidemic</h3>
                             </div>
                           </div>
 
                           <p className="text-base text-on-surface leading-relaxed mb-8">
                             Young adults (18-26) face betting addiction fueled by mobile accessibility and aggressive marketing.
-                            Current blocking tools are ineffective — users bypass them within minutes.
+                            Current blocking tools are ineffective - users bypass them within minutes.
                           </p>
 
                           {/* Stats Row */}
                           <div className="grid grid-cols-2 gap-6 pt-6 border-t border-outline-variant">
                             <div>
                               <p className="text-sm text-on-surface font-semibold mb-1 uppercase tracking-wide">Primary Target</p>
-                              <p className="text-3xl font-bold text-[#0a0a0a]">Males 18-26</p>
+                              <p className="text-3xl font-bold text-on-surface">Males 18-26</p>
                             </div>
                             <div>
                               <p className="text-sm text-on-surface font-semibold mb-1 uppercase tracking-wide">Access Point</p>
-                              <p className="text-3xl font-bold text-[#0a0a0a]">Mobile Apps</p>
+                              <p className="text-3xl font-bold text-on-surface">Mobile Apps</p>
                             </div>
                           </div>
                         </motion.div>
@@ -1264,7 +1448,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         >
                           <div>
                             <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-2">Primary Research</p>
-                            <h3 className="text-lg font-bold text-[#0a0a0a] mb-4">In-Depth PersonIcon Interviews</h3>
+                            <h3 className="text-base font-bold text-on-surface mb-4">In-Depth User Interviews</h3>
                           </div>
 
                           <div className="text-center my-8">
@@ -1274,8 +1458,8 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               transition={{ duration: 0.8, delay: 0.5, type: "spring" }}
                               className="inline-block"
                             >
-                              <p className="text-8xl font-black text-[#0a0a0a] leading-none mb-2">6</p>
-                              <p className="text-lg text-on-surface font-semibold">Participants</p>
+                              <p className="text-8xl font-black text-on-surface leading-none mb-2">6</p>
+                              <p className="text-base text-on-surface font-semibold">Participants</p>
                             </motion.div>
                           </div>
 
@@ -1295,7 +1479,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         >
                           <div>
                             <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-2">Demographics</p>
-                            <h3 className="text-lg font-bold text-[#0a0a0a] mb-4">Target Age Range</h3>
+                            <h3 className="text-base font-bold text-on-surface mb-4">Target Age Range</h3>
                           </div>
 
                           <div className="text-center my-8">
@@ -1304,8 +1488,8 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ duration: 0.8, delay: 0.6, type: "spring" }}
                             >
-                              <p className="text-7xl font-black text-[#0a0a0a] leading-none mb-2">18–26</p>
-                              <p className="text-lg text-on-surface font-semibold">Years Old</p>
+                              <p className="text-5xl font-black text-on-surface leading-none mb-2">18-26</p>
+                              <p className="text-base text-on-surface font-semibold">Years Old</p>
                             </motion.div>
                           </div>
 
@@ -1324,12 +1508,12 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           className="md:col-span-7 bg-surface-container rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-outline-variant"
                         >
                           <div className="flex items-start gap-4 mb-6">
-                            <div className="w-14 h-14 bg-[#292A2E] rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <div className="w-14 h-14 bg-on-surface rounded-2xl flex items-center justify-center flex-shrink-0">
                               <PsychologyIcon className="w-7 h-7 text-white" />
                             </div>
                             <div>
                               <p className="text-xs text-on-surface font-bold uppercase tracking-wider mb-1">Expert Validation</p>
-                              <h3 className="text-2xl font-bold text-[#0a0a0a]">Psychological Insight</h3>
+                              <h3 className="text-2xl font-bold text-on-surface">Psychological Insight</h3>
                             </div>
                           </div>
 
@@ -1356,9 +1540,9 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                   const features = [
                     {
                       title: "Personalized AI Suggestions",
-                      description: "When high-risk triggers are detected, the AI provides personalized intervention strategies. Users receive contextual recommendations like setting pause timers, muting bet triggers during social events, or reflecting on past betting patterns—tailored to their specific emotional state and situation.",
+                      description: "When high-risk triggers are detected, the AI provides personalized intervention strategies. Users receive contextual recommendations like setting pause timers, muting bet triggers during social events, or reflecting on past betting patterns-tailored to their specific emotional state and situation.",
                       icon: ChatIcon,
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -1373,7 +1557,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "Emotional Reflection Journaling",
                       description: "After experiencing a betting urge or relapse, users document their emotional journey through guided reflection. The app captures feelings, contexts, and outcomes, building a comprehensive emotional history that feeds into the AI's pattern recognition system.",
                       icon: CalendarTodayIcon,
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -1388,7 +1572,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       title: "AI-Powered Pattern Insights",
                       description: "Machine learning analyzes your emotional logs to identify recurring triggers and behavioral patterns. The insights dashboard reveals connections like 'High-energy social settings' or 'Post-work stress' as relapse catalysts, enabling you to recognize warning signs before they escalate.",
                       icon: TimerIcon,
-                      color: "from-[#292a2e] to-[#3c3c3c]",
+                      color: "from-on-surface to-on-surface-variant",
                       mockup: (
                         <div className="max-w-sm mx-auto">
                           <img
@@ -1411,10 +1595,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-16">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           The Solution
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           Three pillars of intervention
                         </p>
                       </div>
@@ -1438,17 +1622,17 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                               >
-                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-[#292A2E]">
+                                <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-on-surface">
                                   <span className="text-sm font-bold text-white uppercase tracking-wide">
                                     Feature {featureIndex + 1}
                                   </span>
                                 </div>
 
-                                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0a0a0a] mb-6">
+                                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-bold text-on-surface mb-6">
                                   {feature.title}
                                 </h3>
 
-                                <p className="text-lg text-on-surface-variant leading-relaxed">
+                                <p className="text-base text-on-surface-variant leading-relaxed">
                                   {feature.description}
                                 </p>
                               </motion.div>
@@ -1483,10 +1667,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     >
                       {/* Section Header */}
                       <div className="mb-12">
-                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-3">
+                        <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-3">
                           The Logic Flow
                         </h2>
-                        <p className="text-lg text-on-surface-variant">
+                        <p className="text-base text-on-surface-variant">
                           From Emotion Detection → AI Analysis → Real-Time Action
                         </p>
                       </div>
@@ -1494,12 +1678,13 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       {/* Horizontal Flow Diagram */}
                       <div className="relative">
                         {/* Connection Lines (SVG) */}
-                        <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" style={{ zIndex: 0 }}>
+                        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" style={{ zIndex: 0 }}>
                           {/* Arrow 1->2 */}
                           <motion.path
-                            d="M 33% 50% L 40% 50%"
+                            d="M 33 50 L 40 50"
                             stroke="#292A2E"
                             strokeWidth="3"
+                            vectorEffect="non-scaling-stroke"
                             fill="none"
                             strokeDasharray="8 4"
                             initial={{ pathLength: 0, opacity: 0 }}
@@ -1509,9 +1694,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                           />
                           {/* Arrow 2->3 */}
                           <motion.path
-                            d="M 60% 50% L 67% 50%"
+                            d="M 60 50 L 67 50"
                             stroke="#5C5C5E"
                             strokeWidth="3"
+                            vectorEffect="non-scaling-stroke"
                             fill="none"
                             strokeDasharray="8 4"
                             initial={{ pathLength: 0, opacity: 0 }}
@@ -1543,17 +1729,17 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               </motion.div>
 
                               <div className="mb-4">
-                                <div className="w-16 h-16 bg-[#292A2E] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-16 h-16 bg-on-surface rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                   <PersonIcon className="w-8 h-8 text-white" />
                                 </div>
-                                <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">Emotion Input</h4>
+                                <h4 className="text-2xl font-bold text-on-surface mb-3">Emotion Input</h4>
                                 <p className="text-base text-on-surface leading-relaxed">
-                                  PersonIcon logs emotional state: <span className="font-semibold text-on-surface">"Anxious"</span> or <span className="font-semibold text-on-surface">"Excited"</span>
+                                  User logs emotional state: <span className="font-semibold text-on-surface">"Anxious"</span> or <span className="font-semibold text-on-surface">"Excited"</span>
                                 </p>
                               </div>
 
                               <div className="pt-4 border-t border-outline-variant mt-4">
-                                <p className="text-sm text-on-surface font-semibold">PersonIcon Action</p>
+                                <p className="text-sm text-on-surface font-semibold">User Action</p>
                               </div>
                             </div>
                           </motion.div>
@@ -1579,10 +1765,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               </motion.div>
 
                               <div className="mb-4">
-                                <div className="w-16 h-16 bg-[#292A2E] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-16 h-16 bg-on-surface rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                   <PsychologyIcon className="w-8 h-8 text-white" />
                                 </div>
-                                <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">AI Analysis</h4>
+                                <h4 className="text-2xl font-bold text-on-surface mb-3">AI Analysis</h4>
                                 <p className="text-base text-on-surface leading-relaxed">
                                   System cross-references with past patterns → Detects <span className="font-semibold text-on-surface">"Social Betting Trigger"</span>
                                 </p>
@@ -1615,10 +1801,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               </motion.div>
 
                               <div className="mb-4">
-                                <div className="w-16 h-16 bg-[#292A2E] rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <div className="w-16 h-16 bg-on-surface rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                   <GppMaybeIcon className="w-8 h-8 text-white" />
                                 </div>
-                                <h4 className="text-2xl font-bold text-[#0a0a0a] mb-3">Intervention</h4>
+                                <h4 className="text-2xl font-bold text-on-surface mb-3">Intervention</h4>
                                 <p className="text-base text-on-surface leading-relaxed">
                                   Suggests: <span className="font-semibold text-on-surface">"Activate Pause Timer"</span> or <span className="font-semibold text-on-surface">"Call Support Hotline"</span>
                                 </p>
@@ -1641,7 +1827,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         className="mt-12 p-8 bg-surface-container rounded-3xl border border-outline-variant"
                       >
                         <div>
-                          <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Why This Matters</h4>
+                          <h4 className="text-xl font-bold text-on-surface mb-2">Why This Matters</h4>
                           <p className="text-base text-on-surface leading-relaxed">
                             Unlike traditional blocking apps that are easily bypassed, Mindline leverages <span className="font-semibold">behavioral psychology</span> and <span className="font-semibold">real-time ML pattern recognition</span> to interrupt the dopamine loop <span className="font-semibold italic">before</span> impulsive action occurs.
                           </p>
@@ -1651,10 +1837,10 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                       {/* Additional Feature Showcase */}
                       <div className="mt-32">
                         <div className="mb-16">
-                          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0a0a0a] mb-3">
+                          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-bold text-on-surface mb-3">
                             Additional Features
                           </h3>
-                          <p className="text-lg text-on-surface-variant">
+                          <p className="text-base text-on-surface-variant">
                             Supporting tools for comprehensive intervention
                           </p>
                         </div>
@@ -1676,7 +1862,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               />
                             </div>
                             <div className="text-center">
-                              <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">AI Conversational Support</h4>
+                              <h4 className="text-xl font-bold text-on-surface mb-2">AI Conversational Support</h4>
                               <p className="text-base text-on-surface-variant">Real-time emotional support through intelligent dialogue</p>
                             </div>
                           </motion.div>
@@ -1697,7 +1883,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               />
                             </div>
                             <div className="text-center">
-                              <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Progress CalendarTodayIcon</h4>
+                              <h4 className="text-xl font-bold text-on-surface mb-2">Progress CalendarTodayIcon</h4>
                               <p className="text-base text-on-surface-variant">Visual timeline of emotional states and betting patterns</p>
                             </div>
                           </motion.div>
@@ -1718,7 +1904,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               />
                             </div>
                             <div className="text-center">
-                              <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Social Context Awareness</h4>
+                              <h4 className="text-xl font-bold text-on-surface mb-2">Social Context Awareness</h4>
                               <p className="text-base text-on-surface-variant">Identify triggers in social situations with photo logging</p>
                             </div>
                           </motion.div>
@@ -1739,7 +1925,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                               />
                             </div>
                             <div className="text-center">
-                              <h4 className="text-xl font-bold text-[#0a0a0a] mb-2">Supportive Onboarding</h4>
+                              <h4 className="text-xl font-bold text-on-surface mb-2">Supportive Onboarding</h4>
                               <p className="text-base text-on-surface-variant">Welcoming experience with "Bet on yourself" messaging</p>
                             </div>
                           </motion.div>
@@ -1766,25 +1952,25 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-[#292A2E] rounded-full shadow-lg"
+                            className="inline-flex items-center gap-3 mb-8 px-6 py-3 bg-on-surface rounded-full shadow-lg"
                           >
                             <CheckCircleIcon className="w-6 h-6 text-white" />
                             <span className="text-white font-bold uppercase tracking-wide">Project Impact</span>
                           </motion.div>
 
                           {/* Title */}
-                          <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-4xl lg:text-5xl font-bold text-[#0a0a0a] mb-6">
+                          <h2 className="text-2xl sm:text-xl sm:text-2xl md:text-3xl lg:text-3xl lg:text-4xl font-bold text-on-surface mb-6">
                             Outcome & Reflection
                           </h2>
 
                           {/* Content */}
-                          <div className="space-y-6 text-lg text-on-surface leading-relaxed">
+                          <div className="space-y-6 text-base text-on-surface leading-relaxed">
                             <p>
-                              <span className="font-bold text-[#0a0a0a]">Mindline shifts the paradigm</span> from <span className="italic">'restriction'</span> to <span className="italic">'awareness'</span>. Through user testing with 6 participants, the tool successfully reduced impulsive betting triggers by interrupting the dopamine loop before action occurs.
+                              <span className="font-bold text-on-surface">Mindline shifts the paradigm</span> from <span className="italic">'restriction'</span> to <span className="italic">'awareness'</span>. Through user testing with 6 participants, the tool successfully reduced impulsive betting triggers by interrupting the dopamine loop before action occurs.
                             </p>
 
                             <p>
-                              Rather than simply blocking access (which users bypass within minutes), Mindline empowers users with <span className="font-semibold text-on-surface">self-awareness</span>, <span className="font-semibold text-on-surface">real-time emotional analysis</span>, and <span className="font-semibold text-on-surface">proactive intervention</span> — creating sustainable behavioral change.
+                              Rather than simply blocking access (which users bypass within minutes), Mindline empowers users with <span className="font-semibold text-on-surface">self-awareness</span>, <span className="font-semibold text-on-surface">real-time emotional analysis</span>, and <span className="font-semibold text-on-surface">proactive intervention</span> - creating sustainable behavioral change.
                             </p>
                           </div>
                         </div>
@@ -1804,7 +1990,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                     transition={{ duration: 0.4, delay: 0.1 + index * 0.02, ease: [0.16, 1, 0.3, 1] }}
                     className="pt-4"
                   >
-                    <h3 className="text-lg font-bold text-[#292A2E]">{section.content}</h3>
+                    <h3 className="text-base font-bold text-on-surface">{section.content}</h3>
                   </motion.div>
                 );
               } else {
@@ -1836,7 +2022,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                         key={imgIndex}
                         className={`bg-surface-container border border-outline-variant rounded-[24px] p-4 shadow-sm ${spanFull ? 'md:col-span-2' : ''}`}
                       >
-                        <div className="rounded-xl bg-[#E8E8E8] overflow-hidden mb-3">
+                        <div className="rounded-xl bg-surface-container-high overflow-hidden mb-3">
                           <img
                             src={img.image}
                             alt={img.caption}
@@ -1861,7 +2047,7 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
                   className="bg-surface-container border border-outline-variant rounded-[24px] p-4 shadow-sm"
                 >
                   <div
-                    className="rounded-xl bg-[#E8E8E8] overflow-hidden mb-3"
+                    className="rounded-xl bg-surface-container-high overflow-hidden mb-3"
                     style={{ aspectRatio: section.aspectRatio || '16/9' }}
                   >
                     <video
@@ -1884,15 +2070,17 @@ export default function ProjectDetailView({ project, onBack }: ProjectDetailView
       )}
 
       {/* Back Button - at the bottom */}
-      <motion.button
-        onClick={onBack}
-        whileHover={{ x: -4 }}
-        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="flex items-center gap-2 text-on-surface-variant hover:text-[#292A2E] mt-8 transition-colors"
-      >
-        <ArrowBackIcon className="w-4 h-4" />
-        <span className="text-sm font-medium">Back to projects</span>
-      </motion.button>
+      {!hideBack && (
+        <motion.button
+          onClick={onBack}
+          whileHover={{ x: -4 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface mt-8 transition-colors"
+        >
+          <ArrowBackIcon className="w-4 h-4" />
+          <span className="text-sm font-medium">Back to projects</span>
+        </motion.button>
+      )}
     </motion.div>
   );
 }

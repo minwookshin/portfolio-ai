@@ -1,7 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Linkedin } from "lucide-react";
+import { Mail } from "lucide-react";
+
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
 
 interface ProfileCardProps {
   name: string;
@@ -47,17 +55,17 @@ export default function ProfileCard({
         <div className="flex-1 space-y-6 text-center lg:text-left">
           {/* Name & Title */}
           <div>
-            <h2 className="text-3xl lg:text-4xl font-light text-on-surface mb-2 tracking-tight">
+            <h2 className="text-2xl lg:text-3xl font-light text-on-surface mb-1.5 tracking-tight">
               {name}
             </h2>
-            <p className="text-lg text-on-surface-variant font-medium">{title}</p>
+            <p className="text-sm text-on-surface-variant font-medium">{title}</p>
           </div>
 
           {/* Divider */}
           <div className="h-px bg-gradient-to-r from-transparent via-outline-variant to-transparent" />
 
           {/* Bio */}
-          <p className="text-sm lg:text-base text-on-surface-variant leading-relaxed whitespace-pre-line">
+          <p className="text-[13px] text-on-surface-variant leading-relaxed whitespace-pre-line">
             {bio}
           </p>
 
@@ -82,7 +90,7 @@ export default function ProfileCard({
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="flex items-center gap-2 px-6 py-3 bg-transparent border border-outline hover:border-on-surface text-on-surface rounded-shape-full text-sm font-medium transition-all duration-200"
             >
-              <Linkedin className="w-4 h-4" />
+              <LinkedInIcon className="w-4 h-4" />
               LinkedIn
             </motion.a>
           </div>

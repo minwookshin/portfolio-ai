@@ -61,6 +61,23 @@ body {
 /* Typography Utilities */
 .font-playfair { font-family: var(--font-playfair), Georgia, serif; }
 .font-mono-nothing { font-family: var(--font-space-mono), monospace; }
+.font-sf-mono {
+  font-family: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, monospace;
+  font-weight: 300;
+}
+
+/* Brief highlight when the chat deep-links to a section of a project detail */
+@keyframes sectionFlash {
+  0%   { background-color: rgba(41, 42, 46, 0); box-shadow: 0 0 0 0 rgba(41, 42, 46, 0); }
+  18%  { background-color: rgba(41, 42, 46, 0.10); box-shadow: 0 0 0 6px rgba(41, 42, 46, 0.06); }
+  100% { background-color: rgba(41, 42, 46, 0); box-shadow: 0 0 0 0 rgba(41, 42, 46, 0); }
+}
+.section-flash {
+  animation: sectionFlash 2.4s ease-out;
+  border-radius: 10px;
+  padding: 4px 8px;
+  margin: -4px -8px;
+}
 
 /* Nothing dot-matrix accent */
 .dot-matrix {
@@ -68,9 +85,12 @@ body {
   background-size: 8px 8px;
 }
 
-/* Smooth theme transitions */
-*, *::before, *::after {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+/* Smooth theme transitions - scoped to the page background only.
+   A universal `* { transition }` rule forces a style recalc on every
+   element during Framer Motion transforms and the globe rAF loop,
+   which is the main source of animation jank. */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @tailwind base;
@@ -100,7 +120,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Material 3 Expressive tokens — monochrome + Nothing-red accent (light) */
+/* Material 3 Expressive tokens - monochrome + Nothing-red accent (light) */
 :root {
   --md-surface: #f2f2f2;
   --md-surface-container: #eaeaea;

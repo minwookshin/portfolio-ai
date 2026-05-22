@@ -41,11 +41,9 @@ export default function DynamicBentoCard({
   // Dynamic motion based on creativity
   const getMotionProps = () => {
     const baseScale = creativity > 60 ? 1.03 : 1.02;
-    const baseDuration = creativity > 60 ? 0.2 : 0.3;
 
     return {
       whileHover: { scale: baseScale, rotate: creativity > 70 ? 1 : 0 },
-      transition: { duration: baseDuration },
     };
   };
 

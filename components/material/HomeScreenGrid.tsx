@@ -15,7 +15,7 @@ export function HomeScreenGrid({ projects, onSelectProject }: HomeScreenGridProp
   return (
     <div className="relative mx-auto w-fit">
       {/* 2x2 grid of project app icons */}
-      <div className="grid grid-cols-2 gap-x-[72px] gap-y-5">
+      <div className="grid grid-cols-2 gap-[32px]">
         {projects.slice(0, 4).map((project, index) => {
           const iconSrc = project.icon ?? project.image;
           return (
@@ -29,9 +29,10 @@ export function HomeScreenGrid({ projects, onSelectProject }: HomeScreenGridProp
               transition={{ ...springs.spatialDefault, delay: 0.08 * index }}
               whileHover={reduce ? undefined : { y: -4 }}
               whileTap={reduce ? undefined : { scale: 0.96 }}
-              className="group flex flex-col items-center gap-2 outline-none rounded-shape-xl focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="group outline-none rounded-[27px] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
-              <div className="relative w-[100px] h-[100px] rounded-shape-xl overflow-hidden bg-surface-container border border-outline-variant shadow-[0_6px_20px_rgba(0,0,0,0.10)]">
+              {/* iOS app-icon frame: ~22% corner radius, image full-bleed */}
+              <div className="relative w-[120px] h-[120px] rounded-[27px] overflow-hidden bg-surface-container border border-outline-variant shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
                 {iconSrc ? (
                   <img
                     src={iconSrc}
@@ -44,30 +45,13 @@ export function HomeScreenGrid({ projects, onSelectProject }: HomeScreenGridProp
                     {project.title.charAt(0)}
                   </div>
                 )}
-                {/* Material state layer */}
+                {/* iOS-style hairline + Material state layer */}
+                <span className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-black/[0.06]" />
                 <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity group-hover:opacity-[0.04] group-active:opacity-[0.08]" />
               </div>
-              <span className="font-mono uppercase tracking-[0.16em] text-[10px] text-on-surface-variant text-center">
-                {project.title}
-              </span>
             </motion.button>
           );
         })}
-      </div>
-
-      {/* Center identity mark — nested in the grid's center gap */}
-      <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        style={{ marginTop: "-13px" }}
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ ...springs.spatialDefault, delay: 0.28 }}
-          className="w-[78px] h-[78px] rounded-shape-full flex items-center justify-center bg-surface-container-high border-[3px] border-surface shadow-[0_8px_24px_rgba(0,0,0,0.16)]"
-        >
-          <img src="/icon.png" alt="minwook" className="w-[54px] h-[54px] object-contain" />
-        </motion.div>
       </div>
     </div>
   );

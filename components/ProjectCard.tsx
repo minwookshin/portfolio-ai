@@ -33,6 +33,7 @@ export interface Project {
   themeColor?: string;
   contentSections?: ProjectContentSection[];
   team?: string;
+  gallery?: string[];
 }
 
 interface ProjectCardProps {
