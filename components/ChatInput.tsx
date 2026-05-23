@@ -34,7 +34,7 @@ const outsideBtn =
 // `border: dotted`, the gap between dots is adjustable here (the "9" in the
 // dasharray). Parent must be `relative`. Inherits the element's text color.
 function DotRing({ variant = "circle", className = "" }: { variant?: "circle" | "pill"; className?: string }) {
-  const dots = { className: "dot-connect", fill: "none", stroke: "currentColor", strokeWidth: 1.25, strokeLinecap: "round" as const };
+  const dots = { className: "dot-connect", fill: "none", stroke: "currentColor", strokeWidth: 1, strokeLinecap: "round" as const };
   if (variant === "pill") {
     return (
       <svg className={`absolute inset-[1px] w-[calc(100%-2px)] h-[calc(100%-2px)] pointer-events-none overflow-visible ${className}`} fill="none" aria-hidden>
