@@ -37,8 +37,8 @@ const config: Config = {
         "shape-full": "var(--md-shape-full)",
       },
       fontFamily: {
-        sans: ["var(--font-dm-sans)"],
-        mono: ["var(--font-space-mono)", "var(--font-jetbrains-mono)", "monospace"],
+        sans: ["var(--font-google-sans)", "sans-serif"],
+        mono: ["var(--font-google-sans)", "sans-serif"],
       },
       boxShadow: {
         glow: "0 0 30px rgba(255, 64, 0, 0.2)",

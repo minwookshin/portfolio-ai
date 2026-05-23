@@ -1,31 +1,48 @@
 import type { Metadata } from "next";
-import { Urbanist, Playfair_Display, Space_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const urbanist = Urbanist({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-urbanist",
+// Google Sans Flex (variable, OFL) — self-hosted from Google Fonts since it
+// isn't in next/font/google's catalog yet. Used for the whole site.
+const googleSans = localFont({
+  src: "./fonts/GoogleSansFlex.woff2",
+  variable: "--font-google-sans",
   display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  variable: "--font-playfair",
-  display: "swap",
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-space-mono",
-  display: "swap",
+  weight: "1 1000",
 });
 
 export const metadata: Metadata = {
-  title: "minwook",
-  description: "Designer & Developer | 0 to 1 Builder",
+  title: {
+    default: "minwook shin",
+    template: "%s · minwook shin",
+  },
+  description:
+    "Minwook Shin is a UX Engineer who designs and ships living products — from Figma to production code. Native iOS, AI products, and research-led design.",
+  keywords: [
+    "Minwook Shin",
+    "UX Engineer",
+    "Product Designer",
+    "Design Engineer",
+    "0 to 1 Builder",
+    "Next.js",
+    "SwiftUI",
+    "Portfolio",
+  ],
+  authors: [{ name: "Minwook Shin" }],
+  creator: "Minwook Shin",
+  openGraph: {
+    type: "website",
+    title: "minwook shin",
+    description:
+      "A UX Engineer who designs and ships living products — from Figma to production code.",
+    siteName: "minwook shin",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "minwook shin",
+    description:
+      "A UX Engineer who designs and ships living products — from Figma to production code.",
+  },
 };
 
 export default function RootLayout({
@@ -35,7 +52,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${urbanist.variable} ${playfair.variable} ${spaceMono.variable}`}>{children}</body>
+      <body className={googleSans.variable}>{children}</body>
     </html>
   );
 }

@@ -1,120 +1,131 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { animate, useMotionValue } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Project } from "@/components/ProjectCard";
-import { springs } from "@/lib/material/motion";
+
+export interface OriginRect {
+  cx: number;
+  cy: number;
+  w: number;
+}
 
 interface ProjectFieldProps {
   projects: Project[];
-  mode: "grid" | "globe";
-  onSelectProject: (project: Project) => void;
+  onSelectProject: (project: Project, originRect?: OriginRect) => void;
+  activeCategory?: string | null;
   iconSize?: number;
   gap?: number;
-  globeRadius?: number;
-  mainCount?: number;
 }
 
-const FLAT_RADIUS = 3000; // near-flat grid
-const DEG = 180 / Math.PI;
+function rectOf(el: Element | null | undefined): OriginRect | undefined {
+  if (!el) return undefined;
+  const r = el.getBoundingClientRect();
+  return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width };
+}
+
+// Center-out cell ordering: nearest cells to the middle fill first, so the field
+// reads as one grid that grows outward in rows from a centered core.
+function centerOutCells(n: number, spacing: number) {
+  const max = Math.ceil(Math.sqrt(Math.max(n, 1))) + 1;
+  const cells: { x: number; y: number }[] = [];
+  for (let gy = -max; gy < max; gy++)
+    for (let gx = -max; gx < max; gx++) cells.push({ x: gx + 0.5, y: gy + 0.5 });
+  cells.sort((a, b) => a.x * a.x + a.y * a.y - (b.x * b.x + b.y * b.y));
+  return cells.slice(0, n).map((c) => ({ x: c.x * spacing, y: c.y * spacing }));
+}
 
 /**
- * One field of project app-icons. The flat 2x2 grid of the main projects
- * bends onto a sphere when `mode` becomes "globe": the sphere radius
- * interpolates from near-flat down to `globeRadius`, so the main icons tilt
- * a little while the extra projects fade in alongside - one continuous morph.
+ * A flat field of project app-icons you drag to pan. The matching projects sit
+ * center-out in a grid; filtering by category recompacts the survivors toward
+ * the centre (non-matching icons fade out in place). Every icon shows in full —
+ * no edge-fade mask.
  */
 export function ProjectField({
   projects,
-  mode,
   onSelectProject,
-  iconSize = 88,
+  activeCategory = null,
+  iconSize: iconSizeProp,
   gap,
-  globeRadius = 460,
-  mainCount = 4,
 }: ProjectFieldProps) {
-  // Spacing scales with icon size so it tightens as icons shrink
-  const cellGap = gap ?? Math.round(iconSize * 0.26);
-  const worldRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<(HTMLButtonElement | null)[]>([]);
-  const progress = useMotionValue(mode === "globe" ? 1 : 0);
-  const rot = useRef({ rx: 0, ry: 0 });
-  const drag = useRef({ active: false, lastX: 0, lastY: 0, moved: 0, idx: null as number | null });
-  const modeRef = useRef(mode);
-  const renderRef = useRef<() => void>(() => {});
-  const dragRaf = useRef<number | null>(null);
+  const [vw, setVw] = useState(1024);
+  const [vh, setVh] = useState(768);
+  useEffect(() => {
+    const onResize = () => { setVw(window.innerWidth); setVh(window.innerHeight); };
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const isMobile = vw <= 480;
+
+  const iconSize = iconSizeProp ?? (isMobile ? 64 : 88);
+  const cellGap = gap ?? Math.round(iconSize * 0.13);
   const spacing = iconSize + cellGap;
 
-  // Center-out cells: main projects fill the inner 2x2, extras ring outward.
-  const layout = useMemo(() => {
-    const max = Math.ceil(Math.sqrt(projects.length)) + 1;
-    const cells: { cx: number; cy: number }[] = [];
-    for (let gy = -max; gy < max; gy++) {
-      for (let gx = -max; gx < max; gx++) cells.push({ cx: gx + 0.5, cy: gy + 0.5 });
-    }
-    cells.sort((a, b) => a.cx * a.cx + a.cy * a.cy - (b.cx * b.cx + b.cy * b.cy));
-    return cells.slice(0, projects.length).map((c, i) => ({
-      isMain: i < mainCount,
-      ax: c.cx * spacing, // arc distance from center along the sphere surface
-      ay: c.cy * spacing,
-    }));
-  }, [projects.length, spacing, mainCount]);
+  // The field fills most of the viewport so every icon is shown in full.
+  const boxW = Math.min(vw - 24, 1100);
+  const boxH = Math.min(vh - 150, 820);
 
+  // Placement per project id: matching projects get center-out cells; the rest
+  // park at the centre, invisible, ready to fade back in when the filter clears.
+  const placement = useMemo(() => {
+    const matching = projects.filter(
+      (p) => !activeCategory || p.categories?.includes(activeCategory)
+    );
+    const cells = centerOutCells(matching.length, spacing);
+    const map = new Map<string, { x: number; y: number; visible: boolean }>();
+    matching.forEach((p, i) => map.set(p.id, { x: cells[i].x, y: cells[i].y, visible: true }));
+    projects.forEach((p) => { if (!map.has(p.id)) map.set(p.id, { x: 0, y: 0, visible: false }); });
+    return map;
+  }, [projects, activeCategory, spacing]);
+
+  // Grid extent (max distance from centre among visible icons) for pan clamping.
+  const extent = useMemo(() => {
+    let ex = 0, ey = 0;
+    placement.forEach((p) => {
+      if (!p.visible) return;
+      ex = Math.max(ex, Math.abs(p.x));
+      ey = Math.max(ey, Math.abs(p.y));
+    });
+    return { ex, ey };
+  }, [placement]);
+
+  // Two ways panning is allowed: shift the cluster around inside a roomy frame
+  // (when it all fits), or pan to reveal icons that sit beyond the frame edge
+  // (when the cluster is larger than the frame). Whichever gives more freedom.
+  const clampX = Math.max(0, boxW / 2 - extent.ex - iconSize / 2 - 12, extent.ex + iconSize / 2 - boxW / 2 + 24);
+  const clampY = Math.max(0, boxH / 2 - extent.ey - iconSize / 2 - 12, extent.ey + iconSize / 2 - boxH / 2 + 24);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const worldRef = useRef<HTMLDivElement>(null);
+  const pan = useRef({ x: 0, y: 0 });
+  const drag = useRef({ active: false, lastX: 0, lastY: 0, moved: 0, id: null as string | null });
+  const raf = useRef<number | null>(null);
+  const placementRef = useRef(placement);
+  placementRef.current = placement;
+
+  const paint = () => {
+    const { x, y } = pan.current;
+    if (worldRef.current) worldRef.current.style.transform = `translate(${x}px, ${y}px)`;
+  };
+  const paintRef = useRef(paint);
+  paintRef.current = paint;
+
+  // Re-clamp the pan and repaint when the filter changes the layout.
   useEffect(() => {
-    modeRef.current = mode;
-    if (mode === "grid") rot.current = { rx: 0, ry: 0 };
-    const controls = animate(progress, mode === "globe" ? 1 : 0, springs.spatialDefault);
-    return () => controls.stop();
-  }, [mode, progress]);
-
-  // Paint transforms only when something actually changes: the morph spring
-  // fires "change" events while animating and stops when settled, and drags
-  // schedule their own frames. No perpetual rAF loop competing for paint time.
-  useEffect(() => {
-    const renderFrame = () => {
-      const t = progress.get();
-      // curvature 1/R interpolates from flat to the globe radius
-      const invR = (1 - t) / FLAT_RADIUS + t / globeRadius;
-      const R = 1 / invR;
-
-      if (worldRef.current) {
-        worldRef.current.style.transform = `translateZ(${-R}px) rotateX(${rot.current.rx}deg) rotateY(${rot.current.ry}deg)`;
-      }
-
-      const extrasOpacity = Math.min(1, Math.max(0, (t - 0.05) / 0.7));
-
-      layout.forEach((L, i) => {
-        const lon = (L.ax / R) * DEG;
-        const lat = (L.ay / R) * DEG;
-        const el = itemsRef.current[i];
-        if (el) {
-          el.style.transform = `rotateY(${lon}deg) rotateX(${-lat}deg) translateZ(${R}px)`;
-          const o = L.isMain ? 1 : extrasOpacity;
-          el.style.opacity = String(o);
-          el.style.pointerEvents = o < 0.12 ? "none" : "auto";
-        }
-      });
-    };
-    renderRef.current = renderFrame;
-    renderFrame(); // initial paint
-    const unsub = progress.on("change", renderFrame);
-    return () => {
-      unsub();
-      if (dragRaf.current) cancelAnimationFrame(dragRaf.current);
-    };
-  }, [layout, globeRadius, progress]);
+    pan.current.x = Math.max(-clampX, Math.min(clampX, pan.current.x));
+    pan.current.y = Math.max(-clampY, Math.min(clampY, pan.current.y));
+    paint();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placement]);
 
   const onPointerDown = (e: React.PointerEvent) => {
-    const btn = (e.target as HTMLElement).closest("button[data-idx]");
-    drag.current.idx = btn ? Number(btn.getAttribute("data-idx")) : null;
+    const btn = (e.target as HTMLElement).closest("button[data-id]");
+    drag.current.id = btn ? btn.getAttribute("data-id") : null;
     drag.current.moved = 0;
     drag.current.lastX = e.clientX;
     drag.current.lastY = e.clientY;
-    // Only the globe is draggable to rotate; the grid is static.
-    if (modeRef.current === "globe") {
-      drag.current.active = true;
-      (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
-    }
+    drag.current.active = true;
+    (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!drag.current.active) return;
@@ -123,68 +134,67 @@ export function ProjectField({
     drag.current.lastX = e.clientX;
     drag.current.lastY = e.clientY;
     drag.current.moved += Math.abs(dx) + Math.abs(dy);
-    rot.current.ry += dx * 0.25;
-    rot.current.rx = Math.max(-55, Math.min(55, rot.current.rx - dy * 0.25));
-    if (dragRaf.current == null) {
-      dragRaf.current = requestAnimationFrame(() => {
-        dragRaf.current = null;
-        renderRef.current();
-      });
+    pan.current.x = Math.max(-clampX, Math.min(clampX, pan.current.x + dx));
+    pan.current.y = Math.max(-clampY, Math.min(clampY, pan.current.y + dy));
+    if (raf.current == null) {
+      raf.current = requestAnimationFrame(() => { raf.current = null; paint(); });
     }
   };
   const endDrag = (e: React.PointerEvent) => {
-    if (drag.current.active) {
-      drag.current.active = false;
-      (e.currentTarget as Element).releasePointerCapture?.(e.pointerId);
+    drag.current.active = false;
+    (e.currentTarget as Element).releasePointerCapture?.(e.pointerId);
+    // Tap (negligible movement) on a visible icon opens it, expanding from its rect.
+    if (drag.current.moved < 6 && drag.current.id != null) {
+      const project = projects.find((p) => p.id === drag.current.id);
+      if (project && placement.get(project.id)?.visible) {
+        const el = containerRef.current?.querySelector(`button[data-id="${project.id}"]`);
+        onSelectProject(project, rectOf(el));
+      }
     }
-    // Tap (negligible movement) on an icon opens it - works for grid & globe.
-    if (drag.current.moved < 6 && drag.current.idx != null) {
-      onSelectProject(projects[drag.current.idx]);
-    }
-    drag.current.idx = null;
+    drag.current.id = null;
   };
-
-  const box = 620;
 
   return (
     <div
-      className={`relative mx-auto select-none ${mode === "globe" ? "touch-none cursor-grab active:cursor-grabbing" : ""}`}
-      style={{
-        width: box,
-        height: box,
-        perspective: 1100,
-        WebkitMaskImage: "radial-gradient(circle at center, #000 48%, transparent 80%)",
-        maskImage: "radial-gradient(circle at center, #000 48%, transparent 80%)",
-      }}
+      ref={containerRef}
+      className="relative mx-auto select-none touch-none cursor-grab active:cursor-grabbing"
+      style={{ width: boxW, height: boxH }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
     >
-      <div
-        ref={worldRef}
-        className="absolute left-1/2 top-1/2"
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        {projects.map((project, i) => {
+      <div ref={worldRef} className="absolute left-1/2 top-1/2">
+        {projects.map((project) => {
+          const place = placement.get(project.id)!;
           const iconSrc = project.icon ?? project.image;
           return (
             <button
               key={project.id}
-              ref={(el) => { itemsRef.current[i] = el; }}
               type="button"
-              data-idx={i}
+              data-id={project.id}
               aria-label={`Open ${project.title}`}
-              className="absolute will-change-transform outline-none group"
+              aria-hidden={!place.visible}
+              tabIndex={place.visible ? 0 : -1}
+              onKeyDown={(e) => {
+                if ((e.key === "Enter" || e.key === " ") && place.visible) {
+                  e.preventDefault();
+                  onSelectProject(project, rectOf(e.currentTarget));
+                }
+              }}
+              className="absolute will-change-transform rounded-[22px] outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               style={{
                 width: iconSize,
                 height: iconSize,
                 left: -iconSize / 2,
                 top: -iconSize / 2,
-                backfaceVisibility: "hidden",
+                opacity: place.visible ? 1 : 0,
+                pointerEvents: place.visible ? "auto" : "none",
+                transform: `translate(${place.x}px, ${place.y}px)`,
+                transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
               }}
             >
-              <div className="relative w-full h-full rounded-[20px] overflow-hidden bg-surface-container border border-outline-variant">
+              <div className="glass-stroke-flat bg-surface-container relative w-full h-full rounded-[20px] overflow-hidden transition-all duration-200 ease-out group-hover:-translate-y-1 group-hover:rotate-[-5deg] group-hover:scale-[1.06] group-hover:opacity-80">
                 {iconSrc ? (
                   <img
                     src={iconSrc}
@@ -194,8 +204,8 @@ export function ProjectField({
                     style={{ filter: "grayscale(1) contrast(1.03)" }}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-2xl font-light text-on-surface-variant">
-                    {project.title.charAt(0)}
+                  <div className={`w-full h-full flex items-center justify-center font-medium text-on-surface ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}>
+                    {project.glyph ?? project.title.charAt(0)}
                   </div>
                 )}
                 <span className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-black/[0.06]" />

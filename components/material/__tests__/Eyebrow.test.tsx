@@ -9,7 +9,7 @@ describe("Eyebrow", () => {
     expect(screen.getByText("meet minwook junior")).toBeInTheDocument();
   });
 
-  it("applies the space-mono font family class", () => {
+  it("applies the mono font family class", () => {
     render(<Eyebrow>label</Eyebrow>);
     expect(screen.getByText("label").className).toContain("font-mono");
   });
