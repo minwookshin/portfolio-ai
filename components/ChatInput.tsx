@@ -280,7 +280,7 @@ export default function ChatInput({
             onBlur={() => setFocused(false)}
             placeholder="Ask anything"
             aria-label="Ask anything"
-            className="relative z-10 flex-1 min-w-0 bg-transparent outline-none text-on-surface placeholder:text-on-surface-variant text-sm pl-3 pr-2"
+            className="relative z-10 flex-1 min-w-0 bg-transparent outline-none font-light text-on-surface placeholder:text-on-surface-variant text-sm pl-3 pr-2"
           />
 
           <IconButton

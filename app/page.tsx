@@ -478,7 +478,7 @@ export default function Home() {
               initial={{ y: 0, scale: 2.4 }}
               animate={{ y: introUp ? introTopY : 0, scale: introUp ? 1 : 2.4 }}
               transition={springs.island}
-              className="text-sm sm:text-base font-normal tracking-tight text-on-surface lowercase"
+              className="text-sm sm:text-base font-light tracking-tight text-on-surface lowercase"
             >
               minwook
             </motion.h1>
@@ -624,7 +624,7 @@ export default function Home() {
               transition={springs.spatialDefault}
               className="text-center"
             >
-              <h1 className="group text-sm sm:text-base font-normal tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
+              <h1 className="group text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
                 minwook<span className="inline-block overflow-hidden align-bottom max-w-0 opacity-0 group-hover:max-w-[3em] group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">&nbsp;shin</span>
               </h1>
             </motion.div>
