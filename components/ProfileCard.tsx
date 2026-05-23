@@ -49,7 +49,7 @@ export default function ProfileCard({
         <div className="flex-1 space-y-6 text-center lg:text-left">
           {/* Name & Title */}
           <div>
-            <h2 className="text-2xl lg:text-3xl font-light text-on-surface mb-1.5 tracking-tight">
+            <h2 className="text-2xl lg:text-3xl font-semibold text-on-surface mb-1.5 tracking-[-0.02em]">
               {name}
             </h2>
             <p className="text-sm text-on-surface-variant font-medium">{title}</p>

@@ -530,9 +530,9 @@ export default function Home() {
             exit={overlayReveal.exit}
             transition={overlayReveal.transition}
             onClick={(e) => { if (e.target === e.currentTarget) { setShowProfile(false); setShowResume(false); } }}
-            className="fixed inset-0 z-[70] overflow-y-auto flex"
+            className="fixed inset-0 z-[70] overflow-y-auto flex items-start justify-center"
           >
-            <div className="m-auto w-full max-w-2xl px-4 py-12">
+            <div className="mx-auto w-full max-w-2xl px-4 pt-10 pb-32">
 
               <ProfileCard
                 name={PERSONAL_INFO.name}

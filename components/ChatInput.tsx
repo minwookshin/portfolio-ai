@@ -227,7 +227,7 @@ export default function ChatInput({
             onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
             onFocus={() => { setFocused(true); onFocusInput?.(); }}
             onBlur={() => setFocused(false)}
-            placeholder="..."
+            placeholder="Ask anything"
             aria-label="Ask anything"
             className="relative z-10 flex-1 min-w-0 bg-transparent outline-none text-on-surface placeholder:text-on-surface-variant text-sm pl-3 pr-2"
           />
@@ -236,6 +236,7 @@ export default function ChatInput({
             aria-label={isListening ? "Stop listening" : "Start voice input"}
             selected={isListening}
             size="sm"
+            className="!w-11 !h-11"
             onClick={toggleListening}
           >
             <Mic className="w-4 h-4" />
@@ -244,6 +245,7 @@ export default function ChatInput({
             <IconButton
               aria-label="Send"
               size="sm"
+              className="!w-11 !h-11"
               selected={!!input.trim()}
               disabled={!input.trim()}
               onClick={() => handleSubmit()}
@@ -313,7 +315,7 @@ export default function ChatInput({
                         key={cat}
                         type="button"
                         onClick={() => onSelectCategory?.(cat === "All" ? null : cat)}
-                        className={`shrink-0 px-3 py-2 rounded-full text-[13px] font-medium whitespace-nowrap transition-colors ${
+                        className={`shrink-0 min-h-[44px] px-3 py-2 rounded-full text-[13px] font-medium whitespace-nowrap transition-colors ${
                           isActive
                             ? "bg-on-surface text-surface"
                             : "text-on-surface-variant hover:text-on-surface hover:bg-black/[0.04]"
