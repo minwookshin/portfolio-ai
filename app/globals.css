@@ -121,25 +121,25 @@ body {
    shadow. One consistent edge across every surface (cards, buttons, bubbles). */
 .glass-stroke,
 .glass-stroke-flat {
-  border: 2px solid rgba(34, 34, 34, 0.1);
+  border: 2px solid rgba(0, 0, 2, 0.1);
 }
 .glass-stroke-sm {
-  border: 1.5px solid rgba(34, 34, 34, 0.1);
+  border: 1.5px solid rgba(0, 0, 2, 0.1);
 }
 
 /* Material 3 Expressive tokens - monochrome + Nothing-red accent (light) */
 :root {
-  --md-surface: #ffffff;
-  --md-surface-container: #eaeaea;
+  --md-surface: #fafafc;
+  --md-surface-container: #fafafa;
   --md-surface-container-high: #e2e2e2;
-  --md-on-surface: #222222;
-  --md-on-surface-variant: #5c5c5e;
-  --md-outline: #c4c4c4;
-  --md-outline-variant: #dcdcdc;
-  --md-primary: #222222;
-  --md-on-primary: #ffffff;
-  --md-primary-container: #d6d6d6;
-  --md-on-primary-container: #1a1b1e;
+  --md-on-surface: #000002;
+  --md-on-surface-variant: #1a1a1c;
+  --md-outline: #cecece;
+  --md-outline-variant: #e2e2e2;
+  --md-primary: #000002;
+  --md-on-primary: #fafafc;
+  --md-primary-container: #e2e2e2;
+  --md-on-primary-container: #1a1a1c;
 
   /* shape scale (px) */
   --md-shape-xs: 4px;

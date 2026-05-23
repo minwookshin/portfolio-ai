@@ -205,7 +205,7 @@ export default function ChatInput({
               aria-label={connectorKind === "profile" ? "Profile" : "Current project"}
               whileTap={{ scale: 0.92 }}
               transition={springs.spatialDefault}
-              className="shrink-0 ml-1 w-9 h-9 rounded-full overflow-hidden border border-[rgba(34,34,34,0.1)]"
+              className="shrink-0 ml-1 w-9 h-9 rounded-full overflow-hidden border border-[rgba(0,0,2,0.1)]"
             >
               <img src={connectorSrc} alt="" className="w-full h-full object-cover" style={{ filter: "grayscale(1) contrast(1.03)" }} />
             </motion.button>
