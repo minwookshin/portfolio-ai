@@ -325,7 +325,6 @@ export default function Home() {
     // Bring the chat forward over whatever the user is currently looking at,
     // keeping that view as a dimmed backdrop rather than resetting to home.
     setChatOnTop(true);
-    console.log('Sending message:', message);
 
     // Tell the backend what the user is currently looking at, so the AI can
     // resolve "this"/"it" and ground its answer in that screen.

@@ -340,8 +340,8 @@ export async function POST(req: Request) {
         ? `${SYSTEM_PROMPT}\n\n### [WHERE THE USER IS RIGHT NOW]\n${context.trim()}\nGround your answer in this when relevant.`
         : SYSTEM_PROMPT;
 
-    // [Analytics] Log user questions
-    console.log(`[LOG] New Question at ${new Date().toISOString()}: ${userQuery}`);
+    // Log only that a request happened, not the user's question content (privacy).
+    console.log(`[LOG] Chat request at ${new Date().toISOString()}`);
 
     // Initialize Gemini AI with fallback models
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);

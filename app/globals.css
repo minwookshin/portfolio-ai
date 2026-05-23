@@ -84,12 +84,6 @@ body {
   margin: -4px -8px;
 }
 
-/* Nothing dot-matrix accent */
-.dot-matrix {
-  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
-  background-size: 8px 8px;
-}
-
 /* Smooth theme transitions - scoped to the page background only.
    A universal `* { transition }` rule forces a style recalc on every
    element during Framer Motion transforms and the globe rAF loop,
@@ -120,18 +114,11 @@ body {
 
 /* Plain stroke — a single subtle border (#222222 at 10%), no glass rim, blur, or
    shadow. One consistent edge across every surface (cards, buttons, bubbles). */
-.glass-stroke,
-.glass-stroke-flat {
+.glass-stroke {
   border: 2px solid rgba(0, 0, 2, 0.1);
 }
 .glass-stroke-sm {
   border: 1.5px solid rgba(0, 0, 2, 0.1);
-}
-
-/* Dotted stroke — a border drawn as a row of dots, for the bottom cluster
-   (chat input pill + profile / esc / filter / LinkedIn buttons). */
-.dot-stroke {
-  border: 2px dotted rgba(0, 0, 2, 0.35);
 }
 
 /* Dotted SVG outline that, on hover/focus of the parent group, grows its dashes
