@@ -25,26 +25,15 @@ interface ChatInputProps {
   onFocusInput?: () => void;
 }
 
-const outsideBtn =
-  "glass-stroke bg-surface shrink-0 w-14 h-14 rounded-full text-on-surface flex items-center justify-center transition-colors";
+// Material-style state layer (same as the mic IconButton): a faint current-color
+// tint that fades in on hover and deepens on press. The element must be
+// `relative`, and its visible content should sit in a `relative z-10` wrapper so
+// the tint reads behind it.
+const stateLayer =
+  "before:absolute before:inset-0 before:rounded-[inherit] before:bg-current before:opacity-0 before:transition-opacity hover:before:opacity-[0.08] active:before:opacity-[0.10]";
 
-// A stroke that traces clockwise from the top on hover (same motion as the esc
-// button). Sits over the element's static border. The parent must be `group
-// relative`. pathLength=1 keeps the dash math identical for circles and pills.
-function HoverRing({ variant = "circle" }: { variant?: "circle" | "pill" }) {
-  if (variant === "pill") {
-    return (
-      <svg className="absolute inset-[1px] pointer-events-none overflow-visible" fill="none" aria-hidden="true">
-        <rect className="draw-ring" x="0" y="0" width="100%" height="100%" rx="27" pathLength={1} strokeWidth={1.5} style={{ stroke: "var(--md-on-surface)" }} />
-      </svg>
-    );
-  }
-  return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56" fill="none" aria-hidden="true" style={{ transform: "rotate(-90deg)" }}>
-      <circle className="draw-ring" cx="28" cy="28" r="27" pathLength={1} strokeWidth={1.5} style={{ stroke: "var(--md-on-surface)" }} />
-    </svg>
-  );
-}
+const outsideBtn =
+  `glass-stroke bg-surface shrink-0 w-14 h-14 rounded-full text-on-surface flex items-center justify-center transition-colors relative ${stateLayer}`;
 
 // Stickier than the shared springs (more mass, gentler damping) so the filter
 // pill opens and closes with a smooth, weighted settle.
@@ -215,9 +204,8 @@ export default function ChatInput({
           transition={springs.spatialDefault}
           style={{ maxWidth: "100%" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`group relative glass-stroke bg-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
+          className={`relative glass-stroke bg-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${stateLayer} focus-within:before:opacity-[0.08] ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
         >
-          <HoverRing variant="pill" />
           {/* Current project / profile icon, inside the textbox on the left */}
           {(connectorKind === "project" || connectorKind === "profile") && connectorSrc && (
             <motion.button
@@ -241,7 +229,7 @@ export default function ChatInput({
             onBlur={() => setFocused(false)}
             placeholder="..."
             aria-label="Ask anything"
-            className="flex-1 min-w-0 bg-transparent outline-none text-on-surface placeholder:text-on-surface-variant text-sm pl-3 pr-2"
+            className="relative z-10 flex-1 min-w-0 bg-transparent outline-none text-on-surface placeholder:text-on-surface-variant text-sm pl-3 pr-2"
           />
 
           <IconButton
@@ -281,10 +269,9 @@ export default function ChatInput({
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.5, x: -24 }}
             transition={springs.spatialDefault}
-            className={`${outsideBtn} group relative`}
+            className={outsideBtn}
           >
-            <LinkedInIcon className="w-5 h-5" />
-            <HoverRing variant="circle" />
+            <LinkedInIcon className="w-5 h-5 relative z-10" />
           </motion.a>
         )}
 
@@ -300,18 +287,17 @@ export default function ChatInput({
             transition={springs.spatialDefault}
             className="shrink-0"
           >
-            <div ref={filterRef} className="group relative glass-stroke bg-surface flex items-center rounded-full p-1.5">
-              <HoverRing variant="pill" />
+            <div ref={filterRef} className="glass-stroke bg-surface flex items-center rounded-full p-1.5">
               <button
                 type="button"
                 onClick={onFilter}
                 aria-label="Filter projects"
                 aria-pressed={filterOpen}
-                className={`shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
+                className={`relative shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${stateLayer} ${
                   filterOpen ? "bg-on-surface text-surface" : "text-on-surface"
                 }`}
               >
-                <FilterGlyph className="w-5 h-5" strokeWidth={2} />
+                <FilterGlyph className="w-5 h-5 relative z-10" strokeWidth={2} />
               </button>
               <motion.div
                 initial={false}
@@ -354,10 +340,9 @@ export default function ChatInput({
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.5, x: -24 }}
             transition={springs.spatialDefault}
-            className={`${outsideBtn} group relative ${filterOpen ? "max-sm:hidden" : ""}`}
+            className={`${outsideBtn} ${filterOpen ? "max-sm:hidden" : ""}`}
           >
-            <User className="w-5 h-5" />
-            <HoverRing variant="circle" />
+            <User className="w-5 h-5 relative z-10" />
           </motion.button>
         )}
         </AnimatePresence>
