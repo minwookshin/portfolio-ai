@@ -16,7 +16,7 @@ interface ChatInputProps {
   connectorSrc?: string;
   linkedinUrl?: string;
   onClose?: () => void;
-  onProfile?: () => void;
+  onProfile?: (origin?: { cx: number; cy: number; w: number }) => void;
   onFilter?: () => void;
   filterOpen?: boolean;
   filters?: readonly string[];
@@ -200,7 +200,7 @@ export default function ChatInput({
         <motion.div
           layout="position"
           initial={false}
-          animate={{ width: expanded ? 480 : (connectorKind === "project" || connectorKind === "profile") && connectorSrc ? 210 : 160 }}
+          animate={{ width: expanded ? 480 : (connectorKind === "project" || connectorKind === "profile") && connectorSrc ? 240 : 200 }}
           transition={springs.spatialDefault}
           style={{ maxWidth: "100%" }}
           onClick={() => { if (!expanded) setFocused(true); }}
@@ -335,7 +335,10 @@ export default function ChatInput({
             key="profile"
             layout
             type="button"
-            onClick={onProfile}
+            onClick={(e) => {
+              const r = e.currentTarget.getBoundingClientRect();
+              onProfile({ cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width });
+            }}
             aria-label="View profile"
             whileTap={{ scale: 0.94 }}
             initial={{ opacity: 0, scale: 0.5, x: -24 }}

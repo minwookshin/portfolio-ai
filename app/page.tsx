@@ -15,13 +15,6 @@ import { springs } from "@/lib/material/motion";
 
 // One reveal shared by every full-screen overlay (profile, project detail) so
 // they all enter/leave with the same spring instead of bespoke morphs.
-const overlayReveal = {
-  initial: { opacity: 0, y: 24, scale: 0.985 },
-  animate: { opacity: 1, y: 0, scale: 1 },
-  exit: { opacity: 0, y: 24, scale: 0.985 },
-  transition: springs.spatialDefault,
-} as const;
-
 // Main Projects Data - From GitHub Portfolio
 const MAIN_PROJECTS: Project[] = [
   {
@@ -281,6 +274,8 @@ export default function Home() {
   // Screen rect of the icon a detail was opened from, so the modal can expand
   // out of (and collapse back into) that exact spot.
   const [heroOrigin, setHeroOrigin] = useState<{ cx: number; cy: number; w: number } | null>(null);
+  // Same idea for the profile, so it expands out of the profile button.
+  const [profileOrigin, setProfileOrigin] = useState<{ cx: number; cy: number; w: number } | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [showProfile, setShowProfile] = useState(false);
@@ -390,6 +385,7 @@ export default function Home() {
     setChatOnTop(false);
     setShowProfile(false);
     setHeroProject(null);
+    setDetailFocus(null);
     setShowResume(false);
     setFilterOpen(false);
   };
@@ -404,8 +400,7 @@ export default function Home() {
     if (!heroProject && !showProfile) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
-      if (heroProject) setHeroProject(null);
-      else if (showProfile) { setShowProfile(false); setShowResume(false); }
+      leaveChat();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -421,6 +416,18 @@ export default function Home() {
           scale: Math.max(heroOrigin.w / window.innerWidth, 0.04),
           x: heroOrigin.cx - window.innerWidth / 2,
           y: heroOrigin.cy - window.innerHeight / 2,
+        }
+      : { opacity: 0, scale: 0.94, x: 0, y: 24 };
+
+  // Profile expands out of the profile button (bottom-right), mirroring how a
+  // project detail expands out of its icon. Falls back to a gentle rise.
+  const profileExpand =
+    profileOrigin && typeof window !== "undefined"
+      ? {
+          opacity: 0,
+          scale: Math.max(profileOrigin.w / window.innerWidth, 0.04),
+          x: profileOrigin.cx - window.innerWidth / 2,
+          y: profileOrigin.cy - window.innerHeight / 2,
         }
       : { opacity: 0, scale: 0.94, x: 0, y: 24 };
 
@@ -478,7 +485,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={() => setHeroProject(null)}
+            onClick={leaveChat}
             className="fixed inset-0 z-[68] bg-surface/40 backdrop-blur-xl"
             aria-hidden
           />
@@ -491,13 +498,13 @@ export default function Home() {
             exit={heroExpand}
             transition={springs.genOvershoot}
             style={{ transformOrigin: "center center" }}
-            onClick={(e) => { if (e.target === e.currentTarget) setHeroProject(null); }}
+            onClick={(e) => { if (e.target === e.currentTarget) leaveChat(); }}
             className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain"
           >
             <div className="w-full max-w-3xl mx-auto px-5 sm:px-6 pt-12 pb-20">
               <ProjectDetailView
                 project={heroProject}
-                onBack={() => setHeroProject(null)}
+                onBack={leaveChat}
                 hideBack
                 focusQuery={detailFocus}
                 onAsk={handleMessage}
@@ -517,7 +524,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={() => { setShowProfile(false); setShowResume(false); }}
+            onClick={leaveChat}
             className="fixed inset-0 z-[68] bg-surface/40 backdrop-blur-xl"
             aria-hidden
           />
@@ -525,14 +532,15 @@ export default function Home() {
         {showProfile && (
           <motion.div
             key="profile"
-            initial={overlayReveal.initial}
-            animate={overlayReveal.animate}
-            exit={overlayReveal.exit}
-            transition={overlayReveal.transition}
-            onClick={(e) => { if (e.target === e.currentTarget) { setShowProfile(false); setShowResume(false); } }}
-            className="fixed inset-0 z-[70] overflow-y-auto flex items-start justify-center"
+            initial={profileExpand}
+            animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+            exit={profileExpand}
+            transition={springs.genOvershoot}
+            style={{ transformOrigin: "center center" }}
+            onClick={(e) => { if (e.target === e.currentTarget) leaveChat(); }}
+            className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain"
           >
-            <div className="mx-auto w-full max-w-2xl px-4 pt-10 pb-32">
+            <div className="w-full max-w-2xl mx-auto px-5 sm:px-6 pt-12 pb-24">
 
               <ProfileCard
                 name={PERSONAL_INFO.name}
@@ -789,19 +797,13 @@ export default function Home() {
         connectorKind={heroProject ? "project" : showProfile ? "profile" : hasStarted ? "chat" : null}
         connectorSrc={heroProject ? (heroProject.icon ?? heroProject.image) : showProfile ? "/profile-photo.jpg" : undefined}
         linkedinUrl={heroProject?.linkedin}
-        onClose={
-          heroProject
-            ? () => setHeroProject(null)
-            : showProfile
-            ? () => { setShowProfile(false); setShowResume(false); }
-            : undefined
-        }
+        onClose={heroProject || showProfile ? leaveChat : undefined}
         onFilter={!hasStarted && !showProfile && !heroProject ? () => setFilterOpen((o) => !o) : undefined}
         filterOpen={filterOpen}
         filters={PROJECT_FILTERS}
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
-        onProfile={!showProfile && !heroProject ? () => { setChatOnTop(false); setFilterOpen(false); setShowProfile(true); } : undefined}
+        onProfile={!showProfile && !heroProject ? (origin) => { setChatOnTop(false); setFilterOpen(false); setProfileOrigin(origin ?? null); setShowProfile(true); } : undefined}
         onFocusInput={reopenChat}
       />
     </main>

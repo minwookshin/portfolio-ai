@@ -6,8 +6,8 @@ import { springs } from "@/lib/material/motion";
 
 /**
  * Geometric blueprint intro: draws the stroke outlines of the centered 2x2 app
- * icons and the header typography simultaneously, in the exact positions (based
- * on window size) where the real icons + title land once the wireframe locks.
+ * icons (square, matching the real icon grid) in the exact positions (based on
+ * window size) where the real icons land once the wireframe locks.
  */
 export function LandingWireframe() {
   const [dim, setDim] = useState<{ w: number; h: number } | null>(null);
@@ -32,11 +32,6 @@ export function LandingWireframe() {
     { x: cx + spacing / 2, y: cy + spacing / 2 },
   ];
 
-  // Header typography placeholder (matches the top-centered title).
-  const headerW = isMobile ? 104 : 124;
-  const headerH = 22;
-  const headerY = 42;
-
   const strokeProps = {
     fill: "none",
     stroke: "currentColor",
@@ -50,9 +45,8 @@ export function LandingWireframe() {
   return (
     <svg width={dim.w} height={dim.h} className="absolute inset-0" style={{ pointerEvents: "none" }} aria-hidden>
       {cells.map((c, i) => (
-        <motion.rect key={i} x={c.x - half} y={c.y - half} width={iconSize} height={iconSize} rx={20} {...strokeProps} />
+        <motion.rect key={i} x={c.x - half} y={c.y - half} width={iconSize} height={iconSize} rx={0} {...strokeProps} />
       ))}
-      <motion.rect x={cx - headerW / 2} y={headerY} width={headerW} height={headerH} rx={6} {...strokeProps} />
     </svg>
   );
 }
