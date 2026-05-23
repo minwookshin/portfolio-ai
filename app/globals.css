@@ -57,6 +57,7 @@ html.dark {
 body {
   font-family: var(--font-google-sans), sans-serif;
   letter-spacing: -0.014em;
+  background-color: #FFFFFF;
 }
 
 /* Hide scrollbars everywhere (scrolling still works) for a cleaner look */
@@ -127,9 +128,28 @@ body {
   border: 1.5px solid rgba(0, 0, 2, 0.1);
 }
 
+/* Hover stroke trace — a ring/outline draws clockwise from the top on hover.
+   Shared by the esc button and the bottom nav cluster (chat pill, profile,
+   filter, LinkedIn). pathLength=1 normalizes the dash so it works on any size
+   or shape (circle or pill) without per-element math. */
+.draw-ring {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* esc waits ~0.28s for its black→white fill crossfade before tracing, so the
+   whole stroke is visible over the white fill. The always-white nav buttons
+   need no such delay. */
+.esc-ring {
+  transition-delay: 0.28s;
+}
+.group:hover .draw-ring {
+  stroke-dashoffset: 0;
+}
+
 /* Material 3 Expressive tokens - monochrome + Nothing-red accent (light) */
 :root {
-  --md-surface: #fafafc;
+  --md-surface: #FFFFFF;
   --md-surface-container: #fafafa;
   --md-surface-container-high: #e2e2e2;
   --md-on-surface: #000002;

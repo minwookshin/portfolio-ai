@@ -200,7 +200,7 @@ const MAIN_PROJECTS: Project[] = [
     tags: ["iOS", "UX Design"],
     categories: ["Engineering", "Design"],
     date: "2025",
-    icon: "/projects/caret/icon.png",
+    icon: "/projects/caret/Caret_icon.png",
     image: "/projects/caret/icon.png",
     linkedin: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
   },
@@ -426,11 +426,8 @@ export default function Home() {
 
   return (
     <main
-      className="h-screen flex flex-col bg-surface overflow-hidden justify-center"
-      style={{
-        backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px)",
-        backgroundSize: "20px 20px",
-      }}
+      className="h-screen flex flex-col overflow-hidden justify-center"
+      style={{ backgroundColor: "#FFFFFF" }}
     >
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
@@ -463,11 +460,8 @@ export default function Home() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45 }}
-            className="fixed inset-0 z-[100] bg-surface"
-            style={{
-              backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-            }}
+            className="fixed inset-0 z-[100]"
+            style={{ backgroundColor: "#FFFFFF" }}
           >
             <LandingWireframe />
           </motion.div>

@@ -182,7 +182,7 @@ export function ProjectField({
                   onSelectProject(project, rectOf(e.currentTarget));
                 }
               }}
-              className="absolute will-change-transform rounded-[22px] outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="absolute will-change-transform rounded-none outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
               style={{
                 width: iconSize,
                 height: iconSize,
@@ -194,21 +194,24 @@ export function ProjectField({
                 transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
               }}
             >
-              <div className="glass-stroke-flat bg-surface-container relative w-full h-full rounded-[20px] overflow-hidden transition-all duration-200 ease-out group-hover:-translate-y-1 group-hover:rotate-[-5deg] group-hover:scale-[1.06] group-hover:opacity-80">
+              <div className="bg-surface-container relative w-full h-full rounded-none overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-90">
                 {iconSrc ? (
                   <img
                     src={iconSrc}
                     alt={project.title}
                     draggable={false}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125"
                     style={{ filter: "grayscale(1) contrast(1.03)" }}
                   />
                 ) : (
-                  <div className={`w-full h-full flex items-center justify-center font-medium text-on-surface ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}>
+                  <div
+                    className={`w-full h-full flex items-center justify-center font-medium text-on-surface transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125 ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}
+                    style={{ filter: "grayscale(1)" }}
+                  >
                     {project.glyph ?? project.title.charAt(0)}
                   </div>
                 )}
-                <span className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-black/[0.06]" />
+                <span className="absolute inset-0 rounded-[inherit]" style={{ backgroundColor: "#222222", opacity: 0.05 }} />
                 {/* monochrome hover state layer */}
                 <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.1]" />
               </div>

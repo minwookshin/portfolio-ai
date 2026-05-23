@@ -28,6 +28,24 @@ interface ChatInputProps {
 const outsideBtn =
   "glass-stroke bg-surface shrink-0 w-14 h-14 rounded-full text-on-surface flex items-center justify-center transition-colors";
 
+// A stroke that traces clockwise from the top on hover (same motion as the esc
+// button). Sits over the element's static border. The parent must be `group
+// relative`. pathLength=1 keeps the dash math identical for circles and pills.
+function HoverRing({ variant = "circle" }: { variant?: "circle" | "pill" }) {
+  if (variant === "pill") {
+    return (
+      <svg className="absolute inset-[1px] pointer-events-none overflow-visible" fill="none" aria-hidden="true">
+        <rect className="draw-ring" x="0" y="0" width="100%" height="100%" rx="27" pathLength={1} strokeWidth={1.5} style={{ stroke: "var(--md-on-surface)" }} />
+      </svg>
+    );
+  }
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56" fill="none" aria-hidden="true" style={{ transform: "rotate(-90deg)" }}>
+      <circle className="draw-ring" cx="28" cy="28" r="27" pathLength={1} strokeWidth={1.5} style={{ stroke: "var(--md-on-surface)" }} />
+    </svg>
+  );
+}
+
 // Stickier than the shared springs (more mass, gentler damping) so the filter
 // pill opens and closes with a smooth, weighted settle.
 const filterMorph = { type: "spring", stiffness: 220, damping: 30, mass: 1.7 } as const;
@@ -180,9 +198,12 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.5, x: 24 }}
               transition={springs.spatialDefault}
-              className="shrink-0 w-14 h-14 rounded-full bg-on-surface text-surface flex items-center justify-center text-[11px] font-semibold lowercase tracking-wide"
+              className="group relative shrink-0 w-14 h-14 rounded-full bg-on-surface text-surface flex items-center justify-center text-[11px] font-semibold lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-surface hover:text-on-surface"
             >
-              esc
+              <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56" fill="none" style={{ transform: "rotate(-90deg)" }}>
+                <circle className="draw-ring esc-ring" cx="28" cy="28" r="27" pathLength={1} strokeWidth={1.5} style={{ stroke: "var(--md-on-surface)" }} />
+              </svg>
+              <span className="relative">esc</span>
             </motion.button>
           )}
         </AnimatePresence>
@@ -194,8 +215,9 @@ export default function ChatInput({
           transition={springs.spatialDefault}
           style={{ maxWidth: "100%" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`glass-stroke bg-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
+          className={`group relative glass-stroke bg-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
         >
+          <HoverRing variant="pill" />
           {/* Current project / profile icon, inside the textbox on the left */}
           {(connectorKind === "project" || connectorKind === "profile") && connectorSrc && (
             <motion.button
@@ -259,9 +281,10 @@ export default function ChatInput({
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.5, x: -24 }}
             transition={springs.spatialDefault}
-            className={outsideBtn}
+            className={`${outsideBtn} group relative`}
           >
             <LinkedInIcon className="w-5 h-5" />
+            <HoverRing variant="circle" />
           </motion.a>
         )}
 
@@ -277,7 +300,8 @@ export default function ChatInput({
             transition={springs.spatialDefault}
             className="shrink-0"
           >
-            <div ref={filterRef} className="glass-stroke bg-surface flex items-center rounded-full p-1.5">
+            <div ref={filterRef} className="group relative glass-stroke bg-surface flex items-center rounded-full p-1.5">
+              <HoverRing variant="pill" />
               <button
                 type="button"
                 onClick={onFilter}
@@ -330,9 +354,10 @@ export default function ChatInput({
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.5, x: -24 }}
             transition={springs.spatialDefault}
-            className={`${outsideBtn} ${filterOpen ? "max-sm:hidden" : ""}`}
+            className={`${outsideBtn} group relative ${filterOpen ? "max-sm:hidden" : ""}`}
           >
             <User className="w-5 h-5" />
+            <HoverRing variant="circle" />
           </motion.button>
         )}
         </AnimatePresence>
