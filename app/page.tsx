@@ -10,7 +10,6 @@ import ProfileCard from "@/components/ProfileCard";
 import { Project } from "@/components/ProjectCard";
 import { FileText, ArrowUpRight } from "lucide-react";
 import { ProjectField } from "@/components/material/ProjectField";
-import { LandingWireframe } from "@/components/LandingWireframe";
 import { springs } from "@/lib/material/motion";
 
 // One reveal shared by every full-screen overlay (profile, project detail) so
@@ -286,11 +285,18 @@ export default function Home() {
   // behind it so that view is in focus again.
   const [chatOnTop, setChatOnTop] = useState(false);
   const [detailFocus, setDetailFocus] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Landing intro: "minwook" appears center, then rises to the top header slot
+  // and becomes "minwook shin" (introUp), after which the real header takes over
+  // (introDone). The icon field fades in as the name lifts.
+  const [introUp, setIntroUp] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
+  const [introTopY, setIntroTopY] = useState(0);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 850);
-    return () => clearTimeout(t);
+    setIntroTopY(-(window.innerHeight / 2 - 48));
+    const t1 = setTimeout(() => setIntroUp(true), 550);
+    const t2 = setTimeout(() => setIntroDone(true), 1450);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
   const [showResume, setShowResume] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -458,19 +464,25 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Landing intro - a geometric wireframe draws the 2x2 icon + title outlines
-          in their exact positions, then dissolves to reveal the real content. */}
+      {/* Landing intro - the name appears dead-center, then rises to the top
+          header slot and grows from "minwook" into "minwook shin". The real
+          header takes over once it lands. */}
       <AnimatePresence>
-        {loading && (
+        {!introDone && !hasStarted && (
           <motion.div
-            key="splash"
-            initial={{ opacity: 1 }}
+            key="intro-name"
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.45 }}
-            className="fixed inset-0 z-[100]"
-            style={{ backgroundColor: "#FFFFFF" }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none"
           >
-            <LandingWireframe />
+            <motion.h1
+              initial={{ y: 0, scale: 2.4 }}
+              animate={{ y: introUp ? introTopY : 0, scale: introUp ? 1 : 2.4 }}
+              transition={springs.island}
+              className="text-sm sm:text-base font-normal tracking-tight text-on-surface lowercase"
+            >
+              minwook
+            </motion.h1>
           </motion.div>
         )}
       </AnimatePresence>
@@ -496,7 +508,7 @@ export default function Home() {
             initial={heroExpand}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={heroExpand}
-            transition={springs.genOvershoot}
+            transition={springs.island}
             style={{ transformOrigin: "center center" }}
             onClick={(e) => { if (e.target === e.currentTarget) leaveChat(); }}
             className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain"
@@ -535,12 +547,12 @@ export default function Home() {
             initial={profileExpand}
             animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
             exit={profileExpand}
-            transition={springs.genOvershoot}
+            transition={springs.island}
             style={{ transformOrigin: "center center" }}
             onClick={(e) => { if (e.target === e.currentTarget) leaveChat(); }}
-            className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain"
+            className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain flex pb-28"
           >
-            <div className="w-full max-w-2xl mx-auto px-5 sm:px-6 pt-12 pb-24">
+            <div className="m-auto w-full max-w-2xl px-5 sm:px-6 py-8">
 
               <ProfileCard
                 name={PERSONAL_INFO.name}
@@ -557,7 +569,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-on-surface text-surface rounded-shape-md font-medium transition-all"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-on-surface text-surface rounded-shape-md font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     {showResume ? 'Hide Resume' : 'View Resume'}
@@ -568,7 +580,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="glass-stroke-sm bg-surface-container-high flex items-center justify-center gap-2 px-4 py-2.5 text-on-surface rounded-shape-md font-medium transition-all"
+                    className="glass-stroke-sm bg-surface-container-high flex items-center justify-center gap-2 px-4 py-2.5 text-on-surface rounded-shape-md font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     Download PDF
@@ -604,7 +616,7 @@ export default function Home() {
       <div className={`fixed top-0 inset-x-0 z-50 px-4 flex justify-center pointer-events-none ${hasStarted ? 'pt-4' : 'pt-10'}`}>
         <div className="pointer-events-auto">
         <AnimatePresence>
-          {!hasStarted && !showProfile && !heroProject && (
+          {introDone && !hasStarted && !showProfile && !heroProject && (
             <motion.div
               key="hero"
               initial={{ opacity: 0, y: -8 }}
@@ -613,8 +625,8 @@ export default function Home() {
               transition={springs.spatialDefault}
               className="text-center"
             >
-              <h1 className="text-sm sm:text-base font-medium tracking-tight text-on-surface lowercase">
-                {PERSONAL_INFO.name}
+              <h1 className="group text-sm sm:text-base font-normal tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
+                minwook<span className="inline-block overflow-hidden align-bottom max-w-0 opacity-0 group-hover:max-w-[3em] group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">&nbsp;shin</span>
               </h1>
             </motion.div>
           )}
@@ -624,7 +636,8 @@ export default function Home() {
 
       {/* Project field - always dead-center; stays visible behind the chat */}
       <motion.div
-        animate={{ opacity: hasStarted ? 0.5 : 1, scale: hasStarted ? 0.96 : 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: !introUp ? 0 : hasStarted ? 0.5 : 1, scale: hasStarted ? 0.96 : 1 }}
         transition={springs.spatialDefault}
         className="fixed inset-0 z-[10] flex items-center justify-center pointer-events-none"
       >
@@ -694,24 +707,24 @@ export default function Home() {
                 return (
                   <motion.div
                     key={msg.id}
-                    initial={{ opacity: 0, y: 8, filter: isUser ? "blur(0px)" : "blur(8px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={springs.spatialFast}
                     className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
                     <div
-                      className={`rounded-shape-lg px-4 py-2.5 shadow-[0_6px_20px_rgba(0,0,0,0.08)] ${
+                      className={`rounded-shape-lg px-4 py-2.5 ${
                         isUser
                           ? "bg-on-surface text-surface"
-                          : "glass-stroke bg-surface-container text-on-surface"
+                          : "bg-surface border border-dotted border-on-surface/30 text-on-surface"
                       }`}
                     >
                       {isUser ? (
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{body}</p>
                       ) : (
                         <>
-                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-semibold prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1.5 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-semibold prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-1.5 prose-ul:text-sm prose-ol:my-1.5 prose-ol:text-sm prose-li:my-0.5 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-medium">
+                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1.5 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-1.5 prose-ul:text-sm prose-ol:my-1.5 prose-ol:text-sm prose-li:my-0.5 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-normal">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {body}
                             </ReactMarkdown>
@@ -732,7 +745,7 @@ export default function Home() {
                                   setHeroProject(target);
                                 }
                               }}
-                              className="mt-2.5 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-on-surface text-surface text-xs font-medium hover:opacity-90 transition-opacity"
+                              className="mt-2.5 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
                             >
                               {target === "profile" ? "View profile" : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -752,7 +765,7 @@ export default function Home() {
                             transition={{ ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="glass-stroke-sm bg-surface-container inline-flex items-center px-3 py-1.5 rounded-full text-on-surface text-xs font-medium transition-colors"
+                            className="border border-dotted border-on-surface/30 hover:border-on-surface hover:bg-on-surface hover:text-surface bg-surface inline-flex items-center px-3 py-1.5 rounded-full text-on-surface text-xs font-normal transition-colors"
                           >
                             {f}
                           </motion.button>
@@ -771,7 +784,7 @@ export default function Home() {
                   transition={springs.spatialFast}
                   className="flex justify-start"
                 >
-                  <div className="glass-stroke bg-surface-container rounded-shape-lg px-4 py-3">
+                  <div className="bg-surface border border-dotted border-on-surface/30 rounded-shape-lg px-4 py-3">
                     <div className="flex items-center space-x-1.5">
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
@@ -805,6 +818,7 @@ export default function Home() {
         onSelectCategory={setActiveCategory}
         onProfile={!showProfile && !heroProject ? (origin) => { setChatOnTop(false); setFilterOpen(false); setProfileOrigin(origin ?? null); setShowProfile(true); } : undefined}
         onFocusInput={reopenChat}
+        introReady={introDone}
       />
     </main>
   );

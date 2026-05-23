@@ -62,7 +62,7 @@ export function Button({
       whileTap={reduce || disabled ? undefined : { borderRadius: 12, scale: 0.97 }}
       transition={springs.pressMorph}
       className={[
-        "relative inline-flex items-center justify-center font-medium select-none",
+        "relative inline-flex items-center justify-center font-normal select-none",
         "transition-colors outline-none",
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
         "disabled:opacity-40 disabled:pointer-events-none",

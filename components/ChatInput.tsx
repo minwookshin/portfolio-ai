@@ -23,17 +23,31 @@ interface ChatInputProps {
   activeCategory?: string | null;
   onSelectCategory?: (category: string | null) => void;
   onFocusInput?: () => void;
+  introReady?: boolean;
 }
 
-// Material-style state layer (same as the mic IconButton): a faint current-color
-// tint that fades in on hover and deepens on press. The element must be
-// `relative`, and its visible content should sit in a `relative z-10` wrapper so
-// the tint reads behind it.
-const stateLayer =
-  "before:absolute before:inset-0 before:rounded-[inherit] before:bg-current before:opacity-0 before:transition-opacity hover:before:opacity-[0.08] active:before:opacity-[0.10]";
 
 const outsideBtn =
-  `glass-stroke bg-surface shrink-0 w-14 h-14 rounded-full text-on-surface flex items-center justify-center transition-colors relative ${stateLayer}`;
+  `group bg-surface shrink-0 w-14 h-14 rounded-full text-on-surface flex items-center justify-center transition-colors relative`;
+
+// A dotted outline drawn as evenly-spaced round dots (SVG stroke). Unlike CSS
+// `border: dotted`, the gap between dots is adjustable here (the "9" in the
+// dasharray). Parent must be `relative`. Inherits the element's text color.
+function DotRing({ variant = "circle", className = "" }: { variant?: "circle" | "pill"; className?: string }) {
+  const dots = { className: "dot-connect", fill: "none", stroke: "currentColor", strokeWidth: 1.25, strokeLinecap: "round" as const };
+  if (variant === "pill") {
+    return (
+      <svg className={`absolute inset-[1px] w-[calc(100%-2px)] h-[calc(100%-2px)] pointer-events-none overflow-visible ${className}`} fill="none" aria-hidden>
+        <rect x="0" y="0" width="100%" height="100%" rx="27" {...dots} />
+      </svg>
+    );
+  }
+  return (
+    <svg className={`absolute inset-0 w-full h-full pointer-events-none ${className}`} viewBox="0 0 56 56" fill="none" aria-hidden>
+      <circle cx="28" cy="28" r="27" {...dots} />
+    </svg>
+  );
+}
 
 // Stickier than the shared springs (more mass, gentler damping) so the filter
 // pill opens and closes with a smooth, weighted settle.
@@ -53,6 +67,7 @@ export default function ChatInput({
   activeCategory,
   onSelectCategory,
   onFocusInput,
+  introReady = true,
 }: ChatInputProps) {
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -60,6 +75,20 @@ export default function ChatInput({
   const recognitionRef = useRef<any>(null);
   const watchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Metaball: while the cluster is changing (a button appearing/disappearing or
+  // the filter toggling) turn on a gooey blur so shapes melt/merge into the pill,
+  // then turn it off so the dotted borders read crisp again at rest.
+  const [merging, setMerging] = useState(false);
+  const mergeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!didMount.current) { didMount.current = true; return; }
+    setMerging(true);
+    if (mergeTimer.current) clearTimeout(mergeTimer.current);
+    mergeTimer.current = setTimeout(() => setMerging(false), 520);
+    return () => { if (mergeTimer.current) clearTimeout(mergeTimer.current); };
+  }, [connectorKind, filterOpen]);
 
   // The bar sits collapsed as a pill (placeholder + mic) until the user taps it;
   // it expands into the full composer while focused, typing, or dictating. It
@@ -172,7 +201,27 @@ export default function ChatInput({
         <div className="fixed bottom-0 left-0 w-full h-24 sm:h-32 bg-gradient-to-t from-surface via-surface to-transparent pointer-events-none z-40" />
       )}
 
-      <div className="fixed z-[80] left-1/2 bottom-10 -translate-x-1/2 w-full max-w-[700px] px-4 flex items-center justify-center gap-2">
+      {/* Gooey metaball filter — blurs then alpha-thresholds so nearby shapes
+          merge with liquid necks. Toggled on only during cluster transitions. */}
+      <svg width="0" height="0" className="absolute" aria-hidden>
+        <defs>
+          <filter id="goo-merge">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -8" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
+
+      <div
+        className="fixed z-[80] left-1/2 bottom-10 -translate-x-1/2 w-full max-w-[700px] px-4 flex items-center justify-center gap-2"
+        style={{
+          filter: merging ? "url(#goo-merge)" : undefined,
+          opacity: introReady ? 1 : 0,
+          pointerEvents: introReady ? undefined : "none",
+          transition: "opacity 0.45s ease",
+        }}
+      >
         {/* Close (esc) - OUTSIDE the textbox, slides out from behind the bar */}
         <AnimatePresence mode="popLayout" initial={false}>
           {(connectorKind === "project" || connectorKind === "profile") && onClose && (
@@ -183,12 +232,13 @@ export default function ChatInput({
               onClick={onClose}
               aria-label="Close (Esc)"
               whileTap={{ scale: 0.92 }}
-              initial={{ opacity: 0, scale: 0.5, x: 24 }}
+              initial={{ opacity: 0, scale: 0.2, x: 34 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.5, x: 24 }}
-              transition={springs.spatialDefault}
-              className="group relative shrink-0 w-14 h-14 rounded-full bg-on-surface text-surface flex items-center justify-center text-[11px] font-semibold lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-surface hover:text-on-surface"
+              exit={{ opacity: 0, scale: 0.2, x: 34 }}
+              transition={springs.island}
+              className="group relative shrink-0 w-14 h-14 rounded-full bg-on-surface text-surface flex items-center justify-center text-[11px] font-normal lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-surface hover:text-on-surface"
             >
+              <DotRing variant="circle" className="transition-opacity duration-200 group-hover:opacity-0" />
               <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56" fill="none" style={{ transform: "rotate(-90deg)" }}>
                 <circle className="draw-ring esc-ring" cx="28" cy="28" r="27" pathLength={1} strokeWidth={1.5} style={{ stroke: "var(--md-on-surface)" }} />
               </svg>
@@ -201,11 +251,12 @@ export default function ChatInput({
           layout="position"
           initial={false}
           animate={{ width: expanded ? 480 : (connectorKind === "project" || connectorKind === "profile") && connectorSrc ? 240 : 200 }}
-          transition={springs.spatialDefault}
+          transition={springs.island}
           style={{ maxWidth: "100%" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`relative glass-stroke bg-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${stateLayer} focus-within:before:opacity-[0.08] ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
+          className={`group relative bg-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
         >
+          <DotRing variant="pill" />
           {/* Current project / profile icon, inside the textbox on the left */}
           {(connectorKind === "project" || connectorKind === "profile") && connectorSrc && (
             <motion.button
@@ -214,10 +265,10 @@ export default function ChatInput({
               onClick={onClose}
               aria-label={connectorKind === "profile" ? "Profile" : "Current project"}
               whileTap={{ scale: 0.92 }}
-              transition={springs.spatialDefault}
+              transition={springs.island}
               className="shrink-0 ml-1 w-9 h-9 rounded-full overflow-hidden border border-[rgba(0,0,2,0.1)]"
             >
-              <img src={connectorSrc} alt="" className="w-full h-full object-cover" style={{ filter: "grayscale(1) contrast(1.03)" }} />
+              <img src={connectorSrc} alt="" className="w-full h-full object-cover" style={{ filter: "grayscale(1) contrast(1.03)" }} decoding="async" />
             </motion.button>
           )}
           <input
@@ -246,6 +297,7 @@ export default function ChatInput({
               aria-label="Send"
               size="sm"
               className="!w-11 !h-11"
+              keepRound
               selected={!!input.trim()}
               disabled={!input.trim()}
               onClick={() => handleSubmit()}
@@ -267,12 +319,13 @@ export default function ChatInput({
             rel="noopener noreferrer"
             aria-label="LinkedIn post"
             whileTap={{ scale: 0.94 }}
-            initial={{ opacity: 0, scale: 0.5, x: -24 }}
+            initial={{ opacity: 0, scale: 0.2, x: -34 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.5, x: -24 }}
-            transition={springs.spatialDefault}
+            exit={{ opacity: 0, scale: 0.2, x: -34 }}
+            transition={springs.island}
             className={outsideBtn}
           >
+            <DotRing variant="circle" />
             <LinkedInIcon className="w-5 h-5 relative z-10" />
           </motion.a>
         )}
@@ -283,19 +336,20 @@ export default function ChatInput({
           <motion.div
             key="filter"
             layout="position"
-            initial={{ opacity: 0, scale: 0.5, x: -24 }}
+            initial={{ opacity: 0, scale: 0.2, x: -34 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.5, x: -24 }}
-            transition={springs.spatialDefault}
+            exit={{ opacity: 0, scale: 0.2, x: -34 }}
+            transition={springs.island}
             className="shrink-0"
           >
-            <div ref={filterRef} className="glass-stroke bg-surface flex items-center rounded-full p-1.5">
+            <div ref={filterRef} className="group relative bg-surface flex items-center rounded-full p-1.5">
+              <DotRing variant="pill" />
               <button
                 type="button"
                 onClick={onFilter}
                 aria-label="Filter projects"
                 aria-pressed={filterOpen}
-                className={`relative shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${stateLayer} ${
+                className={`relative shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
                   filterOpen ? "bg-on-surface text-surface" : "text-on-surface"
                 }`}
               >
@@ -315,7 +369,7 @@ export default function ChatInput({
                         key={cat}
                         type="button"
                         onClick={() => onSelectCategory?.(cat === "All" ? null : cat)}
-                        className={`shrink-0 min-h-[44px] px-3 py-2 rounded-full text-[13px] font-medium whitespace-nowrap transition-colors ${
+                        className={`shrink-0 min-h-[44px] px-3 py-2 rounded-full text-[13px] font-normal whitespace-nowrap transition-colors ${
                           isActive
                             ? "bg-on-surface text-surface"
                             : "text-on-surface-variant hover:text-on-surface hover:bg-black/[0.04]"
@@ -341,12 +395,13 @@ export default function ChatInput({
             }}
             aria-label="View profile"
             whileTap={{ scale: 0.94 }}
-            initial={{ opacity: 0, scale: 0.5, x: -24 }}
+            initial={{ opacity: 0, scale: 0.2, x: -34 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.5, x: -24 }}
-            transition={springs.spatialDefault}
+            exit={{ opacity: 0, scale: 0.2, x: -34 }}
+            transition={springs.island}
             className={`${outsideBtn} ${filterOpen ? "max-sm:hidden" : ""}`}
           >
+            <DotRing variant="circle" />
             <User className="w-5 h-5 relative z-10" />
           </motion.button>
         )}

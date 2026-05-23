@@ -33,7 +33,7 @@ export function Chip({
       whileTap={reduce || disabled ? undefined : { scale: 0.95 }}
       transition={springs.spatialFast}
       className={[
-        "relative inline-flex items-center gap-2 h-9 px-4 rounded-shape-sm text-sm font-medium outline-none",
+        "relative inline-flex items-center gap-2 h-9 px-4 rounded-shape-sm text-sm font-normal outline-none",
         "transition-colors",
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
         "disabled:opacity-40 disabled:pointer-events-none",

@@ -61,9 +61,21 @@ const reveal = {
 // Translucent glass so components read as floating over the blurred backdrop
 // rather than sitting on a solid panel.
 const card = "glass-stroke bg-surface-container/45 backdrop-blur-xl rounded-[24px]";
-const eyebrowCls = "font-mono font-light uppercase tracking-[0.2em] text-[11px] text-on-surface-variant";
-const h2Cls = "text-2xl sm:text-3xl font-semibold tracking-[-0.01em] text-on-surface";
+const eyebrowCls = "font-mono font-light uppercase text-[11px] text-on-surface-variant";
+const h2Cls = "text-2xl sm:text-3xl font-normal tracking-[-0.01em] text-on-surface";
 const bodyCls = "text-[15px] sm:text-base text-on-surface-variant leading-relaxed";
+
+// Hero content staggers in after the panel has morphed into place (delayChildren),
+// then each line settles one after another — like the Dynamic Island filling its
+// expanded shape with content.
+const heroContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.12 } },
+};
+const heroItem = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: springs.spatialFast },
+};
 
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
   return (
@@ -84,7 +96,7 @@ function Tags({ tags }: { tags: string[] }) {
       {tags.map((t) => (
         <span
           key={t}
-          className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-medium text-on-surface"
+          className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-normal text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
         >
           {t}
         </span>
@@ -97,13 +109,13 @@ function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "
   if (style === "phone") {
     return (
       <div className="mx-auto w-full max-w-[260px]">
-        <img src={src} alt={alt} className="w-full h-auto" draggable={false} />
+        <img src={src} alt={alt} className="w-full h-auto" draggable={false} loading="lazy" decoding="async" />
       </div>
     );
   }
   return (
     <div className={`${card} overflow-hidden`}>
-      <img src={src} alt={alt} className="w-full h-auto object-cover" draggable={false} />
+      <img src={src} alt={alt} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -114,39 +126,34 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section
           key={i}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={springs.spatialDefault}
+          variants={heroContainer}
+          initial="hidden"
+          animate="show"
           className="pt-2"
         >
-          {section.badge && (
-            <span className="inline-block px-3.5 py-1.5 rounded-full bg-on-surface text-surface text-xs font-semibold uppercase tracking-wide mb-6">
-              {section.badge}
-            </span>
-          )}
-          <h1 className="text-[2.5rem] sm:text-5xl font-semibold tracking-[-0.02em] leading-[1.05] text-on-surface">
+          <motion.h1 variants={heroItem} className="text-[2.5rem] sm:text-5xl font-normal tracking-[-0.02em] leading-[1.05] text-on-surface">
             {section.title}
-          </h1>
+          </motion.h1>
           {section.subtitle && (
-            <p className="mt-4 text-lg sm:text-xl text-on-surface-variant font-light leading-relaxed max-w-xl">
+            <motion.p variants={heroItem} className="mt-4 text-lg sm:text-xl text-on-surface-variant font-light leading-relaxed max-w-xl">
               {section.subtitle}
-            </p>
+            </motion.p>
           )}
           {section.bullets && section.bullets.length > 0 && (
-            <div className="mt-7 space-y-3">
+            <motion.div variants={heroItem} className="mt-7 space-y-3">
               {section.bullets.map((b) => (
                 <div key={b} className="flex items-start gap-3">
                   <Dot />
                   <p className="text-[15px] text-on-surface-variant leading-snug">{b}</p>
                 </div>
               ))}
-            </div>
+            </motion.div>
           )}
-          {section.tags && section.tags.length > 0 && <div className="mt-7"><Tags tags={section.tags} /></div>}
+          {section.tags && section.tags.length > 0 && <motion.div variants={heroItem} className="mt-7"><Tags tags={section.tags} /></motion.div>}
           {section.image && (
-            <div className="mt-10">
+            <motion.div variants={heroItem} className="mt-10">
               <ProjectImage src={section.image} alt={section.title} style={section.imageStyle} />
-            </div>
+            </motion.div>
           )}
         </motion.section>
       );
@@ -167,7 +174,7 @@ function renderSection(section: DetailSection, i: number) {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {section.items.map((s) => (
               <div key={s.label} className={`${card} p-6`}>
-                <p className="text-3xl sm:text-4xl font-semibold tracking-tight text-on-surface">{s.value}</p>
+                <p className="text-3xl sm:text-4xl font-normal tracking-tight text-on-surface">{s.value}</p>
                 <p className="mt-1.5 text-sm text-on-surface-variant">{s.label}</p>
               </div>
             ))}
@@ -186,7 +193,7 @@ function renderSection(section: DetailSection, i: number) {
                 <div className="mt-6 pt-6 border-t border-outline-variant grid grid-cols-2 gap-6">
                   {section.stats.map((s) => (
                     <div key={s.label}>
-                      <p className="text-2xl sm:text-3xl font-semibold tracking-tight text-on-surface">{s.value}</p>
+                      <p className="text-2xl sm:text-3xl font-normal tracking-tight text-on-surface">{s.value}</p>
                       <p className="mt-1 text-xs text-on-surface-variant">{s.label}</p>
                     </div>
                   ))}
@@ -196,7 +203,7 @@ function renderSection(section: DetailSection, i: number) {
             {section.persona && (
               <div className={`${card} p-6 sm:p-8 md:col-span-2`}>
                 <p className={`${eyebrowCls} mb-4`}>Target user</p>
-                <h3 className="text-lg font-semibold text-on-surface">{section.persona.name}</h3>
+                <h3 className="text-lg font-normal text-on-surface">{section.persona.name}</h3>
                 <p className="text-sm text-on-surface-variant mb-4">{section.persona.role}</p>
                 <div className="space-y-2.5 pt-4 border-t border-outline-variant">
                   {section.persona.points.map((p) => (
@@ -219,10 +226,10 @@ function renderSection(section: DetailSection, i: number) {
           <div className="grid sm:grid-cols-2 gap-4">
             {section.columns.map((c) => (
               <div key={c.label} className={`${card} p-6 sm:p-8`}>
-                <span className="inline-block px-3 py-1.5 rounded-full bg-on-surface text-surface text-xs font-semibold mb-5">
+                <span className="inline-block px-3 py-1.5 rounded-full bg-on-surface text-surface text-xs font-normal mb-5">
                   {c.label}
                 </span>
-                <h3 className="text-lg font-semibold text-on-surface mb-2">{c.title}</h3>
+                <h3 className="text-lg font-normal text-on-surface mb-2">{c.title}</h3>
                 <p className={bodyCls}>{c.body}</p>
               </div>
             ))}
@@ -251,7 +258,7 @@ function renderSection(section: DetailSection, i: number) {
                 )}
                 <div className={fi % 2 === 1 ? "sm:order-1" : ""}>
                   <p className={`${eyebrowCls} mb-3`}>{`Feature ${fi + 1}`}</p>
-                  <h3 className="text-xl font-semibold text-on-surface mb-3">{f.title}</h3>
+                  <h3 className="text-xl font-normal text-on-surface mb-3">{f.title}</h3>
                   <p className={bodyCls}>{f.description}</p>
                 </div>
               </motion.div>
@@ -269,12 +276,12 @@ function renderSection(section: DetailSection, i: number) {
             <div className="space-y-6">
               {section.steps.map((s, si) => (
                 <div key={s.title} className="relative">
-                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center rounded-full bg-on-surface text-surface text-xs font-semibold">
+                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center rounded-full bg-on-surface text-surface text-xs font-normal">
                     {si + 1}
                   </span>
                   <div className={`${card} p-5 sm:p-6`}>
                     {s.tag && <p className={`${eyebrowCls} mb-2`}>{s.tag}</p>}
-                    <h3 className="text-base font-semibold text-on-surface mb-1.5">{s.title}</h3>
+                    <h3 className="text-base font-normal text-on-surface mb-1.5">{s.title}</h3>
                     <p className={bodyCls}>{s.body}</p>
                   </div>
                 </div>
@@ -302,7 +309,7 @@ function renderSection(section: DetailSection, i: number) {
           <div className="grid sm:grid-cols-2 gap-4 items-start">
             {section.images.map((img, gi) => (
               <figure key={gi} className={`${card} overflow-hidden`}>
-                <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} />
+                <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
                 {img.caption && <figcaption className="px-4 py-3 text-xs text-on-surface-variant">{img.caption}</figcaption>}
               </figure>
             ))}
@@ -352,8 +359,8 @@ function renderSection(section: DetailSection, i: number) {
                   rel="noopener noreferrer"
                   className={
                     li === 0
-                      ? "inline-flex items-center gap-2 px-6 py-3 rounded-full bg-on-surface text-surface text-sm font-semibold hover:opacity-90 transition-opacity"
-                      : "glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center gap-2 px-6 py-3 rounded-full text-on-surface text-sm font-semibold transition-colors"
+                      ? "inline-flex items-center gap-2 px-6 py-3 rounded-full bg-on-surface text-surface text-sm font-normal hover:opacity-90 transition-opacity"
+                      : "glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center gap-2 px-6 py-3 rounded-full text-on-surface text-sm font-normal transition-colors"
                   }
                 >
                   {l.label}
@@ -369,11 +376,6 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section key={i} {...reveal}>
           <div className={`${card} p-8 sm:p-12`}>
-            {section.badge && (
-              <span className="inline-block px-3.5 py-1.5 rounded-full bg-on-surface text-surface text-xs font-semibold uppercase tracking-wide mb-6">
-                {section.badge}
-              </span>
-            )}
             <h2 className={`${h2Cls} mb-5`}>{section.heading}</h2>
             <div className="space-y-4">
               {section.body.map((p, pi) => (
@@ -419,7 +421,7 @@ function AskRow({
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md group inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-on-surface transition-colors"
+            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md group inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-normal text-on-surface transition-colors"
           >
             {q}
             <ArrowUpRight className="w-3.5 h-3.5 text-on-surface-variant transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

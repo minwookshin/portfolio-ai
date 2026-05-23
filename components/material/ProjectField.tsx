@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { Project } from "@/components/ProjectCard";
+
+// Per-icon entrance directions, cycled so neighbours differ. The artwork starts
+// pushed fully off one edge (clipped invisible) then slides to center.
+const REVEAL_OFFSETS = ["translateY(-100%)", "translateX(100%)", "translateY(100%)", "translateX(-100%)"];
 
 export interface OriginRect {
   cx: number;
@@ -95,6 +100,14 @@ export function ProjectField({
   const clampX = Math.max(0, boxW / 2 - extent.ex - iconSize / 2 - 12, extent.ex + iconSize / 2 - boxW / 2 + 24);
   const clampY = Math.max(0, boxH / 2 - extent.ey - iconSize / 2 - 12, extent.ey + iconSize / 2 - boxH / 2 + 24);
 
+  // Landing reveal: each icon's artwork slides in from a different edge (clipped
+  // to its own frame), staggered, just after the name settles at the top.
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setRevealed(true), 650);
+    return () => clearTimeout(t);
+  }, []);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<HTMLDivElement>(null);
   const pan = useRef({ x: 0, y: 0 });
@@ -165,9 +178,21 @@ export function ProjectField({
       onPointerCancel={endDrag}
     >
       <div ref={worldRef} className="absolute left-1/2 top-1/2">
-        {projects.map((project) => {
+        {projects.map((project, i) => {
           const place = placement.get(project.id)!;
           const iconSrc = project.icon ?? project.image;
+          const d = `${i * 55}ms`;
+          // The whole tile (box + artwork) fades in together so the empty box
+          // never shows before its icon; the artwork additionally slides in from
+          // one edge, clipped to the frame.
+          const boxReveal = {
+            opacity: revealed ? 1 : 0,
+            transition: `opacity 0.5s ease-out ${d}`,
+          };
+          const revealStyle = {
+            transform: revealed ? "translate(0,0)" : REVEAL_OFFSETS[(i * 3) % REVEAL_OFFSETS.length],
+            transition: `transform 0.7s cubic-bezier(0.22,1,0.36,1) ${d}`,
+          };
           return (
             <button
               key={project.id}
@@ -194,26 +219,32 @@ export function ProjectField({
                 transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
               }}
             >
+              <div className="w-full h-full" style={boxReveal}>
               <div className="bg-surface-container relative w-full h-full rounded-none overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-90">
+                <div className="absolute inset-0" style={revealStyle}>
                 {iconSrc ? (
-                  <img
+                  <Image
                     src={iconSrc}
                     alt={project.title}
+                    fill
+                    sizes="128px"
                     draggable={false}
-                    className="w-full h-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125"
+                    className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125"
                     style={{ filter: "grayscale(1) contrast(1.03)" }}
                   />
                 ) : (
                   <div
-                    className={`w-full h-full flex items-center justify-center font-medium text-on-surface transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125 ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}
+                    className={`w-full h-full flex items-center justify-center font-normal text-on-surface transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125 ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}
                     style={{ filter: "grayscale(1)" }}
                   >
                     {project.glyph ?? project.title.charAt(0)}
                   </div>
                 )}
+                </div>
                 <span className="absolute inset-0 rounded-[inherit]" style={{ backgroundColor: "#222222", opacity: 0.05 }} />
                 {/* monochrome hover state layer */}
                 <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.1]" />
+              </div>
               </div>
             </button>
           );

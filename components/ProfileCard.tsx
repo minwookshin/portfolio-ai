@@ -49,10 +49,10 @@ export default function ProfileCard({
         <div className="flex-1 space-y-6 text-center lg:text-left">
           {/* Name & Title */}
           <div>
-            <h2 className="text-2xl lg:text-3xl font-semibold text-on-surface mb-1.5 tracking-[-0.02em]">
+            <h2 className="text-2xl lg:text-3xl font-normal text-on-surface mb-1.5 tracking-[-0.02em]">
               {name}
             </h2>
-            <p className="text-sm text-on-surface-variant font-medium">{title}</p>
+            <p className="text-sm text-on-surface-variant font-normal">{title}</p>
           </div>
 
           {/* Divider */}
@@ -70,7 +70,7 @@ export default function ProfileCard({
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={springs.pressMorph}
-              className="flex items-center gap-2 px-6 py-3 bg-primary hover:opacity-90 text-on-primary rounded-shape-full text-sm font-medium transition-all duration-200"
+              className="flex items-center gap-2 px-6 py-3 bg-primary hover:opacity-90 text-on-primary rounded-shape-full text-sm font-normal transition-all duration-200"
             >
               <Mail className="w-4 h-4" />
               Email Me
@@ -82,7 +82,7 @@ export default function ProfileCard({
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={springs.pressMorph}
-              className="glass-stroke-sm bg-surface-container flex items-center gap-2 px-6 py-3 text-on-surface rounded-shape-full text-sm font-medium transition-all duration-200"
+              className="glass-stroke-sm bg-surface-container flex items-center gap-2 px-6 py-3 text-on-surface rounded-shape-full text-sm font-normal transition-all duration-200"
             >
               <LinkedInIcon className="w-4 h-4" />
               LinkedIn

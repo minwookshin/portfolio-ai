@@ -26,7 +26,7 @@ export function SplitButton({ label, onClick, menuItems, className = "" }: Split
         onClick={onClick}
         whileTap={reduce ? undefined : { scale: 0.97 }}
         transition={springs.pressMorph}
-        className="relative inline-flex items-center h-10 px-5 text-sm font-medium bg-primary text-on-primary rounded-l-shape-full rounded-r-shape-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+        className="relative inline-flex items-center h-10 px-5 text-sm font-normal bg-primary text-on-primary rounded-l-shape-full rounded-r-shape-sm outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
       >
         {label}
       </motion.button>

@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-// Google Sans Flex (variable, OFL) — self-hosted from Google Fonts since it
-// isn't in next/font/google's catalog yet. Used for the whole site.
-const googleSans = localFont({
-  src: "./fonts/GoogleSansFlex.woff2",
+// Outfit (variable, OFL) from Google Fonts. Used for the whole site.
+const googleSans = Outfit({
+  subsets: ["latin"],
   variable: "--font-google-sans",
   display: "swap",
-  weight: "1 1000",
 });
 
 export const metadata: Metadata = {

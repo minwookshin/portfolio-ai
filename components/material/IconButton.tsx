@@ -13,6 +13,8 @@ export interface IconButtonProps {
   onClick?: () => void;
   type?: "button" | "submit";
   className?: string;
+  /** Keep a perfect circle even when selected (only the color changes). */
+  keepRound?: boolean;
   children: ReactNode;
 }
 
@@ -31,6 +33,7 @@ export function IconButton({
   onClick,
   type = "button",
   className = "",
+  keepRound = false,
   children,
   ...rest
 }: IconButtonProps) {
@@ -44,7 +47,7 @@ export function IconButton({
       disabled={disabled}
       onClick={onClick}
       initial={false}
-      animate={{ borderRadius: selected ? 12 : 9999 }}
+      animate={{ borderRadius: keepRound ? 9999 : selected ? 12 : 9999 }}
       whileTap={reduce || disabled ? undefined : { scale: 0.92 }}
       transition={springs.pressMorph}
       className={[

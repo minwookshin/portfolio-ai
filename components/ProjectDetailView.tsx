@@ -73,7 +73,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface mb-8 transition-colors"
         >
           <ArrowBackIcon className="w-4 h-4" />
-          <span className="text-sm font-medium">Back to projects</span>
+          <span className="text-sm font-normal">Back to projects</span>
         </motion.button>
       )}
       <CaseStudy data={caseStudy} onAsk={onAsk} />

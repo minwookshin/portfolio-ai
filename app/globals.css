@@ -128,6 +128,26 @@ body {
   border: 1.5px solid rgba(0, 0, 2, 0.1);
 }
 
+/* Dotted stroke — a border drawn as a row of dots, for the bottom cluster
+   (chat input pill + profile / esc / filter / LinkedIn buttons). */
+.dot-stroke {
+  border: 2px dotted rgba(0, 0, 2, 0.35);
+}
+
+/* Dotted SVG outline that, on hover/focus of the parent group, grows its dashes
+   until they connect into a solid stroke (period stays constant so the dots
+   simply fill the gaps between them). Replaces the gray hover tint. */
+.dot-connect {
+  stroke-dasharray: 0.01 9;
+  opacity: 0.45;
+  transition: stroke-dasharray 0.35s ease, opacity 0.35s ease;
+}
+.group:hover .dot-connect,
+.group:focus-within .dot-connect {
+  stroke-dasharray: 9 0.01;
+  opacity: 0.9;
+}
+
 /* Hover stroke trace — a ring/outline draws clockwise from the top on hover.
    Shared by the esc button and the bottom nav cluster (chat pill, profile,
    filter, LinkedIn). pathLength=1 normalizes the dash so it works on any size
