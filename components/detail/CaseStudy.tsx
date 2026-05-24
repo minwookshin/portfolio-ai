@@ -421,10 +421,10 @@ function AskRow({
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md group inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-normal text-on-surface transition-colors"
+            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md hover:bg-on-surface hover:text-surface group inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-normal text-on-surface transition-colors"
           >
             {q}
-            <ArrowUpRight className="w-3.5 h-3.5 text-on-surface-variant transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </button>
         ))}
       </div>
