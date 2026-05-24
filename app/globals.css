@@ -142,16 +142,22 @@ body {
   opacity: 0.9;
 }
 
-/* Blinking caret for the landing type-on animation */
-.type-caret {
-  display: inline-block;
-  margin-left: 0.04em;
-  font-weight: 300;
-  animation: caret-blink 0.85s steps(1) infinite;
+/* Landing trace-on: "minwook" starts as dotted letter outlines, the dots grow
+   to connect into solid strokes, then the letters fill in. */
+.trace-text {
+  fill: transparent;
+  stroke: var(--md-on-surface);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 0.6 4;
+  animation: trace-connect 0.8s ease 0.55s forwards, trace-fill 0.45s ease 1.45s forwards;
 }
-@keyframes caret-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+@keyframes trace-connect {
+  to { stroke-dasharray: 1000 0; }
+}
+@keyframes trace-fill {
+  to { fill: var(--md-on-surface); stroke-width: 0; }
 }
 
 /* Material 3 Expressive tokens - monochrome + Nothing-red accent (light) */

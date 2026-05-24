@@ -291,19 +291,12 @@ export default function Home() {
   const [introUp, setIntroUp] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const [introTopY, setIntroTopY] = useState(0);
-  const [typed, setTyped] = useState(0); // letters of "minwook" written so far
 
   useEffect(() => {
     setIntroTopY(-(window.innerHeight / 2 - 48));
-    let n = 0;
-    const typer = setInterval(() => {
-      n += 1;
-      setTyped(n);
-      if (n >= 7) clearInterval(typer);
-    }, 75);
-    const t1 = setTimeout(() => setIntroUp(true), 800);
-    const t2 = setTimeout(() => setIntroDone(true), 1700);
-    return () => { clearInterval(typer); clearTimeout(t1); clearTimeout(t2); };
+    const t1 = setTimeout(() => setIntroUp(true), 2050);
+    const t2 = setTimeout(() => setIntroDone(true), 2950);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
   const [showResume, setShowResume] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -481,15 +474,24 @@ export default function Home() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none"
           >
-            <motion.h1
+            <motion.div
               initial={{ y: 0, scale: 2.4 }}
               animate={{ y: introUp ? introTopY : 0, scale: introUp ? 1 : 2.4 }}
               transition={springs.island}
-              className="text-sm sm:text-base font-light tracking-tight text-on-surface lowercase whitespace-nowrap"
             >
-              {"minwook".slice(0, typed)}
-              <span aria-hidden className={introUp ? "opacity-0" : "type-caret"}>|</span>
-            </motion.h1>
+              <svg viewBox="0 0 110 24" width="110" height="24" className="overflow-visible" role="img" aria-label="minwook">
+                <text
+                  x="55"
+                  y="12"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  className="trace-text lowercase"
+                  style={{ fontSize: "16px", fontFamily: "var(--font-google-sans), sans-serif", fontWeight: 300, letterSpacing: "-0.045em" }}
+                >
+                  minwook
+                </text>
+              </svg>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
