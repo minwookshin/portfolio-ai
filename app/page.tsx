@@ -518,7 +518,7 @@ export default function Home() {
             transition={springs.island}
             style={{ transformOrigin: "center center" }}
             onClick={(e) => { if (e.target === e.currentTarget) leaveChat(); }}
-            className="fixed inset-0 z-[70] overflow-y-auto overflow-x-hidden overscroll-contain"
+            className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain"
           >
             <div className="w-full max-w-3xl mx-auto px-5 sm:px-6 pt-12 pb-20">
               <ProjectDetailView
