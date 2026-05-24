@@ -122,34 +122,6 @@ const MAIN_PROJECTS: Project[] = [
     overview: "FLUX is a creative web project that showcases innovative UI/UX design through an interactive grid-based layout. The project emphasizes smooth user interactions, dynamic animations, and a unique circular navigation system that creates an engaging browsing experience."
   },
   {
-    id: "5",
-    title: "Telfair Museum",
-    description: "Exhibition & digital experience design",
-    fullDescription:
-      "A digital experience design project for the Telfair Museum, reimagining how visitors discover and engage with exhibitions.",
-    tags: ["UX Design", "Digital Experience"],
-    categories: ["Design"],
-    date: "2025",
-    image: "/projects/telfair/4.png",
-    icon: "/projects/telfair/4.png",
-    overview: "Reimagining the museum visit through a thoughtful digital experience.",
-    gallery: ["/projects/telfair/4.png", "/projects/telfair/8.png", "/projects/telfair/12.png", "/projects/telfair/16.png"]
-  },
-  {
-    id: "6",
-    title: "Nest",
-    description: "Product design & branding",
-    fullDescription:
-      "Nest is a product design and branding project exploring a cohesive device and brand system.",
-    tags: ["Product Design", "Branding"],
-    categories: ["Design"],
-    date: "2025",
-    image: "/projects/nest/devicefin.png",
-    icon: "/projects/nest/branding1.png",
-    overview: "A product and brand system, from low-fi exploration to a polished device concept.",
-    gallery: ["/projects/nest/devicefin.png", "/projects/nest/branding1.png", "/projects/nest/fin1.png", "/projects/nest/hifi1.png"]
-  },
-  {
     id: "7",
     title: "NameMe",
     description: "Concept design project",

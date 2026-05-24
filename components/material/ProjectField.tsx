@@ -241,6 +241,8 @@ export function ProjectField({
                   </div>
                 )}
                 </div>
+                {/* dither texture — ordered dot screen for depth instead of flat gray */}
+                <span className="dither-overlay absolute inset-0 rounded-[inherit] pointer-events-none" />
                 {/* monochrome hover state layer */}
                 <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.1]" />
               </div>
