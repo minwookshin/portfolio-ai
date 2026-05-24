@@ -144,24 +144,6 @@ body {
   opacity: 0.9;
 }
 
-/* Dither texture for the app icons — two offset ordered dot grids screened over
-   the grayscale art so it reads with depth/grain instead of flat gray. */
-.dither-overlay {
-  background-image:
-    radial-gradient(circle, rgba(0, 0, 0, 0.55) 0.5px, transparent 0.75px),
-    radial-gradient(circle, rgba(0, 0, 0, 0.4) 0.5px, transparent 0.75px);
-  background-size: 3px 3px, 3px 3px;
-  background-position: 0 0, 1.5px 1.5px;
-  mix-blend-mode: multiply;
-  opacity: 0.5;
-}
-html.dark .dither-overlay {
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.5) 0.5px, transparent 0.75px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.35) 0.5px, transparent 0.75px);
-  mix-blend-mode: screen;
-}
-
 /* Landing trace-on: "minwook" starts as dotted letter outlines, the dots grow
    to connect into solid strokes, then the letters fill in. */
 .trace-text {
