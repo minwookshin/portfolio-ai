@@ -7,6 +7,6 @@ describe("springs", () => {
     expect(springs.spatialFast).toEqual({ type: "spring", stiffness: 320, damping: 28, mass: 1.3 });
     expect(springs.pressMorph).toEqual({ type: "spring", stiffness: 380, damping: 26, mass: 1.4 });
     expect(springs.genOvershoot).toEqual({ type: "spring", stiffness: 230, damping: 26, mass: 1.4 });
-    expect(springs.island).toEqual({ type: "spring", stiffness: 200, damping: 18, mass: 1 });
+    expect(springs.island).toEqual({ type: "spring", stiffness: 190, damping: 17, mass: 1.3 });
   });
 });

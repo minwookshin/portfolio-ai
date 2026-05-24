@@ -6,8 +6,8 @@ export const springs = {
   pressMorph: { type: "spring", stiffness: 380, damping: 26, mass: 1.4 },
   // Sticky/weighted with a gentle settle — for the modal expand and reveals.
   genOvershoot: { type: "spring", stiffness: 230, damping: 26, mass: 1.4 },
-  // Dynamic-Island feel: lowish stiffness + ~0.6 damping ratio so the shape
-  // morphs with a little alive bounce and settles softly. Used for the bottom
-  // pill morph and the detail/profile expand.
-  island: { type: "spring", stiffness: 200, damping: 18, mass: 1 },
+  // Dynamic-Island feel: weighted + a low ~0.5 damping ratio so shapes morph
+  // with real inertia and a sticky, slightly-overshooting settle. Used for the
+  // bottom pill morph, the name rise, and the detail/profile expand.
+  island: { type: "spring", stiffness: 190, damping: 17, mass: 1.3 },
 } satisfies Record<string, Transition>;

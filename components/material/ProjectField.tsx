@@ -104,7 +104,7 @@ export function ProjectField({
   // to its own frame), staggered, just after the name settles at the top.
   const [revealed, setRevealed] = useState(false);
   useEffect(() => {
-    const t = setTimeout(() => setRevealed(true), 650);
+    const t = setTimeout(() => setRevealed(true), 880);
     return () => clearTimeout(t);
   }, []);
 
@@ -191,7 +191,7 @@ export function ProjectField({
           };
           const revealStyle = {
             transform: revealed ? "translate(0,0)" : REVEAL_OFFSETS[(i * 3) % REVEAL_OFFSETS.length],
-            transition: `transform 0.7s cubic-bezier(0.22,1,0.36,1) ${d}`,
+            transition: `transform 0.8s cubic-bezier(0.34, 1.4, 0.5, 1) ${d}`,
           };
           return (
             <button
