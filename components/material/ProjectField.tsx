@@ -241,7 +241,6 @@ export function ProjectField({
                   </div>
                 )}
                 </div>
-                <span className="absolute inset-0 rounded-[inherit]" style={{ backgroundColor: "#222222", opacity: 0.05 }} />
                 {/* monochrome hover state layer */}
                 <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.1]" />
               </div>
