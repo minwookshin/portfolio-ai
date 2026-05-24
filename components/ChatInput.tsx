@@ -33,8 +33,10 @@ const outsideBtn =
 // A dotted outline drawn as evenly-spaced round dots (SVG stroke). Unlike CSS
 // `border: dotted`, the gap between dots is adjustable here (the "9" in the
 // dasharray). Parent must be `relative`. Inherits the element's text color.
-function DotRing({ variant = "circle", className = "" }: { variant?: "circle" | "pill"; className?: string }) {
-  const dots = { className: "dot-connect", fill: "none", stroke: "currentColor", strokeLinecap: "round" as const };
+function DotRing({ variant = "circle", className = "", connect = true }: { variant?: "circle" | "pill"; className?: string; connect?: boolean }) {
+  const dots = connect
+    ? { className: "dot-connect", fill: "none", stroke: "currentColor", strokeLinecap: "round" as const }
+    : { fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeDasharray: "0.01 9", style: { opacity: 0.9 } };
   if (variant === "pill") {
     return (
       <svg className={`absolute inset-[1px] w-[calc(100%-2px)] h-[calc(100%-2px)] pointer-events-none overflow-visible ${className}`} fill="none" aria-hidden>
@@ -238,10 +240,7 @@ export default function ChatInput({
               transition={springs.island}
               className="group relative shrink-0 w-14 h-14 rounded-full bg-on-surface text-surface flex items-center justify-center text-[11px] font-normal lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-surface hover:text-on-surface"
             >
-              <DotRing variant="circle" className="transition-opacity duration-200 group-hover:opacity-0" />
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56" fill="none" style={{ transform: "rotate(-90deg)" }}>
-                <circle className="draw-ring esc-ring" cx="28" cy="28" r="27" pathLength={1} strokeWidth={1.5} style={{ stroke: "var(--md-on-surface)" }} />
-              </svg>
+              <DotRing variant="circle" connect={false} className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <span className="relative">esc</span>
             </motion.button>
           )}
