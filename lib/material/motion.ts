@@ -9,5 +9,5 @@ export const springs = {
   // Dynamic-Island feel: weighted + a low ~0.5 damping ratio so shapes morph
   // with real inertia and a sticky, slightly-overshooting settle. Used for the
   // bottom pill morph, the name rise, and the detail/profile expand.
-  island: { type: "spring", stiffness: 190, damping: 17, mass: 1.3 },
+  island: { type: "spring", stiffness: 190, damping: 19, mass: 1.3 },
 } satisfies Record<string, Transition>;

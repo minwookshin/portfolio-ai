@@ -191,7 +191,7 @@ export function ProjectField({
           };
           const revealStyle = {
             transform: revealed ? "translate(0,0)" : REVEAL_OFFSETS[(i * 3) % REVEAL_OFFSETS.length],
-            transition: `transform 0.8s cubic-bezier(0.34, 1.4, 0.5, 1) ${d}`,
+            transition: `transform 0.8s cubic-bezier(0.34, 1.28, 0.5, 1) ${d}`,
           };
           return (
             <button
