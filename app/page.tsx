@@ -291,12 +291,19 @@ export default function Home() {
   const [introUp, setIntroUp] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const [introTopY, setIntroTopY] = useState(0);
+  const [typed, setTyped] = useState(0); // letters of "minwook" written so far
 
   useEffect(() => {
     setIntroTopY(-(window.innerHeight / 2 - 48));
-    const t1 = setTimeout(() => setIntroUp(true), 550);
-    const t2 = setTimeout(() => setIntroDone(true), 1450);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    let n = 0;
+    const typer = setInterval(() => {
+      n += 1;
+      setTyped(n);
+      if (n >= 7) clearInterval(typer);
+    }, 75);
+    const t1 = setTimeout(() => setIntroUp(true), 800);
+    const t2 = setTimeout(() => setIntroDone(true), 1700);
+    return () => { clearInterval(typer); clearTimeout(t1); clearTimeout(t2); };
   }, []);
   const [showResume, setShowResume] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -478,9 +485,10 @@ export default function Home() {
               initial={{ y: 0, scale: 2.4 }}
               animate={{ y: introUp ? introTopY : 0, scale: introUp ? 1 : 2.4 }}
               transition={springs.island}
-              className="text-sm sm:text-base font-light tracking-tight text-on-surface lowercase"
+              className="text-sm sm:text-base font-light tracking-tight text-on-surface lowercase whitespace-nowrap"
             >
-              minwook
+              {"minwook".slice(0, typed)}
+              <span aria-hidden className={introUp ? "opacity-0" : "type-caret"}>|</span>
             </motion.h1>
           </motion.div>
         )}

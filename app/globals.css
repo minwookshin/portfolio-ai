@@ -137,6 +137,18 @@ body {
   opacity: 0.9;
 }
 
+/* Blinking caret for the landing type-on animation */
+.type-caret {
+  display: inline-block;
+  margin-left: 0.04em;
+  font-weight: 300;
+  animation: caret-blink 0.85s steps(1) infinite;
+}
+@keyframes caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
 /* Hover stroke trace — a ring/outline draws clockwise from the top on hover.
    Shared by the esc button and the bottom nav cluster (chat pill, profile,
    filter, LinkedIn). pathLength=1 normalizes the dash so it works on any size
