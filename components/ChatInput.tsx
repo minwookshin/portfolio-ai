@@ -253,7 +253,7 @@ export default function ChatInput({
           transition={springs.island}
           style={{ maxWidth: "100%" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`group relative bg-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
+          className={`group relative bg-surface text-on-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
         >
           <DotRing variant="pill" />
           {/* Current project / profile icon, inside the textbox on the left */}
@@ -341,7 +341,7 @@ export default function ChatInput({
             transition={springs.island}
             className="shrink-0"
           >
-            <div ref={filterRef} className="group relative bg-surface flex items-center rounded-full p-2">
+            <div ref={filterRef} className="group relative bg-surface text-on-surface flex items-center rounded-full p-2">
               <DotRing variant="pill" />
               <button
                 type="button"
