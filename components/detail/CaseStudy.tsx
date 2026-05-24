@@ -76,6 +76,12 @@ const heroItem = {
   hidden: { opacity: 0, y: 12 },
   show: { opacity: 1, y: 0, transition: springs.spatialFast },
 };
+// "From outside" variant: hero lines slide in from the left edge with the sticky
+// island spring (used for Sentinel as a test of the entrance treatment).
+const heroItemOut = {
+  hidden: { opacity: 0, x: -120 },
+  show: { opacity: 1, x: 0, transition: springs.island },
+};
 
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
   return (
@@ -120,7 +126,18 @@ function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "
   );
 }
 
-function renderSection(section: DetailSection, i: number) {
+function renderSection(section: DetailSection, i: number, fromOutside = false) {
+  // For "from outside" projects, sections slide in from alternating edges with
+  // the sticky island spring instead of the gentle upward reveal.
+  const rev = fromOutside
+    ? {
+        initial: { opacity: 0, x: i % 2 === 0 ? -140 : 140 },
+        whileInView: { opacity: 1, x: 0 },
+        viewport: { once: true, margin: "-80px" },
+        transition: springs.island,
+      }
+    : reveal;
+  const hItem = fromOutside ? heroItemOut : heroItem;
   switch (section.kind) {
     case "hero":
       return (
@@ -131,16 +148,16 @@ function renderSection(section: DetailSection, i: number) {
           animate="show"
           className="pt-2"
         >
-          <motion.h1 variants={heroItem} className="text-[2.5rem] sm:text-5xl font-normal tracking-[-0.02em] leading-[1.05] text-on-surface">
+          <motion.h1 variants={hItem} className="text-[2.5rem] sm:text-5xl font-normal tracking-[-0.02em] leading-[1.05] text-on-surface">
             {section.title}
           </motion.h1>
           {section.subtitle && (
-            <motion.p variants={heroItem} className="mt-4 text-lg sm:text-xl text-on-surface-variant font-light leading-relaxed max-w-xl">
+            <motion.p variants={hItem} className="mt-4 text-lg sm:text-xl text-on-surface-variant font-light leading-relaxed max-w-xl">
               {section.subtitle}
             </motion.p>
           )}
           {section.bullets && section.bullets.length > 0 && (
-            <motion.div variants={heroItem} className="mt-7 space-y-3">
+            <motion.div variants={hItem} className="mt-7 space-y-3">
               {section.bullets.map((b) => (
                 <div key={b} className="flex items-start gap-3">
                   <Dot />
@@ -149,9 +166,9 @@ function renderSection(section: DetailSection, i: number) {
               ))}
             </motion.div>
           )}
-          {section.tags && section.tags.length > 0 && <motion.div variants={heroItem} className="mt-7"><Tags tags={section.tags} /></motion.div>}
+          {section.tags && section.tags.length > 0 && <motion.div variants={hItem} className="mt-7"><Tags tags={section.tags} /></motion.div>}
           {section.image && (
-            <motion.div variants={heroItem} className="mt-10">
+            <motion.div variants={hItem} className="mt-10">
               <ProjectImage src={section.image} alt={section.title} style={section.imageStyle} />
             </motion.div>
           )}
@@ -160,7 +177,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "lead":
       return (
-        <motion.section key={i} {...reveal} className="max-w-2xl">
+        <motion.section key={i} {...rev} className="max-w-2xl">
           {section.eyebrow && <p className={`${eyebrowCls} mb-3`}>{section.eyebrow}</p>}
           <h2 className={`${h2Cls} mb-5`}>{section.heading}</h2>
           <p className={bodyCls}>{section.body}</p>
@@ -169,7 +186,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "stats":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {section.items.map((s) => (
@@ -184,7 +201,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "problem":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="grid md:grid-cols-5 gap-4">
             <div className={`${card} p-6 sm:p-8 md:col-span-3`}>
@@ -221,7 +238,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "split":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="grid sm:grid-cols-2 gap-4">
             {section.columns.map((c) => (
@@ -239,7 +256,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "features":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="space-y-10 sm:space-y-14">
             {section.items.map((f, fi) => (
@@ -269,7 +286,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "flow":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="relative pl-8">
             <div className="absolute left-[11px] top-2 bottom-2 w-px bg-outline-variant" />
@@ -294,7 +311,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "quote":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           <blockquote className="border-l-2 border-on-surface pl-6">
             <p className="text-xl sm:text-2xl font-light leading-relaxed text-on-surface">{section.text}</p>
             {section.attribution && <p className="mt-4 text-sm text-on-surface-variant">{section.attribution}</p>}
@@ -304,7 +321,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "gallery":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className="grid sm:grid-cols-2 gap-4 items-start">
             {section.images.map((img, gi) => (
@@ -319,7 +336,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "video":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className={`${card} overflow-hidden`}>
             <video controls poster={section.poster} className="block w-full h-auto">
@@ -331,7 +348,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "links":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           <div className="flex flex-wrap items-center gap-3">
             {section.items.map((l, li) => {
               const isGithub = /github\.com/i.test(l.href);
@@ -374,7 +391,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "outcome":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...rev}>
           <div className={`${card} p-8 sm:p-12`}>
             <h2 className={`${h2Cls} mb-5`}>{section.heading}</h2>
             <div className="space-y-4">
@@ -432,12 +449,12 @@ function AskRow({
   );
 }
 
-export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: string) => void }) {
+export function CaseStudy({ data, onAsk, fromOutside = false }: { data: CaseStudyData; onAsk?: (q: string) => void; fromOutside?: boolean }) {
   return (
     <div className="space-y-10 sm:space-y-14">
       {data.sections.map((s, i) => (
         <div key={i}>
-          {renderSection(s, i)}
+          {renderSection(s, i, fromOutside)}
           {/* Questions woven in right where they make sense in the narrative */}
           {onAsk && s.ask && s.ask.length > 0 && <AskRow prompts={s.ask} onAsk={onAsk} className="mt-6" />}
         </div>

@@ -76,7 +76,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           <span className="text-sm font-normal">Back to projects</span>
         </motion.button>
       )}
-      <CaseStudy data={caseStudy} onAsk={onAsk} />
+      <CaseStudy data={caseStudy} onAsk={onAsk} fromOutside={project.title === "Sentinel"} />
     </motion.div>
   );
 }

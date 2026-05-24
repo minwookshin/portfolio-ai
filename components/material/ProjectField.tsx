@@ -62,7 +62,7 @@ export function ProjectField({
   }, []);
   const isMobile = vw <= 480;
 
-  const iconSize = iconSizeProp ?? (isMobile ? 64 : 88);
+  const iconSize = iconSizeProp ?? (isMobile ? 70 : 97);
   const cellGap = gap ?? Math.round(iconSize * 0.13);
   const spacing = iconSize + cellGap;
 
