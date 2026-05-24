@@ -60,14 +60,10 @@ body {
   background-color: #FFFFFF;
 }
 
-/* Custom cursor: an outlined (stroke) dot by default; a filled black dot when
-   over anything interactive (buttons, links, inputs, and their contents). */
+/* Custom cursor: an outlined (stroke) dot everywhere, including over interactive
+   elements. */
 * {
   cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='14'%3E%3Ccircle%20cx='7'%20cy='7'%20r='5.2'%20fill='none'%20stroke='%23000002'%20stroke-width='1.2'/%3E%3C/svg%3E") 7 7, auto !important;
-}
-a, a *, button, button *, [role="button"], [role="button"] *, label, label *,
-input, textarea, select, summary, [class*="cursor-pointer"], [class*="cursor-pointer"] * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='10'%20height='10'%3E%3Ccircle%20cx='5'%20cy='5'%20r='4'%20fill='%23000002'/%3E%3C/svg%3E") 5 5, auto !important;
 }
 
 /* Hide scrollbars everywhere (scrolling still works) for a cleaner look */

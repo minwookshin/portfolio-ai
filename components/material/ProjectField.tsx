@@ -104,7 +104,7 @@ export function ProjectField({
   // to its own frame), staggered, just after the name settles at the top.
   const [revealed, setRevealed] = useState(false);
   useEffect(() => {
-    const t = setTimeout(() => setRevealed(true), 880);
+    const t = setTimeout(() => setRevealed(true), 2250);
     return () => clearTimeout(t);
   }, []);
 
