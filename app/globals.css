@@ -146,11 +146,11 @@ body {
    to connect into solid strokes, then the letters fill in. */
 .trace-text {
   fill: transparent;
-  stroke: var(--md-on-surface);
-  stroke-width: 1.1;
+  stroke: #9aa0a8; /* silver highlight while tracing */
+  stroke-width: 0.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 0.6 4;
+  stroke-dasharray: 0.4 4;
   animation: trace-connect 0.8s ease 0.55s forwards, trace-fill 0.45s ease 1.45s forwards;
 }
 @keyframes trace-connect {
