@@ -26,33 +26,6 @@
   --gradient-fade: rgba(242, 242, 242, 0);
 }
 
-html.dark {
-  --bg: #0D0D0D;
-  --bg-surface: #1A1A1A;
-  --card-a-bg: #FFFFFF;
-  --card-a-text: #0D0D0D;
-  --card-b-bg: #1A1A1A;
-  --card-b-text: #F5F5F5;
-  --text-primary: #F5F5F5;
-  --text-muted: #666666;
-  --border: #2A2A2A;
-  --input-bg: #1A1A1A;
-  --input-text: #F5F5F5;
-  --input-border: #2A2A2A;
-  --bubble-user-bg: #F5F5F5;
-  --bubble-user-text: #0D0D0D;
-  --bubble-ai-bg: #1A1A1A;
-  --bubble-ai-text: #F5F5F5;
-  --bubble-ai-border: #2A2A2A;
-  --btn-primary-bg: #F5F5F5;
-  --btn-primary-text: #0D0D0D;
-  --btn-secondary-bg: #1A1A1A;
-  --btn-secondary-text: #F5F5F5;
-  --btn-secondary-border: #2A2A2A;
-  --accent: #FF2D2D;
-  --gradient-fade: rgba(13, 13, 13, 0);
-}
-
 /* Base font */
 body {
   font-family: var(--font-google-sans), sans-serif;
@@ -189,26 +162,4 @@ body {
   --md-state-hover: 0.08;
   --md-state-focus: 0.1;
   --md-state-press: 0.1;
-}
-
-/* Dark mode — invert the monochrome surface/text tokens. Most of the UI is
-   token-driven, so it flips automatically. */
-html.dark {
-  --md-surface: #0d0d0f;
-  --md-surface-container: #18181b;
-  --md-surface-container-high: #26262a;
-  --md-on-surface: #f2f2f4;
-  --md-on-surface-variant: #a8a8b0;
-  --md-outline: #3a3a40;
-  --md-outline-variant: #2a2a30;
-  --md-primary: #f2f2f4;
-  --md-on-primary: #0d0d0f;
-  --md-primary-container: #26262a;
-  --md-on-primary-container: #e0e0e4;
-  --md-hairline: rgba(255, 255, 255, 0.14);
-}
-
-/* In dark mode the cursor dot flips to light so it stays visible. */
-html.dark * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23f2f2f4'/%3E%3C/svg%3E") 6 6, auto !important;
 }
