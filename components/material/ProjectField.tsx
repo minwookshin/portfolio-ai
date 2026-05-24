@@ -63,7 +63,7 @@ export function ProjectField({
   const isMobile = vw <= 480;
 
   const iconSize = iconSizeProp ?? (isMobile ? 105 : 145);
-  const cellGap = gap ?? Math.round(iconSize * 0.13);
+  const cellGap = gap ?? Math.round((iconSize * 0.13) / 4) * 4;
   const spacing = iconSize + cellGap;
 
   // The field fills most of the viewport so every icon is shown in full.

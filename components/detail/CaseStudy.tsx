@@ -80,7 +80,7 @@ const heroItem = {
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
   return (
     <div className="mb-6">
-      {eyebrow && <p className={`${eyebrowCls} mb-2.5`}>{eyebrow}</p>}
+      {eyebrow && <p className={`${eyebrowCls} mb-3`}>{eyebrow}</p>}
       <h2 className={h2Cls}>{heading}</h2>
     </div>
   );
@@ -96,7 +96,7 @@ function Tags({ tags }: { tags: string[] }) {
       {tags.map((t) => (
         <span
           key={t}
-          className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-normal text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
+          className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md px-4 py-2 rounded-full text-xs font-normal text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
         >
           {t}
         </span>
@@ -175,7 +175,7 @@ function renderSection(section: DetailSection, i: number) {
             {section.items.map((s) => (
               <div key={s.label} className={`${card} p-6`}>
                 <p className="text-3xl sm:text-4xl font-normal tracking-tight text-on-surface">{s.value}</p>
-                <p className="mt-1.5 text-sm text-on-surface-variant">{s.label}</p>
+                <p className="mt-2 text-sm text-on-surface-variant">{s.label}</p>
               </div>
             ))}
           </div>
@@ -205,9 +205,9 @@ function renderSection(section: DetailSection, i: number) {
                 <p className={`${eyebrowCls} mb-4`}>Target user</p>
                 <h3 className="text-lg font-normal text-on-surface">{section.persona.name}</h3>
                 <p className="text-sm text-on-surface-variant mb-4">{section.persona.role}</p>
-                <div className="space-y-2.5 pt-4 border-t border-outline-variant">
+                <div className="space-y-3 pt-4 border-t border-outline-variant">
                   {section.persona.points.map((p) => (
-                    <div key={p} className="flex items-start gap-2.5">
+                    <div key={p} className="flex items-start gap-3">
                       <Dot />
                       <p className="text-sm text-on-surface leading-snug">{p}</p>
                     </div>
@@ -226,7 +226,7 @@ function renderSection(section: DetailSection, i: number) {
           <div className="grid sm:grid-cols-2 gap-4">
             {section.columns.map((c) => (
               <div key={c.label} className={`${card} p-6 sm:p-8`}>
-                <span className="inline-block px-3 py-1.5 rounded-full bg-on-surface text-surface text-xs font-normal mb-5">
+                <span className="inline-block px-3 py-2 rounded-full bg-on-surface text-surface text-xs font-normal mb-5">
                   {c.label}
                 </span>
                 <h3 className="text-lg font-normal text-on-surface mb-2">{c.title}</h3>
@@ -281,7 +281,7 @@ function renderSection(section: DetailSection, i: number) {
                   </span>
                   <div className={`${card} p-5 sm:p-6`}>
                     {s.tag && <p className={`${eyebrowCls} mb-2`}>{s.tag}</p>}
-                    <h3 className="text-base font-normal text-on-surface mb-1.5">{s.title}</h3>
+                    <h3 className="text-base font-normal text-on-surface mb-2">{s.title}</h3>
                     <p className={bodyCls}>{s.body}</p>
                   </div>
                 </div>
@@ -421,7 +421,7 @@ function AskRow({
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md hover:bg-on-surface hover:text-surface group inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-normal text-on-surface transition-colors"
+            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md hover:bg-on-surface hover:text-surface group inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-normal text-on-surface transition-colors"
           >
             {q}
             <ArrowUpRight className="w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

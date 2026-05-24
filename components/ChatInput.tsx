@@ -341,7 +341,7 @@ export default function ChatInput({
             transition={springs.island}
             className="shrink-0"
           >
-            <div ref={filterRef} className="group relative bg-surface flex items-center rounded-full p-1.5">
+            <div ref={filterRef} className="group relative bg-surface flex items-center rounded-full p-2">
               <DotRing variant="pill" />
               <button
                 type="button"
@@ -360,7 +360,7 @@ export default function ChatInput({
                 transition={filterMorph}
                 className="overflow-hidden flex items-center"
               >
-                <div className="flex items-center gap-1 pl-1 pr-0.5">
+                <div className="flex items-center gap-1 pl-1 pr-1">
                   {filters?.map((cat) => {
                     const isActive = cat === "All" ? !activeCategory : activeCategory === cat;
                     return (
@@ -371,7 +371,7 @@ export default function ChatInput({
                         className={`shrink-0 min-h-[44px] px-3 py-2 rounded-full text-[13px] font-normal whitespace-nowrap transition-colors ${
                           isActive
                             ? "bg-on-surface text-surface"
-                            : "text-on-surface-variant hover:text-on-surface hover:bg-black/[0.04]"
+                            : "text-on-surface-variant hover:text-on-surface hover:bg-on-surface/[0.06]"
                         }`}
                       >
                         {cat}

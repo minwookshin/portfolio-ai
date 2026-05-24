@@ -579,7 +579,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-on-surface text-surface rounded-shape-md font-normal transition-all"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-on-surface text-surface rounded-shape-md font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     {showResume ? 'Hide Resume' : 'View Resume'}
@@ -590,7 +590,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="glass-stroke-sm bg-surface-container-high flex items-center justify-center gap-2 px-4 py-2.5 text-on-surface rounded-shape-md font-normal transition-all"
+                    className="glass-stroke-sm bg-surface-container-high flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-shape-md font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     Download PDF
@@ -633,7 +633,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={springs.spatialDefault}
-              className="flex items-center gap-2.5"
+              className="flex items-center gap-3"
             >
               <h1 className="group text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
                 minwook<span className="inline-block overflow-hidden align-bottom max-w-0 opacity-0 group-hover:max-w-[3em] group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">&nbsp;shin</span>
@@ -725,7 +725,7 @@ export default function Home() {
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
                     <div
-                      className={`rounded-shape-lg px-4 py-2.5 ${
+                      className={`rounded-shape-lg px-4 py-3 ${
                         isUser
                           ? "bg-on-surface text-surface"
                           : "bg-surface border border-dotted border-on-surface/30 text-on-surface"
@@ -735,7 +735,7 @@ export default function Home() {
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{body}</p>
                       ) : (
                         <>
-                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-1.5 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-1.5 prose-ul:text-sm prose-ol:my-1.5 prose-ol:text-sm prose-li:my-0.5 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-normal">
+                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-ol:text-sm prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-normal">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {body}
                             </ReactMarkdown>
@@ -756,7 +756,7 @@ export default function Home() {
                                   setHeroProject(target);
                                 }
                               }}
-                              className="mt-2.5 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
+                              className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
                             >
                               {target === "profile" ? "View profile" : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -766,7 +766,7 @@ export default function Home() {
                       )}
                     </div>
                     {showFollowups && (
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-2">
                         {followups.map((f, fi) => (
                           <motion.button
                             key={f}
@@ -776,7 +776,7 @@ export default function Home() {
                             transition={{ ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="border border-dotted border-on-surface/30 hover:border-on-surface hover:bg-on-surface hover:text-surface bg-surface inline-flex items-center px-3 py-1.5 rounded-full text-on-surface text-xs font-normal transition-colors"
+                            className="border border-dotted border-on-surface/30 hover:border-on-surface hover:bg-on-surface hover:text-surface bg-surface inline-flex items-center px-3 py-2 rounded-full text-on-surface text-xs font-normal transition-colors"
                           >
                             {f}
                           </motion.button>
@@ -796,7 +796,7 @@ export default function Home() {
                   className="flex justify-start"
                 >
                   <div className="bg-surface border border-dotted border-on-surface/30 rounded-shape-lg px-4 py-3">
-                    <div className="flex items-center space-x-1.5">
+                    <div className="flex items-center space-x-2">
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
                           key={d}
