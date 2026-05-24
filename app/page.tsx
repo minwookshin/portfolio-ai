@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
 import ProjectDetailView from "@/components/ProjectDetailView";
 import ProfileCard from "@/components/ProfileCard";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Project } from "@/components/ProjectCard";
 import { FileText, ArrowUpRight } from "lucide-react";
 import { ProjectField } from "@/components/material/ProjectField";
@@ -439,7 +440,7 @@ export default function Home() {
   return (
     <main
       className="h-screen flex flex-col overflow-hidden justify-center"
-      style={{ backgroundColor: "#FFFFFF" }}
+      style={{ backgroundColor: "var(--md-surface)" }}
     >
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
@@ -632,11 +633,12 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={springs.spatialDefault}
-              className="text-center"
+              className="flex items-center gap-2.5"
             >
               <h1 className="group text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
                 minwook<span className="inline-block overflow-hidden align-bottom max-w-0 opacity-0 group-hover:max-w-[3em] group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">&nbsp;shin</span>
               </h1>
+              <ThemeToggle />
             </motion.div>
           )}
         </AnimatePresence>
