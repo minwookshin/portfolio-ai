@@ -48,10 +48,12 @@ export function ThemeToggle() {
     <motion.button
       type="button"
       onClick={toggle}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
       whileTap={{ scale: 0.85 }}
-      transition={springs.island}
+      transition={{ ...springs.island, delay: 0.25 }}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="text-on-surface/70 hover:text-on-surface transition-colors"
+      className="relative top-[1.5px] text-on-surface transition-colors"
     >
       <motion.span
         key={dark ? "moon" : "sun"}

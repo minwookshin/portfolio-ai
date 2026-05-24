@@ -122,10 +122,10 @@ body {
 /* Plain stroke — a single subtle border (#222222 at 10%), no glass rim, blur, or
    shadow. One consistent edge across every surface (cards, buttons, bubbles). */
 .glass-stroke {
-  border: 2px solid rgba(0, 0, 2, 0.1);
+  border: 2px solid var(--md-hairline);
 }
 .glass-stroke-sm {
-  border: 1.5px solid rgba(0, 0, 2, 0.1);
+  border: 1.5px solid var(--md-hairline);
 }
 
 /* Dotted SVG outline that, on hover/focus of the parent group, grows its dashes
@@ -175,6 +175,7 @@ body {
   --md-on-primary: #fafafc;
   --md-primary-container: #e2e2e2;
   --md-on-primary-container: #1a1a1c;
+  --md-hairline: rgba(0, 0, 2, 0.1);
 
   /* shape scale (px) */
   --md-shape-xs: 4px;
@@ -204,6 +205,7 @@ html.dark {
   --md-on-primary: #0d0d0f;
   --md-primary-container: #26262a;
   --md-on-primary-container: #e0e0e4;
+  --md-hairline: rgba(255, 255, 255, 0.14);
 }
 
 /* In dark mode the cursor dot flips to light so it stays visible. */
