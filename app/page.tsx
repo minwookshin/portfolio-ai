@@ -82,29 +82,18 @@ const MAIN_PROJECTS: Project[] = [
     ]
   },
   {
-    id: "3",
-    title: "Mindline",
-    description: "AI-Powered Gambling Addiction Recovery Tool",
-    fullDescription:
-      "An AI-powered support system designed to help young adults overcome betting addiction through real-time intervention, smart journaling, and behavioral pattern recognition.",
-    role: "AI UX Designer / UX Researcher",
-    timeline: "10 weeks",
-    team: "Brynn, Giuseppe, Max, Zhenghao, Leo",
-    tags: ["AI Chatbot", "UX Research"],
+    id: "11",
+    title: "Atlas",
+    description: "Coming soon.",
+    fullDescription: "Atlas is still being prepared.",
+    tags: ["AI", "Product Design"],
     categories: ["AI", "Design"],
-    github: "https://github.com/YeYen1721/mindline",
-    date: "2025",
-    image: "/projects/mindline/hero.png",
-    studioLabel: "Behavioral AI product",
-    themeColor: "#3B82F6",
-    overview: "Mindline shifts the focus from 'restriction' to 'awareness'. An AI-powered tool that helps young adults (18-26) combat betting addiction through real-time emotional analysis, smart journaling, and behavioral interventions.",
-    contentSections: [
-      { type: 'text', content: "Hero" },
-      { type: 'text', content: "Research Deep Dive" },
-      { type: 'text', content: "The Solution" },
-      { type: 'text', content: "The Logic" },
-      { type: 'text', content: "Outcome" }
-    ]
+    date: "Coming soon",
+    image: "/projects/atlas/logo.png",
+    icon: "/projects/atlas/logo.png",
+    studioLabel: "Coming soon",
+    comingSoon: true,
+    unavailableMessage: "Atlas is not ready yet.",
   },
   {
     id: "4",
@@ -125,6 +114,32 @@ const MAIN_PROJECTS: Project[] = [
     overview: "FLUX is a creative web project that showcases innovative UI/UX design through an interactive grid-based layout. The project emphasizes smooth user interactions, dynamic animations, and a unique circular navigation system that creates an engaging browsing experience."
   },
   {
+    id: "3",
+    title: "Mindline",
+    description: "AI-Powered Gambling Addiction Recovery Tool",
+    fullDescription:
+      "An AI-powered support system designed to help young adults overcome betting addiction through real-time intervention, smart journaling, and behavioral pattern recognition.",
+    role: "AI UX Designer / UX Researcher",
+    timeline: "10 weeks",
+    team: "Brynn, Giuseppe, Max, Zhenghao, Leo",
+    tags: ["AI Chatbot", "UX Research"],
+    categories: ["AI", "Design"],
+    github: "https://github.com/YeYen1721/mindline",
+    date: "2025",
+    image: "/projects/mindline/hero.png",
+    icon: "/projects/mindline/icon.png",
+    studioLabel: "Behavioral AI product",
+    themeColor: "#3B82F6",
+    overview: "Mindline shifts the focus from 'restriction' to 'awareness'. An AI-powered tool that helps young adults (18-26) combat betting addiction through real-time emotional analysis, smart journaling, and behavioral interventions.",
+    contentSections: [
+      { type: 'text', content: "Hero" },
+      { type: 'text', content: "Research Deep Dive" },
+      { type: 'text', content: "The Solution" },
+      { type: 'text', content: "The Logic" },
+      { type: 'text', content: "Outcome" }
+    ]
+  },
+  {
     id: "7",
     title: "NameMe",
     description: "Concept design project",
@@ -134,7 +149,7 @@ const MAIN_PROJECTS: Project[] = [
     categories: ["Design"],
     date: "2025",
     image: "/projects/nameme/nmmainfin.jpg",
-    icon: "/projects/nameme/nmmainfin.jpg",
+    icon: "/projects/nameme/icon.png",
     studioLabel: "Concept-to-hi-fi UX",
     overview: "From ideation to a high-fidelity concept.",
     gallery: ["/projects/nameme/nmmainfin.jpg", "/projects/nameme/nmhificoncept.png", "/projects/nameme/nmmidfi.png", "/projects/nameme/nmlowfi.png"]
@@ -180,14 +195,6 @@ const MAIN_PROJECTS: Project[] = [
 
 // Discipline filters for the project field. "All" clears the filter.
 const PROJECT_FILTERS = ["All", "Engineering", "AI", "Design"] as const;
-const STUDIO_SERVICES = ["AI Websites", "Product Prototypes", "AI Agents", "Design Systems"] as const;
-const STUDIO_PROOF = ["Google x SCAD winner", "48-hour iOS MVP", "Gemini streaming UX"] as const;
-const HOME_PROMPTS = [
-  "Build an AI website",
-  "Prototype my product",
-  "Audit my UX",
-  "See selected work",
-] as const;
 
 // Personal Information
 const PERSONAL_INFO = {
@@ -274,6 +281,7 @@ export default function Home() {
   // behind it so that view is in focus again.
   const [chatOnTop, setChatOnTop] = useState(false);
   const [detailFocus, setDetailFocus] = useState<string | null>(null);
+  const [projectNotice, setProjectNotice] = useState<string | null>(null);
   // Landing intro: "minwook" appears center, then rises to the top header slot
   // and becomes "minwook shin" (introUp), after which the real header takes over
   // (introDone). The icon field fades in as the name lifts.
@@ -306,6 +314,12 @@ export default function Home() {
       });
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (!projectNotice) return;
+    const t = setTimeout(() => setProjectNotice(null), 2200);
+    return () => clearTimeout(t);
+  }, [projectNotice]);
 
   const handleMessage = async (message: string) => {
     if (!hasStarted) {
@@ -623,56 +637,14 @@ export default function Home() {
               transition={springs.spatialDefault}
               className="flex items-center gap-3"
             >
-              <h1 className="group relative text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
+              <h1 className="text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
                 minwook studio
-                <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 rounded-full border border-on-surface/10 bg-surface/90 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-on-surface-variant opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                  ai-native product studio
-                </span>
               </h1>
             </motion.div>
           )}
         </AnimatePresence>
         </div>
       </div>
-
-      {/* Studio positioning - compact enough to keep the project field as the
-          primary experience, but explicit enough to read like an agency site. */}
-      <AnimatePresence>
-        {introDone && !hasStarted && !showProfile && !heroProject && (
-          <motion.section
-            key="studio-positioning"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={springs.spatialDefault}
-            className="fixed top-[74px] sm:top-[82px] inset-x-0 z-40 px-5 pointer-events-none"
-          >
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-2xl sm:text-4xl font-light tracking-tight text-on-surface leading-[1.05]">
-                Interfaces for products, websites, and agents.
-              </h2>
-              <p className="mx-auto mt-3 max-w-xl text-xs sm:text-sm leading-relaxed text-on-surface-variant">
-                From Figma to production code, I turn early ideas into working digital experiences.
-              </p>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                {STUDIO_SERVICES.map((service) => (
-                  <span
-                    key={service}
-                    className="glass-stroke-sm bg-surface/70 backdrop-blur-md rounded-full px-3 py-1.5 text-[11px] text-on-surface"
-                  >
-                    {service}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-on-surface-variant">
-                {STUDIO_PROOF.map((proof) => (
-                  <span key={proof}>{proof}</span>
-                ))}
-              </div>
-            </div>
-          </motion.section>
-        )}
-      </AnimatePresence>
 
       {/* Project field - always dead-center; stays visible behind the chat */}
       <motion.div
@@ -681,11 +653,15 @@ export default function Home() {
         transition={springs.spatialDefault}
         className="fixed inset-0 z-[10] flex items-center justify-center pointer-events-none"
       >
-        <div className="pointer-events-auto translate-y-[112px] sm:translate-y-[128px]">
+        <div className="pointer-events-auto">
           <ProjectField
             projects={MAIN_PROJECTS}
             activeCategory={activeCategory}
             onSelectProject={(project, origin) => {
+              if (project.comingSoon) {
+                setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
+                return;
+              }
               setChatOnTop(false);
               setShowProfile(false);
               setFilterOpen(false);
@@ -696,6 +672,21 @@ export default function Home() {
           />
         </div>
       </motion.div>
+
+      <AnimatePresence>
+        {projectNotice && (
+          <motion.div
+            key="project-notice"
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.98 }}
+            transition={springs.spatialFast}
+            className="fixed left-1/2 bottom-[176px] z-[76] -translate-x-1/2 rounded-full border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
+          >
+            {projectNotice}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Click-outside catcher - leaving the chat keeps history (only reload clears it) */}
       {hasStarted && (messages.length > 0 || isStreaming) && (
@@ -782,6 +773,8 @@ export default function Home() {
                               } else if (target === "projects") {
                                 setShowProfile(false);
                                 setHeroProject(null);
+                              } else if (target.comingSoon) {
+                                setProjectNotice(target.unavailableMessage ?? `${target.title} is not ready yet.`);
                               } else {
                                 setShowProfile(false);
                                 setDetailFocus(question);
@@ -790,7 +783,7 @@ export default function Home() {
                             }}
                             className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
                           >
-                              {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : `Open ${target.title}`}
+                              {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
                             </motion.button>
                           )}
@@ -843,37 +836,6 @@ export default function Home() {
               )}
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Project-intake starters. They turn the portfolio into a lightweight
-          studio briefing flow without hiding the work grid. */}
-      <AnimatePresence>
-        {introDone && !hasStarted && !showProfile && !heroProject && (
-          <div
-            key="home-prompts-wrap"
-            className="fixed left-1/2 bottom-[108px] sm:bottom-[124px] z-[45] -translate-x-1/2 w-full max-w-2xl px-5"
-          >
-            <motion.div
-              key="home-prompts"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={springs.spatialDefault}
-              className="mx-auto grid max-w-[330px] grid-cols-2 gap-2 sm:flex sm:max-w-none sm:flex-wrap sm:justify-center"
-            >
-                {HOME_PROMPTS.map((prompt) => (
-                  <button
-                    key={prompt}
-                    type="button"
-                    onClick={() => handleMessage(prompt)}
-                    className="glass-stroke-sm bg-surface/80 backdrop-blur-md hover:bg-on-surface hover:text-surface rounded-full px-3.5 py-2 text-xs font-normal text-on-surface transition-colors whitespace-nowrap"
-                  >
-                    {prompt}
-                  </button>
-                ))}
-            </motion.div>
-          </div>
         )}
       </AnimatePresence>
 

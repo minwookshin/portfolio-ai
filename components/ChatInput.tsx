@@ -368,7 +368,7 @@ export default function ChatInput({
                         key={cat}
                         type="button"
                         onClick={() => onSelectCategory?.(cat === "All" ? null : cat)}
-                        className={`shrink-0 min-h-[44px] px-3 py-2 rounded-full text-[13px] font-normal whitespace-nowrap transition-colors ${
+                        className={`shrink-0 h-11 min-w-11 px-3 py-2 rounded-full text-[13px] font-normal whitespace-nowrap transition-colors ${
                           isActive
                             ? "bg-on-surface text-surface"
                             : "text-on-surface-variant hover:text-on-surface hover:bg-on-surface/[0.06]"

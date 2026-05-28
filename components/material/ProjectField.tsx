@@ -181,6 +181,7 @@ export function ProjectField({
         {projects.map((project, i) => {
           const place = placement.get(project.id)!;
           const iconSrc = project.icon ?? project.image;
+          const isComingSoon = project.comingSoon;
           const d = `${i * 55}ms`;
           // The whole tile (box + artwork) fades in together so the empty box
           // never shows before its icon; the artwork additionally slides in from
@@ -198,7 +199,7 @@ export function ProjectField({
               key={project.id}
               type="button"
               data-id={project.id}
-              aria-label={`Open ${project.title}`}
+              aria-label={isComingSoon ? `${project.title} is not ready yet` : `Open ${project.title}`}
               aria-hidden={!place.visible}
               tabIndex={place.visible ? 0 : -1}
               onKeyDown={(e) => {
@@ -207,7 +208,7 @@ export function ProjectField({
                   onSelectProject(project, rectOf(e.currentTarget));
                 }
               }}
-              className="absolute will-change-transform rounded-none outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className={`absolute will-change-transform rounded-none outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
               style={{
                 width: iconSize,
                 height: iconSize,
@@ -243,9 +244,6 @@ export function ProjectField({
                 </div>
                 {/* monochrome hover state layer */}
                 <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.1]" />
-                <span className="absolute left-2 right-2 bottom-2 rounded-full bg-surface/90 px-2.5 py-1 text-[10px] font-normal text-on-surface opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 whitespace-nowrap overflow-hidden text-ellipsis">
-                  {project.studioLabel ?? project.description}
-                </span>
               </div>
               </div>
             </button>

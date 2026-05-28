@@ -24,6 +24,9 @@ export interface Project {
   glyph?: string;
   /** Short studio-style label shown on the project tile. */
   studioLabel?: string;
+  /** Keeps the tile visible while preventing the detail view from opening. */
+  comingSoon?: boolean;
+  unavailableMessage?: string;
   role?: string;
   timeline?: string;
   overview?: string;
