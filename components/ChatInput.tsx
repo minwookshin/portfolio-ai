@@ -277,8 +277,8 @@ export default function ChatInput({
             onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
             onFocus={() => { setFocused(true); onFocusInput?.(); }}
             onBlur={() => setFocused(false)}
-            placeholder="Ask anything"
-            aria-label="Ask anything"
+            placeholder="Tell me what you want to build"
+            aria-label="Tell me what you want to build"
             className="relative z-10 flex-1 min-w-0 bg-transparent outline-none font-light text-on-surface placeholder:text-on-surface-variant text-sm pl-3 pr-2"
           />
 

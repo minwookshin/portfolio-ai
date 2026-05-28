@@ -11,35 +11,37 @@ const googleSans = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: "minwook",
-    template: "%s · minwook",
+    default: "minwook studio",
+    template: "%s · minwook studio",
   },
   description:
-    "Minwook Shin is a UX Engineer who designs and ships living products — from Figma to production code. Native iOS, AI products, and research-led design.",
+    "Minwook Studio designs and builds AI-native interfaces, product prototypes, websites, agents, and digital experiences from Figma to production code.",
   keywords: [
     "Minwook Shin",
     "UX Engineer",
     "Product Designer",
     "Design Engineer",
     "0 to 1 Builder",
+    "AI Website",
+    "AI Agent",
     "Next.js",
     "SwiftUI",
-    "Portfolio",
+    "Product Studio",
   ],
   authors: [{ name: "Minwook Shin" }],
   creator: "Minwook Shin",
   openGraph: {
     type: "website",
-    title: "minwook",
+    title: "minwook studio",
     description:
-      "A UX Engineer who designs and ships living products — from Figma to production code.",
-    siteName: "minwook",
+      "AI-native interfaces, product prototypes, websites, and agents from Figma to production code.",
+    siteName: "minwook studio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "minwook",
+    title: "minwook studio",
     description:
-      "A UX Engineer who designs and ships living products — from Figma to production code.",
+      "AI-native interfaces, product prototypes, websites, and agents from Figma to production code.",
   },
 };
 

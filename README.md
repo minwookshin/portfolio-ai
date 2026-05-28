@@ -1,47 +1,32 @@
-# Generative UI Portfolio ✨
+# Minwook Studio
 
-An experimental portfolio where content spawns as **draggable sticker cards** based on text commands. Type, create, and arrange your story.
+An AI-native product studio site for Minwook Shin. The interface combines selected work, conversational project intake, and case-study routing in one Next.js experience.
 
-## 🎨 Design Philosophy
+## Design Philosophy
 
-Inspired by:
-- **Glassmorphism** - Frosted glass UI elements with blur effects
-- **Geometric Stickers** - Minimalist shapes (circles, squares, diamonds, organic blobs)
-- **Generative Interface** - Content appears on demand via natural language
+Inspired by Silicon Valley product studios and AI-native agency sites: minimal positioning, strong interface craft, live product proof, and a conversational surface that helps visitors move from curiosity to a project brief.
 
-## ⚡ Features
+## Features
 
-### 1. **Magic Input** (Text Editor UI)
-- Glassmorphism toolbar with formatting controls
-- Natural language command input
-- Execute with button or `⌘ + Enter`
-- Quick command buttons
+### 1. AI Project Intake
+- Conversational input powered by Gemini
+- Quick-start prompts for AI websites, prototypes, UX audits, and selected work
+- Hidden routing directives open the right project or profile view
 
-### 2. **Draggable Stickers**
-Each sticker type has unique geometry:
-- **Projects** → Blue circles (round perfection)
-- **Skills** → Purple rounded squares (structured creativity)
-- **Contact** → Green diamonds (sharp connections)
-- **About** → Orange organic blobs (human touch)
+### 2. Selected Work Field
+- App-icon style project grid
+- Category filters for Engineering, AI, and Design
+- Hover labels that describe each project as studio proof
 
-### 3. **Command System**
-Type natural commands:
-```
-projects     → Spawn 3 project stickers
-skills       → Spawn 3 skill stickers
-about        → Spawn about sticker
-contact      → Spawn contact stickers
-clear        → Clear all stickers
-surprise     → Random sticker
-[any text]   → Custom sticker with your text
-```
+### 3. Data-Driven Case Studies
+- Structured case-study renderer
+- Project-specific sections for challenge, build, features, and outcome
+- Inline follow-up questions wired back into the chat
 
-### 4. **Physics & Interaction**
-- **Drag** - Grab and move stickers anywhere
-- **Spring animations** - Bouncy, playful motion
-- **Spawn effects** - Scale + rotate entrance
-- **Hover states** - Subtle scale and rotation
-- **Shadows** - Animated glow effects
+### 4. Motion + Material Language
+- Framer Motion transitions
+- Monochrome light theme
+- Dotted outlines, app-icon tiles, and floating composer UI
 
 ## 🛠️ Tech Stack
 
@@ -86,59 +71,3 @@ npm run build
 ```
 
 Visit [http://localhost:3000](http://localhost:3000)
-
-## 🎯 Use Cases
-
-- **Interactive Portfolio** - Let visitors explore your work
-- **Presentation Tool** - Spawn content on demand
-- **Creative Playground** - Experiment with layouts
-- **Storytelling** - Build narratives visually
-
-## 🎨 Customization
-
-### Add New Commands
-Edit `app/page.tsx` and add your spawn function:
-
-```typescript
-const spawnCustom = () => {
-  const custom: StickerData = {
-    id: `custom-${Date.now()}`,
-    type: "project",
-    content: {
-      title: "Your Title",
-      description: "Your description",
-      icon: <YourIcon className="w-8 h-8" />,
-    },
-    position: getRandomPosition(),
-  };
-  setStickers((prev) => [...prev, custom]);
-};
-```
-
-### Change Sticker Shapes
-Edit `components/StickerCard.tsx` → `getShape()` function
-
-### Modify Colors
-Edit the gradients in `StickerCard.tsx` → `getGradient()` function
-
-## 🌟 Features to Add
-
-- [ ] Save canvas state (localStorage)
-- [ ] Export as image
-- [ ] Sticker connections (lines between cards)
-- [ ] Sticker clustering/grouping
-- [ ] More shape types
-- [ ] Sound effects
-- [ ] Multiplayer mode (real-time)
-
-## 💡 Inspiration
-
-- Minimalist geometric design
-- iOS sticker systems
-- Generative art
-- Natural language interfaces
-- Playful interactions
-
----
-
-**Built with creativity, code, and a lot of stickers.**

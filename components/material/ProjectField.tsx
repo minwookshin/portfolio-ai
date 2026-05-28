@@ -62,7 +62,7 @@ export function ProjectField({
   }, []);
   const isMobile = vw <= 480;
 
-  const iconSize = iconSizeProp ?? (isMobile ? 105 : 145);
+  const iconSize = iconSizeProp ?? (isMobile ? 86 : 145);
   const cellGap = gap ?? Math.round((iconSize * 0.13) / 4) * 4;
   const spacing = iconSize + cellGap;
 
@@ -243,6 +243,9 @@ export function ProjectField({
                 </div>
                 {/* monochrome hover state layer */}
                 <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.1]" />
+                <span className="absolute left-2 right-2 bottom-2 rounded-full bg-surface/90 px-2.5 py-1 text-[10px] font-normal text-on-surface opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 whitespace-nowrap overflow-hidden text-ellipsis">
+                  {project.studioLabel ?? project.description}
+                </span>
               </div>
               </div>
             </button>

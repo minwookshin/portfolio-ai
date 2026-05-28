@@ -109,59 +109,59 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
     ask: ["What did 48 hours teach you?", "Why did you build this?", "What would you add next?"],
   },
 
-  // Portfolio AI, text/metric-driven (this site is its own live demo, so it
-  // leans on its technical narrative and the real architecture diagram rather
-  // than screenshots).
+  // Portfolio AI, text/metric-driven. This site is its own live studio demo:
+  // an AI-native website that explains the work, qualifies intent, and routes
+  // visitors to the right proof.
   "2": {
     sections: [
       {
         kind: "hero",
-        badge: "Full-stack engineering",
+        badge: "AI website + agent system",
         title: "Portfolio AI",
-        subtitle: "A self-operating digital twin that turns a static résumé into a live technical interview.",
+        subtitle: "An AI-native studio site that turns passive browsing into a live project briefing.",
         bullets: [
-          "Full-stack developer & designer",
+          "Product strategist, designer & full-stack developer",
           "Token-by-token streaming responses",
-          "Server-side security architecture",
+          "Project-intake flow wired to real case studies",
         ],
-        tags: ["Next.js", "React", "Gemini API", "TypeScript"],
+        tags: ["Next.js", "React", "Gemini API", "TypeScript", "AI UX"],
       },
       {
         kind: "lead",
         eyebrow: "The problem",
-        heading: "Static portfolios create a bottleneck",
+        heading: "Static portfolios do not qualify intent",
         body:
-          "Recruiters need specific answers, 'How did you handle state?', 'Why Next.js?', but they're stuck skimming long case studies. Portfolio AI answers in natural language, in real time, grounded in my real work. You're using it right now.",
-        ask: ["Why not just a PDF résumé?"],
+          "Most portfolio sites make visitors do the work: skim thumbnails, guess relevance, and hunt for proof. Portfolio AI behaves more like a studio strategist, answering questions, identifying what someone wants to build, and opening the most relevant project evidence.",
+        ask: ["Why make the site conversational?"],
       },
       {
         kind: "split",
         eyebrow: "How it's built",
-        heading: "Engineered for conversational UX",
+        heading: "Built like a product, not a chatbot wrapper",
         columns: [
           {
-            label: "Streaming via SSE",
-            title: "Responses that feel alive",
+            label: "Conversational intake",
+            title: "A website that can qualify a project",
             body:
-              "Server-Sent Events stream the model's reply token-by-token, a natural conversational rhythm with no loading spinners.",
+              "Visitors can ask for an AI website, UX audit, product prototype, or case study. The system responds with a clear path and routes them to relevant proof.",
           },
           {
-            label: "Defense in depth",
-            title: "Server-side security",
+            label: "Proof system",
+            title: "Case studies wired into the chat",
             body:
-              "API keys never touch the browser; requests route through Next.js API routes with rate limiting and environment isolation.",
+              "Hidden directives let the AI open the right project screen without exposing routing logic. The experience stays conversational, but the navigation is deterministic.",
           },
         ],
-        ask: ["How does the streaming work?", "How do you keep the API key safe?"],
+        ask: ["How does the intake flow work?", "How do you keep the API key safe?"],
       },
       {
         kind: "stats",
-        eyebrow: "Performance",
-        heading: "The numbers",
+        eyebrow: "Studio proof",
+        heading: "What this demonstrates",
         items: [
           { value: "<100ms", label: "Time to first token" },
-          { value: "<200ms", label: "Global response time" },
-          { value: "~35%", label: "Fewer tokens via prompt tuning" },
+          { value: "8", label: "Selected work examples" },
+          { value: "4", label: "Studio service lanes" },
         ],
       },
       {
@@ -173,10 +173,10 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "outcome",
         badge: "Impact",
-        heading: "Bridging design, engineering & product",
+        heading: "Turning a portfolio into an agency-style lead flow",
         body: [
-          "Delivered a streaming AI chat interface with server-side security and sub-100ms first-token latency.",
-          "Cut token usage ~35% through prompt optimization, and unified visual polish with technical rigor, full-stack ownership, end to end.",
+          "Delivered a streaming AI interface that shows design taste, frontend craft, and applied AI in one live product.",
+          "Reframed the portfolio as a working studio demo: visitors can explore the work, ask about capabilities, and start a project brief from the same surface.",
         ],
       },
     ],
@@ -371,8 +371,8 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
 };
 
 // Returns an authored case study, or synthesizes a lightweight "snapshot" from
-// the project's own fields (title + one-liner + gallery). Projects like Telfair,
-// Nest and NameMe are intentionally snapshots, not full case studies.
+// the project's own fields (title + one-liner + gallery). Some explorations are
+// intentionally snapshots, not full case studies.
 export function getCaseStudy(project: Project): CaseStudyData {
   const authored = CASE_STUDIES[project.id];
   if (authored) return authored;

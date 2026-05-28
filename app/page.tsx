@@ -14,7 +14,7 @@ import { springs } from "@/lib/material/motion";
 
 // One reveal shared by every full-screen overlay (profile, project detail) so
 // they all enter/leave with the same spring instead of bespoke morphs.
-// Main Projects Data - From GitHub Portfolio
+// Selected studio work
 const MAIN_PROJECTS: Project[] = [
   {
     id: "1",
@@ -32,6 +32,7 @@ const MAIN_PROJECTS: Project[] = [
     date: "2025",
     image: "/projects/sentinel/hero.png",
     icon: "/projects/sentinellogo.png",
+    studioLabel: "48-hour native iOS MVP",
     themeColor: "#F59E0B",
     overview: "From Idea to Native iOS App in 48 Hours. Sentinel is a predictive home maintenance app that helps homeowners move from gut feeling to data-driven decision making, preventing invisible risks before they become $200,000 disasters.",
     contentSections: [
@@ -46,9 +47,9 @@ const MAIN_PROJECTS: Project[] = [
   {
     id: "2",
     title: "Portfolio AI",
-    description: "A self-operating AI (me!!), built using Next.js, React, and the Gemini API.",
+    description: "An AI-native studio website that explains work, qualifies intent, and routes visitors to the right proof.",
     fullDescription:
-      "A 24/7 autonomous AI agent that simulates a real-time technical interview, answering questions about my stack, philosophy, and experience securely and instantly.",
+      "A conversational product-studio site built with Next.js, React, and Gemini. It answers questions, runs lightweight project intake, and opens relevant case studies in real time.",
     role: "UX Engineer / Full-Stack Developer",
     timeline: "2 weeks",
     team: "Solo Project",
@@ -58,8 +59,9 @@ const MAIN_PROJECTS: Project[] = [
     date: "2025",
     image: "/projects/2.png",
     icon: "/icon.png",
+    studioLabel: "AI intake website",
     themeColor: "#8B5CF6",
-    overview: "A self-operating digital twin that turns a static resume into a live technical interview.",
+    overview: "An AI-native studio site that turns passive browsing into a live project briefing.",
     features: [
       "Zero-latency streaming using Server-Sent Events (SSE)",
       "3-Layer Defense (Identity Protection, Secret Guard, Injection Firewall)",
@@ -68,9 +70,9 @@ const MAIN_PROJECTS: Project[] = [
     challenges: "Bridging high-end Product Design with complex LLM Engineering while maintaining military-grade security.",
     outcome: "Bridged the gap between high-end Product Design and complex LLM Engineering. Proves the ability to build secure, production-ready AI applications with elite UX.",
     contentSections: [
-      { type: 'text', content: "Breaking the Static Portfolio Barrier" },
-      { type: 'text', content: "Static portfolios create an information bottleneck. Recruiters need specific answers-\"How did you handle state management?\" or \"Why Next.js?\"-but they're stuck reading 15-page case studies. This AI agent solves that: natural language queries return precise, contextualized answers about my projects and design rationale in real-time." },
-      { type: 'text', content: "Technical Stack Optimized for Conversational UX" },
+      { type: 'text', content: "Turning a Portfolio into a Studio Interface" },
+      { type: 'text', content: "Static sites make visitors hunt for relevance. This AI-native interface answers questions, qualifies project intent, and routes people to the right proof in real time." },
+      { type: 'text', content: "Technical Stack Optimized for AI-Native UX" },
       { type: 'text', content: "• **Next.js 16 (App Router):** Moved data fetching to the server, reducing client-side hydration time by 40%.\n• **Streaming via SSE:** Implemented Server-Sent Events to stream Gemini responses token-by-token, creating a natural conversational rhythm without loading spinners.\n• **Edge Runtime:** API routes run on global Edge Network, ensuring <200ms response times regardless of user geography." },
       { type: 'gallery', images: [{ image: "/projects/portfolio-ai/architecture.png", caption: "System Architecture" }] },
       { type: 'text', content: "Key Features" },
@@ -93,6 +95,7 @@ const MAIN_PROJECTS: Project[] = [
     github: "https://github.com/YeYen1721/mindline",
     date: "2025",
     image: "/projects/mindline/hero.png",
+    studioLabel: "Behavioral AI product",
     themeColor: "#3B82F6",
     overview: "Mindline shifts the focus from 'restriction' to 'awareness'. An AI-powered tool that helps young adults (18-26) combat betting addiction through real-time emotional analysis, smart journaling, and behavioral interventions.",
     contentSections: [
@@ -117,6 +120,7 @@ const MAIN_PROJECTS: Project[] = [
     github: "https://github.com/YeYen1721/portfolio-",
     date: "2025",
     image: "/projects/1.png",
+    studioLabel: "Interactive web system",
     themeColor: "#8B5CF6",
     overview: "FLUX is a creative web project that showcases innovative UI/UX design through an interactive grid-based layout. The project emphasizes smooth user interactions, dynamic animations, and a unique circular navigation system that creates an engaging browsing experience."
   },
@@ -131,6 +135,7 @@ const MAIN_PROJECTS: Project[] = [
     date: "2025",
     image: "/projects/nameme/nmmainfin.jpg",
     icon: "/projects/nameme/nmmainfin.jpg",
+    studioLabel: "Concept-to-hi-fi UX",
     overview: "From ideation to a high-fidelity concept.",
     gallery: ["/projects/nameme/nmmainfin.jpg", "/projects/nameme/nmhificoncept.png", "/projects/nameme/nmmidfi.png", "/projects/nameme/nmlowfi.png"]
   },
@@ -143,6 +148,7 @@ const MAIN_PROJECTS: Project[] = [
     categories: ["Engineering", "Design", "AI"],
     date: "2025",
     glyph: "CEr",
+    studioLabel: "AI-assisted product demo",
     linkedin: "https://www.linkedin.com/posts/minwookshin_buildinpublic-hat-ugcPost-7432477739208777729-sZlv/",
   },
   {
@@ -154,6 +160,7 @@ const MAIN_PROJECTS: Project[] = [
     categories: ["Design", "AI"],
     date: "2025",
     glyph: "🫠",
+    studioLabel: "Interactive product demo",
     linkedin: "https://www.linkedin.com/posts/minwookshin_technology-innovation-ugcPost-7432812004098084865-AGvW/",
   },
   {
@@ -166,18 +173,27 @@ const MAIN_PROJECTS: Project[] = [
     date: "2025",
     icon: "/projects/caret/Caret_icon.png",
     image: "/projects/caret/icon.png",
+    studioLabel: "iOS UX prototype",
     linkedin: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
   },
 ];
 
 // Discipline filters for the project field. "All" clears the filter.
 const PROJECT_FILTERS = ["All", "Engineering", "AI", "Design"] as const;
+const STUDIO_SERVICES = ["AI Websites", "Product Prototypes", "AI Agents", "Design Systems"] as const;
+const STUDIO_PROOF = ["Google x SCAD winner", "48-hour iOS MVP", "Gemini streaming UX"] as const;
+const HOME_PROMPTS = [
+  "Build an AI website",
+  "Prototype my product",
+  "Audit my UX",
+  "See selected work",
+] as const;
 
 // Personal Information
 const PERSONAL_INFO = {
   name: "Minwook Shin",
-  title: "UX Engineer",
-  bio: "I am a UX Engineer who doesn't just design interfaces but builds living products. My diverse journey studying Medicine, playing competitive Volleyball, writing lines of codes, and majoring in UX Design has shaped my unique approach to problem-solving.\n\n• Medicine taught me empathy and scientific rigor in user research.\n• Volleyball instilled the discipline of teamwork and rapid decision-making.\n• Engineering gave me the power to turn those insights into functional code (React, Next.js, Unity).",
+  title: "AI-native UX Engineer & Product Builder",
+  bio: "I design and build AI-native interfaces, product prototypes, and digital experiences from Figma to production code. My work sits between product design, frontend engineering, and applied AI.\n\n• Medicine taught me empathy and scientific rigor in user research.\n• Volleyball instilled the discipline of teamwork and rapid decision-making.\n• Engineering gave me the power to turn those insights into functional products with React, Next.js, SwiftUI, and AI APIs.",
   email: "mwshin0703@gmail.com",
   linkedin: "https://www.linkedin.com/in/minwookshin",
   github: "https://github.com/YeYen1721",
@@ -228,9 +244,10 @@ function parseAssistant(content: string): { body: string; followups: string[]; s
 }
 
 // Map a SHOW directive to a redirect-button target (a project or the profile).
-function showToTarget(show: string | null): Project | "profile" | null {
+function showToTarget(show: string | null): Project | "profile" | "projects" | null {
   if (!show) return null;
   if (show === "profile") return "profile";
+  if (show === "projects") return "projects";
   if (show.startsWith("project:")) {
     const name = show.slice("project:".length).trim().toLowerCase();
     return MAIN_PROJECTS.find((p) => p.title.toLowerCase() === name) ?? null;
@@ -417,7 +434,7 @@ export default function Home() {
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
           hidden, but real content so the page isn't an empty chat shell to bots. */}
       <section className="sr-only">
-        <h2>{PERSONAL_INFO.name}, UX Engineer & 0→1 Builder</h2>
+        <h2>{PERSONAL_INFO.name}, AI-native UX Engineer & 0→1 Builder</h2>
         <p>{PERSONAL_INFO.bio}</p>
         <h3>Selected work</h3>
         <ul>
@@ -606,14 +623,56 @@ export default function Home() {
               transition={springs.spatialDefault}
               className="flex items-center gap-3"
             >
-              <h1 className="group text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
-                minwook<span className="inline-block overflow-hidden align-bottom max-w-0 opacity-0 group-hover:max-w-[3em] group-hover:opacity-100 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">&nbsp;shin</span>
+              <h1 className="group relative text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
+                minwook studio
+                <span className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 rounded-full border border-on-surface/10 bg-surface/90 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-on-surface-variant opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                  ai-native product studio
+                </span>
               </h1>
             </motion.div>
           )}
         </AnimatePresence>
         </div>
       </div>
+
+      {/* Studio positioning - compact enough to keep the project field as the
+          primary experience, but explicit enough to read like an agency site. */}
+      <AnimatePresence>
+        {introDone && !hasStarted && !showProfile && !heroProject && (
+          <motion.section
+            key="studio-positioning"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={springs.spatialDefault}
+            className="fixed top-[74px] sm:top-[82px] inset-x-0 z-40 px-5 pointer-events-none"
+          >
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-2xl sm:text-4xl font-light tracking-tight text-on-surface leading-[1.05]">
+                Interfaces for products, websites, and agents.
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl text-xs sm:text-sm leading-relaxed text-on-surface-variant">
+                From Figma to production code, I turn early ideas into working digital experiences.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                {STUDIO_SERVICES.map((service) => (
+                  <span
+                    key={service}
+                    className="glass-stroke-sm bg-surface/70 backdrop-blur-md rounded-full px-3 py-1.5 text-[11px] text-on-surface"
+                  >
+                    {service}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-on-surface-variant">
+                {STUDIO_PROOF.map((proof) => (
+                  <span key={proof}>{proof}</span>
+                ))}
+              </div>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
 
       {/* Project field - always dead-center; stays visible behind the chat */}
       <motion.div
@@ -622,7 +681,7 @@ export default function Home() {
         transition={springs.spatialDefault}
         className="fixed inset-0 z-[10] flex items-center justify-center pointer-events-none"
       >
-        <div className="pointer-events-auto">
+        <div className="pointer-events-auto translate-y-[112px] sm:translate-y-[128px]">
           <ProjectField
             projects={MAIN_PROJECTS}
             activeCategory={activeCategory}
@@ -716,19 +775,22 @@ export default function Home() {
                               initial={{ opacity: 0, y: 4 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ ...springs.spatialFast, delay: 0.15 }}
-                              onClick={() => {
-                                setChatOnTop(false);
-                                if (target === "profile") {
-                                  setShowProfile(true);
-                                } else {
-                                  setShowProfile(false);
-                                  setDetailFocus(question);
-                                  setHeroProject(target);
-                                }
-                              }}
-                              className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
-                            >
-                              {target === "profile" ? "View profile" : `Open ${target.title}`}
+                            onClick={() => {
+                              setChatOnTop(false);
+                              if (target === "profile") {
+                                setShowProfile(true);
+                              } else if (target === "projects") {
+                                setShowProfile(false);
+                                setHeroProject(null);
+                              } else {
+                                setShowProfile(false);
+                                setDetailFocus(question);
+                                setHeroProject(target);
+                              }
+                            }}
+                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
+                          >
+                              {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
                             </motion.button>
                           )}
@@ -781,6 +843,37 @@ export default function Home() {
               )}
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Project-intake starters. They turn the portfolio into a lightweight
+          studio briefing flow without hiding the work grid. */}
+      <AnimatePresence>
+        {introDone && !hasStarted && !showProfile && !heroProject && (
+          <div
+            key="home-prompts-wrap"
+            className="fixed left-1/2 bottom-[108px] sm:bottom-[124px] z-[45] -translate-x-1/2 w-full max-w-2xl px-5"
+          >
+            <motion.div
+              key="home-prompts"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={springs.spatialDefault}
+              className="mx-auto grid max-w-[330px] grid-cols-2 gap-2 sm:flex sm:max-w-none sm:flex-wrap sm:justify-center"
+            >
+                {HOME_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    onClick={() => handleMessage(prompt)}
+                    className="glass-stroke-sm bg-surface/80 backdrop-blur-md hover:bg-on-surface hover:text-surface rounded-full px-3.5 py-2 text-xs font-normal text-on-surface transition-colors whitespace-nowrap"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 

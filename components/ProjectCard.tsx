@@ -22,6 +22,8 @@ export interface Project {
   icon?: string;
   /** Text/emoji shown in the app-icon tile when there's no image icon. */
   glyph?: string;
+  /** Short studio-style label shown on the project tile. */
+  studioLabel?: string;
   role?: string;
   timeline?: string;
   overview?: string;
