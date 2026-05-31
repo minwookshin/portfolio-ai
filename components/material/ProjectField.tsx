@@ -29,22 +29,15 @@ function rectOf(el: Element | null | undefined): OriginRect | undefined {
   return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width };
 }
 
-// Center-out cell ordering: nearest cells to the middle fill first, so the field
-// reads as one grid that grows outward in rows from a centered core.
-function centerOutCells(n: number, spacing: number) {
-  const max = Math.ceil(Math.sqrt(Math.max(n, 1))) + 1;
-  const cells: { x: number; y: number }[] = [];
-  for (let gy = -max; gy < max; gy++)
-    for (let gx = -max; gx < max; gx++) cells.push({ x: gx + 0.5, y: gy + 0.5 });
-  cells.sort((a, b) => a.x * a.x + a.y * a.y - (b.x * b.x + b.y * b.y));
-  return cells.slice(0, n).map((c) => ({ x: c.x * spacing, y: c.y * spacing }));
+function horizontalCells(n: number, spacing: number) {
+  const mid = (n - 1) / 2;
+  return Array.from({ length: n }, (_, i) => ({ x: (i - mid) * spacing, y: 0 }));
 }
 
 /**
  * A flat field of project app-icons you drag to pan. The matching projects sit
- * center-out in a grid; filtering by category recompacts the survivors toward
- * the centre (non-matching icons fade out in place). Every icon shows in full —
- * no edge-fade mask.
+ * in one centered horizontal row; filtering recompacts the survivors into that
+ * row while non-matching icons fade out in place.
  */
 export function ProjectField({
   projects,
@@ -64,27 +57,27 @@ export function ProjectField({
   const isMobile = vw <= 480;
 
   const iconSize = iconSizeProp ?? (isMobile ? 86 : 145);
-  const cellGap = gap ?? Math.round((iconSize * 0.13) / 4) * 4;
+  const cellGap = gap ?? Math.round((iconSize * 0.08) / 4) * 4;
   const spacing = iconSize + cellGap;
 
   // The field fills most of the viewport so every icon is shown in full.
   const boxW = Math.min(vw - 24, 1100);
   const boxH = Math.min(vh - 150, 820);
 
-  // Placement per project id: matching projects get center-out cells; the rest
-  // park at the centre, invisible, ready to fade back in when the filter clears.
+  // Placement per project id: matching projects get one horizontal row; the
+  // rest park at the centre, invisible, ready to fade back in when filtering.
   const placement = useMemo(() => {
     const matching = projects.filter(
       (p) => !activeCategory || p.categories?.includes(activeCategory)
     );
-    const cells = centerOutCells(matching.length, spacing);
+    const cells = horizontalCells(matching.length, spacing);
     const map = new Map<string, { x: number; y: number; visible: boolean }>();
     matching.forEach((p, i) => map.set(p.id, { x: cells[i].x, y: cells[i].y, visible: true }));
     projects.forEach((p) => { if (!map.has(p.id)) map.set(p.id, { x: 0, y: 0, visible: false }); });
     return map;
   }, [projects, activeCategory, spacing]);
 
-  // Grid extent (max distance from centre among visible icons) for pan clamping.
+  // Row extent (max distance from centre among visible icons) for pan clamping.
   const extent = useMemo(() => {
     let ex = 0, ey = 0;
     placement.forEach((p) => {
@@ -99,7 +92,7 @@ export function ProjectField({
   // (when it all fits), or pan to reveal icons that sit beyond the frame edge
   // (when the cluster is larger than the frame). Whichever gives more freedom.
   const clampX = Math.max(0, boxW / 2 - extent.ex - iconSize / 2 - 12, extent.ex + iconSize / 2 - boxW / 2 + 24);
-  const clampY = Math.max(0, boxH / 2 - extent.ey - iconSize / 2 - 12, extent.ey + iconSize / 2 - boxH / 2 + 24);
+  const clampY = 0;
 
   // Landing reveal: each icon's artwork slides in from a different edge (clipped
   // to its own frame), staggered, just after the name settles at the top.
