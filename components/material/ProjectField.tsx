@@ -56,7 +56,7 @@ export function ProjectField({
   }, []);
   const isMobile = vw <= 480;
 
-  const iconSize = iconSizeProp ?? (isMobile ? 86 : 145);
+  const iconSize = iconSizeProp ?? (isMobile ? 69 : 116);
   const cellGap = gap ?? Math.round((iconSize * 0.08) / 4) * 4;
   const spacing = iconSize + cellGap;
 
@@ -114,7 +114,7 @@ export function ProjectField({
 
   const paint = () => {
     const { x, y } = pan.current;
-    if (worldRef.current) worldRef.current.style.transform = `translate(${x}px, ${y}px)`;
+    if (worldRef.current) worldRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
   const paintRef = useRef(paint);
   paintRef.current = paint;
@@ -215,7 +215,7 @@ export function ProjectField({
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
     >
-      <div ref={worldRef} className="absolute left-1/2 top-1/2">
+      <div ref={worldRef} data-project-world className="absolute left-1/2 top-1/2 will-change-transform">
         {projects.map((project, i) => {
           const place = placement.get(project.id)!;
           const iconSrc = project.icon ?? project.image;
@@ -268,7 +268,7 @@ export function ProjectField({
                       src={iconSrc}
                       alt={project.title}
                       fill
-                      sizes="128px"
+                      sizes={`${Math.ceil(iconSize)}px`}
                       draggable={false}
                       className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
                       style={{ filter: "grayscale(1) contrast(1.03)" }}
