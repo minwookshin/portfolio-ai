@@ -107,6 +107,8 @@ export function ProjectField({
   const pan = useRef({ x: 0, y: 0 });
   const drag = useRef({ active: false, lastX: 0, lastY: 0, moved: 0, id: null as string | null });
   const raf = useRef<number | null>(null);
+  const autoDir = useRef(1);
+  const autoPausedUntil = useRef(0);
   const placementRef = useRef(placement);
   placementRef.current = placement;
 
@@ -125,7 +127,47 @@ export function ProjectField({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placement]);
 
+  useEffect(() => {
+    if (clampX <= 1) {
+      pan.current.x = 0;
+      pan.current.y = 0;
+      paintRef.current();
+      return;
+    }
+
+    let frame = 0;
+    let last = performance.now();
+    const speed = isMobile ? 30 : 22;
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 48) / 1000;
+      last = now;
+
+      if (revealed && !drag.current.active && now > autoPausedUntil.current) {
+        const next = pan.current.x + autoDir.current * speed * dt;
+        if (next >= clampX) {
+          pan.current.x = clampX;
+          autoDir.current = -1;
+          autoPausedUntil.current = now + 900;
+        } else if (next <= -clampX) {
+          pan.current.x = -clampX;
+          autoDir.current = 1;
+          autoPausedUntil.current = now + 900;
+        } else {
+          pan.current.x = next;
+        }
+        pan.current.y = 0;
+        paintRef.current();
+      }
+
+      frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [clampX, isMobile, revealed]);
+
   const onPointerDown = (e: React.PointerEvent) => {
+    autoPausedUntil.current = performance.now() + 2400;
     const btn = (e.target as HTMLElement).closest("button[data-id]");
     drag.current.id = btn ? btn.getAttribute("data-id") : null;
     drag.current.moved = 0;
@@ -136,6 +178,7 @@ export function ProjectField({
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!drag.current.active) return;
+    autoPausedUntil.current = performance.now() + 1600;
     const dx = e.clientX - drag.current.lastX;
     const dy = e.clientY - drag.current.lastY;
     drag.current.lastX = e.clientX;
@@ -149,6 +192,7 @@ export function ProjectField({
   };
   const endDrag = (e: React.PointerEvent) => {
     drag.current.active = false;
+    autoPausedUntil.current = performance.now() + 2400;
     (e.currentTarget as Element).releasePointerCapture?.(e.pointerId);
     // Tap (negligible movement) on a visible icon opens it, expanding from its rect.
     if (drag.current.moved < 6 && drag.current.id != null) {
@@ -202,7 +246,7 @@ export function ProjectField({
                   onSelectProject(project, rectOf(e.currentTarget));
                 }
               }}
-              className={`absolute will-change-transform rounded-full text-on-surface outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
+              className={`absolute will-change-transform rounded-[24%] text-on-surface outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
               style={{
                 width: iconSize,
                 height: iconSize,
@@ -214,11 +258,11 @@ export function ProjectField({
                 transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
               }}
             >
-              <div className="w-full h-full rounded-full" style={boxReveal}>
+              <div className="w-full h-full rounded-[24%]" style={boxReveal}>
               <div
-                className="relative w-full h-full rounded-full overflow-hidden bg-transparent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
+                className="relative w-full h-full rounded-[24%] overflow-hidden bg-transparent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
               >
-                <div className="absolute inset-0 rounded-full" style={revealStyle}>
+                <div className="absolute inset-0 rounded-[24%]" style={revealStyle}>
                   {iconSrc ? (
                     <Image
                       src={iconSrc}
@@ -238,7 +282,7 @@ export function ProjectField({
                     </div>
                   )}
                 </div>
-                <DotRing variant="circle" />
+                <DotRing variant="squircle" />
               </div>
               </div>
             </button>
