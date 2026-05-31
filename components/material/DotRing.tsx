@@ -5,7 +5,7 @@ type DotRingProps = {
 };
 
 const SQUIRCLE_PATH =
-  "M28 1.5C45.8 1.5 54.5 10.2 54.5 28C54.5 45.8 45.8 54.5 28 54.5C10.2 54.5 1.5 45.8 1.5 28C1.5 10.2 10.2 1.5 28 1.5Z";
+  "M15 1.5H41C49.5 1.5 54.5 6.5 54.5 15V41C54.5 49.5 49.5 54.5 41 54.5H15C6.5 54.5 1.5 49.5 1.5 41V15C1.5 6.5 6.5 1.5 15 1.5Z";
 
 // Evenly spaced round dots drawn with SVG, so circular controls share the same
 // outline instead of relying on browser-specific CSS dotted borders.

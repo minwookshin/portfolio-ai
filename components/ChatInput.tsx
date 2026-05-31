@@ -195,13 +195,14 @@ export default function ChatInput({
         </defs>
       </svg>
 
-      <div
+      <motion.div
         className="fixed z-[80] left-1/2 bottom-10 -translate-x-1/2 w-full max-w-[700px] px-4 flex items-center justify-center gap-2"
+        initial={false}
+        animate={{ opacity: introReady ? 1 : 0, y: introReady ? 0 : 36 }}
+        transition={springs.island}
         style={{
           filter: merging ? "url(#goo-merge)" : undefined,
-          opacity: introReady ? 1 : 0,
           pointerEvents: introReady ? undefined : "none",
-          transition: "opacity 0.45s ease",
         }}
       >
         {/* Close (esc) - OUTSIDE the textbox, slides out from behind the bar */}
@@ -385,7 +386,7 @@ export default function ChatInput({
           </motion.button>
         )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </>
   );
 }

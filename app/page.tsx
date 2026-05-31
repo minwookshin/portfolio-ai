@@ -262,6 +262,59 @@ function showToTarget(show: string | null): Project | "profile" | "projects" | n
   return null;
 }
 
+function ProjectNameRail({
+  projects,
+  activeProject,
+  onSelect,
+  onAllWork,
+}: {
+  projects: Project[];
+  activeProject: Project;
+  onSelect: (project: Project) => void;
+  onAllWork: () => void;
+}) {
+  return (
+    <motion.nav
+      key="project-name-rail"
+      initial={{ opacity: 0, x: -18 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -18 }}
+      transition={springs.island}
+      aria-label="Project navigation"
+      className="fixed left-4 top-1/2 z-[73] hidden -translate-y-1/2 flex-col items-start gap-1.5 md:flex"
+    >
+      {projects.map((project) => {
+        const isActive = project.id === activeProject.id;
+        return (
+          <motion.button
+            key={project.id}
+            type="button"
+            whileTap={{ scale: 0.96 }}
+            transition={springs.pressMorph}
+            onClick={() => onSelect(project)}
+            className={`rounded-full px-4 py-2 text-sm font-light leading-none tracking-tight transition-colors ${
+              isActive
+                ? "bg-on-surface text-surface"
+                : "bg-surface-container-high text-on-surface hover:bg-on-surface hover:text-surface"
+            }`}
+          >
+            {project.title}
+          </motion.button>
+        );
+      })}
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.96 }}
+        transition={springs.pressMorph}
+        onClick={onAllWork}
+        className="rounded-full bg-surface-container-high px-4 py-2 text-sm font-light leading-none tracking-tight text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
+      >
+        All Work
+      </motion.button>
+    </motion.nav>
+  );
+}
+
 // Interface to store content snapshot for each message
 export default function Home() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -512,6 +565,25 @@ export default function Home() {
             onClick={leaveChat}
             className="fixed inset-0 z-[68] bg-surface/40 backdrop-blur-xl"
             aria-hidden
+          />
+        )}
+        {heroProject && (
+          <ProjectNameRail
+            projects={MAIN_PROJECTS}
+            activeProject={heroProject}
+            onSelect={(project) => {
+              if (project.comingSoon) {
+                setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
+                return;
+              }
+              setChatOnTop(false);
+              setShowProfile(false);
+              setFilterOpen(false);
+              setDetailFocus(null);
+              setHeroOrigin(null);
+              setHeroProject(project);
+            }}
+            onAllWork={leaveChat}
           />
         )}
         {heroProject && (
