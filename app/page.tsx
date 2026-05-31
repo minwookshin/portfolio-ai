@@ -292,7 +292,7 @@ function ProjectNameRail({
             whileTap={{ scale: 0.96 }}
             transition={springs.pressMorph}
             onClick={() => onSelect(project)}
-            className={`rounded-full px-4 py-2 text-sm font-light leading-none tracking-tight transition-colors ${
+            className={`rounded-none px-4 py-2 text-sm font-light leading-none tracking-tight transition-colors ${
               isActive
                 ? "bg-on-surface text-surface"
                 : "bg-surface-container-high text-on-surface hover:bg-on-surface hover:text-surface"
@@ -307,7 +307,7 @@ function ProjectNameRail({
         whileTap={{ scale: 0.96 }}
         transition={springs.pressMorph}
         onClick={onAllWork}
-        className="rounded-full bg-surface-container-high px-4 py-2 text-sm font-light leading-none tracking-tight text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
+        className="rounded-none bg-surface-container-high px-4 py-2 text-sm font-light leading-none tracking-tight text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
       >
         All Work
       </motion.button>
@@ -646,14 +646,14 @@ export default function Home() {
                 linkedin={PERSONAL_INFO.linkedin}
               />
 
-              <div className="glass-stroke bg-surface-container mt-4 rounded-shape-lg p-6">
+              <div className="glass-stroke bg-surface-container mt-4 rounded-none p-6">
                 <div className="grid grid-cols-2 gap-3">
                   <motion.button
                     onClick={() => setShowResume(!showResume)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-on-surface text-surface rounded-shape-md font-normal transition-all"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-on-surface text-surface rounded-none font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     {showResume ? 'Hide Resume' : 'View Resume'}
@@ -664,7 +664,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="glass-stroke-sm bg-surface-container-high flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-shape-md font-normal transition-all"
+                    className="glass-stroke-sm bg-surface-container-high flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-none font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     Download PDF
@@ -679,7 +679,7 @@ export default function Home() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden mt-4"
                     >
-                      <div className="glass-stroke-sm bg-surface-container-high rounded-shape-md overflow-hidden">
+                      <div className="glass-stroke-sm bg-surface-container-high rounded-none overflow-hidden">
                         <img
                           src="/resume.2025dec.jpg"
                           alt="Resume - Minwook Shin"
@@ -753,7 +753,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={springs.spatialFast}
-            className="fixed left-1/2 bottom-[176px] z-[76] -translate-x-1/2 rounded-full border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
+            className="fixed left-1/2 bottom-[176px] z-[76] -translate-x-1/2 rounded-none border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
           >
             {projectNotice}
           </motion.div>
@@ -817,7 +817,7 @@ export default function Home() {
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
                     <div
-                      className={`rounded-shape-lg px-4 py-3 ${
+                      className={`rounded-none px-4 py-3 ${
                         isUser
                           ? "bg-on-surface text-surface"
                           : "bg-surface border border-dotted border-on-surface/30 text-on-surface"
@@ -827,7 +827,7 @@ export default function Home() {
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{body}</p>
                       ) : (
                         <>
-                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-lg prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-ol:text-sm prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-normal">
+                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:rounded-none prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-none prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-normal">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {body}
                             </ReactMarkdown>
@@ -853,7 +853,7 @@ export default function Home() {
                                 setHeroProject(target);
                               }
                             }}
-                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
+                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-none bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
                           >
                               {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -873,7 +873,7 @@ export default function Home() {
                             transition={{ ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="border border-dotted border-on-surface/30 hover:border-on-surface hover:bg-on-surface hover:text-surface bg-surface inline-flex items-center px-3 py-2 rounded-full text-on-surface text-xs font-normal transition-colors"
+                            className="border border-dotted border-on-surface/30 hover:border-on-surface hover:bg-on-surface hover:text-surface bg-surface inline-flex items-center px-3 py-2 rounded-none text-on-surface text-xs font-normal transition-colors"
                           >
                             {f}
                           </motion.button>
@@ -892,14 +892,14 @@ export default function Home() {
                   transition={springs.spatialFast}
                   className="flex justify-start"
                 >
-                  <div className="bg-surface border border-dotted border-on-surface/30 rounded-shape-lg px-4 py-3">
+                  <div className="bg-surface border border-dotted border-on-surface/30 rounded-none px-4 py-3">
                     <div className="flex items-center space-x-2">
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
                           key={d}
                           animate={{ opacity: [0.3, 1, 0.3] }}
                           transition={{ duration: 1.4, repeat: Infinity, delay: d }}
-                          className="w-1.5 h-1.5 bg-on-surface rounded-full"
+                          className="w-1.5 h-1.5 bg-on-surface rounded-none"
                         />
                       ))}
                     </div>

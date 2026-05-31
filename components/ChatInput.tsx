@@ -29,7 +29,7 @@ interface ChatInputProps {
 
 
 const outsideBtn =
-  `group bg-surface shrink-0 w-14 h-14 rounded-full text-on-surface flex items-center justify-center transition-colors relative`;
+  `group bg-surface shrink-0 w-14 h-14 rounded-none text-on-surface flex items-center justify-center transition-colors relative`;
 
 // Stickier than the shared springs (more mass, gentler damping) so the filter
 // pill opens and closes with a smooth, weighted settle.
@@ -219,7 +219,7 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.2, x: 34 }}
               transition={springs.island}
-              className="group relative shrink-0 w-14 h-14 rounded-full bg-on-surface text-surface flex items-center justify-center text-[11px] font-normal lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-surface hover:text-on-surface"
+              className="group relative shrink-0 w-14 h-14 rounded-none bg-on-surface text-surface flex items-center justify-center text-[11px] font-normal lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-surface hover:text-on-surface"
             >
               <DotRing variant="circle" connect={false} className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <span className="relative">esc</span>
@@ -234,7 +234,7 @@ export default function ChatInput({
           transition={springs.island}
           style={{ maxWidth: "100%" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`group relative bg-surface text-on-surface min-w-0 flex items-center gap-1 h-14 rounded-full pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
+          className={`group relative bg-surface text-on-surface min-w-0 flex items-center gap-1 h-14 rounded-none pl-2 pr-2 ${expanded ? "" : "cursor-text"} ${filterOpen ? "max-sm:hidden" : ""}`}
         >
           <DotRing variant="pill" />
           {/* Current project / profile icon, inside the textbox on the left */}
@@ -246,7 +246,7 @@ export default function ChatInput({
               aria-label={connectorKind === "profile" ? "Profile" : "Current project"}
               whileTap={{ scale: 0.92 }}
               transition={springs.island}
-              className="shrink-0 ml-1 w-9 h-9 rounded-full overflow-hidden border border-[rgba(0,0,2,0.1)]"
+              className="shrink-0 ml-1 w-9 h-9 rounded-none overflow-hidden border border-[rgba(0,0,2,0.1)]"
             >
               <img src={connectorSrc} alt="" className="w-full h-full object-cover" style={{ filter: "grayscale(1) contrast(1.03)" }} decoding="async" />
             </motion.button>
@@ -277,7 +277,6 @@ export default function ChatInput({
               aria-label="Send"
               size="sm"
               className="!w-11 !h-11"
-              keepRound
               selected={!!input.trim()}
               disabled={!input.trim()}
               onClick={() => handleSubmit()}
@@ -322,14 +321,14 @@ export default function ChatInput({
             transition={springs.island}
             className="shrink-0"
           >
-            <div ref={filterRef} className="group relative bg-surface text-on-surface flex items-center rounded-full p-2">
+            <div ref={filterRef} className="group relative bg-surface text-on-surface flex items-center rounded-none p-2">
               <DotRing variant="pill" />
               <button
                 type="button"
                 onClick={onFilter}
                 aria-label="Filter projects"
                 aria-pressed={filterOpen}
-                className={`relative shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
+                className={`relative shrink-0 w-11 h-11 rounded-none flex items-center justify-center transition-colors ${
                   filterOpen ? "bg-on-surface text-surface" : "text-on-surface"
                 }`}
               >
@@ -349,7 +348,7 @@ export default function ChatInput({
                         key={cat}
                         type="button"
                         onClick={() => onSelectCategory?.(cat === "All" ? null : cat)}
-                        className={`shrink-0 h-11 min-w-11 px-3 py-2 rounded-full text-[13px] font-normal whitespace-nowrap transition-colors ${
+                        className={`shrink-0 h-11 min-w-11 px-3 py-2 rounded-none text-[13px] font-normal whitespace-nowrap transition-colors ${
                           isActive
                             ? "bg-on-surface text-surface"
                             : "text-on-surface-variant hover:text-on-surface hover:bg-on-surface/[0.06]"

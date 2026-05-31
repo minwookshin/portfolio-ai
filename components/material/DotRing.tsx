@@ -5,9 +5,9 @@ type DotRingProps = {
 };
 
 const SQUIRCLE_PATH =
-  "M15 1.5H41C49.5 1.5 54.5 6.5 54.5 15V41C54.5 49.5 49.5 54.5 41 54.5H15C6.5 54.5 1.5 49.5 1.5 41V15C1.5 6.5 6.5 1.5 15 1.5Z";
+  "M1.5 1.5H54.5V54.5H1.5V1.5Z";
 
-// Evenly spaced round dots drawn with SVG, so circular controls share the same
+// Evenly spaced dots drawn with SVG, so rectangular controls share the same
 // outline instead of relying on browser-specific CSS dotted borders.
 export function DotRing({ variant = "circle", className = "", connect = true }: DotRingProps) {
   const dots = connect
@@ -31,7 +31,7 @@ export function DotRing({ variant = "circle", className = "", connect = true }: 
   if (variant === "pill") {
     return (
       <svg className={`absolute inset-[1px] w-[calc(100%-2px)] h-[calc(100%-2px)] pointer-events-none overflow-visible ${className}`} fill="none" aria-hidden>
-        <rect x="0" y="0" width="100%" height="100%" rx="27" {...dots} />
+        <rect x="0" y="0" width="100%" height="100%" rx="0" {...dots} />
       </svg>
     );
   }
@@ -46,7 +46,7 @@ export function DotRing({ variant = "circle", className = "", connect = true }: 
 
   return (
     <svg className={`absolute inset-0 w-full h-full pointer-events-none ${className}`} viewBox="0 0 56 56" fill="none" aria-hidden>
-      <circle cx="28" cy="28" r="27" {...dots} />
+      <path d={SQUIRCLE_PATH} {...dots} />
     </svg>
   );
 }

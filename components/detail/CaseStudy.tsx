@@ -60,7 +60,7 @@ const reveal = {
 
 // Translucent glass so components read as floating over the blurred backdrop
 // rather than sitting on a solid panel.
-const card = "glass-stroke bg-surface-container/45 backdrop-blur-xl rounded-[24px]";
+const card = "glass-stroke bg-surface-container/45 backdrop-blur-xl rounded-none";
 const eyebrowCls = "font-mono font-light uppercase text-[11px] text-on-surface-variant";
 const h2Cls = "text-2xl sm:text-3xl font-normal tracking-[-0.01em] text-on-surface";
 const bodyCls = "text-[15px] sm:text-base text-on-surface-variant leading-relaxed";
@@ -87,7 +87,7 @@ function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }
 }
 
 function Dot() {
-  return <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-on-surface" />;
+  return <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-none bg-on-surface" />;
 }
 
 function Tags({ tags }: { tags: string[] }) {
@@ -96,7 +96,7 @@ function Tags({ tags }: { tags: string[] }) {
       {tags.map((t) => (
         <span
           key={t}
-          className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md px-4 py-2 rounded-full text-xs font-normal text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
+          className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md px-4 py-2 rounded-none text-xs font-normal text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
         >
           {t}
         </span>
@@ -226,7 +226,7 @@ function renderSection(section: DetailSection, i: number) {
           <div className="grid sm:grid-cols-2 gap-4">
             {section.columns.map((c) => (
               <div key={c.label} className={`${card} p-6 sm:p-8`}>
-                <span className="inline-block px-3 py-2 rounded-full bg-on-surface text-surface text-xs font-normal mb-5">
+                <span className="inline-block px-3 py-2 rounded-none bg-on-surface text-surface text-xs font-normal mb-5">
                   {c.label}
                 </span>
                 <h3 className="text-lg font-normal text-on-surface mb-2">{c.title}</h3>
@@ -276,7 +276,7 @@ function renderSection(section: DetailSection, i: number) {
             <div className="space-y-6">
               {section.steps.map((s, si) => (
                 <div key={s.title} className="relative">
-                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center rounded-full bg-on-surface text-surface text-xs font-normal">
+                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center rounded-none bg-on-surface text-surface text-xs font-normal">
                     {si + 1}
                   </span>
                   <div className={`${card} p-5 sm:p-6`}>
@@ -345,7 +345,7 @@ function renderSection(section: DetailSection, i: number) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={isGithub ? "GitHub" : "LinkedIn"}
-                    className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center justify-center w-12 h-12 rounded-full text-on-surface transition-colors hover:bg-surface-container"
+                    className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center justify-center w-12 h-12 rounded-none text-on-surface transition-colors hover:bg-surface-container"
                   >
                     <Icon className="w-5 h-5" />
                   </a>
@@ -359,8 +359,8 @@ function renderSection(section: DetailSection, i: number) {
                   rel="noopener noreferrer"
                   className={
                     li === 0
-                      ? "inline-flex items-center gap-2 px-6 py-3 rounded-full bg-on-surface text-surface text-sm font-normal hover:opacity-90 transition-opacity"
-                      : "glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center gap-2 px-6 py-3 rounded-full text-on-surface text-sm font-normal transition-colors"
+                      ? "inline-flex items-center gap-2 px-6 py-3 rounded-none bg-on-surface text-surface text-sm font-normal hover:opacity-90 transition-opacity"
+                      : "glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center gap-2 px-6 py-3 rounded-none text-on-surface text-sm font-normal transition-colors"
                   }
                 >
                   {l.label}
@@ -421,7 +421,7 @@ function AskRow({
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md hover:bg-on-surface hover:text-surface group inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-normal text-on-surface transition-colors"
+            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md hover:bg-on-surface hover:text-surface group inline-flex items-center gap-2 px-4 py-2 rounded-none text-sm font-normal text-on-surface transition-colors"
           >
             {q}
             <ArrowUpRight className="w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

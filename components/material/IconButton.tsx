@@ -13,8 +13,6 @@ export interface IconButtonProps {
   onClick?: () => void;
   type?: "button" | "submit";
   className?: string;
-  /** Keep a perfect circle even when selected (only the color changes). */
-  keepRound?: boolean;
   children: ReactNode;
 }
 
@@ -33,7 +31,6 @@ export function IconButton({
   onClick,
   type = "button",
   className = "",
-  keepRound = false,
   children,
   ...rest
 }: IconButtonProps) {
@@ -47,7 +44,7 @@ export function IconButton({
       disabled={disabled}
       onClick={onClick}
       initial={false}
-      animate={{ borderRadius: keepRound ? 9999 : selected ? 12 : 9999 }}
+      animate={{ borderRadius: 0 }}
       whileTap={reduce || disabled ? undefined : { scale: 0.92 }}
       transition={springs.pressMorph}
       className={[
@@ -55,7 +52,7 @@ export function IconButton({
         "transition-colors",
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
         "disabled:opacity-40 disabled:pointer-events-none",
-        "before:absolute before:inset-0 before:rounded-[inherit] before:bg-current before:opacity-0 hover:before:opacity-[0.08] active:before:opacity-[0.10] before:transition-opacity",
+        "before:absolute before:inset-0 before:bg-current before:opacity-0 hover:before:opacity-[0.08] active:before:opacity-[0.10] before:transition-opacity",
         selected ? "bg-primary text-on-primary" : "bg-transparent text-on-surface",
         sizeClasses[size],
         className,

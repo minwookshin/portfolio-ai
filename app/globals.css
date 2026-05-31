@@ -59,7 +59,7 @@ body {
 }
 .section-flash {
   animation: sectionFlash 2.4s ease-out;
-  border-radius: 10px;
+  border-radius: 0;
   padding: 4px 8px;
   margin: -4px -8px;
 }
@@ -151,12 +151,12 @@ body {
   --md-hairline: rgba(0, 0, 2, 0.1);
 
   /* shape scale (px) */
-  --md-shape-xs: 4px;
-  --md-shape-sm: 8px;
-  --md-shape-md: 12px;
-  --md-shape-lg: 16px;
-  --md-shape-xl: 28px;
-  --md-shape-full: 9999px;
+  --md-shape-xs: 0px;
+  --md-shape-sm: 0px;
+  --md-shape-md: 0px;
+  --md-shape-lg: 0px;
+  --md-shape-xl: 0px;
+  --md-shape-full: 0px;
 
   /* state layer opacities */
   --md-state-hover: 0.08;

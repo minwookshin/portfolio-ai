@@ -58,15 +58,15 @@ export function Button({
       onClick={onClick}
       aria-label={rest["aria-label"]}
       initial={false}
-      animate={{ borderRadius: 9999 }}
-      whileTap={reduce || disabled ? undefined : { borderRadius: 12, scale: 0.97 }}
+      animate={{ borderRadius: 0 }}
+      whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
       transition={springs.pressMorph}
       className={[
         "relative inline-flex items-center justify-center font-normal select-none",
         "transition-colors outline-none",
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
         "disabled:opacity-40 disabled:pointer-events-none",
-        "before:absolute before:inset-0 before:rounded-[inherit] before:bg-current before:opacity-0 hover:before:opacity-[0.08] active:before:opacity-[0.10] before:transition-opacity",
+        "before:absolute before:inset-0 before:bg-current before:opacity-0 hover:before:opacity-[0.08] active:before:opacity-[0.10] before:transition-opacity",
         variantClasses[variant],
         sizeClasses[size],
         className,
