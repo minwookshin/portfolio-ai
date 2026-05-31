@@ -1,0 +1,34 @@
+type DotRingProps = {
+  variant?: "circle" | "pill";
+  className?: string;
+  connect?: boolean;
+};
+
+// Evenly spaced round dots drawn with SVG, so circular controls share the same
+// outline instead of relying on browser-specific CSS dotted borders.
+export function DotRing({ variant = "circle", className = "", connect = true }: DotRingProps) {
+  const dots = connect
+    ? { className: "dot-connect", fill: "none", stroke: "currentColor", strokeLinecap: "round" as const }
+    : {
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 2,
+        strokeLinecap: "round" as const,
+        strokeDasharray: "0.01 9",
+        style: { opacity: 0.9 },
+      };
+
+  if (variant === "pill") {
+    return (
+      <svg className={`absolute inset-[1px] w-[calc(100%-2px)] h-[calc(100%-2px)] pointer-events-none overflow-visible ${className}`} fill="none" aria-hidden>
+        <rect x="0" y="0" width="100%" height="100%" rx="27" {...dots} />
+      </svg>
+    );
+  }
+
+  return (
+    <svg className={`absolute inset-0 w-full h-full pointer-events-none ${className}`} viewBox="0 0 56 56" fill="none" aria-hidden>
+      <circle cx="28" cy="28" r="27" {...dots} />
+    </svg>
+  );
+}

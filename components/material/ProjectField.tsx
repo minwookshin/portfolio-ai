@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Project } from "@/components/ProjectCard";
+import { DotRing } from "@/components/material/DotRing";
 
 // Per-icon entrance directions, cycled so neighbours differ. The artwork starts
 // pushed fully off one edge (clipped invisible) then slides to center.
@@ -208,7 +209,7 @@ export function ProjectField({
                   onSelectProject(project, rectOf(e.currentTarget));
                 }
               }}
-              className={`absolute will-change-transform rounded-full outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
+              className={`absolute will-change-transform rounded-full text-on-surface outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
               style={{
                 width: iconSize,
                 height: iconSize,
@@ -222,7 +223,7 @@ export function ProjectField({
             >
               <div className="w-full h-full rounded-full" style={boxReveal}>
               <div
-                className="relative w-full h-full rounded-full overflow-hidden bg-surface-container transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
+                className="relative w-full h-full rounded-full overflow-hidden bg-transparent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
               >
                 <div className="absolute inset-0 rounded-full" style={revealStyle}>
                   {iconSrc ? (
@@ -244,7 +245,7 @@ export function ProjectField({
                     </div>
                   )}
                 </div>
-                <span className="pointer-events-none absolute inset-0 rounded-full bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.08]" />
+                <DotRing variant="circle" />
               </div>
               </div>
             </button>

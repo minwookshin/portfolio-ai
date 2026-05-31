@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, ArrowRight, ListFilter, Code2, Sparkles, PenTool, User } from "lucide-react";
 import { LinkedInIcon } from "./LinkedInIcon";
+import { DotRing } from "@/components/material/DotRing";
 import { IconButton } from "@/components/material/IconButton";
 import { springs } from "@/lib/material/motion";
 
@@ -29,27 +30,6 @@ interface ChatInputProps {
 
 const outsideBtn =
   `group bg-surface shrink-0 w-14 h-14 rounded-full text-on-surface flex items-center justify-center transition-colors relative`;
-
-// A dotted outline drawn as evenly-spaced round dots (SVG stroke). Unlike CSS
-// `border: dotted`, the gap between dots is adjustable here (the "9" in the
-// dasharray). Parent must be `relative`. Inherits the element's text color.
-function DotRing({ variant = "circle", className = "", connect = true }: { variant?: "circle" | "pill"; className?: string; connect?: boolean }) {
-  const dots = connect
-    ? { className: "dot-connect", fill: "none", stroke: "currentColor", strokeLinecap: "round" as const }
-    : { fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeDasharray: "0.01 9", style: { opacity: 0.9 } };
-  if (variant === "pill") {
-    return (
-      <svg className={`absolute inset-[1px] w-[calc(100%-2px)] h-[calc(100%-2px)] pointer-events-none overflow-visible ${className}`} fill="none" aria-hidden>
-        <rect x="0" y="0" width="100%" height="100%" rx="27" {...dots} />
-      </svg>
-    );
-  }
-  return (
-    <svg className={`absolute inset-0 w-full h-full pointer-events-none ${className}`} viewBox="0 0 56 56" fill="none" aria-hidden>
-      <circle cx="28" cy="28" r="27" {...dots} />
-    </svg>
-  );
-}
 
 // Stickier than the shared springs (more mass, gentler damping) so the filter
 // pill opens and closes with a smooth, weighted settle.
