@@ -208,7 +208,7 @@ export function ProjectField({
                   onSelectProject(project, rectOf(e.currentTarget));
                 }
               }}
-              className={`absolute will-change-transform rounded-none outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
+              className={`absolute will-change-transform rounded-full outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
               style={{
                 width: iconSize,
                 height: iconSize,
@@ -220,30 +220,40 @@ export function ProjectField({
                 transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
               }}
             >
-              <div className="w-full h-full" style={boxReveal}>
-              <div className="bg-surface-container relative w-full h-full rounded-none overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-90">
-                <div className="absolute inset-0" style={revealStyle}>
-                {iconSrc ? (
-                  <Image
-                    src={iconSrc}
-                    alt={project.title}
-                    fill
-                    sizes="128px"
-                    draggable={false}
-                    className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125"
-                    style={{ filter: "grayscale(1) contrast(1.03)" }}
-                  />
-                ) : (
-                  <div
-                    className={`w-full h-full flex items-center justify-center font-normal text-on-surface transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125 ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}
-                    style={{ filter: "grayscale(1)" }}
-                  >
-                    {project.glyph ?? project.title.charAt(0)}
-                  </div>
-                )}
+              <div className="w-full h-full rounded-full" style={boxReveal}>
+              <div
+                className="relative w-full h-full rounded-full overflow-hidden border border-white/65 bg-surface-container transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
+                style={{
+                  boxShadow:
+                    "inset 0 2px 8px rgba(255,255,255,0.62), inset 0 -20px 30px rgba(0,0,2,0.12), 0 18px 36px rgba(0,0,2,0.10)",
+                }}
+              >
+                <div className="absolute inset-0 rounded-full" style={revealStyle}>
+                  {iconSrc ? (
+                    <Image
+                      src={iconSrc}
+                      alt={project.title}
+                      fill
+                      sizes="128px"
+                      draggable={false}
+                      className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+                      style={{ filter: "grayscale(1) contrast(1.12) brightness(0.96) saturate(0.82)" }}
+                    />
+                  ) : (
+                    <div
+                      className={`w-full h-full flex items-center justify-center font-normal text-on-surface transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125 ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}
+                      style={{ filter: "grayscale(1)" }}
+                    >
+                      {project.glyph ?? project.title.charAt(0)}
+                    </div>
+                  )}
                 </div>
-                {/* monochrome hover state layer */}
-                <span className="absolute inset-0 rounded-[inherit] bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.1]" />
+                {/* Crystal layers: specular light, inner rim, and faint refraction. */}
+                <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_28%_16%,rgba(255,255,255,0.78),rgba(255,255,255,0.18)_24%,rgba(255,255,255,0)_54%)] opacity-55 mix-blend-screen" />
+                <span className="pointer-events-none absolute left-[17%] top-[12%] h-[13%] w-[31%] -rotate-12 rounded-full bg-white/55 blur-[4px]" />
+                <span className="pointer-events-none absolute inset-[1px] rounded-full border border-white/55" />
+                <span className="pointer-events-none absolute inset-0 rounded-full bg-[linear-gradient(135deg,rgba(255,255,255,0.24),rgba(255,255,255,0)_42%,rgba(0,0,2,0.12)_100%)]" />
+                <span className="pointer-events-none absolute inset-0 rounded-full bg-on-surface opacity-0 transition-opacity duration-200 group-hover:opacity-[0.08]" />
               </div>
               </div>
             </button>
