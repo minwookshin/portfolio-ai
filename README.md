@@ -1,6 +1,6 @@
-# Minwook Studio
+# minwook
 
-An AI-native product studio site for Minwook Shin. The interface combines selected work, conversational project intake, and case-study routing in one Next.js experience.
+An AI-native portfolio site for Minwook Shin. The interface combines selected work, conversational project intake, and case-study routing in one Next.js experience.
 
 ## Design Philosophy
 

@@ -11,11 +11,11 @@ const googleSans = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: "minwook studio",
-    template: "%s · minwook studio",
+    default: "minwook",
+    template: "%s · minwook",
   },
   description:
-    "Minwook Studio designs and builds AI-native interfaces, product prototypes, websites, agents, and digital experiences from Figma to production code.",
+    "Minwook Shin designs and builds AI-native interfaces, product prototypes, websites, agents, and digital experiences from Figma to production code.",
   keywords: [
     "Minwook Shin",
     "UX Engineer",
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
   creator: "Minwook Shin",
   openGraph: {
     type: "website",
-    title: "minwook studio",
+    title: "minwook",
     description:
       "AI-native interfaces, product prototypes, websites, and agents from Figma to production code.",
-    siteName: "minwook studio",
+    siteName: "minwook",
   },
   twitter: {
     card: "summary_large_image",
-    title: "minwook studio",
+    title: "minwook",
     description:
       "AI-native interfaces, product prototypes, websites, and agents from Figma to production code.",
   },

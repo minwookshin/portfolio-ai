@@ -638,7 +638,7 @@ export default function Home() {
               className="flex items-center gap-3"
             >
               <h1 className="text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
-                minwook studio
+                minwook
               </h1>
             </motion.div>
           )}
