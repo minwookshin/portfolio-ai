@@ -8,13 +8,20 @@ type DotRingProps = {
 // outline instead of relying on browser-specific CSS dotted borders.
 export function DotRing({ variant = "circle", className = "", connect = true }: DotRingProps) {
   const dots = connect
-    ? { className: "dot-connect", fill: "none", stroke: "currentColor", strokeLinecap: "round" as const }
+    ? {
+        className: "dot-connect",
+        fill: "none",
+        stroke: "currentColor",
+        strokeLinecap: "round" as const,
+        vectorEffect: "non-scaling-stroke" as const,
+      }
     : {
         fill: "none",
         stroke: "currentColor",
         strokeWidth: 2,
         strokeLinecap: "round" as const,
         strokeDasharray: "0.01 9",
+        vectorEffect: "non-scaling-stroke" as const,
         style: { opacity: 0.9 },
       };
 
