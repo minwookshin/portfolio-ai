@@ -152,7 +152,7 @@ body::after {
 /* Temporary type lock while the homepage is being redesigned. Remove this class
    or change the value here when the final type scale is ready. */
 .site-text-16 :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
-  font-size: 18px !important;
+  font-size: 16px !important;
 }
 
 /* Material 3 Expressive tokens - monochrome + Nothing-red accent (dark) */

@@ -479,7 +479,7 @@ function EditorialIntro() {
         <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#f4f4f5] md:text-[36px]">
           Interfaces for AI products, websites, and prototypes that move from early idea to working software.
         </h1>
-        <p className="mt-3 max-w-[520px] text-[16px] leading-[1.5] text-white/60">
+        <p className="mt-3 max-w-[520px] text-[16px] leading-[1.5] text-white">
           I work as a hands-on design engineer and compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.
         </p>
         <div className="mt-7 flex flex-wrap justify-start gap-x-5 gap-y-2">
