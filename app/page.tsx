@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import type { FormEvent, KeyboardEvent } from "react";
+import type { CSSProperties, FormEvent, KeyboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -9,7 +9,7 @@ import ChatInput from "@/components/ChatInput";
 import ProjectDetailView from "@/components/ProjectDetailView";
 import ProfileCard from "@/components/ProfileCard";
 import { Project } from "@/components/ProjectCard";
-import { ArrowRight, FileText, ArrowUpRight } from "lucide-react";
+import { ArrowRight, FileText, ArrowUpRight, X } from "lucide-react";
 import { springs } from "@/lib/material/motion";
 
 // One reveal shared by every full-screen overlay (profile, project detail) so
@@ -204,6 +204,36 @@ const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Caret: "/projects/caret/demo.mp4",
 };
 
+const BUILD_VERSION = "build a60937a";
+const BUILD_UPDATED_AT = "2026-06-01T15:12:55Z";
+type BuildMetaState = {
+  updatedAt: string;
+  version: string;
+};
+const LAB_TILE_HEIGHTS = [
+  "h-[420px] sm:h-[460px]",
+  "h-[300px] sm:h-[340px]",
+  "h-[380px] sm:h-[460px]",
+  "h-[300px] sm:h-[340px]",
+  "h-[420px] sm:h-[500px]",
+  "h-[300px] sm:h-[360px]",
+] as const;
+const LAB_TILE_HEIGHT_VALUES = [460, 340, 460, 340, 500, 360] as const;
+const LIGHT_PROJECT_TOKENS = {
+  "--md-surface": "#f7f7f8",
+  "--md-surface-container": "#ffffff",
+  "--md-surface-container-high": "#efeff1",
+  "--md-on-surface": "#050505",
+  "--md-on-surface-variant": "#6f6f75",
+  "--md-outline": "#d8d8dd",
+  "--md-outline-variant": "#e5e5e8",
+  "--md-primary": "#050505",
+  "--md-on-primary": "#ffffff",
+  "--md-primary-container": "#eeeeef",
+  "--md-on-primary-container": "#050505",
+  "--md-hairline": "rgba(5, 5, 5, 0.10)",
+} as CSSProperties;
+
 // Personal Information
 const PERSONAL_INFO = {
   name: "Minwook Shin",
@@ -276,22 +306,71 @@ function orderProjects(projects: Project[], ids: readonly string[]) {
     .filter((project): project is Project => Boolean(project));
 }
 
+function formatElapsedBefore(from: string, now: number) {
+  const elapsedSeconds = Math.max(0, Math.floor((now - new Date(from).getTime()) / 1000));
+  const days = Math.floor(elapsedSeconds / 86400);
+  const hours = Math.floor((elapsedSeconds % 86400) / 3600);
+  const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+  const seconds = elapsedSeconds % 60;
+  return `${days}d ${hours}h ${minutes}m ${seconds}s before`;
+}
+
+function BuildMeta() {
+  const [meta, setMeta] = useState<BuildMetaState>({
+    updatedAt: BUILD_UPDATED_AT,
+    version: BUILD_VERSION,
+  });
+  const [now, setNow] = useState(() => new Date(BUILD_UPDATED_AT).getTime());
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadMeta = () => {
+      fetch("/api/build-meta", { cache: "no-store" })
+        .then((response) => (response.ok ? response.json() : null))
+        .then((nextMeta: Partial<BuildMetaState> | null) => {
+          if (cancelled || !nextMeta?.updatedAt || !nextMeta?.version) return;
+          setMeta({ updatedAt: nextMeta.updatedAt, version: nextMeta.version });
+        })
+        .catch(() => {});
+    };
+
+    loadMeta();
+    setNow(Date.now());
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    const metaTimer = window.setInterval(loadMeta, 15000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+      window.clearInterval(metaTimer);
+    };
+  }, []);
+
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[#77777d]">
+      <span>{meta.version}</span>
+      <span aria-hidden>·</span>
+      <span>updated {formatElapsedBefore(meta.updatedAt, now)}</span>
+    </div>
+  );
+}
+
 function ProjectMedia({ project, tone = "light" }: { project: Project; tone?: "light" | "dark" }) {
   const src = project.image ?? project.icon;
   const isLogo = project.title === "Atlas" || project.title === "Portfolio AI";
-  const mediaBg = tone === "dark" ? "bg-[#191919]" : "bg-[#e5e5e5]";
+  const mediaBg = tone === "dark" ? "bg-[#101012]" : "bg-[#0b0b0d]";
 
   if (src) {
     return (
-      <div className={`relative aspect-[1.28] w-full overflow-hidden rounded-[10px] ${mediaBg}`}>
+      <div className={`relative aspect-[1.5] w-full overflow-hidden rounded-[22px] ${mediaBg}`}>
         <img
           src={src}
           alt={project.title}
           loading="lazy"
           decoding="async"
           draggable={false}
-          className={`h-full w-full transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035] ${
-            isLogo ? "object-contain p-10 sm:p-14" : "object-cover"
+          className={`h-full w-full object-contain transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035] ${
+            isLogo ? "p-12 sm:p-20" : "p-8 sm:p-12"
           }`}
           style={{ filter: "grayscale(1) contrast(1.02)" }}
         />
@@ -300,7 +379,7 @@ function ProjectMedia({ project, tone = "light" }: { project: Project; tone?: "l
   }
 
   return (
-    <div className={`flex aspect-[1.28] w-full items-center justify-center rounded-[10px] ${mediaBg} text-4xl ${tone === "dark" ? "text-white" : "text-[#090712]"}`}>
+    <div className={`flex aspect-[1.5] w-full items-center justify-center rounded-[22px] ${mediaBg} text-4xl text-[#f4f4f5]`}>
       {project.glyph ?? project.title.charAt(0)}
     </div>
   );
@@ -331,6 +410,27 @@ function ProjectMark({ project, compact = false }: { project: Project; compact?:
   );
 }
 
+function IntroLink({
+  href,
+  children,
+  external = false,
+}: {
+  href: string;
+  children: string;
+  external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      className="text-[13px] text-[rgba(255,255,255,0.68)] underline decoration-[rgba(255,255,255,0.68)] decoration-[1px] underline-offset-4 outline-none transition-colors duration-300 hover:text-[#f4f4f5] hover:decoration-[#f4f4f5] focus-visible:text-[#f4f4f5] focus-visible:decoration-[#f4f4f5]"
+    >
+      {children}
+    </a>
+  );
+}
+
 function SelectedProjectCard({
   project,
   index,
@@ -351,20 +451,20 @@ function SelectedProjectCard({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
       data-work-card="true"
-      className={`group w-[min(72vw,420px)] shrink-0 snap-start text-left outline-none transition-transform duration-300 focus-visible:ring-2 focus-visible:ring-[#090712] focus-visible:ring-offset-4 ${
-        isActive ? "scale-100 opacity-100" : "scale-[0.94] opacity-65 hover:opacity-100"
+      className={`group w-[min(74vw,680px)] shrink-0 snap-center text-left outline-none transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] ${
+        isActive ? "scale-100 opacity-100" : "scale-[0.96] opacity-70 hover:opacity-100"
       }`}
     >
       <ProjectMedia project={project} />
       <span className="mt-3 flex items-start justify-between gap-4">
         <span className="min-w-0">
-          <span className="block text-[15px] font-normal leading-tight text-[#090712]">{project.title}</span>
-          <span className="mt-1 block text-[13px] leading-snug text-[#77777d]">
+          <span className="block text-[15px] font-normal leading-tight text-[#f4f4f5]">{project.title}</span>
+          <span className="mt-1 block text-[13px] leading-snug text-white/55">
             {project.comingSoon ? project.unavailableMessage ?? "Coming soon." : project.studioLabel ?? project.description}
           </span>
         </span>
         {!project.comingSoon && (
-          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[#090712] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[#f4f4f5] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
         )}
       </span>
     </motion.button>
@@ -375,27 +475,19 @@ function EditorialIntro() {
   return (
     <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center px-6 pb-16 pt-[92px] sm:px-10 md:pb-20 md:pt-[122px]">
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <p className="text-[13px] leading-relaxed text-[#090712]">minwook</p>
-        <p className="mt-3 text-[14px] leading-relaxed text-[#77777d]">Design engineer / AI product studio</p>
-        <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#090712] md:text-[36px]">
+        <p className="text-[13px] leading-relaxed text-[#f4f4f5]">minwook shin</p>
+        <p className="mt-1 text-[14px] leading-relaxed text-white/55">Design engineer / AI product studio</p>
+        <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#f4f4f5] md:text-[36px]">
           Interfaces for AI products, websites, and prototypes that move from early idea to working software.
         </h1>
-        <p className="mt-6 max-w-[520px] text-[16px] leading-[1.62] text-[#55555c]">
+        <p className="mt-3 max-w-[520px] text-[16px] leading-[1.5] text-white/60">
           I work as a hands-on design engineer and compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.
         </p>
-        <div className="mt-7 flex flex-wrap justify-start gap-2">
-          <a href={`mailto:${PERSONAL_INFO.email}`} className="rounded-[8px] bg-[#eeeeef] px-3 py-2 text-[13px] text-[#090712] transition-colors hover:bg-[#dfdfe4]">
-            Email
-          </a>
-          <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer" className="rounded-[8px] bg-[#eeeeef] px-3 py-2 text-[13px] text-[#090712] transition-colors hover:bg-[#dfdfe4]">
-            LinkedIn
-          </a>
-          <a href={PERSONAL_INFO.github} target="_blank" rel="noopener noreferrer" className="rounded-[8px] bg-[#eeeeef] px-3 py-2 text-[13px] text-[#090712] transition-colors hover:bg-[#dfdfe4]">
-            GitHub
-          </a>
-          <a href={PERSONAL_INFO.resume} target="_blank" rel="noopener noreferrer" className="rounded-[8px] bg-[#090712] px-3 py-2 text-[13px] text-white transition-opacity hover:opacity-80">
-            Resume
-          </a>
+        <div className="mt-7 flex flex-wrap justify-start gap-x-5 gap-y-2">
+          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>Email</IntroLink>
+          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
+          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
+          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
         </div>
       </div>
     </section>
@@ -434,18 +526,21 @@ function WorkSection({
     const cards = Array.from(scroller?.querySelectorAll<HTMLElement>("[data-work-card]") ?? []);
     const card = cards[index];
     if (!scroller || !card) return;
-    const firstCardLeft = cards[0]?.offsetLeft ?? 0;
+    const scrollerRect = scroller.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const delta = cardRect.left + cardRect.width / 2 - (scrollerRect.left + scrollerRect.width / 2);
+    const target = scroller.scrollLeft + delta;
     const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-    scroller.scrollTo({ left: Math.min(card.offsetLeft - firstCardLeft, maxScroll), behavior: "smooth" });
+    scroller.scrollTo({ left: Math.min(Math.max(target, 0), maxScroll), behavior: "smooth" });
     setActiveIndex(index);
   };
 
   return (
     <section id="work" className="mx-auto w-full max-w-[1180px] px-6 py-14 sm:px-10 md:py-20">
-      <div className="mb-9 flex justify-center">
+      <div className="mb-12 flex justify-center">
         <div className="w-full max-w-[620px] text-left">
-          <h2 className="text-[18px] font-normal text-[#090712]">Selected work</h2>
-          <p className="mt-3 max-w-[520px] text-[15px] leading-[1.58] text-[#77777d]">
+          <h2 className="text-[18px] font-normal text-[#f4f4f5]">Selected work</h2>
+          <p className="mt-3 max-w-[500px] text-[15px] leading-[1.58] text-white/55">
             Product interfaces, AI-native websites, native prototypes, and fast-moving experiments. Open a project for the deeper case-study sheet.
           </p>
         </div>
@@ -453,9 +548,12 @@ function WorkSection({
       <div
         ref={carouselRef}
         onScroll={updateActiveProject}
-        className="mx-auto w-full max-w-[620px] snap-x snap-mandatory overflow-x-auto pb-3 [scrollbar-width:none]"
+        className="relative left-1/2 w-screen -translate-x-1/2 snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain pb-4 [scrollbar-width:none]"
       >
-        <div className="flex w-max gap-4 md:gap-5">
+        <div
+          className="flex w-max gap-[clamp(1.5rem,4vw,3.5rem)]"
+          style={{ paddingInline: "calc((100vw - min(74vw, 680px)) / 2)" }}
+        >
           {projects.map((project, index) => (
             <SelectedProjectCard
               key={project.id}
@@ -467,7 +565,7 @@ function WorkSection({
           ))}
         </div>
       </div>
-      <div className="mx-auto mt-3 flex w-full max-w-[620px] items-center justify-center gap-4" aria-label="Selected work carousel">
+      <div className="mx-auto mt-4 flex w-full max-w-[620px] items-center justify-center gap-4" aria-label="Selected work carousel">
         {projects.map((project, index) => {
           const isActive = index === activeIndex;
           return (
@@ -477,10 +575,14 @@ function WorkSection({
               onClick={() => scrollToProject(index)}
               aria-label={`Show ${project.title}`}
               aria-current={isActive ? "true" : undefined}
-              className={`h-2 rounded-full outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#090712]/25 focus-visible:ring-offset-2 ${
-                isActive ? "w-12 bg-[#090712]" : "w-2 bg-[#8e8e93]"
-              }`}
-            />
+              className="group flex h-6 min-w-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 hover:bg-white/[0.08] focus-visible:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
+            >
+              <span
+                className={`rounded-full transition-all duration-300 ${
+                  isActive ? "h-[3px] w-9 bg-[#f4f4f5]" : "h-[3px] w-[3px] bg-white/40 group-hover:bg-white/65"
+                }`}
+              />
+            </button>
           );
         })}
       </div>
@@ -488,18 +590,66 @@ function WorkSection({
   );
 }
 
-function LabChatTile({
-  onAsk,
-}: {
-  onAsk: (message: string) => void;
-}) {
+function LabChatTile() {
   const [draft, setDraft] = useState("");
+  const [messages, setMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const historyRef = useRef<HTMLDivElement>(null);
 
-  const sendDraft = () => {
+  useEffect(() => {
+    historyRef.current?.scrollTo({
+      top: historyRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages]);
+
+  const sendDraft = async () => {
     const message = draft.trim();
-    if (!message) return;
-    onAsk(message);
+    if (!message || isStreaming) return;
+    const userMessage = { id: `${Date.now()}-user`, role: "user" as const, content: message };
+    const nextMessages = [...messages, userMessage];
+    const assistantId = `${Date.now()}-assistant`;
+
+    setMessages([...nextMessages, { id: assistantId, role: "assistant", content: "" }]);
     setDraft("");
+    setIsStreaming(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: nextMessages,
+          context: "The user is using the Ask me live demo inside the Lab / archive bento tile. Keep the answer concise so it fits inside the card.",
+        }),
+      });
+
+      if (!res.ok) throw new Error("API error");
+      if (!res.body) throw new Error("No response body");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullText += decoder.decode(value);
+        setMessages((prev) =>
+          prev.map((msg) => (msg.id === assistantId ? { ...msg, content: fullText } : msg))
+        );
+      }
+    } catch {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantId
+            ? { ...msg, content: "I hit an error in this demo. Try again in a moment." }
+            : msg
+        )
+      );
+    } finally {
+      setIsStreaming(false);
+    }
   };
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -513,13 +663,36 @@ function LabChatTile({
     sendDraft();
   };
 
+  const hasMessages = messages.length > 0;
+
   return (
-    <div className="mb-4 break-inside-avoid">
+    <div
+      className={`w-full overflow-hidden rounded-[10px] bg-white p-3 text-[#050505] ${
+        hasMessages ? "h-[520px]" : LAB_TILE_HEIGHTS[0]
+      }`}
+    >
       <form
         onSubmit={submit}
-        className="flex aspect-[1.28] w-full flex-col justify-end rounded-[10px] bg-[#191919] p-4 text-[#090712]"
+        className="flex h-full min-h-0 w-full flex-col bg-[#f5f5f5] p-4 text-[#050505] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
       >
-        <div className="flex h-16 w-full min-w-0 bg-[#EEEEF0]">
+        <div ref={historyRef} className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1">
+          {messages.map((msg) => {
+            const body = msg.role === "assistant" ? parseAssistant(msg.content).body : msg.content;
+            const isUser = msg.role === "user";
+            return (
+              <div key={msg.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+                <div
+                  className={`max-w-[88%] px-3 py-2 leading-snug ${
+                    isUser ? "bg-[#050505] text-white" : "bg-white text-[#050505]"
+                  }`}
+                >
+                  <p className="whitespace-pre-wrap">{body || (isStreaming ? "..." : "")}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3 flex h-16 w-full min-w-0 bg-white">
           <input
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
@@ -531,15 +704,13 @@ function LabChatTile({
           <button
             type="submit"
             aria-label="Send"
-            disabled={!draft.trim()}
+            disabled={!draft.trim() || isStreaming}
             className="flex h-16 w-16 shrink-0 items-center justify-center transition-opacity disabled:opacity-30"
           >
             <ArrowRight className="h-5 w-5" strokeWidth={2.25} />
           </button>
         </div>
       </form>
-      <span className="mt-3 block text-[15px] font-normal leading-tight text-white">Ask me</span>
-      <span className="mt-1 block text-[13px] leading-snug text-white/55">Live studio chat</span>
     </div>
   );
 }
@@ -548,13 +719,16 @@ function LabProjectTile({
   project,
   index,
   onSelect,
+  className = "",
 }: {
   project: Project;
   index: number;
   onSelect: (project: Project) => void;
+  className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+  const src = project.image ?? project.icon;
 
   const playPreview = () => {
     const video = videoRef.current;
@@ -582,9 +756,19 @@ function LabProjectTile({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
-      className="group mb-4 break-inside-avoid text-left outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505]"
+      className={`group relative w-full overflow-hidden rounded-[10px] bg-[#f5f5f5] text-left outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${className}`}
     >
-      <div className="relative aspect-[1.28] w-full overflow-hidden rounded-[10px] bg-[#191919]">
+      <div className="absolute inset-0 overflow-hidden">
+        {src && (
+          <img
+            src={src}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className="h-full w-full object-cover grayscale transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+          />
+        )}
         {previewVideo && (
           <video
             ref={videoRef}
@@ -598,29 +782,22 @@ function LabProjectTile({
             <source src={previewVideo} type="video/mp4" />
           </video>
         )}
-        <div
-          className={`absolute inset-0 flex items-center justify-center text-white transition duration-500 ${
-            previewVideo ? "group-hover:scale-[0.92] group-hover:opacity-0 group-focus-visible:scale-[0.92] group-focus-visible:opacity-0" : "group-hover:scale-[1.04]"
-          }`}
-        >
-          <ProjectMark project={project} />
-        </div>
-        {previewVideo && (
-          <div className="absolute left-3 top-3 flex h-9 min-w-9 items-center justify-center rounded-[6px] bg-white/88 px-2 text-[#090712] opacity-0 shadow-sm backdrop-blur transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-            <ProjectMark project={project} compact />
+        {!src && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#eeeeef] text-[#050505] transition duration-500 group-hover:scale-[1.04]">
+            <ProjectMark project={project} />
           </div>
         )}
       </div>
-      <span className="mt-3 flex items-start justify-between gap-4">
-        <span className="min-w-0">
-          <span className="block text-[15px] font-normal leading-tight text-white">{project.title}</span>
-          <span className="mt-1 block text-[13px] leading-snug text-white/55">
-            {project.studioLabel ?? project.description}
+      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/72 via-black/28 to-transparent p-4 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+        <span className="flex items-end justify-between gap-4">
+          <span className="min-w-0">
+            <span className="block font-normal leading-tight text-white">{project.title}</span>
+            <span className="mt-1 block leading-snug text-white/62">
+              {project.studioLabel ?? project.description}
+            </span>
           </span>
+          {!project.comingSoon && <ArrowUpRight className="h-4 w-4 shrink-0 text-white" />}
         </span>
-        {!project.comingSoon && (
-          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-        )}
       </span>
     </motion.button>
   );
@@ -629,26 +806,50 @@ function LabProjectTile({
 function LabArchive({
   projects,
   onSelect,
-  onAsk,
 }: {
   projects: Project[];
   onSelect: (project: Project) => void;
-  onAsk: (message: string) => void;
 }) {
+  const labColumns: Array<Array<{ project: Project; index: number }>> = [[], [], [], []];
+  const labColumnHeights = [LAB_TILE_HEIGHT_VALUES[0], 0, 0, 0];
+  projects.forEach((project, index) => {
+    const preferredColumns = [1, 2, 3, 0];
+    const columnIndex = preferredColumns.reduce((shortest, candidate) =>
+      labColumnHeights[candidate] < labColumnHeights[shortest] ? candidate : shortest
+    );
+    labColumns[columnIndex].push({ project, index });
+    labColumnHeights[columnIndex] += LAB_TILE_HEIGHT_VALUES[(index + 1) % LAB_TILE_HEIGHT_VALUES.length] + 12;
+  });
+
   return (
-    <section className="mt-20 rounded-t-[28px] bg-[#050505] px-6 pb-44 pt-20 text-white sm:px-10 md:pt-28">
+    <section className="lab-cursor-dark mt-20 rounded-t-[28px] bg-white px-6 pb-44 pt-20 text-[#050505] sm:px-10 md:pt-28">
       <div className="mx-auto w-full max-w-[1180px]">
-        <div className="mb-12 grid gap-4 md:grid-cols-[1fr_1.2fr]">
-          <h2 className="text-[18px] font-normal">Lab / archive</h2>
-          <p className="max-w-[560px] text-[15px] leading-[1.58] text-white/55">
-            Smaller demos, experiments, and product sketches live here so the main page stays simple while the body of work stays accessible.
-          </p>
+        <div className="mb-8 flex justify-center">
+          <div className="w-full max-w-[620px] text-left">
+            <h2 className="text-[18px] font-normal text-[#050505]">Lab / archive</h2>
+            <p className="mt-2 max-w-[500px] text-[15px] leading-[1.52] text-[#77777d]">
+              Projects, demos, experiments, and product sketches live here so the main page stays simple while the body of work stays accessible.
+            </p>
+          </div>
         </div>
-        <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4">
-          <LabChatTile onAsk={onAsk} />
-          {projects.map((project, index) => (
-            <LabProjectTile key={project.id} project={project} index={index} onSelect={onSelect} />
+        <div className="mx-auto grid w-full max-w-[1040px] gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {labColumns.map((column, columnIndex) => (
+            <div key={columnIndex} className="flex min-w-0 flex-col gap-3">
+              {columnIndex === 0 && <LabChatTile />}
+              {column.map(({ project, index }) => (
+                <LabProjectTile
+                  key={project.id}
+                  project={project}
+                  index={index}
+                  onSelect={onSelect}
+                  className={LAB_TILE_HEIGHTS[(index + 1) % LAB_TILE_HEIGHTS.length]}
+                />
+              ))}
+            </div>
           ))}
+        </div>
+        <div className="mx-auto mt-10 w-full max-w-[620px]">
+          <BuildMeta />
         </div>
       </div>
     </section>
@@ -660,6 +861,7 @@ export default function Home() {
   const [hasStarted, setHasStarted] = useState(false);
   const [heroProject, setHeroProject] = useState<Project | null>(null);
   const [showProfile, setShowProfile] = useState(false);
+  const [projectDetailSource, setProjectDetailSource] = useState<"work" | "archive" | null>(null);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (project detail / profile / globe) instead of snapping back home. The
   // backing view stays mounted, dimmed behind a scrim. Opening a view
@@ -668,17 +870,13 @@ export default function Home() {
   const [chatOnTop, setChatOnTop] = useState(false);
   const [detailFocus, setDetailFocus] = useState<string | null>(null);
   const [projectNotice, setProjectNotice] = useState<string | null>(null);
-  // Landing intro: a short "minwook" signature appears center, then rises to
-  // the header slot before the editorial page takes over.
-  const [introUp, setIntroUp] = useState(false);
-  const [introDone, setIntroDone] = useState(false);
-  const [introTopY, setIntroTopY] = useState(0);
+  // Keep the landing motion quiet: the page simply settles in, with no separate
+  // logo trace or position handoff.
+  const [introReady, setIntroReady] = useState(false);
 
   useEffect(() => {
-    setIntroTopY(-(window.innerHeight / 2 - 48));
-    const t1 = setTimeout(() => setIntroUp(true), 650);
-    const t2 = setTimeout(() => setIntroDone(true), 1250);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const timer = setTimeout(() => setIntroReady(true), 80);
+    return () => clearTimeout(timer);
   }, []);
   const [showResume, setShowResume] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -778,6 +976,7 @@ export default function Home() {
     setChatOnTop(false);
     setShowProfile(false);
     setHeroProject(null);
+    setProjectDetailSource(null);
     setDetailFocus(null);
     setShowResume(false);
   };
@@ -789,6 +988,7 @@ export default function Home() {
     setChatOnTop(false);
     setShowProfile(false);
     setHeroProject(null);
+    setProjectDetailSource(null);
     setDetailFocus(null);
     setShowResume(false);
   };
@@ -806,26 +1006,27 @@ export default function Home() {
     setHasStarted(false);
     setShowProfile(false);
     setHeroProject(null);
+    setProjectDetailSource(null);
     requestAnimationFrame(() => {
       document.getElementById("profile")?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   };
 
-  const openProject = (project: Project) => {
+  const openProject = (project: Project, source: "work" | "archive" = "work") => {
     if (project.comingSoon) {
-      setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
       return;
     }
     setChatOnTop(false);
     setShowProfile(false);
     setDetailFocus(null);
+    setProjectDetailSource(source);
     setHeroProject(project);
   };
 
   // Esc closes whichever overlay is open (pairs with the on-screen ESC keycap).
   useEffect(() => {
     if (!heroProject && !showProfile) return;
-    const onKey = (e: KeyboardEvent) => {
+    const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key !== "Escape") return;
       closeOverlay();
     };
@@ -839,10 +1040,11 @@ export default function Home() {
     exit: { y: "100%", opacity: 1 },
     transition: { type: "tween", duration: 0.62, ease: [0.22, 1, 0.36, 1] as const },
   } as const;
+  const isArchiveDetail = Boolean(heroProject && projectDetailSource === "archive");
 
   return (
     <main
-      className="site-text-14 min-h-screen overflow-x-hidden bg-white text-[#090712]"
+      className="site-text-16 min-h-screen overflow-x-hidden bg-[#050505] text-[#f4f4f5]"
       style={{ backgroundColor: "var(--md-surface)" }}
     >
 
@@ -867,54 +1069,22 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Landing intro - brief signature mark before the editorial page fades in. */}
-      <AnimatePresence>
-        {!introDone && !hasStarted && (
-          <motion.div
-            key="intro-name"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none"
-          >
-            <motion.div
-              initial={{ y: 0, scale: 2.4 }}
-              animate={{ y: introUp ? introTopY : 0, scale: introUp ? 1 : 2.4 }}
-              transition={springs.island}
-            >
-              <svg viewBox="0 0 110 24" width="110" height="24" className="overflow-visible" role="img" aria-label="minwook">
-                <text
-                  x="55"
-                  y="12"
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  className="trace-text lowercase"
-                  style={{ fontSize: "16px", fontFamily: "var(--font-google-sans), sans-serif", fontWeight: 300, letterSpacing: "-0.045em" }}
-                >
-                  minwook
-                </text>
-              </svg>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <motion.div
-        initial={false}
-        animate={{ opacity: introDone ? 1 : 0, y: introDone ? 0 : 10 }}
-        transition={springs.spatialDefault}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: introReady ? 1 : 0, y: introReady ? 0 : 8 }}
+        transition={{ type: "tween", duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
       >
         <EditorialIntro />
         <WorkSection projects={featuredProjects} onSelect={openProject} />
         <LabArchive
           projects={archiveProjects}
-          onSelect={openProject}
-          onAsk={handleMessage}
+          onSelect={(project) => openProject(project, "archive")}
         />
       </motion.div>
 
-      {/* Project detail - bottom sheet, closer to the reference site's gallery sheets. */}
+      {/* Project detail - selected work stays a sheet; archive items open as centered lightboxes. */}
       <AnimatePresence>
-        {heroProject && (
+        {heroProject && !isArchiveDetail && (
           <motion.div
             key="hero-scrim"
             initial={{ opacity: 0 }}
@@ -926,19 +1096,19 @@ export default function Home() {
             aria-hidden
           />
         )}
-        {heroProject && (
+        {heroProject && !isArchiveDetail && (
           <motion.div
             key="hero-detail"
             {...sheetMotion}
             onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
-            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-white shadow-[0_-24px_80px_rgba(0,0,0,0.22)]"
+            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-[#050505] shadow-[0_-24px_80px_rgba(0,0,0,0.42)]"
           >
-            <div className="sticky top-0 z-10 flex justify-center bg-white/85 pb-3 pt-4 backdrop-blur-xl">
+            <div className="sticky top-0 z-10 flex justify-center bg-[#050505]/85 pb-3 pt-4 backdrop-blur-xl">
               <button
                 type="button"
                 onClick={closeOverlay}
                 aria-label="Close project"
-                className="h-1.5 w-14 rounded-full bg-[#d9d9de]"
+                className="h-1.5 w-14 rounded-full bg-white/30"
               />
             </div>
             <div className="max-h-[calc(100dvh-62px)] overflow-y-auto overscroll-contain">
@@ -952,6 +1122,43 @@ export default function Home() {
               />
               </div>
             </div>
+          </motion.div>
+        )}
+        {heroProject && isArchiveDetail && (
+          <motion.div
+            key="archive-lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24 }}
+            onClick={closeOverlay}
+            className="project-lightbox-close-zone fixed inset-0 z-[70] flex items-center justify-center bg-white/92 p-4 backdrop-blur-[18px] sm:p-10"
+          >
+            <button
+              type="button"
+              onClick={closeOverlay}
+              aria-label="Close project"
+              className="project-lightbox-close-button fixed left-4 top-4 z-[72] flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#050505] shadow-[0_14px_40px_rgba(5,5,5,0.12)] transition-transform duration-300 hover:scale-105 sm:left-8 sm:top-1/2 sm:-translate-y-1/2"
+            >
+              <X className="h-5 w-5" strokeWidth={2} />
+            </button>
+            <motion.div
+              initial={{ opacity: 0, y: 22, scale: 0.975 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 18, scale: 0.985 }}
+              transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(event) => event.stopPropagation()}
+              style={LIGHT_PROJECT_TOKENS}
+              className="project-lightbox-content relative max-h-[calc(100dvh-72px)] w-full max-w-[1120px] overflow-y-auto overscroll-contain rounded-[18px] bg-surface p-5 text-on-surface shadow-[0_24px_90px_rgba(5,5,5,0.16)] sm:max-h-[calc(100dvh-96px)] sm:p-8"
+            >
+              <ProjectDetailView
+                project={heroProject}
+                onBack={closeOverlay}
+                hideBack
+                focusQuery={detailFocus}
+                onAsk={handleMessage}
+              />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -975,14 +1182,14 @@ export default function Home() {
             key="profile"
             {...sheetMotion}
             onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
-            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-white shadow-[0_-24px_80px_rgba(0,0,0,0.22)]"
+            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-[#050505] shadow-[0_-24px_80px_rgba(0,0,0,0.42)]"
           >
-            <div className="sticky top-0 z-10 flex justify-center bg-white/85 pb-3 pt-4 backdrop-blur-xl">
+            <div className="sticky top-0 z-10 flex justify-center bg-[#050505]/85 pb-3 pt-4 backdrop-blur-xl">
               <button
                 type="button"
                 onClick={closeOverlay}
                 aria-label="Close profile"
-                className="h-1.5 w-14 rounded-full bg-[#d9d9de]"
+                className="h-1.5 w-14 rounded-full bg-white/30"
               />
             </div>
             <div className="max-h-[calc(100dvh-62px)] overflow-y-auto overscroll-contain pb-28">
@@ -1003,7 +1210,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-[#EEEEF0] text-on-surface rounded-none font-normal transition-all"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-surface-container-high text-on-surface rounded-none font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     {showResume ? 'Hide Resume' : 'View Resume'}
@@ -1014,7 +1221,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="bg-[#EEEEF0] flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-none font-normal transition-all"
+                    className="bg-surface-container-high flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-none font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     Download PDF
@@ -1121,7 +1328,7 @@ export default function Home() {
                       className={`rounded-none px-4 py-3 ${
                         isUser
                           ? "bg-on-surface text-surface"
-                          : "bg-[#EEEEF0] text-on-surface"
+                          : "bg-surface-container-high text-on-surface"
                       }`}
                     >
                       {isUser ? (
@@ -1154,7 +1361,7 @@ export default function Home() {
                                 setHeroProject(target);
                               }
                             }}
-                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-none bg-[#EEEEF0] text-on-surface text-xs font-normal hover:bg-[#e1e1e5] transition-colors"
+                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-none bg-surface-container-high text-on-surface text-xs font-normal hover:bg-outline-variant transition-colors"
                           >
                               {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1174,7 +1381,7 @@ export default function Home() {
                             transition={{ ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="hover:bg-[#e1e1e5] bg-[#EEEEF0] inline-flex items-center px-3 py-2 rounded-none text-on-surface text-xs font-normal transition-colors"
+                            className="hover:bg-outline-variant bg-surface-container-high inline-flex items-center px-3 py-2 rounded-none text-on-surface text-xs font-normal transition-colors"
                           >
                             {f}
                           </motion.button>
@@ -1193,7 +1400,7 @@ export default function Home() {
                   transition={springs.spatialFast}
                   className="flex justify-start"
                 >
-                  <div className="bg-[#EEEEF0] rounded-none px-4 py-3">
+                  <div className="bg-surface-container-high rounded-none px-4 py-3">
                     <div className="flex items-center space-x-2">
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
@@ -1222,7 +1429,7 @@ export default function Home() {
           linkedinUrl={heroProject?.linkedin}
           onClose={heroProject || showProfile ? closeOverlay : undefined}
           onFocusInput={reopenChat}
-          introReady={introDone}
+          introReady={introReady}
         />
       )}
     </main>
