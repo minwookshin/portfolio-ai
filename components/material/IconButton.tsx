@@ -45,7 +45,7 @@ export function IconButton({
       onClick={onClick}
       initial={false}
       animate={{ borderRadius: 0 }}
-      whileTap={reduce || disabled ? undefined : { scale: 0.92 }}
+      whileTap={reduce || disabled ? undefined : { scale: 0.96 }}
       transition={springs.pressMorph}
       className={[
         "relative inline-flex items-center justify-center outline-none",
@@ -53,7 +53,7 @@ export function IconButton({
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
         "disabled:opacity-40 disabled:pointer-events-none",
         "before:absolute before:inset-0 before:bg-current before:opacity-0 hover:before:opacity-[0.08] active:before:opacity-[0.10] before:transition-opacity",
-        selected ? "bg-primary text-on-primary" : "bg-transparent text-on-surface",
+        "bg-[#EEEEF0] text-on-surface",
         sizeClasses[size],
         className,
       ].join(" ")}

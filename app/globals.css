@@ -1,29 +1,29 @@
 /* Nothing OS Design Tokens */
 :root {
-  --bg: #F2F2F2;
+  --bg: #FFFFFF;
   --bg-surface: #FFFFFF;
-  --card-a-bg: #0D0D0D;
+  --card-a-bg: #090712;
   --card-a-text: #F5F5F5;
   --card-b-bg: #FFFFFF;
-  --card-b-text: #0D0D0D;
-  --text-primary: #0D0D0D;
+  --card-b-text: #090712;
+  --text-primary: #090712;
   --text-muted: #999999;
   --border: #E0E0E0;
   --input-bg: #FFFFFF;
-  --input-text: #0D0D0D;
+  --input-text: #090712;
   --input-border: #E0E0E0;
-  --bubble-user-bg: #0D0D0D;
+  --bubble-user-bg: #090712;
   --bubble-user-text: #F5F5F5;
   --bubble-ai-bg: #FFFFFF;
-  --bubble-ai-text: #0D0D0D;
+  --bubble-ai-text: #090712;
   --bubble-ai-border: #E0E0E0;
-  --btn-primary-bg: #0D0D0D;
+  --btn-primary-bg: #090712;
   --btn-primary-text: #F5F5F5;
   --btn-secondary-bg: #F2F2F2;
-  --btn-secondary-text: #0D0D0D;
+  --btn-secondary-text: #090712;
   --btn-secondary-border: #E0E0E0;
   --accent: #FF2D2D;
-  --gradient-fade: rgba(242, 242, 242, 0);
+  --gradient-fade: rgba(255, 255, 255, 0);
 }
 
 /* Base font */
@@ -34,10 +34,10 @@ body {
   transition: background-color 0.3s ease;
 }
 
-/* Custom cursor: a filled black dot everywhere, including over interactive
+/* Custom cursor: a filled near-black dot everywhere, including over interactive
    elements. */
 * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23000002'/%3E%3C/svg%3E") 6 6, auto !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23090712'/%3E%3C/svg%3E") 6 6, auto !important;
 }
 
 /* Hide scrollbars everywhere (scrolling still works) for a cleaner look */
@@ -53,9 +53,9 @@ body {
 
 /* Brief highlight when the chat deep-links to a section of a project detail */
 @keyframes sectionFlash {
-  0%   { background-color: rgba(41, 42, 46, 0); box-shadow: 0 0 0 0 rgba(41, 42, 46, 0); }
-  18%  { background-color: rgba(41, 42, 46, 0.10); box-shadow: 0 0 0 6px rgba(41, 42, 46, 0.06); }
-  100% { background-color: rgba(41, 42, 46, 0); box-shadow: 0 0 0 0 rgba(41, 42, 46, 0); }
+  0%   { background-color: rgba(9, 7, 18, 0); box-shadow: 0 0 0 0 rgba(9, 7, 18, 0); }
+  18%  { background-color: rgba(9, 7, 18, 0.10); box-shadow: 0 0 0 6px rgba(9, 7, 18, 0.06); }
+  100% { background-color: rgba(9, 7, 18, 0); box-shadow: 0 0 0 0 rgba(9, 7, 18, 0); }
 }
 .section-flash {
   animation: sectionFlash 2.4s ease-out;
@@ -70,6 +70,18 @@ body {
    which is the main source of animation jank. */
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  opacity: 0.11;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23grain)' opacity='0.62'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }
 
 @tailwind base;
@@ -140,15 +152,15 @@ body {
   --md-surface: #FFFFFF;
   --md-surface-container: #fafafa;
   --md-surface-container-high: #e2e2e2;
-  --md-on-surface: #000002;
-  --md-on-surface-variant: #1a1a1c;
+  --md-on-surface: #090712;
+  --md-on-surface-variant: #272330;
   --md-outline: #cecece;
   --md-outline-variant: #e2e2e2;
-  --md-primary: #000002;
+  --md-primary: #090712;
   --md-on-primary: #fafafc;
   --md-primary-container: #e2e2e2;
-  --md-on-primary-container: #1a1a1c;
-  --md-hairline: rgba(0, 0, 2, 0.1);
+  --md-on-primary-container: #272330;
+  --md-hairline: rgba(9, 7, 18, 0.1);
 
   /* shape scale (px) */
   --md-shape-xs: 0px;
