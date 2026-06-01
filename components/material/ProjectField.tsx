@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Project } from "@/components/ProjectCard";
 
@@ -139,29 +139,24 @@ export function ProjectField({
   const raf = useRef<number | null>(null);
   const autoDir = useRef(1);
   const autoPausedUntil = useRef(0);
-  const placementRef = useRef(placement);
-  placementRef.current = placement;
 
-  const paint = () => {
+  const paint = useCallback(() => {
     const { x, y } = pan.current;
     if (worldRef.current) worldRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-  };
-  const paintRef = useRef(paint);
-  paintRef.current = paint;
+  }, []);
 
   // Re-clamp the pan and repaint when the project mode changes the layout.
   useEffect(() => {
     pan.current.x = Math.max(-clampX, Math.min(clampX, pan.current.x));
     pan.current.y = Math.max(-clampY, Math.min(clampY, pan.current.y));
     paint();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placement]);
+  }, [clampX, clampY, paint, placement]);
 
   useEffect(() => {
     if (clampX <= 1) {
       pan.current.x = 0;
       pan.current.y = 0;
-      paintRef.current();
+      paint();
       return;
     }
 
@@ -186,7 +181,7 @@ export function ProjectField({
           pan.current.x = next;
         }
         pan.current.y = 0;
-        paintRef.current();
+        paint();
       }
 
       frame = requestAnimationFrame(tick);
@@ -194,7 +189,7 @@ export function ProjectField({
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [clampX, isMobile, revealed]);
+  }, [clampX, isMobile, paint, revealed]);
 
   const onPointerDown = (e: React.PointerEvent) => {
     autoPausedUntil.current = performance.now() + 2400;

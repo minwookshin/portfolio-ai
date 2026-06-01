@@ -62,7 +62,7 @@ async function getUpdatedAt() {
   const mtimes = await Promise.all(
     WATCH_PATHS.map(async (watchPath) => {
       try {
-        return await newestMtime(path.join(ROOT, watchPath));
+        return await newestMtime(path.join(/* turbopackIgnore: true */ process.cwd(), watchPath));
       } catch {
         return 0;
       }
