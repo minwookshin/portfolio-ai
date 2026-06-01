@@ -928,8 +928,16 @@ export default function Home() {
       ? `The user is viewing my profile / resume / contact page.`
       : '';
 
-    // Add user message
-    const userMsg = { id: Date.now().toString(), role: 'user' as const, content: message };
+    const messageIdSeed = `${messages.length}-${message.length}`;
+    const userMsg = { id: `user-${messageIdSeed}`, role: 'user' as const, content: message };
+    const assistantId = `assistant-${messageIdSeed}`;
+
+    const updateAssistantMessage = (content: string) => {
+      setMessages(prev => prev.map(msg =>
+        msg.id === assistantId ? { ...msg, content } : msg
+      ));
+    };
+
     setMessages(prev => [...prev, userMsg]);
     setIsStreaming(true);
 
@@ -945,40 +953,31 @@ export default function Home() {
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let fullText = '';
 
-      // Add empty assistant message that we'll update
-      const assistantId = Date.now().toString();
       setMessages(prev => [...prev, { id: assistantId, role: 'assistant' as const, content: '' }]);
 
-      while (true) {
+      const readStream = async (currentText: string): Promise<void> => {
         const { done, value } = await reader.read();
         if (done) {
           const tail = decoder.decode();
-          if (tail) {
-            fullText += tail;
-            setMessages(prev => prev.map(msg =>
-              msg.id === assistantId ? { ...msg, content: fullText } : msg
-            ));
-          }
-          break;
+          const finalText = tail ? `${currentText}${tail}` : currentText;
+          if (tail) updateAssistantMessage(finalText);
+          return;
         }
 
-        const text = decoder.decode(value, { stream: true });
-        fullText += text;
+        const nextText = `${currentText}${decoder.decode(value, { stream: true })}`;
+        updateAssistantMessage(nextText);
+        return readStream(nextText);
+      };
 
-        // Update the assistant message
-        setMessages(prev => prev.map(msg =>
-          msg.id === assistantId ? { ...msg, content: fullText } : msg
-        ));
-      }
+      await readStream('');
 
       setIsStreaming(false);
 
     } catch (err) {
       console.error('Chat error:', err);
       setMessages(prev => [...prev, {
-        id: Date.now().toString(),
+        id: `assistant-error-${messageIdSeed}`,
         role: 'assistant' as const,
         content: 'Sorry, I encountered an error. Please try again.'
       }]);
