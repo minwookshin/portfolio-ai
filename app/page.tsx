@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import type { FormEvent, KeyboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -8,8 +9,7 @@ import ChatInput from "@/components/ChatInput";
 import ProjectDetailView from "@/components/ProjectDetailView";
 import ProfileCard from "@/components/ProfileCard";
 import { Project } from "@/components/ProjectCard";
-import { FileText, ArrowUpRight } from "lucide-react";
-import { ProjectField } from "@/components/material/ProjectField";
+import { ArrowRight, FileText, ArrowUpRight } from "lucide-react";
 import { springs } from "@/lib/material/motion";
 
 // One reveal shared by every full-screen overlay (profile, project detail) so
@@ -197,6 +197,13 @@ const MAIN_PROJECTS: Project[] = [
 // The home view opens with these four projects in a centered 2x2 grid.
 const FEATURED_PROJECT_IDS = ["11", "3", "1", "2"] as const;
 
+const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
+  Sentinel: "/projects/sentinel/demo.mp4",
+  CapExplorer: "/projects/capexplorer/demo.mp4",
+  Tomo: "/projects/tomo/demo.mp4",
+  Caret: "/projects/caret/demo.mp4",
+};
+
 // Personal Information
 const PERSONAL_INFO = {
   name: "Minwook Shin",
@@ -263,16 +270,395 @@ function showToTarget(show: string | null): Project | "profile" | "projects" | n
   return null;
 }
 
+function orderProjects(projects: Project[], ids: readonly string[]) {
+  return ids
+    .map((id) => projects.find((project) => project.id === id))
+    .filter((project): project is Project => Boolean(project));
+}
+
+function ProjectMedia({ project, tone = "light" }: { project: Project; tone?: "light" | "dark" }) {
+  const src = project.image ?? project.icon;
+  const isLogo = project.title === "Atlas" || project.title === "Portfolio AI";
+  const mediaBg = tone === "dark" ? "bg-[#191919]" : "bg-[#e5e5e5]";
+
+  if (src) {
+    return (
+      <div className={`relative aspect-[1.28] w-full overflow-hidden rounded-[10px] ${mediaBg}`}>
+        <img
+          src={src}
+          alt={project.title}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className={`h-full w-full transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035] ${
+            isLogo ? "object-contain p-10 sm:p-14" : "object-cover"
+          }`}
+          style={{ filter: "grayscale(1) contrast(1.02)" }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex aspect-[1.28] w-full items-center justify-center rounded-[10px] ${mediaBg} text-4xl ${tone === "dark" ? "text-white" : "text-[#090712]"}`}>
+      {project.glyph ?? project.title.charAt(0)}
+    </div>
+  );
+}
+
+function ProjectMark({ project, compact = false }: { project: Project; compact?: boolean }) {
+  const src = project.icon ?? project.image;
+  const isLogo = project.title === "Atlas" || project.title === "Portfolio AI" || Boolean(project.icon);
+
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        className={`h-full w-full ${isLogo ? "object-contain" : "object-cover"} ${compact ? "p-2" : "p-4"}`}
+        style={{ filter: "grayscale(1) contrast(1.04)" }}
+      />
+    );
+  }
+
+  return (
+    <span className={`${compact ? "text-[12px]" : "text-[28px]"} font-normal text-current`}>
+      {project.glyph ?? project.title.charAt(0)}
+    </span>
+  );
+}
+
+function SelectedProjectCard({
+  project,
+  index,
+  isActive,
+  onSelect,
+}: {
+  project: Project;
+  index: number;
+  isActive: boolean;
+  onSelect: (project: Project) => void;
+}) {
+  return (
+    <motion.button
+      type="button"
+      onClick={() => onSelect(project)}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
+      data-work-card="true"
+      className={`group w-[min(72vw,420px)] shrink-0 snap-start text-left outline-none transition-transform duration-300 focus-visible:ring-2 focus-visible:ring-[#090712] focus-visible:ring-offset-4 ${
+        isActive ? "scale-100 opacity-100" : "scale-[0.94] opacity-65 hover:opacity-100"
+      }`}
+    >
+      <ProjectMedia project={project} />
+      <span className="mt-3 flex items-start justify-between gap-4">
+        <span className="min-w-0">
+          <span className="block text-[15px] font-normal leading-tight text-[#090712]">{project.title}</span>
+          <span className="mt-1 block text-[13px] leading-snug text-[#77777d]">
+            {project.comingSoon ? project.unavailableMessage ?? "Coming soon." : project.studioLabel ?? project.description}
+          </span>
+        </span>
+        {!project.comingSoon && (
+          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[#090712] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+        )}
+      </span>
+    </motion.button>
+  );
+}
+
+function EditorialIntro() {
+  return (
+    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center px-6 pb-16 pt-[92px] sm:px-10 md:pb-20 md:pt-[122px]">
+      <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
+        <p className="text-[13px] leading-relaxed text-[#090712]">minwook</p>
+        <p className="mt-3 text-[14px] leading-relaxed text-[#77777d]">Design engineer / AI product studio</p>
+        <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#090712] md:text-[36px]">
+          Interfaces for AI products, websites, and prototypes that move from early idea to working software.
+        </h1>
+        <p className="mt-6 max-w-[520px] text-[16px] leading-[1.62] text-[#55555c]">
+          I work as a hands-on design engineer and compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.
+        </p>
+        <div className="mt-7 flex flex-wrap justify-start gap-2">
+          <a href={`mailto:${PERSONAL_INFO.email}`} className="rounded-[8px] bg-[#eeeeef] px-3 py-2 text-[13px] text-[#090712] transition-colors hover:bg-[#dfdfe4]">
+            Email
+          </a>
+          <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noopener noreferrer" className="rounded-[8px] bg-[#eeeeef] px-3 py-2 text-[13px] text-[#090712] transition-colors hover:bg-[#dfdfe4]">
+            LinkedIn
+          </a>
+          <a href={PERSONAL_INFO.github} target="_blank" rel="noopener noreferrer" className="rounded-[8px] bg-[#eeeeef] px-3 py-2 text-[13px] text-[#090712] transition-colors hover:bg-[#dfdfe4]">
+            GitHub
+          </a>
+          <a href={PERSONAL_INFO.resume} target="_blank" rel="noopener noreferrer" className="rounded-[8px] bg-[#090712] px-3 py-2 text-[13px] text-white transition-opacity hover:opacity-80">
+            Resume
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WorkSection({
+  projects,
+  onSelect,
+}: {
+  projects: Project[];
+  onSelect: (project: Project) => void;
+}) {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const updateActiveProject = () => {
+    const scroller = carouselRef.current;
+    if (!scroller) return;
+    const cards = Array.from(scroller.querySelectorAll<HTMLElement>("[data-work-card]"));
+    if (!cards.length) return;
+    const scrollerRect = scroller.getBoundingClientRect();
+    const scrollerCenter = scrollerRect.left + scrollerRect.width / 2;
+    const closestIndex = cards.reduce((bestIndex, card, index) => {
+      const bestRect = cards[bestIndex].getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+      const bestDistance = Math.abs(bestRect.left + bestRect.width / 2 - scrollerCenter);
+      const distance = Math.abs(cardRect.left + cardRect.width / 2 - scrollerCenter);
+      return distance < bestDistance ? index : bestIndex;
+    }, 0);
+    setActiveIndex(closestIndex);
+  };
+
+  const scrollToProject = (index: number) => {
+    const scroller = carouselRef.current;
+    const cards = Array.from(scroller?.querySelectorAll<HTMLElement>("[data-work-card]") ?? []);
+    const card = cards[index];
+    if (!scroller || !card) return;
+    const firstCardLeft = cards[0]?.offsetLeft ?? 0;
+    const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+    scroller.scrollTo({ left: Math.min(card.offsetLeft - firstCardLeft, maxScroll), behavior: "smooth" });
+    setActiveIndex(index);
+  };
+
+  return (
+    <section id="work" className="mx-auto w-full max-w-[1180px] px-6 py-14 sm:px-10 md:py-20">
+      <div className="mb-9 flex justify-center">
+        <div className="w-full max-w-[620px] text-left">
+          <h2 className="text-[18px] font-normal text-[#090712]">Selected work</h2>
+          <p className="mt-3 max-w-[520px] text-[15px] leading-[1.58] text-[#77777d]">
+            Product interfaces, AI-native websites, native prototypes, and fast-moving experiments. Open a project for the deeper case-study sheet.
+          </p>
+        </div>
+      </div>
+      <div
+        ref={carouselRef}
+        onScroll={updateActiveProject}
+        className="mx-auto w-full max-w-[620px] snap-x snap-mandatory overflow-x-auto pb-3 [scrollbar-width:none]"
+      >
+        <div className="flex w-max gap-4 md:gap-5">
+          {projects.map((project, index) => (
+            <SelectedProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+              isActive={index === activeIndex}
+              onSelect={onSelect}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="mx-auto mt-3 flex w-full max-w-[620px] items-center justify-center gap-4" aria-label="Selected work carousel">
+        {projects.map((project, index) => {
+          const isActive = index === activeIndex;
+          return (
+            <button
+              key={project.id}
+              type="button"
+              onClick={() => scrollToProject(index)}
+              aria-label={`Show ${project.title}`}
+              aria-current={isActive ? "true" : undefined}
+              className={`h-2 rounded-full outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#090712]/25 focus-visible:ring-offset-2 ${
+                isActive ? "w-12 bg-[#090712]" : "w-2 bg-[#8e8e93]"
+              }`}
+            />
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function LabChatTile({
+  onAsk,
+}: {
+  onAsk: (message: string) => void;
+}) {
+  const [draft, setDraft] = useState("");
+
+  const sendDraft = () => {
+    const message = draft.trim();
+    if (!message) return;
+    onAsk(message);
+    setDraft("");
+  };
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    sendDraft();
+  };
+
+  const submitFromKeyboard = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    sendDraft();
+  };
+
+  return (
+    <div className="mb-4 break-inside-avoid">
+      <form
+        onSubmit={submit}
+        className="flex aspect-[1.28] w-full flex-col justify-end rounded-[10px] bg-[#191919] p-4 text-[#090712]"
+      >
+        <div className="flex h-16 w-full min-w-0 bg-[#EEEEF0]">
+          <input
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={submitFromKeyboard}
+            placeholder="ask me"
+            aria-label="Ask from lab"
+            className="min-w-0 flex-1 bg-transparent px-5 font-light outline-none placeholder:text-[#77777d]"
+          />
+          <button
+            type="submit"
+            aria-label="Send"
+            disabled={!draft.trim()}
+            className="flex h-16 w-16 shrink-0 items-center justify-center transition-opacity disabled:opacity-30"
+          >
+            <ArrowRight className="h-5 w-5" strokeWidth={2.25} />
+          </button>
+        </div>
+      </form>
+      <span className="mt-3 block text-[15px] font-normal leading-tight text-white">Ask me</span>
+      <span className="mt-1 block text-[13px] leading-snug text-white/55">Live studio chat</span>
+    </div>
+  );
+}
+
+function LabProjectTile({
+  project,
+  index,
+  onSelect,
+}: {
+  project: Project;
+  index: number;
+  onSelect: (project: Project) => void;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+
+  const playPreview = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  };
+
+  const stopPreview = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+    video.currentTime = 0;
+  };
+
+  return (
+    <motion.button
+      type="button"
+      onClick={() => onSelect(project)}
+      onMouseEnter={playPreview}
+      onMouseLeave={stopPreview}
+      onFocus={playPreview}
+      onBlur={stopPreview}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
+      className="group mb-4 break-inside-avoid text-left outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505]"
+    >
+      <div className="relative aspect-[1.28] w-full overflow-hidden rounded-[10px] bg-[#191919]">
+        {previewVideo && (
+          <video
+            ref={videoRef}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={project.image ?? project.icon}
+            className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+          >
+            <source src={previewVideo} type="video/mp4" />
+          </video>
+        )}
+        <div
+          className={`absolute inset-0 flex items-center justify-center text-white transition duration-500 ${
+            previewVideo ? "group-hover:scale-[0.92] group-hover:opacity-0 group-focus-visible:scale-[0.92] group-focus-visible:opacity-0" : "group-hover:scale-[1.04]"
+          }`}
+        >
+          <ProjectMark project={project} />
+        </div>
+        {previewVideo && (
+          <div className="absolute left-3 top-3 flex h-9 min-w-9 items-center justify-center rounded-[6px] bg-white/88 px-2 text-[#090712] opacity-0 shadow-sm backdrop-blur transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+            <ProjectMark project={project} compact />
+          </div>
+        )}
+      </div>
+      <span className="mt-3 flex items-start justify-between gap-4">
+        <span className="min-w-0">
+          <span className="block text-[15px] font-normal leading-tight text-white">{project.title}</span>
+          <span className="mt-1 block text-[13px] leading-snug text-white/55">
+            {project.studioLabel ?? project.description}
+          </span>
+        </span>
+        {!project.comingSoon && (
+          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+        )}
+      </span>
+    </motion.button>
+  );
+}
+
+function LabArchive({
+  projects,
+  onSelect,
+  onAsk,
+}: {
+  projects: Project[];
+  onSelect: (project: Project) => void;
+  onAsk: (message: string) => void;
+}) {
+  return (
+    <section className="mt-20 rounded-t-[28px] bg-[#050505] px-6 pb-44 pt-20 text-white sm:px-10 md:pt-28">
+      <div className="mx-auto w-full max-w-[1180px]">
+        <div className="mb-12 grid gap-4 md:grid-cols-[1fr_1.2fr]">
+          <h2 className="text-[18px] font-normal">Lab / archive</h2>
+          <p className="max-w-[560px] text-[15px] leading-[1.58] text-white/55">
+            Smaller demos, experiments, and product sketches live here so the main page stays simple while the body of work stays accessible.
+          </p>
+        </div>
+        <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4">
+          <LabChatTile onAsk={onAsk} />
+          {projects.map((project, index) => (
+            <LabProjectTile key={project.id} project={project} index={index} onSelect={onSelect} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Interface to store content snapshot for each message
 export default function Home() {
   const [hasStarted, setHasStarted] = useState(false);
   const [heroProject, setHeroProject] = useState<Project | null>(null);
-  // Screen rect of the icon a detail was opened from, so the modal can expand
-  // out of (and collapse back into) that exact spot.
-  const [heroOrigin, setHeroOrigin] = useState<{ cx: number; cy: number; w: number } | null>(null);
-  // Same idea for the profile, so it expands out of the profile button.
-  const [profileOrigin, setProfileOrigin] = useState<{ cx: number; cy: number; w: number } | null>(null);
-  const [showAllProjects, setShowAllProjects] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (project detail / profile / globe) instead of snapping back home. The
@@ -282,17 +668,16 @@ export default function Home() {
   const [chatOnTop, setChatOnTop] = useState(false);
   const [detailFocus, setDetailFocus] = useState<string | null>(null);
   const [projectNotice, setProjectNotice] = useState<string | null>(null);
-  // Landing intro: "minwook" appears center, then rises to the top header slot
-  // and becomes "minwook shin" (introUp), after which the real header takes over
-  // (introDone). The icon field fades in as the name lifts.
+  // Landing intro: a short "minwook" signature appears center, then rises to
+  // the header slot before the editorial page takes over.
   const [introUp, setIntroUp] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const [introTopY, setIntroTopY] = useState(0);
 
   useEffect(() => {
     setIntroTopY(-(window.innerHeight / 2 - 48));
-    const t1 = setTimeout(() => setIntroUp(true), 2050);
-    const t2 = setTimeout(() => setIntroDone(true), 2950);
+    const t1 = setTimeout(() => setIntroUp(true), 650);
+    const t2 = setTimeout(() => setIntroDone(true), 1250);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
   const [showResume, setShowResume] = useState(false);
@@ -395,7 +780,6 @@ export default function Home() {
     setHeroProject(null);
     setDetailFocus(null);
     setShowResume(false);
-    setShowAllProjects(false);
   };
 
   // Close whichever overlay is open and return to the exact project grid state
@@ -407,13 +791,35 @@ export default function Home() {
     setHeroProject(null);
     setDetailFocus(null);
     setShowResume(false);
-    setHeroOrigin(null);
-    setProfileOrigin(null);
   };
 
   // Re-open the chat (with history) when the user re-engages the composer
   const reopenChat = () => {
     if (messages.length > 0) setHasStarted(true);
+  };
+
+  const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
+  const archiveProjects = MAIN_PROJECTS.filter((project) => !FEATURED_PROJECT_IDS.includes(project.id as typeof FEATURED_PROJECT_IDS[number]));
+
+  const openProfile = () => {
+    setChatOnTop(false);
+    setHasStarted(false);
+    setShowProfile(false);
+    setHeroProject(null);
+    requestAnimationFrame(() => {
+      document.getElementById("profile")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  };
+
+  const openProject = (project: Project) => {
+    if (project.comingSoon) {
+      setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
+      return;
+    }
+    setChatOnTop(false);
+    setShowProfile(false);
+    setDetailFocus(null);
+    setHeroProject(project);
   };
 
   // Esc closes whichever overlay is open (pairs with the on-screen ESC keycap).
@@ -427,34 +833,16 @@ export default function Home() {
     return () => window.removeEventListener("keydown", onKey);
   }, [heroProject, showProfile]);
 
-  // Start the detail modal scaled down at the icon's screen position so it
-  // expands out of (and collapses back into) the icon. Falls back to a gentle
-  // rise if we don't have the origin rect.
-  const heroExpand =
-    heroOrigin && typeof window !== "undefined"
-      ? {
-          opacity: 0,
-          scale: Math.max(heroOrigin.w / window.innerWidth, 0.04),
-          x: heroOrigin.cx - window.innerWidth / 2,
-          y: heroOrigin.cy - window.innerHeight / 2,
-        }
-      : { opacity: 0, scale: 0.94, x: 0, y: 24 };
-
-  // Profile expands out of the profile button (bottom-right), mirroring how a
-  // project detail expands out of its icon. Falls back to a gentle rise.
-  const profileExpand =
-    profileOrigin && typeof window !== "undefined"
-      ? {
-          opacity: 0,
-          scale: Math.max(profileOrigin.w / window.innerWidth, 0.04),
-          x: profileOrigin.cx - window.innerWidth / 2,
-          y: profileOrigin.cy - window.innerHeight / 2,
-        }
-      : { opacity: 0, scale: 0.94, x: 0, y: 24 };
+  const sheetMotion = {
+    initial: { y: "100%", opacity: 1 },
+    animate: { y: 0, opacity: 1 },
+    exit: { y: "100%", opacity: 1 },
+    transition: { type: "tween", duration: 0.62, ease: [0.22, 1, 0.36, 1] as const },
+  } as const;
 
   return (
     <main
-      className="h-screen flex flex-col overflow-hidden justify-center"
+      className="site-text-14 min-h-screen overflow-x-hidden bg-white text-[#090712]"
       style={{ backgroundColor: "var(--md-surface)" }}
     >
 
@@ -479,9 +867,7 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Landing intro - the name appears dead-center, then rises to the top
-          header slot and grows from "minwook" into "minwook shin". The real
-          header takes over once it lands. */}
+      {/* Landing intro - brief signature mark before the editorial page fades in. */}
       <AnimatePresence>
         {!introDone && !hasStarted && (
           <motion.div
@@ -512,8 +898,21 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Project detail - a card that expands out of the icon and floats ON TOP
-          of the (dimmed) home page, then collapses back into the icon. */}
+      <motion.div
+        initial={false}
+        animate={{ opacity: introDone ? 1 : 0, y: introDone ? 0 : 10 }}
+        transition={springs.spatialDefault}
+      >
+        <EditorialIntro />
+        <WorkSection projects={featuredProjects} onSelect={openProject} />
+        <LabArchive
+          projects={archiveProjects}
+          onSelect={openProject}
+          onAsk={handleMessage}
+        />
+      </motion.div>
+
+      {/* Project detail - bottom sheet, closer to the reference site's gallery sheets. */}
       <AnimatePresence>
         {heroProject && (
           <motion.div
@@ -523,22 +922,27 @@ export default function Home() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={closeOverlay}
-            className="fixed inset-0 z-[68] bg-surface/40 backdrop-blur-xl"
+            className="fixed inset-0 z-[68] bg-[#050505]/38 backdrop-blur-[18px]"
             aria-hidden
           />
         )}
         {heroProject && (
           <motion.div
             key="hero-detail"
-            initial={heroExpand}
-            animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-            exit={heroExpand}
-            transition={springs.island}
-            style={{ transformOrigin: "center center" }}
+            {...sheetMotion}
             onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
-            className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain"
+            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-white shadow-[0_-24px_80px_rgba(0,0,0,0.22)]"
           >
-            <div className="w-full max-w-3xl mx-auto px-5 sm:px-6 pt-12 pb-20">
+            <div className="sticky top-0 z-10 flex justify-center bg-white/85 pb-3 pt-4 backdrop-blur-xl">
+              <button
+                type="button"
+                onClick={closeOverlay}
+                aria-label="Close project"
+                className="h-1.5 w-14 rounded-full bg-[#d9d9de]"
+              />
+            </div>
+            <div className="max-h-[calc(100dvh-62px)] overflow-y-auto overscroll-contain">
+              <div className="w-full max-w-3xl mx-auto px-5 sm:px-6 pt-8 pb-32">
               <ProjectDetailView
                 project={heroProject}
                 onBack={closeOverlay}
@@ -546,13 +950,13 @@ export default function Home() {
                 focusQuery={detailFocus}
                 onAsk={handleMessage}
               />
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Profile - a UI that floats on top of the (blurred) home page; tap the
-          area outside it to close, same as a project detail. */}
+      {/* Profile - same sheet language as project detail. */}
       <AnimatePresence>
         {showProfile && (
           <motion.div
@@ -562,22 +966,27 @@ export default function Home() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={closeOverlay}
-            className="fixed inset-0 z-[68] bg-surface/40 backdrop-blur-xl"
+            className="fixed inset-0 z-[68] bg-[#050505]/38 backdrop-blur-[18px]"
             aria-hidden
           />
         )}
         {showProfile && (
           <motion.div
             key="profile"
-            initial={profileExpand}
-            animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
-            exit={profileExpand}
-            transition={springs.island}
-            style={{ transformOrigin: "center center" }}
+            {...sheetMotion}
             onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
-            className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain flex pb-28"
+            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-white shadow-[0_-24px_80px_rgba(0,0,0,0.22)]"
           >
-            <div className="m-auto w-full max-w-2xl px-5 sm:px-6 py-8">
+            <div className="sticky top-0 z-10 flex justify-center bg-white/85 pb-3 pt-4 backdrop-blur-xl">
+              <button
+                type="button"
+                onClick={closeOverlay}
+                aria-label="Close profile"
+                className="h-1.5 w-14 rounded-full bg-[#d9d9de]"
+              />
+            </div>
+            <div className="max-h-[calc(100dvh-62px)] overflow-y-auto overscroll-contain pb-28">
+            <div className="mx-auto w-full max-w-2xl px-5 sm:px-6 py-8">
 
               <ProfileCard
                 name={PERSONAL_INFO.name}
@@ -632,69 +1041,10 @@ export default function Home() {
                 </AnimatePresence>
               </div>
             </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Header / hero - the positioning statement; pinned to the top, clear of the
-          centered project grid; fades out once chat starts */}
-      <div className={`fixed top-0 inset-x-0 z-50 px-4 flex justify-center pointer-events-none ${hasStarted ? 'pt-4' : 'pt-10'}`}>
-        <div className="pointer-events-auto">
-        <AnimatePresence>
-          {introDone && !hasStarted && !showProfile && !heroProject && (
-            <motion.div
-              key="hero"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={springs.spatialDefault}
-              className="flex items-center gap-3"
-            >
-              <h1
-                aria-label="minwook lab"
-                tabIndex={0}
-                className="group relative text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap outline-none"
-              >
-                <span>minwook</span>
-                <span
-                  aria-hidden="true"
-                  className="absolute left-full top-0 ml-1 inline-block max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:max-w-[2rem] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:max-w-[2rem] group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
-                >
-                  lab
-                </span>
-              </h1>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Project field - always dead-center; stays visible behind the chat */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: !introUp ? 0 : hasStarted ? 0.5 : 1, scale: hasStarted ? 0.96 : 1 }}
-        transition={springs.spatialDefault}
-        className="fixed inset-0 z-[10] flex items-center justify-center pointer-events-none"
-      >
-        <div className="pointer-events-auto">
-          <ProjectField
-            projects={MAIN_PROJECTS}
-            featuredProjectIds={FEATURED_PROJECT_IDS}
-            showAllProjects={showAllProjects}
-            onSelectProject={(project, origin) => {
-              if (project.comingSoon) {
-                setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
-                return;
-              }
-              setChatOnTop(false);
-              setShowProfile(false);
-              setDetailFocus(null);
-              setHeroOrigin(origin ?? null);
-              setHeroProject(project);
-            }}
-          />
-        </div>
-      </motion.div>
 
       <AnimatePresence>
         {projectNotice && (
@@ -792,7 +1142,7 @@ export default function Home() {
                             onClick={() => {
                               setChatOnTop(false);
                               if (target === "profile") {
-                                setShowProfile(true);
+                                openProfile();
                               } else if (target === "projects") {
                                 setShowProfile(false);
                                 setHeroProject(null);
@@ -862,20 +1212,19 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Floating Input (rendered by ChatInput component itself) */}
-      <ChatInput
-        onSend={handleMessage}
-        hasStarted={hasStarted}
-        connectorKind={heroProject ? "project" : showProfile ? "profile" : hasStarted ? "chat" : null}
-        connectorSrc={heroProject ? (heroProject.icon ?? heroProject.image) : showProfile ? "/profile-photo.jpg" : undefined}
-        linkedinUrl={heroProject?.linkedin}
-        onClose={heroProject || showProfile ? closeOverlay : undefined}
-        onToggleProjectView={!hasStarted && !showProfile && !heroProject ? () => setShowAllProjects((value) => !value) : undefined}
-        showAllProjects={showAllProjects}
-        onProfile={!showProfile && !heroProject ? (origin) => { setChatOnTop(false); setProfileOrigin(origin ?? null); setShowProfile(true); } : undefined}
-        onFocusInput={reopenChat}
-        introReady={introDone}
-      />
+      {/* Floating Input appears only when chat or a detail view is active. */}
+      {(hasStarted || heroProject || showProfile) && (
+        <ChatInput
+          onSend={handleMessage}
+          hasStarted={hasStarted}
+          connectorKind={heroProject ? "project" : showProfile ? "profile" : hasStarted ? "chat" : null}
+          connectorSrc={heroProject ? (heroProject.icon ?? heroProject.image) : showProfile ? "/profile-photo.jpg" : undefined}
+          linkedinUrl={heroProject?.linkedin}
+          onClose={heroProject || showProfile ? closeOverlay : undefined}
+          onFocusInput={reopenChat}
+          introReady={introDone}
+        />
+      )}
     </main>
   );
 }
