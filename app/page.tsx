@@ -336,7 +336,6 @@ function BuildMeta() {
     };
 
     loadMeta();
-    setNow(Date.now());
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
     const metaTimer = window.setInterval(loadMeta, 15000);
     return () => {
@@ -633,8 +632,17 @@ function LabChatTile() {
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
-        fullText += decoder.decode(value);
+        if (done) {
+          const tail = decoder.decode();
+          if (tail) {
+            fullText += tail;
+            setMessages((prev) =>
+              prev.map((msg) => (msg.id === assistantId ? { ...msg, content: fullText } : msg))
+            );
+          }
+          break;
+        }
+        fullText += decoder.decode(value, { stream: true });
         setMessages((prev) =>
           prev.map((msg) => (msg.id === assistantId ? { ...msg, content: fullText } : msg))
         );
@@ -945,9 +953,18 @@ export default function Home() {
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done) {
+          const tail = decoder.decode();
+          if (tail) {
+            fullText += tail;
+            setMessages(prev => prev.map(msg =>
+              msg.id === assistantId ? { ...msg, content: fullText } : msg
+            ));
+          }
+          break;
+        }
 
-        const text = decoder.decode(value);
+        const text = decoder.decode(value, { stream: true });
         fullText += text;
 
         // Update the assistant message
