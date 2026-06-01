@@ -32,7 +32,7 @@
 - Tradeoffs: preserve the existing assistant and case-study system while replacing the icon-field homepage with an editorial browsing model.
 
 ## Visual language
-- Color: white canvas, near-black text, soft gray surfaces, dark footer/lab.
+- Color: dark canvas, soft white text, charcoal surfaces, restrained gray secondary copy.
 - Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, wider project media rows.
 - Shape/radius/elevation: cards use modest 8-12px radius; sheets use large top radius; avoid nested cards.
@@ -48,7 +48,7 @@
 ## Accessibility
 - Target standard: keyboard reachable project cards, profile controls, assistant input, and sheet dismissal.
 - Keyboard/focus behavior: project cards open on click/keyboard, Escape closes sheets, visible focus rings remain.
-- Contrast/readability: near-black text on white; muted text only for secondary copy.
+- Contrast/readability: soft white text on near-black; muted gray text only for secondary copy.
 - Screen-reader semantics: real headings, button labels, image alt text, hidden crawlable content retained.
 - Reduced motion and sensory considerations: no essential interaction should depend on animation.
 
@@ -72,7 +72,7 @@
 
 ## Implementation constraints
 - Framework/styling system: Next.js App Router, React, Tailwind, CSS variables, Framer Motion.
-- Design-token constraints: continue using existing near-black, soft-gray, and white tokens.
+- Design-token constraints: continue using existing monochrome tokens, now biased toward dark surfaces with soft-white foregrounds.
 - Performance constraints: avoid heavy canvas/WebGL; lazy-load media; use CSS transforms for motion.
 - Compatibility constraints: keep existing chat API, project data, and case-study renderer.
 - Test/screenshot expectations: run unit tests, production build, and browser checks on localhost after major changes.
