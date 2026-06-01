@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 
-// Outfit (variable, OFL) from Google Fonts. Used for the whole site.
-const googleSans = Outfit({
+// Geist Sans from Google Fonts. Used for the whole site.
+const googleSans = Geist({
   subsets: ["latin"],
   variable: "--font-google-sans",
   display: "swap",

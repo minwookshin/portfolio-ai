@@ -61,7 +61,7 @@ const reveal = {
 // Translucent glass so components read as floating over the blurred backdrop
 // rather than sitting on a solid panel.
 const card = "glass-stroke bg-surface-container/45 backdrop-blur-xl rounded-none";
-const eyebrowCls = "font-mono font-light uppercase text-[11px] text-on-surface-variant";
+const eyebrowCls = "font-mono font-light text-[11px] text-on-surface-variant";
 const h2Cls = "text-2xl sm:text-3xl font-normal tracking-[-0.01em] text-on-surface";
 const bodyCls = "text-[15px] sm:text-base text-on-surface-variant leading-relaxed";
 
@@ -92,12 +92,9 @@ function Dot() {
 
 function Tags({ tags }: { tags: string[] }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-normal text-on-surface-variant">
       {tags.map((t) => (
-        <span
-          key={t}
-          className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md px-4 py-2 rounded-none text-xs font-normal text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
-        >
+        <span key={t}>
           {t}
         </span>
       ))}

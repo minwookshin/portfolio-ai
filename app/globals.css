@@ -29,7 +29,7 @@
 /* Base font */
 body {
   font-family: var(--font-google-sans), sans-serif;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.02em;
   background-color: var(--md-surface);
   transition: background-color 0.3s ease;
 }
@@ -55,8 +55,15 @@ body {
   cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%3E%3Cline%20x1='5'%20y1='5'%20x2='15'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cline%20x1='15'%20y1='5'%20x2='5'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") 10 10, pointer !important;
 }
 
+.light-cursor-dark,
+.light-cursor-dark * {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23050505'/%3E%3C/svg%3E") 6 6, auto !important;
+}
+
 .lab-cursor-dark,
-.lab-cursor-dark * {
+.lab-cursor-dark *,
+.surface-cursor-dark,
+.surface-cursor-dark * {
   cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23050505'/%3E%3C/svg%3E") 6 6, auto !important;
 }
 
@@ -153,6 +160,15 @@ body::after {
    or change the value here when the final type scale is ready. */
 .site-text-16 :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
   font-size: 16px !important;
+}
+
+.site-lowercase,
+.site-lowercase :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
+  text-transform: lowercase !important;
+}
+
+.site-lowercase :is(input, textarea)::placeholder {
+  text-transform: lowercase !important;
 }
 
 /* Material 3 Expressive tokens - monochrome + Nothing-red accent (dark) */
