@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Grid2X2, Mic, ArrowRight, User } from "lucide-react";
+import { Mic, ArrowRight } from "lucide-react";
 import { LinkedInIcon } from "./LinkedInIcon";
 import { IconButton } from "@/components/material/IconButton";
 
@@ -15,16 +15,11 @@ interface ChatInputProps {
   connectorSrc?: string;
   linkedinUrl?: string;
   onClose?: () => void;
-  onProfile?: (origin?: { cx: number; cy: number; w: number }) => void;
-  onToggleProjectView?: () => void;
-  showAllProjects?: boolean;
   onFocusInput?: () => void;
   introReady?: boolean;
 }
 
 
-const outsideBtn =
-  `group bg-[#EEEEF0] shrink-0 w-16 h-16 rounded-none text-on-surface flex items-center justify-center transition-colors relative`;
 const darkOutsideBtn =
   `group bg-[#010101] shrink-0 w-16 h-16 rounded-none text-[#EEEEF0] flex items-center justify-center transition-colors relative`;
 
@@ -38,9 +33,6 @@ export default function ChatInput({
   connectorSrc,
   linkedinUrl,
   onClose,
-  onProfile,
-  onToggleProjectView,
-  showAllProjects = false,
   onFocusInput,
   introReady = true,
 }: ChatInputProps) {
@@ -145,7 +137,7 @@ export default function ChatInput({
       )}
 
       <motion.div
-        className="fixed z-[80] inset-x-0 bottom-10 mx-auto w-full max-w-[700px] px-4 flex min-w-0 items-center justify-center gap-2"
+        className="fixed z-[80] inset-x-0 bottom-6 mx-auto w-full max-w-[700px] px-4 flex min-w-0 items-center justify-center gap-2"
         initial={false}
         animate={{ opacity: introReady ? 1 : 0, y: introReady ? 0 : 36 }}
         transition={controlMotion}
@@ -230,7 +222,7 @@ export default function ChatInput({
           )}
         </motion.div>
 
-        {/* Right cluster - LinkedIn (project) or project view + profile (home). */}
+        {/* Right cluster - LinkedIn when a project sheet is open. */}
         <AnimatePresence mode="popLayout" initial={false}>
         {connectorKind === "project" && linkedinUrl && (
           <motion.a
@@ -251,54 +243,6 @@ export default function ChatInput({
           </motion.a>
         )}
 
-        {/* Project view - toggles between the featured 2x2 grid and all work. */}
-        {!connectorKind && onToggleProjectView && (
-          <motion.div
-            key="project-view"
-            layout="position"
-            initial={{ opacity: 0, scale: 0.96, x: -14 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.96, x: -14 }}
-            transition={controlMotion}
-            className="shrink-0"
-          >
-            <div className="group relative bg-[#EEEEF0] text-on-surface flex items-center rounded-none p-0">
-              <button
-                type="button"
-                onClick={onToggleProjectView}
-                aria-label={showAllProjects ? "Show featured projects" : "Show all projects"}
-                aria-pressed={showAllProjects}
-                className="relative shrink-0 w-16 h-16 rounded-none bg-[#010101] text-[#EEEEF0] flex items-center justify-center transition-colors"
-              >
-                {showAllProjects ? (
-                  <ArrowLeft className="w-6 h-6 relative z-10 text-[#EEEEF0]" strokeWidth={2} />
-                ) : (
-                  <Grid2X2 className="w-6 h-6 relative z-10 text-[#EEEEF0]" strokeWidth={2} />
-                )}
-              </button>
-            </div>
-          </motion.div>
-        )}
-        {!connectorKind && onProfile && (
-          <motion.button
-            key="profile"
-            layout
-            type="button"
-            onClick={(e) => {
-              const r = e.currentTarget.getBoundingClientRect();
-              onProfile({ cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width });
-            }}
-            aria-label="View profile"
-            whileTap={{ scale: 0.97 }}
-            initial={{ opacity: 0, scale: 0.96, x: -14 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.96, x: -14 }}
-            transition={controlMotion}
-            className={outsideBtn}
-          >
-            <User className="w-6 h-6 relative z-10" />
-          </motion.button>
-        )}
         </AnimatePresence>
       </motion.div>
     </>
