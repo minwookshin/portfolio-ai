@@ -204,6 +204,8 @@ const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Caret: "/projects/caret/demo.mp4",
 };
 
+const LIVE_DEMO_TILE_TITLES = new Set(["CapExplorer", "Caret"]);
+
 const BUILD_VERSION = "build a60937a";
 const BUILD_UPDATED_AT = "2026-06-01T15:12:55Z";
 type BuildMetaState = {
@@ -423,7 +425,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="text-[13px] text-[rgba(255,255,255,0.68)] underline decoration-[rgba(255,255,255,0.68)] decoration-[1px] underline-offset-2 outline-none transition-colors duration-300 hover:text-[#f4f4f5] hover:decoration-[#f4f4f5] focus-visible:text-[#f4f4f5] focus-visible:decoration-[#f4f4f5]"
+      className="text-[13px] text-[rgba(5,5,5,0.68)] underline decoration-[rgba(5,5,5,0.68)] decoration-[1px] underline-offset-2 outline-none transition-colors duration-300 hover:text-[#050505] hover:decoration-[#050505] focus-visible:text-[#050505] focus-visible:decoration-[#050505]"
     >
       {children}
     </a>
@@ -447,23 +449,25 @@ function SelectedProjectCard({
       onClick={() => onSelect(project)}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
+      animate={{ scale: isActive ? 1 : 0.8 }}
+      whileHover={isActive ? undefined : { scale: 0.84 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
       data-work-card="true"
-      className={`group w-[min(74vw,680px)] shrink-0 snap-center text-left outline-none transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] ${
-        isActive ? "scale-100 opacity-100" : "scale-[0.96] opacity-70 hover:opacity-100"
+      className={`group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left outline-none transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-[#050505]/60 focus-visible:ring-offset-4 focus-visible:ring-offset-white ${
+        isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
       }`}
     >
       <ProjectMedia project={project} />
       <span className="mt-3 flex items-start justify-between gap-4">
         <span className="min-w-0">
-          <span className="block text-[15px] font-normal leading-tight text-[#f4f4f5]">{project.title}</span>
-          <span className="mt-1 block text-[13px] leading-snug text-white/55">
+          <span className="block text-[15px] font-normal leading-tight text-[#050505]">{project.title}</span>
+          <span className="mt-1 block text-[13px] leading-snug text-[#050505]/55">
             {project.comingSoon ? project.unavailableMessage ?? "Coming soon." : project.studioLabel ?? project.description}
           </span>
         </span>
         {!project.comingSoon && (
-          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[#f4f4f5] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[#050505] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
         )}
       </span>
     </motion.button>
@@ -474,20 +478,24 @@ function EditorialIntro() {
   return (
     <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center px-6 pb-16 pt-[92px] sm:px-10 md:pb-20 md:pt-[122px]">
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <p className="text-[13px] leading-relaxed text-[#f4f4f5]">minwook shin</p>
-        <p className="mt-1 text-[14px] leading-relaxed text-white/55">Design engineer / AI product studio</p>
-        <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#f4f4f5] md:text-[36px]">
+        <p className="text-[13px] leading-relaxed text-[#050505]">minwook shin</p>
+        <p className="mt-1 text-[14px] leading-relaxed text-[#050505]/55">Design engineer / AI product studio</p>
+        <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#050505] md:text-[36px]">
           Interfaces for AI products, websites, and prototypes that move from early idea to working software.
         </h1>
-        <p className="mt-3 max-w-[520px] text-[16px] leading-[1.5] text-white">
+        <p className="mt-3 max-w-[520px] text-[16px] leading-[1.5] text-[#050505]">
           I work as a hands-on design engineer and compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.
         </p>
-        <div className="mt-7 flex flex-wrap justify-start gap-x-5 gap-y-2">
+        <p className="mt-7 max-w-full whitespace-nowrap leading-relaxed text-[#050505]/68">
           <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>Email</IntroLink>
+          {", "}
           <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
+          {", "}
           <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
+          {", and "}
           <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
-        </div>
+          {"."}
+        </p>
       </div>
     </section>
   );
@@ -536,12 +544,9 @@ function WorkSection({
 
   return (
     <section id="work" className="mx-auto w-full max-w-[1180px] px-6 py-14 sm:px-10 md:py-20">
-      <div className="mb-12 flex justify-center">
+      <div className="mb-5 flex justify-center">
         <div className="w-full max-w-[620px] text-left">
-          <h2 className="text-[18px] font-normal text-[#f4f4f5]">Selected work</h2>
-          <p className="mt-3 max-w-[500px] text-[15px] leading-[1.58] text-white/55">
-            Product interfaces, AI-native websites, native prototypes, and fast-moving experiments. Open a project for the deeper case-study sheet.
-          </p>
+          <h2 className="text-[18px] font-normal text-[#050505]">Selected work</h2>
         </div>
       </div>
       <div
@@ -564,7 +569,7 @@ function WorkSection({
           ))}
         </div>
       </div>
-      <div className="mx-auto mt-4 flex w-full max-w-[620px] items-center justify-center gap-4" aria-label="Selected work carousel">
+      <div className="mx-auto mt-4 flex w-full max-w-[620px] items-center justify-center gap-0" aria-label="Selected work carousel">
         {projects.map((project, index) => {
           const isActive = index === activeIndex;
           return (
@@ -574,12 +579,15 @@ function WorkSection({
               onClick={() => scrollToProject(index)}
               aria-label={`Show ${project.title}`}
               aria-current={isActive ? "true" : undefined}
-              className="group flex h-6 min-w-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 hover:bg-white/[0.08] focus-visible:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
+              className={`group flex h-8 w-10 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 ${
+                isActive ? "" : "hover:bg-[#050505]/[0.08] focus-visible:bg-[#050505]/[0.08]"
+              }`}
             >
-              <span
-                className={`rounded-full transition-all duration-300 ${
-                  isActive ? "h-[3px] w-9 bg-[#f4f4f5]" : "h-[3px] w-[3px] bg-white/40 group-hover:bg-white/65"
-                }`}
+              <motion.span
+                className="h-[3px] rounded-full bg-[#050505]"
+                animate={{ width: isActive ? 36 : 3, opacity: isActive ? 1 : 0.4 }}
+                whileHover={isActive ? undefined : { opacity: 0.65 }}
+                transition={{ type: "spring", stiffness: 520, damping: 42, mass: 0.7 }}
               />
             </button>
           );
@@ -675,15 +683,18 @@ function LabChatTile() {
 
   return (
     <div
-      className={`w-full overflow-hidden rounded-[10px] bg-white p-3 text-[#050505] ${
+      className={`surface-cursor-dark w-full overflow-hidden rounded-[10px] bg-transparent p-0 text-[#050505] ${
         hasMessages ? "h-[520px]" : LAB_TILE_HEIGHTS[0]
       }`}
     >
       <form
         onSubmit={submit}
-        className="flex h-full min-h-0 w-full flex-col bg-[#f5f5f5] p-4 text-[#050505] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="flex h-full min-h-0 w-full flex-col rounded-[10px] bg-[#f5f5f5] p-4 text-[#050505] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
       >
-        <div ref={historyRef} className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1">
+        <div
+          ref={historyRef}
+          className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1"
+        >
           {messages.map((msg) => {
             const body = msg.role === "assistant" ? parseAssistant(msg.content).body : msg.content;
             const isUser = msg.role === "user";
@@ -700,7 +711,9 @@ function LabChatTile() {
             );
           })}
         </div>
-        <div className="mt-3 flex h-16 w-full min-w-0 bg-white">
+        <div
+          className="mt-3 flex h-16 w-full min-w-0 rounded-[8px] bg-white"
+        >
           <input
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
@@ -713,7 +726,7 @@ function LabChatTile() {
             type="submit"
             aria-label="Send"
             disabled={!draft.trim() || isStreaming}
-            className="flex h-16 w-16 shrink-0 items-center justify-center transition-opacity disabled:opacity-30"
+            className="flex h-full w-16 shrink-0 items-center justify-center transition-opacity disabled:opacity-30"
           >
             <ArrowRight className="h-5 w-5" strokeWidth={2.25} />
           </button>
@@ -736,16 +749,23 @@ function LabProjectTile({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+  const showsLiveDemo = Boolean(previewVideo && LIVE_DEMO_TILE_TITLES.has(project.title));
   const src = project.image ?? project.icon;
+
+  useEffect(() => {
+    if (!showsLiveDemo) return;
+    videoRef.current?.play().catch(() => {});
+  }, [showsLiveDemo]);
 
   const playPreview = () => {
     const video = videoRef.current;
     if (!video) return;
-    video.currentTime = 0;
+    if (!showsLiveDemo) video.currentTime = 0;
     video.play().catch(() => {});
   };
 
   const stopPreview = () => {
+    if (showsLiveDemo) return;
     const video = videoRef.current;
     if (!video) return;
     video.pause();
@@ -764,7 +784,7 @@ function LabProjectTile({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
-      className={`group relative w-full overflow-hidden rounded-[10px] bg-[#f5f5f5] text-left outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${className}`}
+      className={`surface-cursor-dark group relative w-full overflow-hidden rounded-[10px] bg-[#f5f5f5] text-left outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${className}`}
     >
       <div className="absolute inset-0 overflow-hidden">
         {src && (
@@ -783,15 +803,26 @@ function LabProjectTile({
             muted
             loop
             playsInline
-            preload="metadata"
+            autoPlay={showsLiveDemo}
+            preload={showsLiveDemo ? "auto" : "metadata"}
             poster={project.image ?? project.icon}
-            className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+              showsLiveDemo ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+            }`}
           >
             <source src={previewVideo} type="video/mp4" />
           </video>
         )}
         {!src && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#eeeeef] text-[#050505] transition duration-500 group-hover:scale-[1.04]">
+          <div
+            className={`absolute inset-0 flex items-center justify-center bg-[#eeeeef] text-[#050505] transition duration-500 ${
+              showsLiveDemo
+                ? "opacity-0"
+                : previewVideo
+                ? "opacity-100 group-hover:scale-[1.04] group-hover:opacity-0 group-focus-visible:opacity-0"
+                : "group-hover:scale-[1.04]"
+            }`}
+          >
             <ProjectMark project={project} />
           </div>
         )}
@@ -830,12 +861,12 @@ function LabArchive({
   });
 
   return (
-    <section className="lab-cursor-dark mt-20 rounded-t-[28px] bg-white px-6 pb-44 pt-20 text-[#050505] sm:px-10 md:pt-28">
+    <section className="rounded-t-[28px] bg-[#050505] px-6 pb-44 pt-20 text-[#f4f4f5] sm:px-10 md:pt-28">
       <div className="mx-auto w-full max-w-[1180px]">
         <div className="mb-8 flex justify-center">
           <div className="w-full max-w-[620px] text-left">
-            <h2 className="text-[18px] font-normal text-[#050505]">Lab / archive</h2>
-            <p className="mt-2 max-w-[500px] text-[15px] leading-[1.52] text-[#77777d]">
+            <h2 className="text-[18px] font-normal text-[#f4f4f5]">Lab / archive</h2>
+            <p className="mt-2 max-w-[500px] text-[15px] leading-[1.52] text-white/55">
               Projects, demos, experiments, and product sketches live here so the main page stays simple while the body of work stays accessible.
             </p>
           </div>
