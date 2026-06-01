@@ -147,6 +147,12 @@ body::after {
   to { fill: var(--md-on-surface); stroke-width: 0; }
 }
 
+/* Temporary type lock while the homepage is being redesigned. Remove this class
+   or change the value here when the final type scale is ready. */
+.site-text-14 :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
+  font-size: 14px !important;
+}
+
 /* Material 3 Expressive tokens - monochrome + Nothing-red accent (light) */
 :root {
   --md-surface: #FFFFFF;
