@@ -3,6 +3,97 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
+type ChatRole = 'user' | 'assistant';
+type SafeChatMessage = {
+  role: ChatRole;
+  content: string;
+};
+
+type ParsedChatRequest =
+  | { ok: true; messages: SafeChatMessage[]; context: string; userQuery: string }
+  | { ok: false; response: Response };
+
+const MAX_MESSAGES = 20;
+const MAX_MESSAGE_LENGTH = 4000;
+const MAX_CONTEXT_LENGTH = 1200;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 10;
+
+const requestWindows = new Map<string, { count: number; resetAt: number }>();
+
+function jsonError(message: string, status: number, extra?: Record<string, unknown>) {
+  return new Response(JSON.stringify({ error: message, ...extra }), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function parseChatRequest(payload: unknown): ParsedChatRequest {
+  if (!isRecord(payload)) {
+    return { ok: false, response: jsonError("Expected a JSON object.", 400) };
+  }
+
+  const rawMessages = payload.messages;
+  if (!Array.isArray(rawMessages) || rawMessages.length === 0) {
+    return { ok: false, response: jsonError("Expected at least one message.", 400) };
+  }
+
+  const messages: SafeChatMessage[] = [];
+  for (const rawMessage of rawMessages.slice(-MAX_MESSAGES)) {
+    if (!isRecord(rawMessage)) {
+      return { ok: false, response: jsonError("Invalid message format.", 400) };
+    }
+
+    const role = rawMessage.role;
+    const content = rawMessage.content;
+    if ((role !== "user" && role !== "assistant") || typeof content !== "string") {
+      return { ok: false, response: jsonError("Messages must include a user or assistant role and text content.", 400) };
+    }
+
+    const trimmedContent = content.trim().slice(0, MAX_MESSAGE_LENGTH);
+    if (trimmedContent) {
+      messages.push({ role, content: trimmedContent });
+    }
+  }
+
+  const lastMessage = messages.at(-1);
+  if (!lastMessage || lastMessage.role !== "user") {
+    return { ok: false, response: jsonError("The latest message must be a user message.", 400) };
+  }
+
+  const context =
+    typeof payload.context === "string"
+      ? payload.context.trim().slice(0, MAX_CONTEXT_LENGTH)
+      : "";
+
+  return { ok: true, messages, context, userQuery: lastMessage.content };
+}
+
+function checkRateLimit(req: Request) {
+  const now = Date.now();
+  const forwardedFor = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const clientKey = forwardedFor || req.headers.get("x-real-ip") || "anonymous";
+
+  for (const [key, window] of requestWindows) {
+    if (window.resetAt <= now) requestWindows.delete(key);
+  }
+
+  const current = requestWindows.get(clientKey);
+  if (!current || current.resetAt <= now) {
+    requestWindows.set(clientKey, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return null;
+  }
+
+  current.count += 1;
+  if (current.count <= RATE_LIMIT_MAX_REQUESTS) return null;
+
+  return Math.max(1, Math.ceil((current.resetAt - now) / 1000));
+}
+
 const SYSTEM_PROMPT = `You are now Minwook's AI project strategist. Your identity is Minwook Shin: a UX Engineer, 0 to 1 builder, and AI-native product designer who turns ideas into working interfaces, websites, agents, and prototypes.
 
 **Core Rules You Must Follow:**
@@ -359,8 +450,26 @@ A: I use both. I develop on Mac, but I appreciate the PC for gaming and raw powe
 
 export async function POST(req: Request) {
   try {
-    const { messages, context } = await req.json();
-    const userQuery = messages[messages.length - 1].content;
+    const retryAfter = checkRateLimit(req);
+    if (retryAfter) {
+      return jsonError("Too many requests. Try again in a moment.", 429, { retryAfter });
+    }
+
+    let payload: unknown;
+    try {
+      payload = await req.json();
+    } catch {
+      return jsonError("Invalid JSON body.", 400);
+    }
+
+    const parsed = parseChatRequest(payload);
+    if (!parsed.ok) return parsed.response;
+
+    const { messages, context, userQuery } = parsed;
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return jsonError("Chat is not configured on this deployment.", 500);
+    }
 
     // The client tells us what the user is currently looking at so the AI can
     // resolve "this"/"it" and tailor the answer to that screen.
@@ -373,11 +482,11 @@ export async function POST(req: Request) {
     console.log(`[LOG] Chat request at ${new Date().toISOString()}`);
 
     // Initialize Gemini AI with fallback models
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+    const genAI = new GoogleGenerativeAI(apiKey);
     const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
 
     // Build conversation history for context
-    const chatHistory = messages.slice(0, -1).map((msg: any) => ({
+    const chatHistory = messages.slice(0, -1).map((msg) => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.content }]
     }));
@@ -399,8 +508,9 @@ export async function POST(req: Request) {
         result = await chat.sendMessageStream(userQuery);
         console.log(`[LOG] Using model: ${modelName}`);
         break;
-      } catch (err: any) {
-        console.warn(`[WARN] Model ${modelName} failed: ${err.message}`);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn(`[WARN] Model ${modelName} failed: ${message}`);
         if (modelName === MODELS[MODELS.length - 1]) throw err;
       }
     }
