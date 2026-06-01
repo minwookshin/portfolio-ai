@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Project } from "@/components/ProjectCard";
-import { DotRing } from "@/components/material/DotRing";
 
 // Per-icon entrance directions, cycled so neighbours differ. The artwork starts
 // pushed fully off one edge (clipped invisible) then slides to center.
@@ -18,7 +17,8 @@ export interface OriginRect {
 interface ProjectFieldProps {
   projects: Project[];
   onSelectProject: (project: Project, originRect?: OriginRect) => void;
-  activeCategory?: string | null;
+  featuredProjectIds?: readonly string[];
+  showAllProjects?: boolean;
   iconSize?: number;
   gap?: number;
 }
@@ -34,15 +34,38 @@ function horizontalCells(n: number, spacing: number) {
   return Array.from({ length: n }, (_, i) => ({ x: (i - mid) * spacing, y: 0 }));
 }
 
+function featuredGridCells(n: number, spacing: number) {
+  if (n === 4) {
+    const offset = spacing / 2;
+    return [
+      { x: -offset, y: -offset },
+      { x: offset, y: -offset },
+      { x: -offset, y: offset },
+      { x: offset, y: offset },
+    ];
+  }
+
+  const cols = Math.min(2, n);
+  const rows = Math.ceil(n / cols);
+  return Array.from({ length: n }, (_, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    return {
+      x: (col - (cols - 1) / 2) * spacing,
+      y: (row - (rows - 1) / 2) * spacing,
+    };
+  });
+}
+
 /**
- * A flat field of project app-icons you drag to pan. The matching projects sit
- * in one centered horizontal row; filtering recompacts the survivors into that
- * row while non-matching icons fade out in place.
+ * A flat field of project app-icons. It opens with a centered 2x2 featured grid;
+ * the archive mode restores the older horizontal row you can drag to pan.
  */
 export function ProjectField({
   projects,
   onSelectProject,
-  activeCategory = null,
+  featuredProjectIds = [],
+  showAllProjects = false,
   iconSize: iconSizeProp,
   gap,
 }: ProjectFieldProps) {
@@ -64,18 +87,24 @@ export function ProjectField({
   const boxW = Math.min(vw - 24, 1100);
   const boxH = Math.min(vh - 150, 820);
 
-  // Placement per project id: matching projects get one horizontal row; the
-  // rest park at the centre, invisible, ready to fade back in when filtering.
+  // Placement per project id: default is a tight 2x2 featured grid. The "show
+  // all" button restores the older horizontal row for the full archive.
   const placement = useMemo(() => {
-    const matching = projects.filter(
-      (p) => !activeCategory || p.categories?.includes(activeCategory)
-    );
-    const cells = horizontalCells(matching.length, spacing);
+    const matching = showAllProjects
+      ? projects
+      : featuredProjectIds
+          .map((id) => projects.find((p) => p.id === id))
+          .filter((p): p is Project => Boolean(p));
+    const cells = showAllProjects
+      ? horizontalCells(matching.length, spacing)
+      : featuredGridCells(matching.length, spacing);
     const map = new Map<string, { x: number; y: number; visible: boolean }>();
     matching.forEach((p, i) => map.set(p.id, { x: cells[i].x, y: cells[i].y, visible: true }));
-    projects.forEach((p) => { if (!map.has(p.id)) map.set(p.id, { x: 0, y: 0, visible: false }); });
+    projects.forEach((p) => {
+      if (!map.has(p.id)) map.set(p.id, { x: 0, y: 0, visible: false });
+    });
     return map;
-  }, [projects, activeCategory, spacing]);
+  }, [projects, featuredProjectIds, showAllProjects, spacing]);
 
   // Row extent (max distance from centre among visible icons) for pan clamping.
   const extent = useMemo(() => {
@@ -91,7 +120,8 @@ export function ProjectField({
   // Two ways panning is allowed: shift the cluster around inside a roomy frame
   // (when it all fits), or pan to reveal icons that sit beyond the frame edge
   // (when the cluster is larger than the frame). Whichever gives more freedom.
-  const clampX = Math.max(0, boxW / 2 - extent.ex - iconSize / 2 - 12, extent.ex + iconSize / 2 - boxW / 2 + 24);
+  const rowClampX = Math.max(0, boxW / 2 - extent.ex - iconSize / 2 - 12, extent.ex + iconSize / 2 - boxW / 2 + 24);
+  const clampX = showAllProjects ? rowClampX : 0;
   const clampY = 0;
 
   // Landing reveal: each icon's artwork slides in from a different edge (clipped
@@ -119,7 +149,7 @@ export function ProjectField({
   const paintRef = useRef(paint);
   paintRef.current = paint;
 
-  // Re-clamp the pan and repaint when the filter changes the layout.
+  // Re-clamp the pan and repaint when the project mode changes the layout.
   useEffect(() => {
     pan.current.x = Math.max(-clampX, Math.min(clampX, pan.current.x));
     pan.current.y = Math.max(-clampY, Math.min(clampY, pan.current.y));
@@ -282,7 +312,6 @@ export function ProjectField({
                     </div>
                   )}
                 </div>
-                <DotRing variant="squircle" />
               </div>
               </div>
             </button>

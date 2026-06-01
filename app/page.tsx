@@ -109,6 +109,7 @@ const MAIN_PROJECTS: Project[] = [
     github: "https://github.com/YeYen1721/portfolio-",
     date: "2025",
     image: "/projects/1.png",
+    icon: "/projects/flux/icon-white.png",
     studioLabel: "Interactive web system",
     themeColor: "#8B5CF6",
     overview: "FLUX is a creative web project that showcases innovative UI/UX design through an interactive grid-based layout. The project emphasizes smooth user interactions, dynamic animations, and a unique circular navigation system that creates an engaging browsing experience."
@@ -193,14 +194,14 @@ const MAIN_PROJECTS: Project[] = [
   },
 ];
 
-// Discipline filters for the project field. "All" clears the filter.
-const PROJECT_FILTERS = ["All", "Engineering", "AI", "Design"] as const;
+// The home view opens with these four projects in a centered 2x2 grid.
+const FEATURED_PROJECT_IDS = ["11", "3", "1", "2"] as const;
 
 // Personal Information
 const PERSONAL_INFO = {
   name: "Minwook Shin",
-  title: "AI-native UX Engineer & Product Builder",
-  bio: "I design and build AI-native interfaces, product prototypes, and digital experiences from Figma to production code. My work sits between product design, frontend engineering, and applied AI.\n\n• Medicine taught me empathy and scientific rigor in user research.\n• Volleyball instilled the discipline of teamwork and rapid decision-making.\n• Engineering gave me the power to turn those insights into functional products with React, Next.js, SwiftUI, and AI APIs.",
+  title: "Design Engineer",
+  bio: "I work as a hands-on design engineer and a compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.\n\n• Product strategy, UX systems, and polished interaction design.\n• Frontend builds with React, Next.js, SwiftUI, and production-ready motion.\n• AI websites, agents, and launchable demos for founders, teams, and agencies.",
   email: "mwshin0703@gmail.com",
   linkedin: "https://www.linkedin.com/in/minwookshin",
   github: "https://github.com/YeYen1721",
@@ -262,59 +263,6 @@ function showToTarget(show: string | null): Project | "profile" | "projects" | n
   return null;
 }
 
-function ProjectNameRail({
-  projects,
-  activeProject,
-  onSelect,
-  onAllWork,
-}: {
-  projects: Project[];
-  activeProject: Project;
-  onSelect: (project: Project) => void;
-  onAllWork: () => void;
-}) {
-  return (
-    <motion.nav
-      key="project-name-rail"
-      initial={{ opacity: 0, x: -18 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -18 }}
-      transition={springs.island}
-      aria-label="Project navigation"
-      className="fixed left-4 top-1/2 z-[73] hidden -translate-y-1/2 flex-col items-start gap-1.5 md:flex"
-    >
-      {projects.map((project) => {
-        const isActive = project.id === activeProject.id;
-        return (
-          <motion.button
-            key={project.id}
-            type="button"
-            whileTap={{ scale: 0.96 }}
-            transition={springs.pressMorph}
-            onClick={() => onSelect(project)}
-            className={`rounded-none px-4 py-2 text-sm font-light leading-none tracking-tight transition-colors ${
-              isActive
-                ? "bg-on-surface text-surface"
-                : "bg-surface-container-high text-on-surface hover:bg-on-surface hover:text-surface"
-            }`}
-          >
-            {project.title}
-          </motion.button>
-        );
-      })}
-      <motion.button
-        type="button"
-        whileTap={{ scale: 0.96 }}
-        transition={springs.pressMorph}
-        onClick={onAllWork}
-        className="rounded-none bg-surface-container-high px-4 py-2 text-sm font-light leading-none tracking-tight text-on-surface transition-colors hover:bg-on-surface hover:text-surface"
-      >
-        All Work
-      </motion.button>
-    </motion.nav>
-  );
-}
-
 // Interface to store content snapshot for each message
 export default function Home() {
   const [hasStarted, setHasStarted] = useState(false);
@@ -324,8 +272,7 @@ export default function Home() {
   const [heroOrigin, setHeroOrigin] = useState<{ cx: number; cy: number; w: number } | null>(null);
   // Same idea for the profile, so it expands out of the profile button.
   const [profileOrigin, setProfileOrigin] = useState<{ cx: number; cy: number; w: number } | null>(null);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (project detail / profile / globe) instead of snapping back home. The
@@ -448,7 +395,20 @@ export default function Home() {
     setHeroProject(null);
     setDetailFocus(null);
     setShowResume(false);
-    setFilterOpen(false);
+    setShowAllProjects(false);
+  };
+
+  // Close whichever overlay is open and return to the exact project grid state
+  // the user came from, including all-projects mode.
+  const closeOverlay = () => {
+    setHasStarted(false);
+    setChatOnTop(false);
+    setShowProfile(false);
+    setHeroProject(null);
+    setDetailFocus(null);
+    setShowResume(false);
+    setHeroOrigin(null);
+    setProfileOrigin(null);
   };
 
   // Re-open the chat (with history) when the user re-engages the composer
@@ -461,7 +421,7 @@ export default function Home() {
     if (!heroProject && !showProfile) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
-      leaveChat();
+      closeOverlay();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -501,7 +461,7 @@ export default function Home() {
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
           hidden, but real content so the page isn't an empty chat shell to bots. */}
       <section className="sr-only">
-        <h2>{PERSONAL_INFO.name}, AI-native UX Engineer & 0→1 Builder</h2>
+        <h2>{PERSONAL_INFO.name}, {PERSONAL_INFO.title}</h2>
         <p>{PERSONAL_INFO.bio}</p>
         <h3>Selected work</h3>
         <ul>
@@ -562,28 +522,9 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={leaveChat}
+            onClick={closeOverlay}
             className="fixed inset-0 z-[68] bg-surface/40 backdrop-blur-xl"
             aria-hidden
-          />
-        )}
-        {heroProject && (
-          <ProjectNameRail
-            projects={MAIN_PROJECTS}
-            activeProject={heroProject}
-            onSelect={(project) => {
-              if (project.comingSoon) {
-                setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
-                return;
-              }
-              setChatOnTop(false);
-              setShowProfile(false);
-              setFilterOpen(false);
-              setDetailFocus(null);
-              setHeroOrigin(null);
-              setHeroProject(project);
-            }}
-            onAllWork={leaveChat}
           />
         )}
         {heroProject && (
@@ -594,13 +535,13 @@ export default function Home() {
             exit={heroExpand}
             transition={springs.island}
             style={{ transformOrigin: "center center" }}
-            onClick={(e) => { if (e.target === e.currentTarget) leaveChat(); }}
+            onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
             className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain"
           >
             <div className="w-full max-w-3xl mx-auto px-5 sm:px-6 pt-12 pb-20">
               <ProjectDetailView
                 project={heroProject}
-                onBack={leaveChat}
+                onBack={closeOverlay}
                 hideBack
                 focusQuery={detailFocus}
                 onAsk={handleMessage}
@@ -620,7 +561,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={leaveChat}
+            onClick={closeOverlay}
             className="fixed inset-0 z-[68] bg-surface/40 backdrop-blur-xl"
             aria-hidden
           />
@@ -633,7 +574,7 @@ export default function Home() {
             exit={profileExpand}
             transition={springs.island}
             style={{ transformOrigin: "center center" }}
-            onClick={(e) => { if (e.target === e.currentTarget) leaveChat(); }}
+            onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
             className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain flex pb-28"
           >
             <div className="m-auto w-full max-w-2xl px-5 sm:px-6 py-8">
@@ -646,14 +587,14 @@ export default function Home() {
                 linkedin={PERSONAL_INFO.linkedin}
               />
 
-              <div className="glass-stroke bg-surface-container mt-4 rounded-none p-6">
+              <div className="bg-surface-container mt-4 rounded-none p-6">
                 <div className="grid grid-cols-2 gap-3">
                   <motion.button
                     onClick={() => setShowResume(!showResume)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-on-surface text-surface rounded-none font-normal transition-all"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-[#EEEEF0] text-on-surface rounded-none font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     {showResume ? 'Hide Resume' : 'View Resume'}
@@ -664,7 +605,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="glass-stroke-sm bg-surface-container-high flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-none font-normal transition-all"
+                    className="bg-[#EEEEF0] flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-none font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     Download PDF
@@ -679,7 +620,7 @@ export default function Home() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden mt-4"
                     >
-                      <div className="glass-stroke-sm bg-surface-container-high rounded-none overflow-hidden">
+                      <div className="bg-surface-container-high rounded-none overflow-hidden">
                         <img
                           src="/resume.2025dec.jpg"
                           alt="Resume - Minwook Shin"
@@ -709,8 +650,18 @@ export default function Home() {
               transition={springs.spatialDefault}
               className="flex items-center gap-3"
             >
-              <h1 className="text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap">
-                minwook
+              <h1
+                aria-label="minwook lab"
+                tabIndex={0}
+                className="group relative text-sm sm:text-base font-light tracking-tight text-on-surface lowercase cursor-default whitespace-nowrap outline-none"
+              >
+                <span>minwook</span>
+                <span
+                  aria-hidden="true"
+                  className="absolute left-full top-0 ml-1 inline-block max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:max-w-[2rem] group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:max-w-[2rem] group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
+                >
+                  lab
+                </span>
               </h1>
             </motion.div>
           )}
@@ -728,7 +679,8 @@ export default function Home() {
         <div className="pointer-events-auto">
           <ProjectField
             projects={MAIN_PROJECTS}
-            activeCategory={activeCategory}
+            featuredProjectIds={FEATURED_PROJECT_IDS}
+            showAllProjects={showAllProjects}
             onSelectProject={(project, origin) => {
               if (project.comingSoon) {
                 setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
@@ -736,7 +688,6 @@ export default function Home() {
               }
               setChatOnTop(false);
               setShowProfile(false);
-              setFilterOpen(false);
               setDetailFocus(null);
               setHeroOrigin(origin ?? null);
               setHeroProject(project);
@@ -753,7 +704,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={springs.spatialFast}
-            className="fixed left-1/2 bottom-[176px] z-[76] -translate-x-1/2 rounded-none border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
+            className="fixed left-1/2 bottom-32 z-[76] -translate-x-1/2 rounded-none border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
           >
             {projectNotice}
           </motion.div>
@@ -793,8 +744,8 @@ export default function Home() {
             transition={{ duration: 0.3 }}
             className={`fixed left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 overflow-y-auto scroll-smooth ${chatOnTop ? "z-[72]" : "z-[35]"}`}
             style={{
-              bottom: 116,
-              maxHeight: "calc(100dvh - 220px)",
+              bottom: 96,
+              maxHeight: "calc(100dvh - 180px)",
             }}
           >
             <div className="flex min-h-full flex-col justify-end gap-3 pb-7">
@@ -820,7 +771,7 @@ export default function Home() {
                       className={`rounded-none px-4 py-3 ${
                         isUser
                           ? "bg-on-surface text-surface"
-                          : "bg-surface border border-dotted border-on-surface/30 text-on-surface"
+                          : "bg-[#EEEEF0] text-on-surface"
                       }`}
                     >
                       {isUser ? (
@@ -853,7 +804,7 @@ export default function Home() {
                                 setHeroProject(target);
                               }
                             }}
-                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-none bg-on-surface text-surface text-xs font-normal hover:opacity-90 transition-opacity"
+                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-none bg-[#EEEEF0] text-on-surface text-xs font-normal hover:bg-[#e1e1e5] transition-colors"
                           >
                               {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -873,7 +824,7 @@ export default function Home() {
                             transition={{ ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="border border-dotted border-on-surface/30 hover:border-on-surface hover:bg-on-surface hover:text-surface bg-surface inline-flex items-center px-3 py-2 rounded-none text-on-surface text-xs font-normal transition-colors"
+                            className="hover:bg-[#e1e1e5] bg-[#EEEEF0] inline-flex items-center px-3 py-2 rounded-none text-on-surface text-xs font-normal transition-colors"
                           >
                             {f}
                           </motion.button>
@@ -892,7 +843,7 @@ export default function Home() {
                   transition={springs.spatialFast}
                   className="flex justify-start"
                 >
-                  <div className="bg-surface border border-dotted border-on-surface/30 rounded-none px-4 py-3">
+                  <div className="bg-[#EEEEF0] rounded-none px-4 py-3">
                     <div className="flex items-center space-x-2">
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
@@ -918,13 +869,10 @@ export default function Home() {
         connectorKind={heroProject ? "project" : showProfile ? "profile" : hasStarted ? "chat" : null}
         connectorSrc={heroProject ? (heroProject.icon ?? heroProject.image) : showProfile ? "/profile-photo.jpg" : undefined}
         linkedinUrl={heroProject?.linkedin}
-        onClose={heroProject || showProfile ? leaveChat : undefined}
-        onFilter={!hasStarted && !showProfile && !heroProject ? () => setFilterOpen((o) => !o) : undefined}
-        filterOpen={filterOpen}
-        filters={PROJECT_FILTERS}
-        activeCategory={activeCategory}
-        onSelectCategory={setActiveCategory}
-        onProfile={!showProfile && !heroProject ? (origin) => { setChatOnTop(false); setFilterOpen(false); setProfileOrigin(origin ?? null); setShowProfile(true); } : undefined}
+        onClose={heroProject || showProfile ? closeOverlay : undefined}
+        onToggleProjectView={!hasStarted && !showProfile && !heroProject ? () => setShowAllProjects((value) => !value) : undefined}
+        showAllProjects={showAllProjects}
+        onProfile={!showProfile && !heroProject ? (origin) => { setChatOnTop(false); setProfileOrigin(origin ?? null); setShowProfile(true); } : undefined}
         onFocusInput={reopenChat}
         introReady={introDone}
       />
