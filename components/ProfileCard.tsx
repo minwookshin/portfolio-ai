@@ -27,7 +27,7 @@ export default function ProfileCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={springs.spatialDefault}
-      className="glass-stroke bg-surface-container rounded-none p-8 transition-all duration-300"
+      className="bg-surface-container rounded-none p-8 transition-all duration-300"
     >
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Profile Photo */}
@@ -35,7 +35,7 @@ export default function ProfileCard({
           <motion.div
             whileHover={{ scale: 1.03 }}
             transition={springs.pressMorph}
-            className="glass-stroke bg-surface-container-high w-40 h-40 lg:w-48 lg:h-48 rounded-none overflow-hidden"
+            className="bg-surface-container-high w-40 h-40 lg:w-48 lg:h-48 rounded-none overflow-hidden"
           >
             <img
               src={imagePath}
@@ -55,9 +55,6 @@ export default function ProfileCard({
             <p className="text-sm text-on-surface-variant font-normal">{title}</p>
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-outline-variant to-transparent" />
-
           {/* Bio */}
           <p className="text-[13px] text-on-surface-variant leading-relaxed whitespace-pre-line">
             {bio}
@@ -70,7 +67,7 @@ export default function ProfileCard({
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={springs.pressMorph}
-              className="flex items-center gap-2 px-6 py-3 bg-primary hover:opacity-90 text-on-primary rounded-none text-sm font-normal transition-all duration-200"
+              className="flex items-center gap-2 px-6 py-3 bg-[#EEEEF0] hover:bg-[#e1e1e5] text-on-surface rounded-none text-sm font-normal transition-all duration-200"
             >
               <Mail className="w-4 h-4" />
               Email Me
@@ -82,7 +79,7 @@ export default function ProfileCard({
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={springs.pressMorph}
-              className="glass-stroke-sm bg-surface-container flex items-center gap-2 px-6 py-3 text-on-surface rounded-none text-sm font-normal transition-all duration-200"
+              className="bg-[#EEEEF0] hover:bg-[#e1e1e5] flex items-center gap-2 px-6 py-3 text-on-surface rounded-none text-sm font-normal transition-all duration-200"
             >
               <LinkedInIcon className="w-4 h-4" />
               LinkedIn
