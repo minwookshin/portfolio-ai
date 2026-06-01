@@ -1,29 +1,29 @@
 /* Nothing OS Design Tokens */
 :root {
-  --bg: #FFFFFF;
-  --bg-surface: #FFFFFF;
-  --card-a-bg: #090712;
-  --card-a-text: #F5F5F5;
-  --card-b-bg: #FFFFFF;
-  --card-b-text: #090712;
-  --text-primary: #090712;
-  --text-muted: #999999;
-  --border: #E0E0E0;
-  --input-bg: #FFFFFF;
-  --input-text: #090712;
-  --input-border: #E0E0E0;
-  --bubble-user-bg: #090712;
-  --bubble-user-text: #F5F5F5;
-  --bubble-ai-bg: #FFFFFF;
-  --bubble-ai-text: #090712;
-  --bubble-ai-border: #E0E0E0;
-  --btn-primary-bg: #090712;
-  --btn-primary-text: #F5F5F5;
-  --btn-secondary-bg: #F2F2F2;
-  --btn-secondary-text: #090712;
-  --btn-secondary-border: #E0E0E0;
+  --bg: #050505;
+  --bg-surface: #111113;
+  --card-a-bg: #F4F4F5;
+  --card-a-text: #050505;
+  --card-b-bg: #111113;
+  --card-b-text: #F4F4F5;
+  --text-primary: #F4F4F5;
+  --text-muted: #A0A0A7;
+  --border: #2A2A2E;
+  --input-bg: #1A1A1D;
+  --input-text: #F4F4F5;
+  --input-border: #2A2A2E;
+  --bubble-user-bg: #F4F4F5;
+  --bubble-user-text: #050505;
+  --bubble-ai-bg: #141416;
+  --bubble-ai-text: #F4F4F5;
+  --bubble-ai-border: #2A2A2E;
+  --btn-primary-bg: #F4F4F5;
+  --btn-primary-text: #050505;
+  --btn-secondary-bg: #1A1A1D;
+  --btn-secondary-text: #F4F4F5;
+  --btn-secondary-border: #2A2A2E;
   --accent: #FF2D2D;
-  --gradient-fade: rgba(255, 255, 255, 0);
+  --gradient-fade: rgba(5, 5, 5, 0);
 }
 
 /* Base font */
@@ -37,7 +37,27 @@ body {
 /* Custom cursor: a filled near-black dot everywhere, including over interactive
    elements. */
 * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23090712'/%3E%3C/svg%3E") 6 6, auto !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23f4f4f5'/%3E%3C/svg%3E") 6 6, auto !important;
+}
+
+.project-lightbox-close-zone,
+.project-lightbox-close-zone * {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%3E%3Cline%20x1='5'%20y1='5'%20x2='15'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cline%20x1='15'%20y1='5'%20x2='5'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") 10 10, pointer !important;
+}
+
+.project-lightbox-content,
+.project-lightbox-content * {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23050505'/%3E%3C/svg%3E") 6 6, auto !important;
+}
+
+.project-lightbox-close-button,
+.project-lightbox-close-button * {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%3E%3Cline%20x1='5'%20y1='5'%20x2='15'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cline%20x1='15'%20y1='5'%20x2='5'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") 10 10, pointer !important;
+}
+
+.lab-cursor-dark,
+.lab-cursor-dark * {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23050505'/%3E%3C/svg%3E") 6 6, auto !important;
 }
 
 /* Hide scrollbars everywhere (scrolling still works) for a cleaner look */
@@ -53,9 +73,9 @@ body {
 
 /* Brief highlight when the chat deep-links to a section of a project detail */
 @keyframes sectionFlash {
-  0%   { background-color: rgba(9, 7, 18, 0); box-shadow: 0 0 0 0 rgba(9, 7, 18, 0); }
-  18%  { background-color: rgba(9, 7, 18, 0.10); box-shadow: 0 0 0 6px rgba(9, 7, 18, 0.06); }
-  100% { background-color: rgba(9, 7, 18, 0); box-shadow: 0 0 0 0 rgba(9, 7, 18, 0); }
+  0%   { background-color: rgba(244, 244, 245, 0); box-shadow: 0 0 0 0 rgba(244, 244, 245, 0); }
+  18%  { background-color: rgba(244, 244, 245, 0.10); box-shadow: 0 0 0 6px rgba(244, 244, 245, 0.06); }
+  100% { background-color: rgba(244, 244, 245, 0); box-shadow: 0 0 0 0 rgba(244, 244, 245, 0); }
 }
 .section-flash {
   animation: sectionFlash 2.4s ease-out;
@@ -78,8 +98,8 @@ body::after {
   inset: 0;
   z-index: 2147483647;
   pointer-events: none;
-  opacity: 0.11;
-  mix-blend-mode: multiply;
+  opacity: 0.08;
+  mix-blend-mode: screen;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23grain)' opacity='0.62'/%3E%3C/svg%3E");
   background-size: 180px 180px;
 }
@@ -129,44 +149,26 @@ body::after {
   opacity: 0.9;
 }
 
-/* Landing trace-on: "minwook" starts as dotted letter outlines, the dots grow
-   to connect into solid strokes, then the letters fill in. */
-.trace-text {
-  fill: transparent;
-  stroke: #9aa0a8; /* silver highlight while tracing */
-  stroke-width: 0.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 0.4 4;
-  animation: trace-connect 0.8s ease 0.55s forwards, trace-fill 0.45s ease 1.45s forwards;
-}
-@keyframes trace-connect {
-  to { stroke-dasharray: 1000 0; }
-}
-@keyframes trace-fill {
-  to { fill: var(--md-on-surface); stroke-width: 0; }
-}
-
 /* Temporary type lock while the homepage is being redesigned. Remove this class
    or change the value here when the final type scale is ready. */
-.site-text-14 :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
-  font-size: 14px !important;
+.site-text-16 :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
+  font-size: 18px !important;
 }
 
-/* Material 3 Expressive tokens - monochrome + Nothing-red accent (light) */
+/* Material 3 Expressive tokens - monochrome + Nothing-red accent (dark) */
 :root {
-  --md-surface: #FFFFFF;
-  --md-surface-container: #fafafa;
-  --md-surface-container-high: #e2e2e2;
-  --md-on-surface: #090712;
-  --md-on-surface-variant: #272330;
-  --md-outline: #cecece;
-  --md-outline-variant: #e2e2e2;
-  --md-primary: #090712;
-  --md-on-primary: #fafafc;
-  --md-primary-container: #e2e2e2;
-  --md-on-primary-container: #272330;
-  --md-hairline: rgba(9, 7, 18, 0.1);
+  --md-surface: #050505;
+  --md-surface-container: #111113;
+  --md-surface-container-high: #1A1A1D;
+  --md-on-surface: #F4F4F5;
+  --md-on-surface-variant: #A0A0A7;
+  --md-outline: #34343A;
+  --md-outline-variant: #242428;
+  --md-primary: #F4F4F5;
+  --md-on-primary: #050505;
+  --md-primary-container: #1A1A1D;
+  --md-on-primary-container: #F4F4F5;
+  --md-hairline: rgba(244, 244, 245, 0.12);
 
   /* shape scale (px) */
   --md-shape-xs: 0px;

@@ -21,11 +21,11 @@ export interface ButtonProps {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  elevated: "bg-[#EEEEF0] text-on-surface shadow-md hover:shadow-lg",
-  filled: "bg-[#EEEEF0] text-on-surface",
-  tonal: "bg-[#EEEEF0] text-on-surface",
-  outlined: "bg-[#EEEEF0] text-on-surface",
-  text: "bg-[#EEEEF0] text-on-surface",
+  elevated: "bg-surface-container-high text-on-surface shadow-md hover:shadow-lg",
+  filled: "bg-surface-container-high text-on-surface",
+  tonal: "bg-surface-container-high text-on-surface",
+  outlined: "bg-surface-container-high text-on-surface",
+  text: "bg-surface-container-high text-on-surface",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

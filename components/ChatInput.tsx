@@ -21,7 +21,7 @@ interface ChatInputProps {
 
 
 const darkOutsideBtn =
-  `group bg-[#010101] shrink-0 w-16 h-16 rounded-none text-[#EEEEF0] flex items-center justify-center transition-colors relative`;
+  `group shrink-0 w-16 h-16 rounded-none bg-surface-container-high text-on-surface border border-outline-variant flex items-center justify-center transition-colors relative`;
 
 const appleEase = [0.22, 1, 0.36, 1] as const;
 const controlMotion = { type: "tween", duration: 0.34, ease: appleEase } as const;
@@ -157,7 +157,7 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.96, x: 14 }}
               transition={controlMotion}
-              className="group relative shrink-0 w-16 h-16 rounded-none bg-[#010101] text-[#EEEEF0] flex items-center justify-center text-xs font-normal lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-[#010101]"
+              className="group relative shrink-0 w-16 h-16 rounded-none bg-surface-container-high text-on-surface border border-outline-variant flex items-center justify-center text-xs font-normal lowercase tracking-wide transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-outline-variant"
             >
               <span className="relative">esc</span>
             </motion.button>
@@ -171,7 +171,7 @@ export default function ChatInput({
           transition={controlMotion}
           style={{ maxWidth: "min(100%, calc(100vw - 176px))" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`group relative bg-[#EEEEF0] text-on-surface min-w-0 flex items-center gap-1 h-16 rounded-none pl-3 pr-2 ${expanded ? "" : "cursor-text"}`}
+          className={`group relative bg-surface-container-high text-on-surface min-w-0 flex items-center gap-1 h-16 rounded-none pl-3 pr-2 ${expanded ? "" : "cursor-text"}`}
         >
           {/* Current project / profile icon, inside the textbox on the left */}
           {(connectorKind === "project" || connectorKind === "profile") && connectorSrc && (
@@ -182,7 +182,7 @@ export default function ChatInput({
               aria-label={connectorKind === "profile" ? "Profile" : "Current project"}
               whileTap={{ scale: 0.97 }}
               transition={controlMotion}
-              className="shrink-0 w-10 h-10 rounded-none overflow-hidden border border-[rgba(9,7,18,0.1)]"
+              className="shrink-0 w-10 h-10 rounded-none overflow-hidden border border-white/15"
             >
               <img src={connectorSrc} alt="" className="w-full h-full object-cover" style={{ filter: "grayscale(1) contrast(1.03)" }} decoding="async" />
             </motion.button>

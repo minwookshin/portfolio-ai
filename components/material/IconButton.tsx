@@ -53,7 +53,7 @@ export function IconButton({
         "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
         "disabled:opacity-40 disabled:pointer-events-none",
         "before:absolute before:inset-0 before:bg-current before:opacity-0 hover:before:opacity-[0.08] active:before:opacity-[0.10] before:transition-opacity",
-        "bg-[#EEEEF0] text-on-surface",
+        "bg-surface-container-high text-on-surface",
         sizeClasses[size],
         className,
       ].join(" ")}
