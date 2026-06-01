@@ -423,7 +423,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="text-[13px] text-[rgba(255,255,255,0.68)] underline decoration-[rgba(255,255,255,0.68)] decoration-[1px] underline-offset-4 outline-none transition-colors duration-300 hover:text-[#f4f4f5] hover:decoration-[#f4f4f5] focus-visible:text-[#f4f4f5] focus-visible:decoration-[#f4f4f5]"
+      className="text-[13px] text-[rgba(255,255,255,0.68)] underline decoration-[rgba(255,255,255,0.68)] decoration-[1px] underline-offset-2 outline-none transition-colors duration-300 hover:text-[#f4f4f5] hover:decoration-[#f4f4f5] focus-visible:text-[#f4f4f5] focus-visible:decoration-[#f4f4f5]"
     >
       {children}
     </a>
