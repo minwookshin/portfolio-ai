@@ -9,7 +9,7 @@ import ChatInput from "@/components/ChatInput";
 import ProjectDetailView from "@/components/ProjectDetailView";
 import ProfileCard from "@/components/ProfileCard";
 import { Project } from "@/components/ProjectCard";
-import { ArrowRight, FileText, ArrowUpRight, X } from "lucide-react";
+import { ArrowRight, FileText, ArrowUpRight } from "lucide-react";
 import { springs } from "@/lib/material/motion";
 
 // One reveal shared by every full-screen overlay (profile, project detail) so
@@ -306,6 +306,10 @@ function orderProjects(projects: Project[], ids: readonly string[]) {
   return ids
     .map((id) => projects.find((project) => project.id === id))
     .filter((project): project is Project => Boolean(project));
+}
+
+function isFeaturedProject(project: Project) {
+  return FEATURED_PROJECT_IDS.includes(project.id as typeof FEATURED_PROJECT_IDS[number]);
 }
 
 function formatElapsedBefore(from: string, now: number) {
@@ -899,8 +903,8 @@ function LabArchive({
 export default function Home() {
   const [hasStarted, setHasStarted] = useState(false);
   const [heroProject, setHeroProject] = useState<Project | null>(null);
+  const [archiveProject, setArchiveProject] = useState<Project | null>(null);
   const [showProfile, setShowProfile] = useState(false);
-  const [projectDetailSource, setProjectDetailSource] = useState<"work" | "archive" | null>(null);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (project detail / profile / globe) instead of snapping back home. The
   // backing view stays mounted, dimmed behind a scrim. Opening a view
@@ -953,8 +957,9 @@ export default function Home() {
 
     // Tell the backend what the user is currently looking at, so the AI can
     // resolve "this"/"it" and ground its answer in that screen.
-    const viewContext = heroProject
-      ? `The user is viewing the "${heroProject.title}" project detail page. If they say "this", "it", or "this project", they mean ${heroProject.title}.`
+    const activeProject = heroProject ?? archiveProject;
+    const viewContext = activeProject
+      ? `The user is viewing the "${activeProject.title}" project detail page. If they say "this", "it", or "this project", they mean ${activeProject.title}.`
       : showProfile
       ? `The user is viewing my profile / resume / contact page.`
       : '';
@@ -1023,7 +1028,7 @@ export default function Home() {
     setChatOnTop(false);
     setShowProfile(false);
     setHeroProject(null);
-    setProjectDetailSource(null);
+    setArchiveProject(null);
     setDetailFocus(null);
     setShowResume(false);
   };
@@ -1035,7 +1040,7 @@ export default function Home() {
     setChatOnTop(false);
     setShowProfile(false);
     setHeroProject(null);
-    setProjectDetailSource(null);
+    setArchiveProject(null);
     setDetailFocus(null);
     setShowResume(false);
   };
@@ -1053,33 +1058,53 @@ export default function Home() {
     setHasStarted(false);
     setShowProfile(false);
     setHeroProject(null);
-    setProjectDetailSource(null);
+    setArchiveProject(null);
     requestAnimationFrame(() => {
       document.getElementById("profile")?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   };
 
-  const openProject = (project: Project, source: "work" | "archive" = "work") => {
+  const prepareProjectOpen = (project: Project, focus: string | null = null) => {
     if (project.comingSoon) {
       return;
     }
+    setHasStarted(false);
     setChatOnTop(false);
     setShowProfile(false);
-    setDetailFocus(null);
-    setProjectDetailSource(source);
+    setDetailFocus(focus);
+    return true;
+  };
+
+  const openFeaturedProject = (project: Project, focus: string | null = null) => {
+    if (!prepareProjectOpen(project, focus)) return;
+    setArchiveProject(null);
     setHeroProject(project);
+  };
+
+  const openArchiveProject = (project: Project, focus: string | null = null) => {
+    if (!prepareProjectOpen(project, focus)) return;
+    setHeroProject(null);
+    setArchiveProject(project);
+  };
+
+  const openProjectFromChat = (project: Project, focus: string | null = null) => {
+    if (isFeaturedProject(project)) {
+      openFeaturedProject(project, focus);
+      return;
+    }
+    openArchiveProject(project, focus);
   };
 
   // Esc closes whichever overlay is open (pairs with the on-screen ESC keycap).
   useEffect(() => {
-    if (!heroProject && !showProfile) return;
+    if (!heroProject && !archiveProject && !showProfile) return;
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key !== "Escape") return;
       closeOverlay();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [heroProject, showProfile]);
+  }, [heroProject, archiveProject, showProfile]);
 
   const sheetMotion = {
     initial: { y: "100%", opacity: 1 },
@@ -1087,12 +1112,10 @@ export default function Home() {
     exit: { y: "100%", opacity: 1 },
     transition: { type: "tween", duration: 0.62, ease: [0.22, 1, 0.36, 1] as const },
   } as const;
-  const isArchiveDetail = Boolean(heroProject && projectDetailSource === "archive");
 
   return (
     <main
-      className="site-text-16 min-h-screen overflow-x-hidden bg-[#050505] text-[#f4f4f5]"
-      style={{ backgroundColor: "var(--md-surface)" }}
+      className="site-text-16 site-lowercase min-h-screen overflow-x-hidden bg-white text-[#050505]"
     >
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
@@ -1121,92 +1144,139 @@ export default function Home() {
         animate={{ opacity: introReady ? 1 : 0, y: introReady ? 0 : 8 }}
         transition={{ type: "tween", duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
       >
-        <EditorialIntro />
-        <WorkSection projects={featuredProjects} onSelect={openProject} />
+        <div className="light-cursor-dark bg-white text-[#050505]">
+          <EditorialIntro />
+          <WorkSection projects={featuredProjects} onSelect={openFeaturedProject} />
+        </div>
         <LabArchive
           projects={archiveProjects}
-          onSelect={(project) => openProject(project, "archive")}
+          onSelect={openArchiveProject}
         />
       </motion.div>
 
-      {/* Project detail - selected work stays a sheet; archive items open as centered lightboxes. */}
+      {/* Project detail - page-like view with breadcrumb navigation. */}
       <AnimatePresence>
-        {heroProject && !isArchiveDetail && (
+        {heroProject && (
           <motion.div
-            key="hero-scrim"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            key={`project-page-${heroProject.id}`}
+            style={LIGHT_PROJECT_TOKENS}
             onClick={closeOverlay}
-            className="fixed inset-0 z-[68] bg-[#050505]/38 backdrop-blur-[18px]"
-            aria-hidden
-          />
-        )}
-        {heroProject && !isArchiveDetail && (
-          <motion.div
-            key="hero-detail"
-            {...sheetMotion}
-            onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
-            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-[#050505] shadow-[0_-24px_80px_rgba(0,0,0,0.42)]"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+            className="project-lightbox-close-zone fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-surface text-on-surface"
           >
-            <div className="sticky top-0 z-10 flex justify-center bg-[#050505]/85 pb-3 pt-4 backdrop-blur-xl">
-              <button
-                type="button"
-                onClick={closeOverlay}
-                aria-label="Close project"
-                className="h-1.5 w-14 rounded-full bg-white/30"
-              />
-            </div>
-            <div className="max-h-[calc(100dvh-62px)] overflow-y-auto overscroll-contain">
-              <div className="w-full max-w-3xl mx-auto px-5 sm:px-6 pt-8 pb-32">
-              <ProjectDetailView
-                project={heroProject}
-                onBack={closeOverlay}
-                hideBack
-                focusQuery={detailFocus}
-                onAsk={handleMessage}
-              />
+            <div className="mx-auto flex w-full max-w-[1180px] justify-center px-6 pb-36 pt-[92px] sm:px-10 md:pt-[122px]">
+              <div
+                className="project-lightbox-content w-full max-w-[620px]"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <nav className="mb-10 flex w-full items-center justify-between gap-4 text-left leading-relaxed text-on-surface">
+                  <span className="flex min-w-0 items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={closeOverlay}
+                      className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
+                    >
+                      minwook shin
+                    </button>
+                    <span className="text-on-surface-variant">/</span>
+                    <span className="truncate text-on-surface">{heroProject.title}</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={closeOverlay}
+                    className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
+                  >
+                    back
+                  </button>
+                </nav>
+                <ProjectDetailView
+                  project={heroProject}
+                  onBack={closeOverlay}
+                  hideBack
+                  focusQuery={detailFocus}
+                  onAsk={undefined}
+                />
               </div>
             </div>
           </motion.div>
         )}
-        {heroProject && isArchiveDetail && (
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {archiveProject && (
           <motion.div
-            key="archive-lightbox"
+            key={`archive-frame-${archiveProject.id}`}
+            onClick={closeOverlay}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.24 }}
-            onClick={closeOverlay}
-            className="project-lightbox-close-zone fixed inset-0 z-[70] flex items-center justify-center bg-white/92 p-4 backdrop-blur-[18px] sm:p-10"
+            transition={{ type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="project-lightbox-close-zone fixed inset-0 z-[70] flex items-center justify-center bg-[#050505]/55 p-4 text-on-surface backdrop-blur-[10px] sm:p-6"
           >
-            <button
-              type="button"
-              onClick={closeOverlay}
-              aria-label="Close project"
-              className="project-lightbox-close-button fixed left-4 top-4 z-[72] flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#050505] shadow-[0_14px_40px_rgba(5,5,5,0.12)] transition-transform duration-300 hover:scale-105 sm:left-8 sm:top-1/2 sm:-translate-y-1/2"
-            >
-              <X className="h-5 w-5" strokeWidth={2} />
-            </button>
             <motion.div
-              initial={{ opacity: 0, y: 22, scale: 0.975 }}
+              style={LIGHT_PROJECT_TOKENS}
+              initial={{ opacity: 0, y: 28, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 18, scale: 0.985 }}
               transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
               onClick={(event) => event.stopPropagation()}
-              style={LIGHT_PROJECT_TOKENS}
-              className="project-lightbox-content relative max-h-[calc(100dvh-72px)] w-full max-w-[1120px] overflow-y-auto overscroll-contain rounded-[18px] bg-surface p-5 text-on-surface shadow-[0_24px_90px_rgba(5,5,5,0.16)] sm:max-h-[calc(100dvh-96px)] sm:p-8"
+              className="project-lightbox-content max-h-[86dvh] w-[min(92vw,980px)] overflow-y-auto rounded-[10px] bg-surface px-6 pb-12 pt-6 text-on-surface shadow-[0_30px_110px_rgba(0,0,0,0.28)] sm:px-8 sm:pt-8"
             >
+              <nav className="mb-8 flex w-full items-center justify-between gap-4 leading-relaxed text-on-surface">
+                <span className="flex min-w-0 items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={closeOverlay}
+                    className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
+                  >
+                    minwook shin
+                  </button>
+                  <span className="text-on-surface-variant">/</span>
+                  <span className="truncate text-on-surface">{archiveProject.title}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={closeOverlay}
+                  className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
+                >
+                  back
+                </button>
+              </nav>
               <ProjectDetailView
-                project={heroProject}
+                project={archiveProject}
                 onBack={closeOverlay}
                 hideBack
                 focusQuery={detailFocus}
-                onAsk={handleMessage}
+                onAsk={undefined}
               />
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {(heroProject ?? archiveProject)?.linkedin && (
+          <motion.a
+            key="project-linkedin-only"
+            href={(heroProject ?? archiveProject)?.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open LinkedIn post"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 12 }}
+            transition={{ type: "tween", duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+            className={`fixed bottom-7 left-1/2 z-[80] -translate-x-1/2 underline decoration-[1px] underline-offset-2 transition-colors ${
+              archiveProject
+                ? "text-white decoration-white/65 hover:decoration-white"
+                : "text-[#050505] decoration-[#050505]/55 hover:decoration-[#050505]"
+            }`}
+          >
+            linkedin
+          </motion.a>
         )}
       </AnimatePresence>
 
@@ -1316,13 +1386,13 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Click-outside catcher - leaving the chat keeps history (only reload clears it) */}
-      {hasStarted && (messages.length > 0 || isStreaming) && (
+      {hasStarted && !heroProject && !archiveProject && (messages.length > 0 || isStreaming) && (
         <div className="fixed inset-0 z-[34]" onClick={leaveChat} aria-hidden />
       )}
 
       {/* Scrim - dims the view the chat is floating over; tap it to drop back into that view */}
       <AnimatePresence>
-        {hasStarted && (messages.length > 0 || isStreaming) && chatOnTop && (heroProject || showProfile) && (
+        {hasStarted && (messages.length > 0 || isStreaming) && chatOnTop && showProfile && (
           <motion.div
             key="chat-scrim"
             initial={{ opacity: 0 }}
@@ -1338,7 +1408,7 @@ export default function Home() {
 
       {/* Chat - floating capsules rising from the bottom over the page, gradient-faded at top */}
       <AnimatePresence>
-        {hasStarted && (messages.length > 0 || isStreaming) && (
+        {hasStarted && !heroProject && !archiveProject && (messages.length > 0 || isStreaming) && (
           <motion.div
             ref={chatContainerRef}
             key="chat"
@@ -1400,12 +1470,12 @@ export default function Home() {
                               } else if (target === "projects") {
                                 setShowProfile(false);
                                 setHeroProject(null);
+                                setArchiveProject(null);
                               } else if (target.comingSoon) {
                                 setProjectNotice(target.unavailableMessage ?? `${target.title} is not ready yet.`);
                               } else {
                                 setShowProfile(false);
-                                setDetailFocus(question);
-                                setHeroProject(target);
+                                openProjectFromChat(target, question);
                               }
                             }}
                             className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-none bg-surface-container-high text-on-surface text-xs font-normal hover:bg-outline-variant transition-colors"
@@ -1466,15 +1536,14 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Floating Input appears only when chat or a detail view is active. */}
-      {(hasStarted || heroProject || showProfile) && (
+      {/* Floating Input appears only when chat or profile is active. Project detail uses a LinkedIn-only action. */}
+      {!heroProject && !archiveProject && (hasStarted || showProfile) && (
         <ChatInput
           onSend={handleMessage}
           hasStarted={hasStarted}
-          connectorKind={heroProject ? "project" : showProfile ? "profile" : hasStarted ? "chat" : null}
-          connectorSrc={heroProject ? (heroProject.icon ?? heroProject.image) : showProfile ? "/profile-photo.jpg" : undefined}
-          linkedinUrl={heroProject?.linkedin}
-          onClose={heroProject || showProfile ? closeOverlay : undefined}
+          connectorKind={showProfile ? "profile" : hasStarted ? "chat" : null}
+          connectorSrc={showProfile ? "/profile-photo.jpg" : undefined}
+          onClose={showProfile ? closeOverlay : undefined}
           onFocusInput={reopenChat}
           introReady={introReady}
         />
