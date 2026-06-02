@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { CSSProperties, FormEvent, KeyboardEvent } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
@@ -514,6 +514,7 @@ function WorkSection({
 }) {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const indicatorTransition = { type: "tween" as const, duration: 0.42, ease: [0.16, 1, 0.3, 1] as const };
 
   const updateActiveProject = () => {
     const scroller = carouselRef.current;
@@ -573,30 +574,43 @@ function WorkSection({
           ))}
         </div>
       </div>
-      <div className="mx-auto mt-4 flex w-full max-w-[620px] items-center justify-center gap-0" aria-label="Selected work carousel">
-        {projects.map((project, index) => {
-          const isActive = index === activeIndex;
-          return (
-            <button
-              key={project.id}
-              type="button"
-              onClick={() => scrollToProject(index)}
-              aria-label={`Show ${project.title}`}
-              aria-current={isActive ? "true" : undefined}
-              className={`group flex h-8 w-10 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 ${
-                isActive ? "" : "hover:bg-[#050505]/[0.08] focus-visible:bg-[#050505]/[0.08]"
-              }`}
-            >
-              <motion.span
-                className="h-[3px] rounded-full bg-[#050505]"
-                animate={{ width: isActive ? 36 : 3, opacity: isActive ? 1 : 0.4 }}
-                whileHover={isActive ? undefined : { opacity: 0.65 }}
-                transition={{ type: "spring", stiffness: 520, damping: 42, mass: 0.7 }}
-              />
-            </button>
-          );
-        })}
-      </div>
+      <LayoutGroup id="selected-work-carousel-indicator">
+        <div className="mx-auto mt-4 flex w-full max-w-[620px] items-center justify-center gap-[6px]" aria-label="Selected work carousel">
+          {projects.map((project, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <motion.button
+                key={project.id}
+                type="button"
+                onClick={() => scrollToProject(index)}
+                aria-label={`Show ${project.title}`}
+                aria-current={isActive ? "true" : undefined}
+                animate={{ marginLeft: isActive ? 16.5 : 0, marginRight: isActive ? 16.5 : 0 }}
+                className={`group relative flex h-6 w-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 ${
+                  isActive ? "" : "hover:bg-[#050505]/[0.08] focus-visible:bg-[#050505]/[0.08]"
+                }`}
+                transition={indicatorTransition}
+              >
+                <motion.span
+                  aria-hidden="true"
+                  className="h-[3px] w-[3px] shrink-0 rounded-full bg-[#050505]"
+                  animate={{ opacity: isActive ? 0 : 0.4 }}
+                  whileHover={isActive ? undefined : { opacity: 0.65 }}
+                  transition={indicatorTransition}
+                />
+                {isActive ? (
+                  <motion.span
+                    aria-hidden="true"
+                    layoutId="selected-work-active-indicator"
+                    className="pointer-events-none absolute left-[-6px] top-[10.5px] h-[3px] w-9 rounded-full bg-[#050505]"
+                    transition={indicatorTransition}
+                  />
+                ) : null}
+              </motion.button>
+            );
+          })}
+        </div>
+      </LayoutGroup>
     </section>
   );
 }
