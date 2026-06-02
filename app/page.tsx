@@ -483,7 +483,7 @@ function EditorialIntro() {
     <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center px-6 pb-16 pt-[92px] sm:px-10 md:pb-20 md:pt-[122px]">
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
         <p className="text-[13px] leading-relaxed text-[#050505]">minwook shin</p>
-        <p className="mt-1 text-[14px] leading-relaxed text-[#050505]/55">Design engineer / AI product studio</p>
+        <p className="mt-1 text-[14px] leading-relaxed text-[#050505]/55">Design engineer</p>
         <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#050505] md:text-[36px]">
           Interfaces for AI products, websites, and prototypes that move from early idea to working software.
         </h1>
