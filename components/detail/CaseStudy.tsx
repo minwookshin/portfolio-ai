@@ -111,7 +111,7 @@ function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "
     );
   }
   return (
-    <div className={`${card} overflow-hidden`}>
+    <div className="overflow-hidden">
       <img src={src} alt={alt} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
     </div>
   );
@@ -305,7 +305,7 @@ function renderSection(section: DetailSection, i: number) {
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className="grid sm:grid-cols-2 gap-4 items-start">
             {section.images.map((img, gi) => (
-              <figure key={gi} className={`${card} overflow-hidden`}>
+              <figure key={gi} className="overflow-hidden">
                 <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
                 {img.caption && <figcaption className="px-4 py-3 text-xs text-on-surface-variant">{img.caption}</figcaption>}
               </figure>
