@@ -1,210 +1,25 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import type { CSSProperties, FormEvent, KeyboardEvent } from "react";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import type { FormEvent, KeyboardEvent } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
-import ProjectDetailView from "@/components/ProjectDetailView";
 import ProfileCard from "@/components/ProfileCard";
-import { Project } from "@/components/ProjectCard";
+import type { Project } from "@/components/ProjectCard";
 import { ArrowRight, FileText, ArrowUpRight } from "lucide-react";
 import { springs } from "@/lib/material/motion";
-
-// One reveal shared by every full-screen overlay (profile, project detail) so
-// they all enter/leave with the same spring instead of bespoke morphs.
-// Selected studio work
-const MAIN_PROJECTS: Project[] = [
-  {
-    id: "1",
-    title: "Sentinel",
-    description: "Predictive Home Maintenance iOS App",
-    fullDescription:
-      "A native iOS app built in 48 hours that transforms home maintenance from reactive crisis management to proactive risk mitigation. Winner of Google x SCAD FLUX Hackathon 2025.",
-    role: "UX Engineer (Design + Native iOS Development)",
-    timeline: "2 days (48-hour hackathon)",
-    team: "Hyunsoo, Madelyn",
-    tags: ["Swift", "SwiftUI", "Figma", "Predictive Data"],
-    categories: ["Engineering", "Design"],
-    github: "https://github.com/YeYen1721/sentinel",
-    linkedin: "https://www.linkedin.com/posts/minwookshin_hackathon-scadflux-vibecoding-ugcPost-7389656630055018498-BOpk/",
-    date: "2025",
-    image: "/projects/sentinel/hero.png",
-    icon: "/projects/sentinellogo.png",
-    studioLabel: "48-hour native iOS MVP",
-    themeColor: "#F59E0B",
-    overview: "From Idea to Native iOS App in 48 Hours. Sentinel is a predictive home maintenance app that helps homeowners move from gut feeling to data-driven decision making, preventing invisible risks before they become $200,000 disasters.",
-    contentSections: [
-      { type: 'text', content: "Hero" },
-      { type: 'text', content: "Context" },
-      { type: 'text', content: "Builder Process" },
-      { type: 'text', content: "Key Features" },
-      { type: 'text', content: "Demo Video" },
-      { type: 'text', content: "Outcome" }
-    ]
-  },
-  {
-    id: "2",
-    title: "Portfolio AI",
-    description: "An AI-native studio website that explains work, qualifies intent, and routes visitors to the right proof.",
-    fullDescription:
-      "A conversational product-studio site built with Next.js, React, and Gemini. It answers questions, runs lightweight project intake, and opens relevant case studies in real time.",
-    role: "UX Engineer / Full-Stack Developer",
-    timeline: "2 weeks",
-    team: "Solo Project",
-    tags: ["Next.js", "React", "Gemini API", "TypeScript", "Framer Motion"],
-    categories: ["Engineering", "AI"],
-    github: "https://github.com/YeYen1721/portfolio",
-    date: "2025",
-    image: "/projects/2.png",
-    icon: "/icon.png",
-    studioLabel: "AI intake website",
-    themeColor: "#8B5CF6",
-    overview: "An AI-native studio site that turns passive browsing into a live project briefing.",
-    features: [
-      "Zero-latency streaming using Server-Sent Events (SSE)",
-      "3-Layer Defense (Identity Protection, Secret Guard, Injection Firewall)",
-      "Rich content rendering with Markdown, Code Blocks, and Project Cards"
-    ],
-    challenges: "Bridging high-end Product Design with complex LLM Engineering while maintaining military-grade security.",
-    outcome: "Bridged the gap between high-end Product Design and complex LLM Engineering. Proves the ability to build secure, production-ready AI applications with elite UX.",
-    contentSections: [
-      { type: 'text', content: "Turning a Portfolio into a Studio Interface" },
-      { type: 'text', content: "Static sites make visitors hunt for relevance. This AI-native interface answers questions, qualifies project intent, and routes people to the right proof in real time." },
-      { type: 'text', content: "Technical Stack Optimized for AI-Native UX" },
-      { type: 'text', content: "• **Next.js 16 (App Router):** Moved data fetching to the server, reducing client-side hydration time by 40%.\n• **Streaming via SSE:** Implemented Server-Sent Events to stream Gemini responses token-by-token, creating a natural conversational rhythm without loading spinners.\n• **Edge Runtime:** API routes run on global Edge Network, ensuring <200ms response times regardless of user geography." },
-      { type: 'gallery', images: [{ image: "/projects/portfolio-ai/architecture.png", caption: "System Architecture" }] },
-      { type: 'text', content: "Key Features" },
-      { type: 'text', content: "**Streaming Responses + Structured Data Rendering**\n\n• **Fluidity:** Server-Sent Events deliver responses token-by-token, mimicking human typing. No \"loading...\" states-just natural flow.\n• **Structured Output:** Responses render as Markdown with syntax-highlighted code and formatted tables. Complex technical answers become scannable, visual information, reducing cognitive load." },
-      { type: 'text', content: "**Enterprise-Ready Security Architecture**\n\n• **Server-Side API Key Protection:** Keys never touch the browser; all requests route via Next.js API Routes.\n• **Rate Limiting:** Implemented request throttling (10 req/min) to prevent abuse and DDoS attacks.\n• **Environment Isolation:** Sensitive credentials stored in secure server-only environments, mirroring production standards." },
-      { type: 'text', content: "**Impact: Bridging Design, Engineering, and Product Strategy**\n\n• **LLM Integration at Scale:** Delivered a streaming AI chat interface with enterprise-grade security and sub-100ms latency.\n• **Cost-Efficient Architecture:** Reduced token usage by 35% through prompt optimization, cutting API costs without sacrificing UX.\n• **Design + Engineering Fusion:** Unified visual polish (Framer Motion) with technical rigor (RSC)-proving full-stack ownership." }
-    ]
-  },
-  {
-    id: "11",
-    title: "Atlas",
-    description: "Coming soon.",
-    fullDescription: "Atlas is still being prepared.",
-    tags: ["AI", "Product Design"],
-    categories: ["AI", "Design"],
-    date: "Coming soon",
-    image: "/projects/atlas/logo.png",
-    icon: "/projects/atlas/logo.png",
-    studioLabel: "Coming soon",
-    comingSoon: true,
-    unavailableMessage: "Atlas is not ready yet.",
-  },
-  {
-    id: "4",
-    title: "FLUX Website",
-    description: "Interactive design project with unique UI interactions",
-    fullDescription:
-      "A creative web project featuring an innovative grid-based layout with circular elements and dynamic interactions. Built with modern web technologies to create an engaging user experience with smooth animations and responsive design.",
-    role: "Website Officer",
-    timeline: "2025",
-    tags: ["HTML", "CSS", "JavaScript", "UI/UX Design"],
-    categories: ["Engineering", "Design"],
-    link: "https://www.scadflux.com/fluxathon",
-    github: "https://github.com/YeYen1721/portfolio-",
-    date: "2025",
-    image: "/projects/1.png",
-    icon: "/projects/flux/icon-white.png",
-    studioLabel: "Interactive web system",
-    themeColor: "#8B5CF6",
-    overview: "FLUX is a creative web project that showcases innovative UI/UX design through an interactive grid-based layout. The project emphasizes smooth user interactions, dynamic animations, and a unique circular navigation system that creates an engaging browsing experience."
-  },
-  {
-    id: "3",
-    title: "Mindline",
-    description: "AI-Powered Gambling Addiction Recovery Tool",
-    fullDescription:
-      "An AI-powered support system designed to help young adults overcome betting addiction through real-time intervention, smart journaling, and behavioral pattern recognition.",
-    role: "AI UX Designer / UX Researcher",
-    timeline: "10 weeks",
-    team: "Brynn, Giuseppe, Max, Zhenghao, Leo",
-    tags: ["AI Chatbot", "UX Research"],
-    categories: ["AI", "Design"],
-    github: "https://github.com/YeYen1721/mindline",
-    date: "2025",
-    image: "/projects/mindline/hero.png",
-    icon: "/projects/mindline/icon.png",
-    studioLabel: "Behavioral AI product",
-    themeColor: "#3B82F6",
-    overview: "Mindline shifts the focus from 'restriction' to 'awareness'. An AI-powered tool that helps young adults (18-26) combat betting addiction through real-time emotional analysis, smart journaling, and behavioral interventions.",
-    contentSections: [
-      { type: 'text', content: "Hero" },
-      { type: 'text', content: "Research Deep Dive" },
-      { type: 'text', content: "The Solution" },
-      { type: 'text', content: "The Logic" },
-      { type: 'text', content: "Outcome" }
-    ]
-  },
-  {
-    id: "7",
-    title: "NameMe",
-    description: "Concept design project",
-    fullDescription:
-      "NameMe is a concept design project spanning ideation, low-fi flows, and a high-fidelity concept.",
-    tags: ["UX Design", "Concept"],
-    categories: ["Design"],
-    date: "2025",
-    image: "/projects/nameme/nmmainfin.jpg",
-    icon: "/projects/nameme/icon.png",
-    studioLabel: "Concept-to-hi-fi UX",
-    overview: "From ideation to a high-fidelity concept.",
-    gallery: ["/projects/nameme/nmmainfin.jpg", "/projects/nameme/nmhificoncept.png", "/projects/nameme/nmmidfi.png", "/projects/nameme/nmlowfi.png"]
-  },
-  {
-    id: "8",
-    title: "CapExplorer",
-    description: "A website for exploring caps.",
-    fullDescription: "CapExplorer, a website for exploring caps.",
-    tags: ["Web", "UI/UX Design"],
-    categories: ["Engineering", "Design", "AI"],
-    date: "2025",
-    glyph: "CEr",
-    studioLabel: "AI-assisted product demo",
-    linkedin: "https://www.linkedin.com/posts/minwookshin_buildinpublic-hat-ugcPost-7432477739208777729-sZlv/",
-  },
-  {
-    id: "9",
-    title: "Tomo",
-    description: "Tomo, interactive demo.",
-    fullDescription: "Tomo, interactive demo.",
-    tags: ["Product Design"],
-    categories: ["Design", "AI"],
-    date: "2025",
-    glyph: "🫠",
-    studioLabel: "Interactive product demo",
-    linkedin: "https://www.linkedin.com/posts/minwookshin_technology-innovation-ugcPost-7432812004098084865-AGvW/",
-  },
-  {
-    id: "10",
-    title: "Caret",
-    description: "Caret, an iOS app and UX design project.",
-    fullDescription: "Caret, an iOS app and UX design project.",
-    tags: ["iOS", "UX Design"],
-    categories: ["Engineering", "Design"],
-    date: "2025",
-    icon: "/projects/caret/Caret_icon.png",
-    image: "/projects/caret/icon.png",
-    studioLabel: "iOS UX prototype",
-    linkedin: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
-  },
-];
-
-// The home view opens with these four projects in a centered 2x2 grid.
-const FEATURED_PROJECT_IDS = ["11", "3", "1", "2"] as const;
-
-const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
-  Sentinel: "/projects/sentinel/demo.mp4",
-  CapExplorer: "/projects/capexplorer/demo.mp4",
-  Tomo: "/projects/tomo/demo.mp4",
-  Caret: "/projects/caret/demo.mp4",
-};
-
-const LIVE_DEMO_TILE_TITLES = new Set(["CapExplorer", "Caret"]);
+import {
+  FEATURED_PROJECT_IDS,
+  LIVE_DEMO_TILE_TITLES,
+  MAIN_PROJECTS,
+  PROJECT_PREVIEW_VIDEOS,
+  getProjectPath,
+  orderProjects,
+} from "@/data/projects";
 
 const BUILD_VERSION = "3.1.33387";
 const BUILD_UPDATED_AT = "2026-06-01T15:12:55Z";
@@ -221,21 +36,7 @@ const LAB_TILE_HEIGHTS = [
   "h-[300px] sm:h-[360px]",
 ] as const;
 const LAB_TILE_HEIGHT_VALUES = [460, 340, 460, 340, 500, 360] as const;
-const LIGHT_PROJECT_TOKENS = {
-  "--md-surface": "#f7f7f8",
-  "--md-surface-container": "#ffffff",
-  "--md-surface-container-high": "#efeff1",
-  "--md-on-surface": "#050505",
-  "--md-on-surface-variant": "#6f6f75",
-  "--md-outline": "#d8d8dd",
-  "--md-outline-variant": "#e5e5e8",
-  "--md-primary": "#050505",
-  "--md-on-primary": "#ffffff",
-  "--md-primary-container": "#eeeeef",
-  "--md-on-primary-container": "#050505",
-  "--md-hairline": "rgba(5, 5, 5, 0.10)",
-} as CSSProperties;
-
+const APPLE_EASE = [0.22, 1, 0.36, 1] as const;
 // Personal Information
 const PERSONAL_INFO = {
   name: "Minwook Shin",
@@ -302,16 +103,6 @@ function showToTarget(show: string | null): Project | "profile" | "projects" | n
   return null;
 }
 
-function orderProjects(projects: Project[], ids: readonly string[]) {
-  return ids
-    .map((id) => projects.find((project) => project.id === id))
-    .filter((project): project is Project => Boolean(project));
-}
-
-function isFeaturedProject(project: Project) {
-  return FEATURED_PROJECT_IDS.includes(project.id as typeof FEATURED_PROJECT_IDS[number]);
-}
-
 function formatElapsedBefore(from: string, now: number) {
   const elapsedSeconds = Math.max(0, Math.floor((now - new Date(from).getTime()) / 1000));
   const days = Math.floor(elapsedSeconds / 86400);
@@ -352,7 +143,7 @@ function BuildMeta() {
   }, []);
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[#77777d]">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[var(--dark-text-muted)]">
       <span>{meta.version}</span>
       <span aria-hidden>·</span>
       <span>updated {formatElapsedBefore(meta.updatedAt, now)}</span>
@@ -363,11 +154,14 @@ function BuildMeta() {
 function ProjectMedia({ project, tone = "light" }: { project: Project; tone?: "light" | "dark" }) {
   const src = project.image ?? project.icon;
   const isLogo = project.title === "Atlas" || project.title === "Portfolio AI";
-  const mediaBg = tone === "dark" ? "bg-[#101012]" : "bg-[#0b0b0d]";
+  const mediaBg =
+    tone === "dark"
+      ? "border border-[var(--dark-border)] bg-[var(--dark-bg-surface)]"
+      : "border border-[var(--dark-border)] bg-[var(--dark-bg-base)]";
 
   if (src) {
     return (
-      <div className={`relative aspect-[1.5] w-full overflow-hidden rounded-[22px] ${mediaBg}`}>
+      <div className={`relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] ${mediaBg}`}>
         <img
           src={src}
           alt={project.title}
@@ -384,7 +178,7 @@ function ProjectMedia({ project, tone = "light" }: { project: Project; tone?: "l
   }
 
   return (
-    <div className={`flex aspect-[1.5] w-full items-center justify-center rounded-[22px] ${mediaBg} text-4xl text-[#f4f4f5]`}>
+    <div className={`flex aspect-[1.5] w-full items-center justify-center rounded-[var(--md-shape-lg)] ${mediaBg} text-4xl text-[var(--dark-text-primary)]`}>
       {project.glyph ?? project.title.charAt(0)}
     </div>
   );
@@ -429,7 +223,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="text-[13px] text-[rgba(5,5,5,0.68)] underline decoration-[rgba(5,5,5,0.68)] decoration-[1px] underline-offset-2 outline-none transition-colors duration-300 hover:text-[#050505] hover:decoration-[#050505] focus-visible:text-[#050505] focus-visible:decoration-[#050505]"
+      className="text-[length:var(--type-0)] text-[var(--text-muted)] underline decoration-[var(--text-muted)] decoration-[1px] underline-offset-1 outline-none transition-colors duration-300 hover:text-[var(--accent-indigo)] hover:decoration-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)] focus-visible:decoration-[var(--accent-indigo)]"
     >
       {children}
     </a>
@@ -438,59 +232,62 @@ function IntroLink({
 
 function SelectedProjectCard({
   project,
-  index,
   isActive,
-  onSelect,
 }: {
   project: Project;
-  index: number;
   isActive: boolean;
-  onSelect: (project: Project) => void;
 }) {
-  return (
-    <motion.button
-      type="button"
-      onClick={() => onSelect(project)}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      animate={{ scale: isActive ? 1 : 0.8 }}
-      whileHover={isActive ? undefined : { scale: 0.84 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
-      data-work-card="true"
-      className={`group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left outline-none transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-[#050505]/60 focus-visible:ring-offset-4 focus-visible:ring-offset-white ${
-        isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
-      }`}
-    >
+  const cardContent = (
+    <>
       <ProjectMedia project={project} />
       <span className="mt-3 flex items-start justify-between gap-4">
         <span className="min-w-0">
-          <span className="block text-[15px] font-normal leading-tight text-[#050505]">{project.title}</span>
-          <span className="mt-1 block text-[13px] leading-snug text-[#050505]/55">
+          <span className="block text-[length:var(--type-0)] font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">{project.title}</span>
+          <span className="mt-[var(--space-1)] block text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
             {project.comingSoon ? project.unavailableMessage ?? "Coming soon." : project.studioLabel ?? project.description}
           </span>
         </span>
         {!project.comingSoon && (
-          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[#050505] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
         )}
       </span>
-    </motion.button>
+    </>
+  );
+
+  return (
+    <motion.div
+      animate={{ scale: isActive ? 1 : 0.8 }}
+      whileHover={isActive ? undefined : { scale: 0.84 }}
+      transition={{ type: "tween", duration: 0.52, ease: APPLE_EASE }}
+      data-work-card="true"
+      className={`group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left outline-none transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-base)] ${
+        isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
+      }`}
+    >
+      {project.comingSoon ? (
+        <div aria-disabled="true">{cardContent}</div>
+      ) : (
+        <Link href={getProjectPath(project)} className="block outline-none">
+          {cardContent}
+        </Link>
+      )}
+    </motion.div>
   );
 }
 
 function EditorialIntro() {
   return (
-    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center px-6 pb-16 pt-[92px] sm:px-10 md:pb-20 md:pt-[122px]">
+    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[#F7F8F8] px-[var(--space-3)] pb-[var(--space-8)] pt-[92px] sm:px-[var(--space-5)] md:pb-[calc(var(--space-8)+var(--space-2))] md:pt-[122px]">
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <p className="text-[13px] leading-relaxed text-[#050505]">minwook shin</p>
-        <p className="mt-1 text-[14px] leading-relaxed text-[#050505]/55">Design engineer</p>
-        <h1 className="mt-5 max-w-[620px] text-[28px] font-normal leading-[1.16] text-[#050505] md:text-[36px]">
+        <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">minwook shin</p>
+        <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</p>
+        <h1 className="mt-[var(--space-3)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
           Interfaces for AI products, websites, and prototypes that move from early idea to working software.
         </h1>
-        <p className="mt-3 max-w-[520px] text-[16px] leading-[1.5] text-[#050505]">
+        <p className="mt-[var(--space-2)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
           I work as a hands-on design engineer and compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.
         </p>
-        <p className="mt-7 max-w-full whitespace-nowrap leading-relaxed text-[#050505]/68">
+        <p className="mt-[var(--space-4)] max-w-full whitespace-nowrap leading-[var(--leading-body)] text-[var(--text-muted)]">
           <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>Email</IntroLink>
           {", "}
           <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
@@ -507,30 +304,56 @@ function EditorialIntro() {
 
 function WorkSection({
   projects,
-  onSelect,
 }: {
   projects: Project[];
-  onSelect: (project: Project) => void;
 }) {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const programmaticScrollRef = useRef<number | null>(null);
+  const scrollSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const indicatorTransition = { type: "tween" as const, duration: 0.42, ease: [0.16, 1, 0.3, 1] as const };
+  const indicatorCell = 24;
+  const indicatorGap = 8;
+  const indicatorStride = indicatorCell + indicatorGap;
+  const activeIndicatorWidth = 36;
+  const activeIndicatorX = activeIndex * indicatorStride + (indicatorCell - activeIndicatorWidth) / 2;
 
-  const updateActiveProject = () => {
+  useEffect(() => {
+    return () => {
+      if (scrollSettleTimerRef.current) clearTimeout(scrollSettleTimerRef.current);
+    };
+  }, []);
+
+  const getClosestProjectIndex = () => {
     const scroller = carouselRef.current;
-    if (!scroller) return;
+    if (!scroller) return null;
     const cards = Array.from(scroller.querySelectorAll<HTMLElement>("[data-work-card]"));
-    if (!cards.length) return;
+    if (!cards.length) return null;
     const scrollerRect = scroller.getBoundingClientRect();
     const scrollerCenter = scrollerRect.left + scrollerRect.width / 2;
-    const closestIndex = cards.reduce((bestIndex, card, index) => {
+    return cards.reduce((bestIndex, card, index) => {
       const bestRect = cards[bestIndex].getBoundingClientRect();
       const cardRect = card.getBoundingClientRect();
       const bestDistance = Math.abs(bestRect.left + bestRect.width / 2 - scrollerCenter);
       const distance = Math.abs(cardRect.left + cardRect.width / 2 - scrollerCenter);
       return distance < bestDistance ? index : bestIndex;
     }, 0);
-    setActiveIndex(closestIndex);
+  };
+
+  const updateActiveProject = () => {
+    if (programmaticScrollRef.current !== null) {
+      if (scrollSettleTimerRef.current) clearTimeout(scrollSettleTimerRef.current);
+      scrollSettleTimerRef.current = setTimeout(() => {
+        const lockedIndex = programmaticScrollRef.current;
+        programmaticScrollRef.current = null;
+        scrollSettleTimerRef.current = null;
+        setActiveIndex(getClosestProjectIndex() ?? lockedIndex ?? 0);
+      }, 180);
+      return;
+    }
+
+    const closestIndex = getClosestProjectIndex();
+    if (closestIndex === null) return;
+    setActiveIndex((current) => (current === closestIndex ? current : closestIndex));
   };
 
   const scrollToProject = (index: number) => {
@@ -538,20 +361,27 @@ function WorkSection({
     const cards = Array.from(scroller?.querySelectorAll<HTMLElement>("[data-work-card]") ?? []);
     const card = cards[index];
     if (!scroller || !card) return;
+    if (scrollSettleTimerRef.current) clearTimeout(scrollSettleTimerRef.current);
+    programmaticScrollRef.current = index;
+    setActiveIndex(index);
     const scrollerRect = scroller.getBoundingClientRect();
     const cardRect = card.getBoundingClientRect();
     const delta = cardRect.left + cardRect.width / 2 - (scrollerRect.left + scrollerRect.width / 2);
     const target = scroller.scrollLeft + delta;
     const maxScroll = scroller.scrollWidth - scroller.clientWidth;
     scroller.scrollTo({ left: Math.min(Math.max(target, 0), maxScroll), behavior: "smooth" });
-    setActiveIndex(index);
+    scrollSettleTimerRef.current = setTimeout(() => {
+      programmaticScrollRef.current = null;
+      scrollSettleTimerRef.current = null;
+      setActiveIndex(getClosestProjectIndex() ?? index);
+    }, 700);
   };
 
   return (
-    <section id="work" className="mx-auto w-full max-w-[1180px] px-6 py-14 sm:px-10 md:py-20">
-      <div className="mb-5 flex justify-center">
+    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-7)] sm:px-[var(--space-5)] md:py-[calc(var(--space-8)+var(--space-2))]">
+      <div className="mb-[var(--space-3)] flex justify-center">
         <div className="w-full max-w-[620px] text-left">
-          <h2 className="text-[18px] font-normal text-[#050505]">Selected work</h2>
+          <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)]">Selected work</h2>
         </div>
       </div>
       <div
@@ -567,15 +397,21 @@ function WorkSection({
             <SelectedProjectCard
               key={project.id}
               project={project}
-              index={index}
               isActive={index === activeIndex}
-              onSelect={onSelect}
             />
           ))}
         </div>
       </div>
-      <LayoutGroup id="selected-work-carousel-indicator">
-        <div className="mx-auto mt-4 flex w-full max-w-[620px] items-center justify-center gap-[6px]" aria-label="Selected work carousel">
+      <div className="mx-auto mt-4 flex w-full max-w-[620px] justify-center" aria-label="Selected work carousel">
+        <div className="relative flex items-center gap-2">
+          <div className="pointer-events-none absolute left-0 top-1/2 h-[3px] w-full -translate-y-1/2">
+            <motion.span
+              aria-hidden="true"
+              className="block h-[3px] w-9 rounded-full bg-[var(--text-primary)]"
+              animate={{ x: activeIndicatorX }}
+              transition={{ type: "tween", duration: 0.48, ease: APPLE_EASE }}
+            />
+          </div>
           {projects.map((project, index) => {
             const isActive = index === activeIndex;
             return (
@@ -585,32 +421,22 @@ function WorkSection({
                 onClick={() => scrollToProject(index)}
                 aria-label={`Show ${project.title}`}
                 aria-current={isActive ? "true" : undefined}
-                animate={{ marginLeft: isActive ? 16.5 : 0, marginRight: isActive ? 16.5 : 0 }}
                 className={`group relative flex h-6 w-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 ${
-                  isActive ? "" : "hover:bg-[#050505]/[0.08] focus-visible:bg-[#050505]/[0.08]"
+                  isActive ? "" : "hover:bg-[var(--bg-element)] focus-visible:bg-[var(--bg-element)]"
                 }`}
-                transition={indicatorTransition}
               >
                 <motion.span
                   aria-hidden="true"
-                  className="h-[3px] w-[3px] shrink-0 rounded-full bg-[#050505]"
-                  animate={{ opacity: isActive ? 0 : 0.4 }}
-                  whileHover={isActive ? undefined : { opacity: 0.65 }}
-                  transition={indicatorTransition}
+                  className="h-[3px] w-[3px] shrink-0 rounded-full bg-[var(--text-primary)]"
+                  animate={{ opacity: isActive ? 0 : 0.38, scale: isActive ? 0.75 : 1 }}
+                  whileHover={isActive ? undefined : { opacity: 0.72, scale: 1.08 }}
+                  transition={{ type: "tween", duration: 0.32, ease: APPLE_EASE }}
                 />
-                {isActive ? (
-                  <motion.span
-                    aria-hidden="true"
-                    layoutId="selected-work-active-indicator"
-                    className="pointer-events-none absolute left-[-6px] top-[10.5px] h-[3px] w-9 rounded-full bg-[#050505]"
-                    transition={indicatorTransition}
-                  />
-                ) : null}
               </motion.button>
             );
           })}
         </div>
-      </LayoutGroup>
+      </div>
     </section>
   );
 }
@@ -701,13 +527,13 @@ function LabChatTile() {
 
   return (
     <div
-      className={`surface-cursor-dark w-full overflow-hidden rounded-[10px] bg-transparent p-0 text-[#050505] ${
+      className={`dark-embed w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--dark-border)] bg-[var(--dark-bg-surface)] p-0 text-[var(--dark-text-primary)] ${
         hasMessages ? "h-[520px]" : LAB_TILE_HEIGHTS[0]
       }`}
     >
       <form
         onSubmit={submit}
-        className="flex h-full min-h-0 w-full flex-col rounded-[10px] bg-[#f5f5f5] p-4 text-[#050505] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="flex h-full min-h-0 w-full flex-col rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-surface)] p-4 text-[var(--dark-text-primary)] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
       >
         <div
           ref={historyRef}
@@ -719,8 +545,10 @@ function LabChatTile() {
             return (
               <div key={msg.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[88%] px-3 py-2 leading-snug ${
-                    isUser ? "bg-[#050505] text-white" : "bg-white text-[#050505]"
+                  className={`max-w-[88%] rounded-[var(--md-shape-sm)] border px-3 py-2 leading-snug ${
+                    isUser
+                      ? "border-[var(--accent-indigo)] bg-[var(--accent-indigo)] text-[var(--dark-text-primary)]"
+                      : "border-[var(--dark-border)] bg-[var(--dark-bg-base)] text-[var(--dark-text-primary)]"
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{body || (isStreaming ? "..." : "")}</p>
@@ -730,7 +558,7 @@ function LabChatTile() {
           })}
         </div>
         <div
-          className="mt-3 flex h-16 w-full min-w-0 rounded-[8px] bg-white"
+          className="mt-3 flex h-16 w-full min-w-0 rounded-[var(--md-shape-sm)] border border-[var(--dark-border)] bg-[var(--dark-bg-base)]"
         >
           <input
             value={draft}
@@ -738,13 +566,13 @@ function LabChatTile() {
             onKeyDown={submitFromKeyboard}
             placeholder="ask me"
             aria-label="Ask from lab"
-            className="min-w-0 flex-1 bg-transparent px-5 font-light outline-none placeholder:text-[#77777d]"
+            className="min-w-0 flex-1 bg-transparent px-5 font-light text-[var(--dark-text-primary)] outline-none placeholder:text-[var(--dark-text-muted)]"
           />
           <button
             type="submit"
             aria-label="Send"
             disabled={!draft.trim() || isStreaming}
-            className="flex h-full w-16 shrink-0 items-center justify-center transition-opacity disabled:opacity-30"
+            className="flex h-full w-16 shrink-0 items-center justify-center border-l border-[var(--dark-border)] text-[var(--dark-text-primary)] transition-colors hover:bg-[var(--dark-bg-surface)] disabled:opacity-30"
           >
             <ArrowRight className="h-5 w-5" strokeWidth={2.25} />
           </button>
@@ -757,12 +585,10 @@ function LabChatTile() {
 function LabProjectTile({
   project,
   index,
-  onSelect,
   className = "",
 }: {
   project: Project;
   index: number;
-  onSelect: (project: Project) => void;
   className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -790,20 +616,8 @@ function LabProjectTile({
     video.currentTime = 0;
   };
 
-  return (
-    <motion.button
-      type="button"
-      onClick={() => onSelect(project)}
-      onMouseEnter={playPreview}
-      onMouseLeave={stopPreview}
-      onFocus={playPreview}
-      onBlur={stopPreview}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
-      className={`surface-cursor-dark group relative w-full overflow-hidden rounded-[10px] bg-[#f5f5f5] text-left outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] ${className}`}
-    >
+  const tileContent = (
+    <>
       <div className="absolute inset-0 overflow-hidden">
         {src && (
           <img
@@ -833,7 +647,7 @@ function LabProjectTile({
         )}
         {!src && (
           <div
-            className={`absolute inset-0 flex items-center justify-center bg-[#eeeeef] text-[#050505] transition duration-500 ${
+            className={`absolute inset-0 flex items-center justify-center bg-[var(--bg-element)] text-[var(--text-primary)] transition duration-500 ${
               showsLiveDemo
                 ? "opacity-0"
                 : previewVideo
@@ -845,27 +659,47 @@ function LabProjectTile({
           </div>
         )}
       </div>
-      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/72 via-black/28 to-transparent p-4 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-        <span className="flex items-end justify-between gap-4">
+      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-[var(--dark-bg-base)] via-[var(--dark-overlay-56)] to-transparent p-[var(--space-2)] opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+        <span className="flex items-end justify-between gap-[var(--space-2)]">
           <span className="min-w-0">
-            <span className="block font-normal leading-tight text-white">{project.title}</span>
-            <span className="mt-1 block leading-snug text-white/62">
+            <span className="block font-normal leading-[var(--leading-tight)] text-[var(--dark-text-primary)]">{project.title}</span>
+            <span className="mt-[var(--space-1)] block leading-[var(--leading-body)] text-[var(--dark-text-muted)]">
               {project.studioLabel ?? project.description}
             </span>
           </span>
-          {!project.comingSoon && <ArrowUpRight className="h-4 w-4 shrink-0 text-white" />}
+          {!project.comingSoon && <ArrowUpRight className="h-4 w-4 shrink-0 text-[var(--accent-indigo-hover)]" />}
         </span>
       </span>
-    </motion.button>
+    </>
+  );
+
+  return (
+    <motion.div
+      onMouseEnter={playPreview}
+      onMouseLeave={stopPreview}
+      onFocus={playPreview}
+      onBlur={stopPreview}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
+      className={`dark-embed group relative w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--dark-border)] bg-[var(--dark-bg-surface)] text-left outline-none transition-colors hover:bg-[var(--dark-bg-base)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--dark-bg-base)] ${className}`}
+    >
+      {project.comingSoon ? (
+        <div aria-disabled="true">{tileContent}</div>
+      ) : (
+        <Link href={getProjectPath(project)} className="absolute inset-0 block outline-none">
+          {tileContent}
+        </Link>
+      )}
+    </motion.div>
   );
 }
 
 function LabArchive({
   projects,
-  onSelect,
 }: {
   projects: Project[];
-  onSelect: (project: Project) => void;
 }) {
   const labColumns: Array<Array<{ project: Project; index: number }>> = [[], [], [], []];
   const labColumnHeights = [LAB_TILE_HEIGHT_VALUES[0], 0, 0, 0];
@@ -879,12 +713,12 @@ function LabArchive({
   });
 
   return (
-    <section className="rounded-t-[28px] bg-[#050505] px-6 pb-44 pt-20 text-[#f4f4f5] sm:px-10 md:pt-28">
+    <section className="dark-embed border-t border-[var(--dark-border)] bg-[var(--dark-bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[calc(var(--space-8)+var(--space-2))] text-[var(--dark-text-primary)] sm:px-[var(--space-5)] md:pt-[calc(var(--space-8)*1.75)]">
       <div className="mx-auto w-full max-w-[1180px]">
-        <div className="mb-8 flex justify-center">
+        <div className="mb-[var(--space-4)] flex justify-center">
           <div className="w-full max-w-[620px] text-left">
-            <h2 className="text-[18px] font-normal text-[#f4f4f5]">Lab / archive</h2>
-            <p className="mt-2 max-w-[500px] text-[15px] leading-[1.52] text-white/55">
+            <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--dark-text-primary)]">Lab / archive</h2>
+            <p className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--dark-text-muted)]">
               Projects, demos, experiments, and product sketches live here so the main page stays simple while the body of work stays accessible.
             </p>
           </div>
@@ -898,7 +732,6 @@ function LabArchive({
                   key={project.id}
                   project={project}
                   index={index}
-                  onSelect={onSelect}
                   className={LAB_TILE_HEIGHTS[(index + 1) % LAB_TILE_HEIGHTS.length]}
                 />
               ))}
@@ -915,9 +748,8 @@ function LabArchive({
 
 // Interface to store content snapshot for each message
 export default function Home() {
+  const router = useRouter();
   const [hasStarted, setHasStarted] = useState(false);
-  const [heroProject, setHeroProject] = useState<Project | null>(null);
-  const [archiveProject, setArchiveProject] = useState<Project | null>(null);
   const [showProfile, setShowProfile] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (project detail / profile / globe) instead of snapping back home. The
@@ -925,7 +757,6 @@ export default function Home() {
   // explicitly (tapping an icon, "Open X", profile/globe) drops the chat back
   // behind it so that view is in focus again.
   const [chatOnTop, setChatOnTop] = useState(false);
-  const [detailFocus, setDetailFocus] = useState<string | null>(null);
   const [projectNotice, setProjectNotice] = useState<string | null>(null);
   // Keep the landing motion quiet: the page simply settles in, with no separate
   // logo trace or position handoff.
@@ -971,10 +802,7 @@ export default function Home() {
 
     // Tell the backend what the user is currently looking at, so the AI can
     // resolve "this"/"it" and ground its answer in that screen.
-    const activeProject = heroProject ?? archiveProject;
-    const viewContext = activeProject
-      ? `The user is viewing the "${activeProject.title}" project detail page. If they say "this", "it", or "this project", they mean ${activeProject.title}.`
-      : showProfile
+    const viewContext = showProfile
       ? `The user is viewing my profile / resume / contact page.`
       : '';
 
@@ -1041,21 +869,14 @@ export default function Home() {
     setHasStarted(false);
     setChatOnTop(false);
     setShowProfile(false);
-    setHeroProject(null);
-    setArchiveProject(null);
-    setDetailFocus(null);
     setShowResume(false);
   };
 
-  // Close whichever overlay is open and return to the exact project grid state
-  // the user came from, including all-projects mode.
+  // Close the local profile/chat overlay state. Project detail is now URL-backed.
   const closeOverlay = () => {
     setHasStarted(false);
     setChatOnTop(false);
     setShowProfile(false);
-    setHeroProject(null);
-    setArchiveProject(null);
-    setDetailFocus(null);
     setShowResume(false);
   };
 
@@ -1071,54 +892,33 @@ export default function Home() {
     setChatOnTop(false);
     setHasStarted(false);
     setShowProfile(false);
-    setHeroProject(null);
-    setArchiveProject(null);
     requestAnimationFrame(() => {
       document.getElementById("profile")?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   };
 
-  const prepareProjectOpen = (project: Project, focus: string | null = null) => {
+  const openProjectFromChat = (project: Project) => {
     if (project.comingSoon) {
+      setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
       return;
     }
     setHasStarted(false);
     setChatOnTop(false);
     setShowProfile(false);
-    setDetailFocus(focus);
-    return true;
+    setShowResume(false);
+    router.push(getProjectPath(project));
   };
 
-  const openFeaturedProject = (project: Project, focus: string | null = null) => {
-    if (!prepareProjectOpen(project, focus)) return;
-    setArchiveProject(null);
-    setHeroProject(project);
-  };
-
-  const openArchiveProject = (project: Project, focus: string | null = null) => {
-    if (!prepareProjectOpen(project, focus)) return;
-    setHeroProject(null);
-    setArchiveProject(project);
-  };
-
-  const openProjectFromChat = (project: Project, focus: string | null = null) => {
-    if (isFeaturedProject(project)) {
-      openFeaturedProject(project, focus);
-      return;
-    }
-    openArchiveProject(project, focus);
-  };
-
-  // Esc closes whichever overlay is open (pairs with the on-screen ESC keycap).
+  // Esc closes whichever local overlay is open (pairs with the on-screen ESC keycap).
   useEffect(() => {
-    if (!heroProject && !archiveProject && !showProfile) return;
+    if (!showProfile) return;
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key !== "Escape") return;
       closeOverlay();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [heroProject, archiveProject, showProfile]);
+  }, [showProfile]);
 
   const sheetMotion = {
     initial: { y: "100%", opacity: 1 },
@@ -1129,7 +929,7 @@ export default function Home() {
 
   return (
     <main
-      className="site-text-16 site-lowercase min-h-screen overflow-x-hidden bg-white text-[#050505]"
+      className="site-lowercase min-h-screen overflow-x-hidden bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
@@ -1158,141 +958,14 @@ export default function Home() {
         animate={{ opacity: introReady ? 1 : 0, y: introReady ? 0 : 8 }}
         transition={{ type: "tween", duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="light-cursor-dark bg-white text-[#050505]">
+        <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
-          <WorkSection projects={featuredProjects} onSelect={openFeaturedProject} />
+          <WorkSection projects={featuredProjects} />
         </div>
         <LabArchive
           projects={archiveProjects}
-          onSelect={openArchiveProject}
         />
       </motion.div>
-
-      {/* Project detail - page-like view with breadcrumb navigation. */}
-      <AnimatePresence>
-        {heroProject && (
-          <motion.div
-            key={`project-page-${heroProject.id}`}
-            style={LIGHT_PROJECT_TOKENS}
-            onClick={closeOverlay}
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-            className="project-lightbox-close-zone fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-surface text-on-surface"
-          >
-            <div className="mx-auto flex w-full max-w-[1180px] justify-center px-6 pb-36 pt-[92px] sm:px-10 md:pt-[122px]">
-              <div
-                className="project-lightbox-content w-full max-w-[620px]"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <nav className="mb-10 flex w-full items-center justify-between gap-4 text-left leading-relaxed text-on-surface">
-                  <span className="flex min-w-0 items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={closeOverlay}
-                      className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
-                    >
-                      minwook shin
-                    </button>
-                    <span className="text-on-surface-variant">/</span>
-                    <span className="truncate text-on-surface">{heroProject.title}</span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={closeOverlay}
-                    className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
-                  >
-                    back
-                  </button>
-                </nav>
-                <ProjectDetailView
-                  project={heroProject}
-                  onBack={closeOverlay}
-                  hideBack
-                  focusQuery={detailFocus}
-                  onAsk={undefined}
-                />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {archiveProject && (
-          <motion.div
-            key={`archive-frame-${archiveProject.id}`}
-            onClick={closeOverlay}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="project-lightbox-close-zone fixed inset-0 z-[70] flex items-center justify-center bg-[#050505]/55 p-4 text-on-surface backdrop-blur-[10px] sm:p-6"
-          >
-            <motion.div
-              style={LIGHT_PROJECT_TOKENS}
-              initial={{ opacity: 0, y: 28, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 18, scale: 0.985 }}
-              transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-              onClick={(event) => event.stopPropagation()}
-              className="project-lightbox-content max-h-[86dvh] w-[min(92vw,980px)] overflow-y-auto rounded-[10px] bg-surface px-6 pb-12 pt-6 text-on-surface shadow-[0_30px_110px_rgba(0,0,0,0.28)] sm:px-8 sm:pt-8"
-            >
-              <nav className="mb-8 flex w-full items-center justify-between gap-4 leading-relaxed text-on-surface">
-                <span className="flex min-w-0 items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={closeOverlay}
-                    className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
-                  >
-                    minwook shin
-                  </button>
-                  <span className="text-on-surface-variant">/</span>
-                  <span className="truncate text-on-surface">{archiveProject.title}</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={closeOverlay}
-                  className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
-                >
-                  back
-                </button>
-              </nav>
-              <ProjectDetailView
-                project={archiveProject}
-                onBack={closeOverlay}
-                hideBack
-                focusQuery={detailFocus}
-                onAsk={undefined}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {(heroProject ?? archiveProject)?.linkedin && (
-          <motion.a
-            key="project-linkedin-only"
-            href={(heroProject ?? archiveProject)?.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Open LinkedIn post"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 12 }}
-            transition={{ type: "tween", duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-            className={`fixed bottom-7 left-1/2 z-[80] -translate-x-1/2 underline decoration-[1px] underline-offset-2 transition-colors ${
-              archiveProject
-                ? "text-white decoration-white/65 hover:decoration-white"
-                : "text-[#050505] decoration-[#050505]/55 hover:decoration-[#050505]"
-            }`}
-          >
-            linkedin
-          </motion.a>
-        )}
-      </AnimatePresence>
 
       {/* Profile - same sheet language as project detail. */}
       <AnimatePresence>
@@ -1304,7 +977,8 @@ export default function Home() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={closeOverlay}
-            className="fixed inset-0 z-[68] bg-[#050505]/38 backdrop-blur-[18px]"
+            style={{ backgroundColor: "var(--dark-overlay-38)" }}
+            className="fixed inset-0 z-[68] backdrop-blur-[18px]"
             aria-hidden
           />
         )}
@@ -1313,14 +987,17 @@ export default function Home() {
             key="profile"
             {...sheetMotion}
             onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
-            className="fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[28px] bg-[#050505] shadow-[0_-24px_80px_rgba(0,0,0,0.42)]"
+            className="dark-embed fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[var(--md-shape-lg)] border-t border-[var(--dark-border)] bg-[var(--dark-bg-base)]"
           >
-            <div className="sticky top-0 z-10 flex justify-center bg-[#050505]/85 pb-3 pt-4 backdrop-blur-xl">
+            <div
+              style={{ backgroundColor: "var(--dark-overlay-85)" }}
+              className="sticky top-0 z-10 flex justify-center pb-3 pt-4 backdrop-blur-xl"
+            >
               <button
                 type="button"
                 onClick={closeOverlay}
                 aria-label="Close profile"
-                className="h-1.5 w-14 rounded-full bg-white/30"
+                className="h-1.5 w-14 rounded-full bg-[var(--dark-text-muted)]"
               />
             </div>
             <div className="max-h-[calc(100dvh-62px)] overflow-y-auto overscroll-contain pb-28">
@@ -1334,14 +1011,14 @@ export default function Home() {
                 linkedin={PERSONAL_INFO.linkedin}
               />
 
-              <div className="bg-surface-container mt-4 rounded-none p-6">
+              <div className="mt-4 rounded-[var(--md-shape-lg)] bg-surface-container p-6">
                 <div className="grid grid-cols-2 gap-3">
                   <motion.button
                     onClick={() => setShowResume(!showResume)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-surface-container-high text-on-surface rounded-none font-normal transition-all"
+                    className="flex items-center justify-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3 text-on-surface font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     {showResume ? 'Hide Resume' : 'View Resume'}
@@ -1352,7 +1029,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={springs.pressMorph}
-                    className="bg-surface-container-high flex items-center justify-center gap-2 px-4 py-3 text-on-surface rounded-none font-normal transition-all"
+                    className="flex items-center justify-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3 text-on-surface font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
                     Download PDF
@@ -1367,7 +1044,7 @@ export default function Home() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden mt-4"
                     >
-                      <div className="bg-surface-container-high rounded-none overflow-hidden">
+                      <div className="overflow-hidden rounded-[var(--md-shape-lg)] bg-surface-container-high">
                         <img
                           src="/resume.2025dec.jpg"
                           alt="Resume - Minwook Shin"
@@ -1392,7 +1069,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={springs.spatialFast}
-            className="fixed left-1/2 bottom-32 z-[76] -translate-x-1/2 rounded-none border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
+            className="fixed left-1/2 bottom-32 z-[76] -translate-x-1/2 rounded-[var(--md-shape-sm)] border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
           >
             {projectNotice}
           </motion.div>
@@ -1400,7 +1077,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Click-outside catcher - leaving the chat keeps history (only reload clears it) */}
-      {hasStarted && !heroProject && !archiveProject && (messages.length > 0 || isStreaming) && (
+      {hasStarted && (messages.length > 0 || isStreaming) && (
         <div className="fixed inset-0 z-[34]" onClick={leaveChat} aria-hidden />
       )}
 
@@ -1422,7 +1099,7 @@ export default function Home() {
 
       {/* Chat - floating capsules rising from the bottom over the page, gradient-faded at top */}
       <AnimatePresence>
-        {hasStarted && !heroProject && !archiveProject && (messages.length > 0 || isStreaming) && (
+        {hasStarted && (messages.length > 0 || isStreaming) && (
           <motion.div
             ref={chatContainerRef}
             key="chat"
@@ -1456,7 +1133,7 @@ export default function Home() {
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
                     <div
-                      className={`rounded-none px-4 py-3 ${
+                      className={`rounded-[var(--md-shape-sm)] px-4 py-3 ${
                         isUser
                           ? "bg-on-surface text-surface"
                           : "bg-surface-container-high text-on-surface"
@@ -1466,7 +1143,7 @@ export default function Home() {
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{body}</p>
                       ) : (
                         <>
-                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:text-on-surface prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:rounded-none prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-surface-container-high prose-pre:border prose-pre:border-outline-variant prose-pre:rounded-none prose-pre:p-3 prose-pre:my-2 prose-pre:overflow-x-auto prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:underline prose-a:font-normal">
+                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:rounded-[var(--md-shape-sm)] prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:font-mono prose-code:text-xs prose-code:text-on-surface prose-code:before:content-none prose-code:after:content-none prose-pre:my-2 prose-pre:overflow-x-auto prose-pre:rounded-[var(--md-shape-sm)] prose-pre:border prose-pre:border-outline-variant prose-pre:bg-surface-container-high prose-pre:p-3 prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:font-normal prose-a:underline">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {body}
                             </ReactMarkdown>
@@ -1483,16 +1160,15 @@ export default function Home() {
                                 openProfile();
                               } else if (target === "projects") {
                                 setShowProfile(false);
-                                setHeroProject(null);
-                                setArchiveProject(null);
+                                document.getElementById("work")?.scrollIntoView({ behavior: "smooth", block: "center" });
                               } else if (target.comingSoon) {
                                 setProjectNotice(target.unavailableMessage ?? `${target.title} is not ready yet.`);
                               } else {
                                 setShowProfile(false);
-                                openProjectFromChat(target, question);
+                                openProjectFromChat(target);
                               }
                             }}
-                            className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-none bg-surface-container-high text-on-surface text-xs font-normal hover:bg-outline-variant transition-colors"
+                            className="mt-3 inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-2 text-xs font-normal text-on-surface transition-colors hover:bg-outline-variant"
                           >
                               {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1512,7 +1188,7 @@ export default function Home() {
                             transition={{ ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="hover:bg-outline-variant bg-surface-container-high inline-flex items-center px-3 py-2 rounded-none text-on-surface text-xs font-normal transition-colors"
+                            className="inline-flex items-center rounded-[var(--md-shape-sm)] bg-surface-container-high px-3 py-2 text-xs font-normal text-on-surface transition-colors hover:bg-outline-variant"
                           >
                             {f}
                           </motion.button>
@@ -1531,14 +1207,14 @@ export default function Home() {
                   transition={springs.spatialFast}
                   className="flex justify-start"
                 >
-                  <div className="bg-surface-container-high rounded-none px-4 py-3">
+                  <div className="rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3">
                     <div className="flex items-center space-x-2">
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
                           key={d}
                           animate={{ opacity: [0.3, 1, 0.3] }}
                           transition={{ duration: 1.4, repeat: Infinity, delay: d }}
-                          className="w-1.5 h-1.5 bg-on-surface rounded-none"
+                          className="h-1.5 w-1.5 rounded-full bg-on-surface"
                         />
                       ))}
                     </div>
@@ -1551,7 +1227,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Floating Input appears only when chat or profile is active. Project detail uses a LinkedIn-only action. */}
-      {!heroProject && !archiveProject && (hasStarted || showProfile) && (
+      {(hasStarted || showProfile) && (
         <ChatInput
           onSend={handleMessage}
           hasStarted={hasStarted}
