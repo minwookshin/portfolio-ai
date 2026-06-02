@@ -44,7 +44,7 @@ export function IconButton({
       disabled={disabled}
       onClick={onClick}
       initial={false}
-      animate={{ borderRadius: 0 }}
+      animate={{ borderRadius: "var(--md-shape-sm)" }}
       whileTap={reduce || disabled ? undefined : { scale: 0.96 }}
       transition={springs.pressMorph}
       className={[

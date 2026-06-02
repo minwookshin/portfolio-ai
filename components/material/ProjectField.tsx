@@ -271,7 +271,7 @@ export function ProjectField({
                   onSelectProject(project, rectOf(e.currentTarget));
                 }
               }}
-              className={`absolute will-change-transform rounded-none text-on-surface outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
+              className={`absolute will-change-transform rounded-[var(--md-shape-lg)] text-on-surface outline-none group focus-visible:ring-2 focus-visible:ring-on-surface focus-visible:ring-offset-2 focus-visible:ring-offset-surface ${isComingSoon ? "cursor-not-allowed" : ""}`}
               style={{
                 width: iconSize,
                 height: iconSize,
@@ -283,11 +283,11 @@ export function ProjectField({
                 transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
               }}
             >
-              <div className="w-full h-full rounded-none" style={boxReveal}>
+              <div className="h-full w-full rounded-[var(--md-shape-lg)]" style={boxReveal}>
               <div
-                className="relative w-full h-full rounded-none overflow-hidden bg-transparent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
+                className="relative h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
               >
-                <div className="absolute inset-0 rounded-none" style={revealStyle}>
+                <div className="absolute inset-0 rounded-[var(--md-shape-lg)]" style={revealStyle}>
                   {iconSrc ? (
                     <Image
                       src={iconSrc}

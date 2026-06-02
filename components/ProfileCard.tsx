@@ -27,7 +27,7 @@ export default function ProfileCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={springs.spatialDefault}
-      className="bg-surface-container rounded-none p-8 transition-all duration-300"
+      className="rounded-[var(--md-shape-lg)] bg-surface-container p-8 transition-all duration-300"
     >
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Profile Photo */}
@@ -35,7 +35,7 @@ export default function ProfileCard({
           <motion.div
             whileHover={{ scale: 1.03 }}
             transition={springs.pressMorph}
-            className="bg-surface-container-high w-40 h-40 lg:w-48 lg:h-48 rounded-none overflow-hidden"
+            className="h-40 w-40 overflow-hidden rounded-[var(--md-shape-lg)] bg-surface-container-high lg:h-48 lg:w-48"
           >
             <img
               src={imagePath}
@@ -67,7 +67,7 @@ export default function ProfileCard({
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={springs.pressMorph}
-              className="flex items-center gap-2 px-6 py-3 bg-surface-container-high hover:bg-outline-variant text-on-surface rounded-none text-sm font-normal transition-all duration-200"
+              className="flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-6 py-3 text-sm font-normal text-on-surface transition-all duration-200 hover:bg-outline-variant"
             >
               <Mail className="w-4 h-4" />
               Email Me
@@ -79,7 +79,7 @@ export default function ProfileCard({
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={springs.pressMorph}
-              className="bg-surface-container-high hover:bg-outline-variant flex items-center gap-2 px-6 py-3 text-on-surface rounded-none text-sm font-normal transition-all duration-200"
+              className="flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-6 py-3 text-sm font-normal text-on-surface transition-all duration-200 hover:bg-outline-variant"
             >
               <LinkedInIcon className="w-4 h-4" />
               LinkedIn

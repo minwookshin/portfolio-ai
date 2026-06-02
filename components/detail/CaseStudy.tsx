@@ -60,10 +60,10 @@ const reveal = {
 
 // Translucent glass so components read as floating over the blurred backdrop
 // rather than sitting on a solid panel.
-const card = "glass-stroke bg-surface-container/45 backdrop-blur-xl rounded-none";
-const eyebrowCls = "font-mono font-light text-[11px] text-on-surface-variant";
-const h2Cls = "text-2xl sm:text-3xl font-normal tracking-[-0.01em] text-on-surface";
-const bodyCls = "text-[15px] sm:text-base text-on-surface-variant leading-relaxed";
+const card = "glass-stroke rounded-[var(--md-shape-lg)] bg-surface-container/45 backdrop-blur-xl";
+const eyebrowCls = "font-mono font-light text-[length:var(--type--2)] leading-[var(--leading-tight)] text-on-surface-variant";
+const h2Cls = "text-[length:var(--type-1)] sm:text-[length:var(--type-2)] font-normal tracking-[-0.01em] leading-[var(--leading-heading)] text-on-surface";
+const bodyCls = "text-[length:var(--type-0)] text-on-surface-variant leading-[var(--leading-body)]";
 
 // Hero content staggers in after the panel has morphed into place (delayChildren),
 // then each line settles one after another — like the Dynamic Island filling its
@@ -79,20 +79,20 @@ const heroItem = {
 
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
   return (
-    <div className="mb-6">
-      {eyebrow && <p className={`${eyebrowCls} mb-3`}>{eyebrow}</p>}
+    <div className="mb-[var(--space-3)]">
+      {eyebrow && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{eyebrow}</p>}
       <h2 className={h2Cls}>{heading}</h2>
     </div>
   );
 }
 
 function Dot() {
-  return <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-none bg-on-surface" />;
+  return <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-on-surface" />;
 }
 
 function Tags({ tags }: { tags: string[] }) {
   return (
-    <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs font-normal text-on-surface-variant">
+    <div className="flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)] text-[length:var(--type--2)] font-normal text-on-surface-variant">
       {tags.map((t) => (
         <span key={t}>
           {t}
@@ -128,27 +128,27 @@ function renderSection(section: DetailSection, i: number) {
           animate="show"
           className="pt-2"
         >
-          <motion.h1 variants={heroItem} className="text-[2.5rem] sm:text-5xl font-normal tracking-[-0.02em] leading-[1.05] text-on-surface">
+          <motion.h1 variants={heroItem} className="text-[length:var(--type-3)] sm:text-[length:var(--type-4)] font-normal tracking-[-0.02em] leading-[var(--leading-heading)] text-on-surface">
             {section.title}
           </motion.h1>
           {section.subtitle && (
-            <motion.p variants={heroItem} className="mt-4 text-lg sm:text-xl text-on-surface-variant font-light leading-relaxed max-w-xl">
+            <motion.p variants={heroItem} className="mt-[var(--space-2)] max-w-[var(--measure)] text-[length:var(--type-1)] text-on-surface-variant font-light leading-[var(--leading-body)]">
               {section.subtitle}
             </motion.p>
           )}
           {section.bullets && section.bullets.length > 0 && (
-            <motion.div variants={heroItem} className="mt-7 space-y-3">
+            <motion.div variants={heroItem} className="mt-[var(--space-4)] space-y-[var(--space-2)]">
               {section.bullets.map((b) => (
                 <div key={b} className="flex items-start gap-3">
                   <Dot />
-                  <p className="text-[15px] text-on-surface-variant leading-snug">{b}</p>
+                  <p className="text-[length:var(--type-0)] text-on-surface-variant leading-[var(--leading-body)]">{b}</p>
                 </div>
               ))}
             </motion.div>
           )}
-          {section.tags && section.tags.length > 0 && <motion.div variants={heroItem} className="mt-7"><Tags tags={section.tags} /></motion.div>}
+          {section.tags && section.tags.length > 0 && <motion.div variants={heroItem} className="mt-[var(--space-4)]"><Tags tags={section.tags} /></motion.div>}
           {section.image && (
-            <motion.div variants={heroItem} className="mt-10">
+            <motion.div variants={heroItem} className="mt-[var(--space-5)]">
               <ProjectImage src={section.image} alt={section.title} style={section.imageStyle} />
             </motion.div>
           )}
@@ -159,7 +159,7 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section key={i} {...reveal} className="max-w-2xl">
           {section.eyebrow && <p className={`${eyebrowCls} mb-3`}>{section.eyebrow}</p>}
-          <h2 className={`${h2Cls} mb-5`}>{section.heading}</h2>
+          <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
           <p className={bodyCls}>{section.body}</p>
         </motion.section>
       );
@@ -168,11 +168,11 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section key={i} {...reveal}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-[var(--space-2)] sm:grid-cols-3">
             {section.items.map((s) => (
               <div key={s.label} className={`${card} p-6`}>
                 <p className="text-3xl sm:text-4xl font-normal tracking-tight text-on-surface">{s.value}</p>
-                <p className="mt-2 text-sm text-on-surface-variant">{s.label}</p>
+                <p className="mt-[var(--space-1)] text-[length:var(--type--1)] text-on-surface-variant">{s.label}</p>
               </div>
             ))}
           </div>
@@ -183,15 +183,15 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section key={i} {...reveal}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
-          <div className="grid md:grid-cols-5 gap-4">
+          <div className="grid gap-[var(--space-2)] md:grid-cols-5">
             <div className={`${card} p-6 sm:p-8 md:col-span-3`}>
               <p className={bodyCls}>{section.body}</p>
               {section.stats && section.stats.length > 0 && (
-                <div className="mt-6 pt-6 border-t border-outline-variant grid grid-cols-2 gap-6">
+                <div className="mt-[var(--space-3)] grid grid-cols-2 gap-[var(--space-3)] border-t border-outline-variant pt-[var(--space-3)]">
                   {section.stats.map((s) => (
                     <div key={s.label}>
                       <p className="text-2xl sm:text-3xl font-normal tracking-tight text-on-surface">{s.value}</p>
-                      <p className="mt-1 text-xs text-on-surface-variant">{s.label}</p>
+                      <p className="mt-[var(--space-1)] text-[length:var(--type--2)] text-on-surface-variant">{s.label}</p>
                     </div>
                   ))}
                 </div>
@@ -199,10 +199,10 @@ function renderSection(section: DetailSection, i: number) {
             </div>
             {section.persona && (
               <div className={`${card} p-6 sm:p-8 md:col-span-2`}>
-                <p className={`${eyebrowCls} mb-4`}>Target user</p>
+                <p className={`${eyebrowCls} mb-[var(--space-2)]`}>Target user</p>
                 <h3 className="text-lg font-normal text-on-surface">{section.persona.name}</h3>
-                <p className="text-sm text-on-surface-variant mb-4">{section.persona.role}</p>
-                <div className="space-y-3 pt-4 border-t border-outline-variant">
+                <p className="mb-[var(--space-2)] text-[length:var(--type--1)] text-on-surface-variant">{section.persona.role}</p>
+                <div className="space-y-[var(--space-2)] border-t border-outline-variant pt-[var(--space-2)]">
                   {section.persona.points.map((p) => (
                     <div key={p} className="flex items-start gap-3">
                       <Dot />
@@ -220,13 +220,13 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section key={i} {...reveal}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
             {section.columns.map((c) => (
               <div key={c.label} className={`${card} p-6 sm:p-8`}>
-                <span className="inline-block px-3 py-2 rounded-none bg-on-surface text-surface text-xs font-normal mb-5">
+                <span className="mb-[var(--space-3)] inline-block rounded-[var(--md-shape-sm)] bg-on-surface px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--2)] font-normal text-surface">
                   {c.label}
                 </span>
-                <h3 className="text-lg font-normal text-on-surface mb-2">{c.title}</h3>
+                <h3 className="mb-[var(--space-1)] text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-on-surface">{c.title}</h3>
                 <p className={bodyCls}>{c.body}</p>
               </div>
             ))}
@@ -246,7 +246,7 @@ function renderSection(section: DetailSection, i: number) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={springs.spatialDefault}
-                className="grid sm:grid-cols-2 gap-6 items-center"
+                className="grid items-center gap-[var(--space-3)] sm:grid-cols-2"
               >
                 {f.image && (
                   <div className={fi % 2 === 1 ? "sm:order-2" : ""}>
@@ -254,8 +254,8 @@ function renderSection(section: DetailSection, i: number) {
                   </div>
                 )}
                 <div className={fi % 2 === 1 ? "sm:order-1" : ""}>
-                  <p className={`${eyebrowCls} mb-3`}>{`Feature ${fi + 1}`}</p>
-                  <h3 className="text-xl font-normal text-on-surface mb-3">{f.title}</h3>
+                  <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{`Feature ${fi + 1}`}</p>
+                  <h3 className="mb-[var(--space-1)] text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-on-surface">{f.title}</h3>
                   <p className={bodyCls}>{f.description}</p>
                 </div>
               </motion.div>
@@ -273,19 +273,19 @@ function renderSection(section: DetailSection, i: number) {
             <div className="space-y-6">
               {section.steps.map((s, si) => (
                 <div key={s.title} className="relative">
-                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center rounded-none bg-on-surface text-surface text-xs font-normal">
+                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center rounded-[var(--md-shape-sm)] bg-on-surface text-xs font-normal text-surface">
                     {si + 1}
                   </span>
                   <div className={`${card} p-5 sm:p-6`}>
-                    {s.tag && <p className={`${eyebrowCls} mb-2`}>{s.tag}</p>}
-                    <h3 className="text-base font-normal text-on-surface mb-2">{s.title}</h3>
+                    {s.tag && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{s.tag}</p>}
+                    <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-heading)] text-on-surface">{s.title}</h3>
                     <p className={bodyCls}>{s.body}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          {section.note && <p className={`${bodyCls} mt-6`}>{section.note}</p>}
+          {section.note && <p className={`${bodyCls} mt-[var(--space-3)]`}>{section.note}</p>}
         </motion.section>
       );
 
@@ -303,11 +303,11 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section key={i} {...reveal}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className="grid sm:grid-cols-2 gap-4 items-start">
+          <div className="grid items-start gap-[var(--space-2)] sm:grid-cols-2">
             {section.images.map((img, gi) => (
               <figure key={gi} className="overflow-hidden">
                 <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
-                {img.caption && <figcaption className="px-4 py-3 text-xs text-on-surface-variant">{img.caption}</figcaption>}
+                {img.caption && <figcaption className="px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--2)] text-on-surface-variant">{img.caption}</figcaption>}
               </figure>
             ))}
           </div>
@@ -342,7 +342,7 @@ function renderSection(section: DetailSection, i: number) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={isGithub ? "GitHub" : "LinkedIn"}
-                    className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center justify-center w-12 h-12 rounded-none text-on-surface transition-colors hover:bg-surface-container"
+                    className="glass-stroke-sm inline-flex h-12 w-12 items-center justify-center rounded-[var(--md-shape-sm)] bg-surface-container/50 text-on-surface backdrop-blur-md transition-colors hover:bg-surface-container"
                   >
                     <Icon className="w-5 h-5" />
                   </a>
@@ -356,8 +356,8 @@ function renderSection(section: DetailSection, i: number) {
                   rel="noopener noreferrer"
                   className={
                     li === 0
-                      ? "inline-flex items-center gap-2 px-6 py-3 rounded-none bg-on-surface text-surface text-sm font-normal hover:opacity-90 transition-opacity"
-                      : "glass-stroke-sm bg-surface-container/50 backdrop-blur-md inline-flex items-center gap-2 px-6 py-3 rounded-none text-on-surface text-sm font-normal transition-colors"
+                      ? "inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-on-surface px-6 py-3 text-sm font-normal text-surface transition-opacity hover:opacity-90"
+                      : "glass-stroke-sm inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container/50 px-6 py-3 text-sm font-normal text-on-surface backdrop-blur-md transition-colors"
                   }
                 >
                   {l.label}
@@ -373,10 +373,10 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section key={i} {...reveal}>
           <div className={`${card} p-8 sm:p-12`}>
-            <h2 className={`${h2Cls} mb-5`}>{section.heading}</h2>
+          <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
             <div className="space-y-4">
               {section.body.map((p, pi) => (
-                <p key={pi} className="text-[15px] sm:text-base text-on-surface leading-relaxed">
+                <p key={pi} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">
                   {p}
                 </p>
               ))}
@@ -411,14 +411,14 @@ function AskRow({
       transition={reveal.transition}
       className={className}
     >
-      {label && <p className={`${eyebrowCls} mb-3`}>{label}</p>}
-      <div className="flex flex-wrap gap-2">
+      {label && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{label}</p>}
+      <div className="flex flex-wrap gap-[var(--space-1)]">
         {prompts.map((q) => (
           <button
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="glass-stroke-sm bg-surface-container/50 backdrop-blur-md hover:bg-on-surface hover:text-surface group inline-flex items-center gap-2 px-4 py-2 rounded-none text-sm font-normal text-on-surface transition-colors"
+            className="glass-stroke-sm group inline-flex items-center gap-[var(--space-1)] rounded-[var(--md-shape-sm)] bg-surface-container/50 px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--1)] font-normal text-on-surface backdrop-blur-md transition-colors hover:bg-on-surface hover:text-surface"
           >
             {q}
             <ArrowUpRight className="w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -431,12 +431,12 @@ function AskRow({
 
 export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: string) => void }) {
   return (
-    <div className="space-y-10 sm:space-y-14">
+    <div className="space-y-[var(--space-5)] sm:space-y-[var(--space-7)]">
       {data.sections.map((s, i) => (
         <div key={i}>
           {renderSection(s, i)}
           {/* Questions woven in right where they make sense in the narrative */}
-          {onAsk && s.ask && s.ask.length > 0 && <AskRow prompts={s.ask} onAsk={onAsk} className="mt-6" />}
+          {onAsk && s.ask && s.ask.length > 0 && <AskRow prompts={s.ask} onAsk={onAsk} className="mt-[var(--space-3)]" />}
         </div>
       ))}
 
