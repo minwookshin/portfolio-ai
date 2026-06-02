@@ -9,13 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#050505",
-        foreground: "#f4f4f5",
-        accent: "#0151fe", // Single modern blue accent
-        muted: "#858585",
-        border: "#e5e5e5",
-        light: "#fafafa",
-        // Material 3 Expressive color roles
+        background: "var(--bg-base)",
+        foreground: "var(--text-primary)",
+        accent: "var(--accent-indigo)",
+        "accent-hover": "var(--accent-indigo-hover)",
+        muted: "var(--text-muted)",
+        border: "var(--border-light)",
+        light: "var(--bg-surface)",
+        element: "var(--bg-element)",
+        "dark-base": "var(--dark-bg-base)",
+        "dark-surface": "var(--dark-bg-surface)",
+        "dark-border": "var(--dark-border)",
+        "dark-muted": "var(--dark-text-muted)",
+        // Existing component color roles bridged to the design tokens.
         surface: "var(--md-surface)",
         "surface-container": "var(--md-surface-container)",
         "surface-container-high": "var(--md-surface-container-high)",
@@ -39,6 +45,25 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-google-sans)", "sans-serif"],
         mono: ["var(--font-google-sans)", "sans-serif"],
+      },
+      fontSize: {
+        "step--2": ["var(--type--2)", { lineHeight: "var(--leading-body)" }],
+        "step--1": ["var(--type--1)", { lineHeight: "var(--leading-body)" }],
+        "step-0": ["var(--type-0)", { lineHeight: "var(--leading-body)" }],
+        "step-1": ["var(--type-1)", { lineHeight: "var(--leading-heading)" }],
+        "step-2": ["var(--type-2)", { lineHeight: "var(--leading-heading)" }],
+        "step-3": ["var(--type-3)", { lineHeight: "var(--leading-heading)" }],
+        "step-4": ["var(--type-4)", { lineHeight: "var(--leading-heading)" }],
+      },
+      spacing: {
+        grid: "var(--space-1)",
+        "grid-2": "var(--space-2)",
+        "grid-3": "var(--space-3)",
+        "grid-4": "var(--space-4)",
+        "grid-5": "var(--space-5)",
+        "grid-6": "var(--space-6)",
+        "grid-7": "var(--space-7)",
+        "grid-8": "var(--space-8)",
       },
       boxShadow: {
         glow: "0 0 30px rgba(255, 64, 0, 0.2)",

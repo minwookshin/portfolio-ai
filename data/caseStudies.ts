@@ -159,9 +159,9 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         eyebrow: "Studio proof",
         heading: "What this demonstrates",
         items: [
-          { value: "<100ms", label: "Time to first token" },
+          { value: "{{FILL: time to first token}}", label: "Time to first token" },
           { value: "8", label: "Selected work examples" },
-          { value: "4", label: "Studio service lanes" },
+          { value: "{{FILL: service lane count}}", label: "Studio service lanes" },
         ],
       },
       {
@@ -273,7 +273,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Project impact",
         heading: "Outcome & reflection",
         body: [
-          "Mindline shifts the paradigm from restriction to awareness. In testing with 6 participants, it reduced impulsive betting triggers by interrupting the dopamine loop before action occurs.",
+          "Mindline shifts the paradigm from restriction to awareness. 6 research interviews surfaced the trigger patterns; outcome validation is still a placeholder: {{FILL: behavior-change validation metric}}.",
           "Rather than blocking access, which users bypass within minutes, it builds self-awareness, real-time emotional analysis, and proactive intervention: the foundation for sustainable behavioral change.",
         ],
       },

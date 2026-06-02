@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import AnimatedCursor from "@/components/AnimatedCursor";
 import "./globals.css";
 
 // Geist Sans from Google Fonts. Used for the whole site.
@@ -10,6 +11,7 @@ const googleSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.minwookshin.com"),
   title: {
     default: "minwook shin",
     template: "%s · minwook shin",
@@ -47,12 +49,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={googleSans.variable}>{children}</body>
+      <body className={googleSans.variable}>
+        {children}
+        {modal}
+        <AnimatedCursor />
+      </body>
     </html>
   );
 }

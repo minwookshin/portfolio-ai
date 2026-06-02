@@ -1,70 +1,145 @@
-/* Nothing OS Design Tokens */
+/* Industrial minimalist design tokens */
 :root {
-  --bg: #050505;
-  --bg-surface: #111113;
-  --card-a-bg: #F4F4F5;
-  --card-a-text: #050505;
-  --card-b-bg: #111113;
-  --card-b-text: #F4F4F5;
-  --text-primary: #F4F4F5;
-  --text-muted: #A0A0A7;
-  --border: #2A2A2E;
-  --input-bg: #1A1A1D;
-  --input-text: #F4F4F5;
-  --input-border: #2A2A2E;
-  --bubble-user-bg: #F4F4F5;
-  --bubble-user-text: #050505;
-  --bubble-ai-bg: #141416;
-  --bubble-ai-text: #F4F4F5;
-  --bubble-ai-border: #2A2A2E;
-  --btn-primary-bg: #F4F4F5;
-  --btn-primary-text: #050505;
-  --btn-secondary-bg: #1A1A1D;
-  --btn-secondary-text: #F4F4F5;
-  --btn-secondary-border: #2A2A2E;
-  --accent: #FF2D2D;
-  --gradient-fade: rgba(5, 5, 5, 0);
+  /* Global Canvas (Light Mode Base) */
+  --bg-base: #F7F8F8;
+  --bg-surface: #FFFFFF;
+  --bg-element: #F1F2F4;
+  --border-light: #E2E4E9;
+
+  --text-primary: #111214;
+  --text-muted: #62666D;
+
+  /* Embedded Dark Mode (For Project Cards/Code Blocks) */
+  --dark-bg-base: #08090A;
+  --dark-bg-surface: #121314;
+  --dark-border: #222326;
+  --dark-text-primary: #F7F8F8;
+  --dark-text-muted: #8A8F98;
+
+  /* Accent & Interactions */
+  --accent-indigo: #5E6AD2;
+  --accent-indigo-hover: #828FFF;
+  --accent-mono: #000000;
+  --dark-overlay-38: color-mix(in srgb, var(--dark-bg-base) 38%, transparent);
+  --dark-overlay-56: color-mix(in srgb, var(--dark-bg-base) 56%, transparent);
+  --dark-overlay-85: color-mix(in srgb, var(--dark-bg-base) 85%, transparent);
+
+  /* Site type scale: intentionally tight, close to the earlier 16px system. */
+  --type--2: 0.64rem;
+  --type--1: 0.8rem;
+  --type-0: 1rem;
+  --type-1: 1rem;
+  --type-2: 1rem;
+  --type-3: 1.125rem;
+  --type-4: 1.25rem;
+  --leading-body: 1.55;
+  --leading-heading: 1.16;
+  --leading-tight: 1.22;
+  --measure: 65ch;
+
+  /* 8px spacing grid. */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 2.5rem;
+  --space-6: 3rem;
+  --space-7: 3.5rem;
+  --space-8: 4rem;
+
+  /* Back-compat aliases used by older components. */
+  --bg: var(--bg-base);
+  --card-a-bg: var(--bg-surface);
+  --card-a-text: var(--text-primary);
+  --card-b-bg: var(--dark-bg-surface);
+  --card-b-text: var(--dark-text-primary);
+  --border: var(--border-light);
+  --input-bg: var(--bg-surface);
+  --input-text: var(--text-primary);
+  --input-border: var(--border-light);
+  --bubble-user-bg: var(--text-primary);
+  --bubble-user-text: var(--bg-surface);
+  --bubble-ai-bg: var(--bg-element);
+  --bubble-ai-text: var(--text-primary);
+  --bubble-ai-border: var(--border-light);
+  --btn-primary-bg: var(--text-primary);
+  --btn-primary-text: var(--bg-surface);
+  --btn-secondary-bg: var(--bg-element);
+  --btn-secondary-text: var(--text-primary);
+  --btn-secondary-border: var(--border-light);
+  --accent: var(--accent-indigo);
+  --gradient-fade: rgba(247, 248, 248, 0);
+
+  /* Material-role bridge for the existing component API. */
+  --md-surface: var(--bg-base);
+  --md-surface-container: var(--bg-surface);
+  --md-surface-container-high: var(--bg-element);
+  --md-on-surface: var(--text-primary);
+  --md-on-surface-variant: var(--text-muted);
+  --md-outline: var(--border-light);
+  --md-outline-variant: var(--border-light);
+  --md-primary: var(--accent-indigo);
+  --md-on-primary: var(--dark-text-primary);
+  --md-primary-container: var(--bg-element);
+  --md-on-primary-container: var(--text-primary);
+  --md-hairline: var(--border-light);
+
+  /* shape scale (px) */
+  --md-shape-xs: 4px;
+  --md-shape-sm: 4px;
+  --md-shape-md: 4px;
+  --md-shape-lg: 8px;
+  --md-shape-xl: 8px;
+  --md-shape-full: 999px;
+
+  /* state layer opacities */
+  --md-state-hover: 0.08;
+  --md-state-focus: 0.1;
+  --md-state-press: 0.1;
 }
 
 /* Base font */
 body {
   font-family: var(--font-google-sans), sans-serif;
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
   letter-spacing: -0.02em;
-  background-color: var(--md-surface);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   transition: background-color 0.3s ease;
 }
 
 /* Custom cursor: a filled near-black dot everywhere, including over interactive
    elements. */
 * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23f4f4f5'/%3E%3C/svg%3E") 6 6, auto !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23111214'/%3E%3C/svg%3E") 6 6, auto !important;
 }
 
 .project-lightbox-close-zone,
 .project-lightbox-close-zone * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%3E%3Cline%20x1='5'%20y1='5'%20x2='15'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cline%20x1='15'%20y1='5'%20x2='5'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") 10 10, pointer !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%3E%3Cline%20x1='5'%20y1='5'%20x2='15'%20y2='15'%20stroke='%23111214'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cline%20x1='15'%20y1='5'%20x2='5'%20y2='15'%20stroke='%23111214'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") 10 10, pointer !important;
 }
 
 .project-lightbox-content,
 .project-lightbox-content * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23050505'/%3E%3C/svg%3E") 6 6, auto !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23111214'/%3E%3C/svg%3E") 6 6, auto !important;
 }
 
 .project-lightbox-close-button,
 .project-lightbox-close-button * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%3E%3Cline%20x1='5'%20y1='5'%20x2='15'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cline%20x1='15'%20y1='5'%20x2='5'%20y2='15'%20stroke='%23050505'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") 10 10, pointer !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%3E%3Cline%20x1='5'%20y1='5'%20x2='15'%20y2='15'%20stroke='%23111214'%20stroke-width='2'%20stroke-linecap='round'/%3E%3Cline%20x1='15'%20y1='5'%20x2='5'%20y2='15'%20stroke='%23111214'%20stroke-width='2'%20stroke-linecap='round'/%3E%3C/svg%3E") 10 10, pointer !important;
 }
 
 .light-cursor-dark,
 .light-cursor-dark * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23050505'/%3E%3C/svg%3E") 6 6, auto !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23111214'/%3E%3C/svg%3E") 6 6, auto !important;
 }
 
 .lab-cursor-dark,
 .lab-cursor-dark *,
 .surface-cursor-dark,
 .surface-cursor-dark * {
-  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23050505'/%3E%3C/svg%3E") 6 6, auto !important;
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23111214'/%3E%3C/svg%3E") 6 6, auto !important;
 }
 
 /* Hide scrollbars everywhere (scrolling still works) for a cleaner look */
@@ -80,9 +155,9 @@ body {
 
 /* Brief highlight when the chat deep-links to a section of a project detail */
 @keyframes sectionFlash {
-  0%   { background-color: rgba(244, 244, 245, 0); box-shadow: 0 0 0 0 rgba(244, 244, 245, 0); }
-  18%  { background-color: rgba(244, 244, 245, 0.10); box-shadow: 0 0 0 6px rgba(244, 244, 245, 0.06); }
-  100% { background-color: rgba(244, 244, 245, 0); box-shadow: 0 0 0 0 rgba(244, 244, 245, 0); }
+  0%   { background-color: color-mix(in srgb, var(--accent-indigo) 0%, transparent); box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-indigo) 0%, transparent); }
+  18%  { background-color: color-mix(in srgb, var(--accent-indigo) 10%, transparent); box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-indigo) 6%, transparent); }
+  100% { background-color: color-mix(in srgb, var(--accent-indigo) 0%, transparent); box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-indigo) 0%, transparent); }
 }
 .section-flash {
   animation: sectionFlash 2.4s ease-out;
@@ -134,10 +209,10 @@ body::after {
 /* Plain stroke — a single subtle border (#222222 at 10%), no glass rim, blur, or
    shadow. One consistent edge across every surface (cards, buttons, bubbles). */
 .glass-stroke {
-  border: 2px solid var(--md-hairline);
+  border: 1px solid var(--md-hairline);
 }
 .glass-stroke-sm {
-  border: 1.5px solid var(--md-hairline);
+  border: 1px solid var(--md-hairline);
 }
 
 /* Dotted SVG outline that, on hover/focus of the parent group, grows its dashes
@@ -156,12 +231,6 @@ body::after {
   opacity: 0.9;
 }
 
-/* Temporary type lock while the homepage is being redesigned. Remove this class
-   or change the value here when the final type scale is ready. */
-.site-text-16 :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
-  font-size: 16px !important;
-}
-
 .site-lowercase,
 .site-lowercase :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
   text-transform: lowercase !important;
@@ -171,31 +240,151 @@ body::after {
   text-transform: lowercase !important;
 }
 
-/* Material 3 Expressive tokens - monochrome + Nothing-red accent (dark) */
-:root {
-  --md-surface: #050505;
-  --md-surface-container: #111113;
-  --md-surface-container-high: #1A1A1D;
-  --md-on-surface: #F4F4F5;
-  --md-on-surface-variant: #A0A0A7;
-  --md-outline: #34343A;
-  --md-outline-variant: #242428;
-  --md-primary: #F4F4F5;
-  --md-on-primary: #050505;
-  --md-primary-container: #1A1A1D;
-  --md-on-primary-container: #F4F4F5;
-  --md-hairline: rgba(244, 244, 245, 0.12);
+.project-readable {
+  max-width: var(--measure);
+}
 
-  /* shape scale (px) */
-  --md-shape-xs: 0px;
-  --md-shape-sm: 0px;
-  --md-shape-md: 0px;
-  --md-shape-lg: 0px;
-  --md-shape-xl: 0px;
-  --md-shape-full: 0px;
+.project-readable :is(p, li, figcaption) {
+  line-height: var(--leading-body);
+}
 
-  /* state layer opacities */
-  --md-state-hover: 0.08;
-  --md-state-focus: 0.1;
-  --md-state-press: 0.1;
+.project-readable :is(h1, h2, h3, h4) {
+  line-height: var(--leading-heading);
+}
+
+.dark-embed {
+  --md-surface: var(--dark-bg-base);
+  --md-surface-container: var(--dark-bg-surface);
+  --md-surface-container-high: var(--dark-bg-surface);
+  --md-on-surface: var(--dark-text-primary);
+  --md-on-surface-variant: var(--dark-text-muted);
+  --md-outline: var(--dark-border);
+  --md-outline-variant: var(--dark-border);
+  --md-primary: var(--accent-indigo-hover);
+  --md-on-primary: var(--dark-bg-base);
+  --md-primary-container: var(--dark-bg-surface);
+  --md-on-primary-container: var(--dark-text-primary);
+  --md-hairline: var(--dark-border);
+}
+
+.dark-embed,
+.dark-embed * {
+  cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%3E%3Ccircle%20cx='6'%20cy='6'%20r='5'%20fill='%23F7F8F8'/%3E%3C/svg%3E") 6 6, auto !important;
+}
+
+@media (pointer: fine) {
+  .animated-cursor-active,
+  .animated-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+.animated-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2147483646;
+  width: 24px;
+  height: 24px;
+  color: var(--text-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease, color 160ms ease;
+  will-change: transform;
+}
+
+.animated-cursor.is-visible {
+  opacity: 1;
+}
+
+.animated-cursor--light {
+  color: var(--dark-text-primary);
+}
+
+.animated-cursor__frame,
+.animated-cursor__core,
+.animated-cursor__x {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+}
+
+.animated-cursor__frame {
+  width: 10px;
+  height: 10px;
+  border: 0 solid currentColor;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    width 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-width 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 160ms ease,
+    opacity 140ms ease,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animated-cursor__core {
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.45);
+  transition:
+    opacity 150ms ease,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animated-cursor__x {
+  width: 17px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(0deg) scaleX(0.35);
+  transition:
+    opacity 130ms ease,
+    transform 190ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animated-cursor--interactive .animated-cursor__frame {
+  width: 18px;
+  height: 18px;
+  border-width: 1px;
+  background: transparent;
+}
+
+.animated-cursor--interactive .animated-cursor__core {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.animated-cursor--close .animated-cursor__frame {
+  width: 20px;
+  height: 20px;
+  border-width: 0;
+  background: transparent;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.82);
+}
+
+.animated-cursor--close .animated-cursor__core {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.35);
+}
+
+.animated-cursor--close .animated-cursor__x {
+  opacity: 1;
+}
+
+.animated-cursor--close .animated-cursor__x--a {
+  transform: translate(-50%, -50%) rotate(45deg) scaleX(1);
+}
+
+.animated-cursor--close .animated-cursor__x--b {
+  transform: translate(-50%, -50%) rotate(-45deg) scaleX(1);
 }

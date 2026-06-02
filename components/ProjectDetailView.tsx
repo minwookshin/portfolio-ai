@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { springs } from "@/lib/material/motion";
 import { ArrowLeft as ArrowBackIcon } from "lucide-react";
 import { Project } from "./ProjectCard";
 import { CaseStudy } from "./detail/CaseStudy";
 import { getCaseStudy } from "@/data/caseStudies";
+import type { BuilderProof, PortfolioProject } from "@/data/projects";
 
 interface ProjectDetailViewProps {
-  project: Project;
-  onBack: () => void;
+  project: Project | PortfolioProject;
+  onBack?: () => void;
   hideBack?: boolean;
   focusQuery?: string | null;
   onAsk?: (q: string) => void;
@@ -21,6 +23,99 @@ const FOCUS_STOPWORDS = new Set([
   "with", "did", "does", "was", "were", "you", "project", "can", "show", "of", "to",
   "is", "it", "are", "have", "more", "give", "into", "from", "they", "their", "the",
 ]);
+
+function hasBuilderProof(project: Project | PortfolioProject): project is PortfolioProject {
+  return "builder" in project;
+}
+
+function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
+  return (
+    <section className="mb-[var(--space-7)] space-y-[var(--space-4)]">
+      <div className="grid gap-[var(--space-2)] border-y border-outline-variant py-[var(--space-3)] sm:grid-cols-2">
+        <SummaryItem label="role" value={proof.role} />
+        <SummaryItem label="stack" value={proof.stack.join(", ")} />
+        <SummaryItem
+          label="status"
+          value={
+            proof.status.href ? (
+              <a
+                href={proof.status.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-on-surface/55 underline-offset-2 hover:decoration-on-surface"
+              >
+                {proof.status.label}
+              </a>
+            ) : (
+              proof.status.label
+            )
+          }
+        />
+        <SummaryItem label="what it does" value={proof.oneLiner} />
+      </div>
+
+      {proof.demo && (
+        <div className="space-y-[var(--space-2)]">
+          {proof.demo.video ? (
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              className="block w-full bg-surface-container"
+            >
+              <source src={proof.demo.video} type="video/mp4" />
+            </video>
+          ) : proof.demo.href ? (
+            <a
+              href={proof.demo.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center bg-on-surface px-[var(--space-3)] text-surface underline decoration-surface/55 underline-offset-2 transition-opacity hover:opacity-85"
+            >
+              {proof.demo.label}
+            </a>
+          ) : null}
+          <p className="text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">
+            {proof.demo.note ?? proof.demo.label}
+          </p>
+        </div>
+      )}
+
+      <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">
+        {proof.pipeline}
+      </p>
+
+      <MetricGrid title="engineering scope" items={proof.scope} />
+      <MetricGrid title="results" items={proof.results} />
+    </section>
+  );
+}
+
+function SummaryItem({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div>
+      <p className="font-mono text-[length:var(--type--2)] leading-[var(--leading-tight)] text-on-surface-variant">{label}</p>
+      <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">{value}</p>
+    </div>
+  );
+}
+
+function MetricGrid({ title, items }: { title: string; items: BuilderProof["scope"] }) {
+  return (
+    <section className="space-y-[var(--space-2)]">
+      <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-heading)] text-on-surface">{title}</h2>
+      <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
+        {items.map((item) => (
+          <div key={`${title}-${item.label}`} className="bg-surface-container px-[var(--space-3)] py-[var(--space-2)]">
+            <p className="font-mono text-[length:var(--type--2)] leading-[var(--leading-tight)] text-on-surface-variant">{item.label}</p>
+            <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">{item.value}</p>
+            {item.note && <p className="mt-[var(--space-1)] text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">{item.note}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function ProjectDetailView({ project, onBack, hideBack = false, focusQuery, onAsk }: ProjectDetailViewProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -63,19 +158,20 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="mb-12"
+      className="mb-[var(--space-6)]"
     >
-      {!hideBack && (
+      {!hideBack && onBack && (
         <motion.button
           onClick={onBack}
           whileHover={{ x: -4 }}
           transition={springs.spatialFast}
-          className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface mb-8 transition-colors"
+          className="mb-[var(--space-4)] flex items-center gap-[var(--space-1)] text-on-surface-variant transition-colors hover:text-on-surface"
         >
           <ArrowBackIcon className="w-4 h-4" />
           <span className="text-sm font-normal">Back to projects</span>
         </motion.button>
       )}
+      {hasBuilderProof(project) && <BuilderProofIntro proof={project.builder} />}
       <CaseStudy data={caseStudy} onAsk={onAsk} />
     </motion.div>
   );
