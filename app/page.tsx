@@ -206,7 +206,7 @@ const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
 
 const LIVE_DEMO_TILE_TITLES = new Set(["CapExplorer", "Caret"]);
 
-const BUILD_VERSION = "build a60937a";
+const BUILD_VERSION = "3.1.33387";
 const BUILD_UPDATED_AT = "2026-06-01T15:12:55Z";
 type BuildMetaState = {
   updatedAt: string;

@@ -74,14 +74,14 @@ async function getUpdatedAt() {
 }
 
 async function getVersion() {
-  const vercelHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
-  if (vercelHash) return `build ${vercelHash}`;
+  const vercelHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 5);
+  if (vercelHash) return `3.1.${vercelHash}`;
 
   try {
-    const { stdout } = await execFileAsync("git", ["rev-parse", "--short", "HEAD"], { cwd: ROOT });
-    return `build ${stdout.trim()}`;
+    const { stdout } = await execFileAsync("git", ["rev-parse", "--short=5", "HEAD"], { cwd: ROOT });
+    return `3.1.${stdout.trim()}`;
   } catch {
-    return "build local";
+    return "3.1.local";
   }
 }
 
