@@ -7,6 +7,7 @@ import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import type { PortfolioProject } from "@/data/projects";
 import { LIGHT_PROJECT_TOKENS, isFeaturedProject } from "@/data/projects";
 import { tweens } from "@/lib/material/motion";
+import { restoreProjectOpenScroll } from "@/lib/projectScrollRestoration";
 
 const focusableSelector = [
   "a[href]",
@@ -69,7 +70,8 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
-      previousFocusRef.current?.focus();
+      previousFocusRef.current?.focus({ preventScroll: true });
+      restoreProjectOpenScroll();
     };
   }, [router]);
 

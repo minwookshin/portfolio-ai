@@ -11,6 +11,7 @@ import ChatInput from "@/components/ChatInput";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
+import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import {
   FEATURED_PROJECT_IDS,
   LIVE_DEMO_TILE_TITLES,
@@ -278,7 +279,7 @@ function SelectedProjectCard({
       {project.comingSoon ? (
         <div aria-disabled="true">{cardContent}</div>
       ) : (
-        <Link href={getProjectPath(project)} className="block outline-none">
+        <Link href={getProjectPath(project)} scroll={false} onClick={saveProjectOpenScroll} className="block outline-none">
           {cardContent}
         </Link>
       )}
@@ -704,7 +705,7 @@ function LabProjectTile({
       {project.comingSoon ? (
         <div aria-disabled="true">{tileContent}</div>
       ) : (
-        <Link href={getProjectPath(project)} className="absolute inset-0 block outline-none">
+        <Link href={getProjectPath(project)} scroll={false} onClick={saveProjectOpenScroll} className="absolute inset-0 block outline-none">
           {tileContent}
         </Link>
       )}
@@ -911,7 +912,8 @@ export default function Home() {
     }
     setHasStarted(false);
     setChatOnTop(false);
-    router.push(getProjectPath(project));
+    saveProjectOpenScroll();
+    router.push(getProjectPath(project), { scroll: false });
   };
 
   return (
