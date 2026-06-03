@@ -3,6 +3,7 @@ import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
 import { NextResponse } from "next/server";
+import { BUILD_VERSION } from "@/lib/buildMeta";
 
 const execFileAsync = promisify(execFile);
 
@@ -74,6 +75,9 @@ async function getUpdatedAt() {
 }
 
 async function getVersion() {
+  const configuredVersion = process.env.NEXT_PUBLIC_BUILD_VERSION ?? process.env.BUILD_VERSION;
+  if (configuredVersion) return configuredVersion;
+
   const vercelHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 5);
   if (vercelHash) return `3.1.${vercelHash}`;
 
@@ -81,7 +85,7 @@ async function getVersion() {
     const { stdout } = await execFileAsync("git", ["rev-parse", "--short=5", "HEAD"], { cwd: ROOT });
     return `3.1.${stdout.trim()}`;
   } catch {
-    return "3.1.local";
+    return BUILD_VERSION;
   }
 }
 

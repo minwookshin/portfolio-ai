@@ -11,6 +11,7 @@ import ChatInput from "@/components/ChatInput";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
+import { BUILD_UPDATED_AT, BUILD_VERSION } from "@/lib/buildMeta";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import {
   FEATURED_PROJECT_IDS,
@@ -21,8 +22,6 @@ import {
   orderProjects,
 } from "@/data/projects";
 
-const BUILD_VERSION = "3.1.33387";
-const BUILD_UPDATED_AT = "2026-06-01T15:12:55Z";
 type BuildMetaState = {
   updatedAt: string;
   version: string;
