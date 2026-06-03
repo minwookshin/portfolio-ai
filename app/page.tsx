@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import type { FormEvent, KeyboardEvent } from "react";
+import type { FormEvent, KeyboardEvent, ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -9,6 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
+import HoverVideoPreview, { useHoverVideoPreview } from "@/components/HoverVideoPreview";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -154,10 +155,12 @@ function BuildMeta() {
 }
 
 function ProjectMedia({
+  previewLayer,
   project,
   tone = "light",
   reduceMotion = false,
 }: {
+  previewLayer?: ReactNode;
   project: Project;
   tone?: "light" | "dark";
   reduceMotion?: boolean;
@@ -185,13 +188,15 @@ function ProjectMedia({
           }`}
           style={{ filter: "grayscale(1) contrast(1.02)" }}
         />
+        {previewLayer}
       </div>
     );
   }
 
   return (
-    <div className={`flex aspect-[1.5] w-full items-center justify-center rounded-[var(--md-shape-lg)] ${mediaBg} text-4xl text-[var(--dark-text-primary)]`}>
+    <div className={`relative flex aspect-[1.5] w-full items-center justify-center overflow-hidden rounded-[var(--md-shape-lg)] ${mediaBg} text-4xl text-[var(--dark-text-primary)]`}>
       {project.glyph ?? project.title.charAt(0)}
+      {previewLayer}
     </div>
   );
 }
@@ -252,9 +257,23 @@ function SelectedProjectCard({
   isActive: boolean;
 }) {
   const reduceMotion = useReducedMotion();
+  const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+  const videoPoster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
+  const previewState = useHoverVideoPreview({ videoSrc: previewVideo });
+  const videoLayer = (
+    <HoverVideoPreview
+      canPlayVideo={previewState.canPlayVideo}
+      isAlwaysOn={previewState.isAlwaysOn}
+      videoSrc={previewVideo}
+      poster={videoPoster}
+      preload="none"
+      reduceMotion={previewState.reduceMotion}
+      videoRef={previewState.videoRef}
+    />
+  );
   const cardContent = (
     <>
-      <ProjectMedia project={project} reduceMotion={Boolean(reduceMotion)} />
+      <ProjectMedia project={project} reduceMotion={Boolean(reduceMotion)} previewLayer={videoLayer} />
       <span className="mt-3 flex items-start justify-between gap-4">
         <span className="min-w-0">
           <span className="block text-[length:var(--type-0)] font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">{project.title}</span>
@@ -271,6 +290,7 @@ function SelectedProjectCard({
 
   return (
     <motion.div
+      {...previewState.previewHandlers}
       animate={{ scale: reduceMotion ? 1 : isActive ? 1 : 0.8 }}
       whileHover={reduceMotion || isActive ? undefined : { scale: 0.84 }}
       transition={reduceMotion ? tweens.none : tweens.slower}
@@ -635,32 +655,22 @@ function LabProjectTile({
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
-  const videoRef = useRef<HTMLVideoElement>(null);
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
   const showsLiveDemo = Boolean(previewVideo && LIVE_DEMO_TILE_TITLES.has(project.title));
   const src = project.image ?? project.icon;
   const videoPoster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
-
-  useEffect(() => {
-    if (!showsLiveDemo) return;
-    videoRef.current?.play().catch(() => {});
-  }, [showsLiveDemo]);
-
-  const playPreview = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (!showsLiveDemo) video.currentTime = 0;
-    video.play().catch(() => {});
-  };
-
-  const stopPreview = () => {
-    if (showsLiveDemo) return;
-    const video = videoRef.current;
-    if (!video) return;
-    video.pause();
-    video.currentTime = 0;
-  };
-
+  const previewState = useHoverVideoPreview({ videoSrc: previewVideo, alwaysOn: showsLiveDemo });
+  const videoLayer = (
+    <HoverVideoPreview
+      canPlayVideo={previewState.canPlayVideo}
+      isAlwaysOn={previewState.isAlwaysOn}
+      videoSrc={previewVideo}
+      poster={videoPoster}
+      preload="metadata"
+      reduceMotion={previewState.reduceMotion}
+      videoRef={previewState.videoRef}
+    />
+  );
   const tileContent = (
     <>
       <div className="absolute inset-0 overflow-hidden">
@@ -676,28 +686,13 @@ function LabProjectTile({
             }`}
           />
         )}
-        {previewVideo && (
-          <video
-            ref={videoRef}
-            muted
-            loop
-            playsInline
-            autoPlay={showsLiveDemo}
-            preload={showsLiveDemo ? "auto" : "metadata"}
-            poster={videoPoster}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] ${
-              showsLiveDemo ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
-            }`}
-          >
-            <source src={previewVideo} type="video/mp4" />
-          </video>
-        )}
+        {videoLayer}
         {!src && (
           <div
             className={`absolute inset-0 flex items-center justify-center bg-[var(--bg-element)] text-[var(--text-primary)] transition duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] ${
-              showsLiveDemo
+              previewState.isAlwaysOn
                 ? "opacity-0"
-                : previewVideo
+                : previewState.canPlayVideo
                 ? `opacity-100 group-hover:opacity-0 group-focus-within:opacity-0 ${reduceMotion ? "" : "group-hover:scale-[1.04]"}`
                 : reduceMotion ? "" : "group-hover:scale-[1.04]"
             }`}
@@ -724,10 +719,7 @@ function LabProjectTile({
 
   return (
     <motion.div
-      onMouseEnter={playPreview}
-      onMouseLeave={stopPreview}
-      onFocus={playPreview}
-      onBlur={stopPreview}
+      {...previewState.previewHandlers}
       initial={reduceMotion ? false : { opacity: 0, y: 24 }}
       whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
