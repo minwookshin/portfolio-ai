@@ -705,7 +705,7 @@ function LabArchive({
   });
 
   return (
-    <section className="border-t border-[var(--border-light)] bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[calc(var(--space-8)+var(--space-2))] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[calc(var(--space-8)*1.75)]">
+    <section className="bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[calc(var(--space-8)+var(--space-2))] text-[var(--text-primary)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[1180px]">
         <div className="mb-[var(--space-4)] flex justify-center">
           <div className="w-full max-w-[620px] text-left">
