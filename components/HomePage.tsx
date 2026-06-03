@@ -15,7 +15,6 @@ import { ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
-import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 import {
   FEATURED_PROJECT_IDS,
@@ -228,7 +227,12 @@ function ProjectTextRow({
           {rowText}
         </div>
       ) : (
-        <Link href={getProjectPath(project)} scroll={false} onClick={saveProjectOpenScroll} className={rowClass}>
+        <Link
+          href={getProjectPath(project)}
+          scroll={false}
+          onClick={saveProjectOpenScroll}
+          className={rowClass}
+        >
           {rowText}
         </Link>
       )}
@@ -241,7 +245,7 @@ function ProjectTextRow({
 
 function EditorialIntro() {
   return (
-    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[#F7F8F8] px-[var(--space-3)] pb-[var(--space-8)] pt-[92px] sm:px-[var(--space-5)] md:pb-[calc(var(--space-8)+var(--space-2))] md:pt-[122px]">
+    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[#F7F8F8] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
         <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</p>
         <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</p>
@@ -269,7 +273,7 @@ function WorkSection({
   projects: Project[];
 }) {
   return (
-    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-7)] sm:px-[var(--space-5)] md:py-[calc(var(--space-8)+var(--space-2))]">
+    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
         <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)]">Work</h2>
         <ul className="mt-[var(--space-3)] border-t border-[var(--border-light)]">
@@ -287,45 +291,16 @@ function WorkSection({
   );
 }
 
-function WritingSection({
-  posts,
-}: {
-  posts: WritingPostMeta[];
-}) {
-  if (posts.length === 0) return null;
-
+function WritingSection() {
   return (
-    <section className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-7)] sm:px-[var(--space-5)] md:py-[calc(var(--space-8)+var(--space-2))]">
+    <section className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <div className="flex items-baseline justify-between gap-[var(--space-2)]">
-          <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)]">
-            Writing
-          </h2>
-          <Link
-            href="/writing"
-            className="micro-link micro-focus text-[length:var(--type-0)] text-[var(--text-muted)] hover:text-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)]"
-          >
-            all writing
-          </Link>
-        </div>
-        <ul className="mt-[var(--space-3)] border-t border-[var(--border-light)]">
-          {posts.map((post) => (
-            <li key={post.slug} className="list-none border-b border-[var(--border-light)]">
-              <Link
-                href={`/writing/${post.slug}`}
-                className="micro-focus micro-pressable group flex min-h-12 w-full items-baseline justify-between gap-[var(--space-2)] py-[var(--space-1)] text-left"
-              >
-                <span className="min-w-0 truncate font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-                  {post.title}
-                </span>
-                <span className="shrink-0 leading-[var(--leading-body)] text-[var(--text-muted)]">
-                  {formatWritingDate(post.date)}
-                </span>
-                <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-visible:opacity-100" />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Link
+          href="/writing"
+          className="micro-link micro-focus text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)] hover:text-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)]"
+        >
+          writing
+        </Link>
       </div>
     </section>
   );
@@ -333,7 +308,7 @@ function WritingSection({
 
 function LabEntrySection() {
   return (
-    <section className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[var(--space-7)] sm:px-[var(--space-5)] md:pt-[calc(var(--space-8)+var(--space-2))]">
+    <section className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
         <Link
           href="/lab"
@@ -545,7 +520,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
           <WorkSection projects={featuredProjects} />
-          <WritingSection posts={latestWritingPosts} />
+          <WritingSection />
         </div>
         <LabEntrySection />
       </motion.div>
