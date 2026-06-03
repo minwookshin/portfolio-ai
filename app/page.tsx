@@ -145,7 +145,7 @@ function BuildMeta() {
   }, []);
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[var(--dark-text-muted)]">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[var(--text-muted)]">
       <span>{meta.version}</span>
       <span aria-hidden>·</span>
       <span>updated {formatElapsedBefore(meta.updatedAt, now)}</span>
@@ -519,13 +519,13 @@ function LabChatTile() {
 
   return (
     <div
-      className={`dark-embed w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--dark-border)] bg-[var(--dark-bg-surface)] p-0 text-[var(--dark-text-primary)] ${
+      className={`w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] p-0 text-[var(--text-primary)] ${
         hasMessages ? "h-[520px]" : LAB_TILE_HEIGHTS[0]
       }`}
     >
       <form
         onSubmit={submit}
-        className="flex h-full min-h-0 w-full flex-col rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-surface)] p-4 text-[var(--dark-text-primary)] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="flex h-full min-h-0 w-full flex-col rounded-[var(--md-shape-lg)] bg-[var(--bg-surface)] p-4 text-[var(--text-primary)] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
       >
         <div
           ref={historyRef}
@@ -539,8 +539,8 @@ function LabChatTile() {
                 <div
                   className={`max-w-[88%] rounded-[var(--md-shape-sm)] border px-3 py-2 leading-snug ${
                     isUser
-                      ? "border-[var(--accent-indigo)] bg-[var(--accent-indigo)] text-[var(--dark-text-primary)]"
-                      : "border-[var(--dark-border)] bg-[var(--dark-bg-base)] text-[var(--dark-text-primary)]"
+                      ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-[var(--bg-surface)]"
+                      : "border-[var(--border-light)] bg-[var(--bg-element)] text-[var(--text-primary)]"
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{body || (isStreaming ? "..." : "")}</p>
@@ -550,7 +550,7 @@ function LabChatTile() {
           })}
         </div>
         <div
-          className="mt-3 flex h-16 w-full min-w-0 rounded-[var(--md-shape-sm)] border border-[var(--dark-border)] bg-[var(--dark-bg-base)]"
+          className="mt-3 flex h-16 w-full min-w-0 rounded-[var(--md-shape-sm)] border border-[var(--border-light)] bg-[var(--bg-element)]"
         >
           <input
             value={draft}
@@ -558,13 +558,13 @@ function LabChatTile() {
             onKeyDown={submitFromKeyboard}
             placeholder="ask me"
             aria-label="Ask from lab"
-            className="min-w-0 flex-1 bg-transparent px-5 font-light text-[var(--dark-text-primary)] outline-none placeholder:text-[var(--dark-text-muted)]"
+            className="min-w-0 flex-1 bg-transparent px-5 font-light text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)]"
           />
           <button
             type="submit"
             aria-label="Send"
             disabled={!draft.trim() || isStreaming}
-            className="flex h-full w-16 shrink-0 items-center justify-center border-l border-[var(--dark-border)] text-[var(--dark-text-primary)] transition-colors hover:bg-[var(--dark-bg-surface)] disabled:opacity-30"
+            className="flex h-full w-16 shrink-0 items-center justify-center border-l border-[var(--border-light)] text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-surface)] disabled:opacity-30"
           >
             <ArrowRight className="h-5 w-5" strokeWidth={2.25} />
           </button>
@@ -651,15 +651,15 @@ function LabProjectTile({
           </div>
         )}
       </div>
-      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-[var(--dark-bg-base)] via-[var(--dark-overlay-56)] to-transparent p-[var(--space-2)] opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-[rgba(247,248,248,0.92)] via-[rgba(247,248,248,0.72)] to-transparent p-[var(--space-2)] opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
         <span className="flex items-end justify-between gap-[var(--space-2)]">
           <span className="min-w-0">
-            <span className="block font-normal leading-[var(--leading-tight)] text-[var(--dark-text-primary)]">{project.title}</span>
-            <span className="mt-[var(--space-1)] block leading-[var(--leading-body)] text-[var(--dark-text-muted)]">
+            <span className="block font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">{project.title}</span>
+            <span className="mt-[var(--space-1)] block leading-[var(--leading-body)] text-[var(--text-muted)]">
               {project.studioLabel ?? project.description}
             </span>
           </span>
-          {!project.comingSoon && <ArrowUpRight className="h-4 w-4 shrink-0 text-[var(--accent-indigo-hover)]" />}
+          {!project.comingSoon && <ArrowUpRight className="h-4 w-4 shrink-0 text-[var(--accent-indigo)]" />}
         </span>
       </span>
     </>
@@ -675,7 +675,7 @@ function LabProjectTile({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
-      className={`dark-embed group relative w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--dark-border)] bg-[var(--dark-bg-surface)] text-left outline-none transition-colors hover:bg-[var(--dark-bg-base)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--dark-bg-base)] ${className}`}
+      className={`group relative w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left outline-none transition-colors hover:bg-[var(--bg-element)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] ${className}`}
     >
       {project.comingSoon ? (
         <div aria-disabled="true">{tileContent}</div>
@@ -705,12 +705,12 @@ function LabArchive({
   });
 
   return (
-    <section className="dark-embed border-t border-[var(--dark-border)] bg-[var(--dark-bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[calc(var(--space-8)+var(--space-2))] text-[var(--dark-text-primary)] sm:px-[var(--space-5)] md:pt-[calc(var(--space-8)*1.75)]">
+    <section className="border-t border-[var(--border-light)] bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[calc(var(--space-8)+var(--space-2))] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[calc(var(--space-8)*1.75)]">
       <div className="mx-auto w-full max-w-[1180px]">
         <div className="mb-[var(--space-4)] flex justify-center">
           <div className="w-full max-w-[620px] text-left">
-            <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--dark-text-primary)]">Lab / archive</h2>
-            <p className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--dark-text-muted)]">
+            <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)]">Lab / archive</h2>
+            <p className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
               Projects, demos, experiments, and product sketches live here so the main page stays simple while the body of work stays accessible.
             </p>
           </div>
