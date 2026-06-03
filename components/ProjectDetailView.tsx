@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { springs } from "@/lib/material/motion";
 import { ArrowLeft as ArrowBackIcon } from "lucide-react";
 import { Project } from "./ProjectCard";
@@ -131,6 +131,7 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
 }
 
 export default function ProjectDetailView({ project, onBack, hideBack = false, focusQuery, onAsk }: ProjectDetailViewProps) {
+  const reduceMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
 
   // Deep-link: scroll to and highlight the section that answers the user's question
@@ -152,13 +153,13 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
       };
       const target = headings.find(matches) ?? paras.find(matches);
       if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
         target.classList.add("section-flash");
         setTimeout(() => target.classList.remove("section-flash"), 2400);
       }
     }, 480);
     return () => clearTimeout(timer);
-  }, [focusQuery, project.title]);
+  }, [focusQuery, project.title, reduceMotion]);
 
   // Every project renders through the case-study system — authored studies for
   // the deep ones, auto-synthesized snapshots for the rest.
@@ -167,17 +168,17 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   return (
     <motion.div
       ref={rootRef}
-      initial={{ opacity: 0 }}
+      initial={reduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={reduceMotion ? { duration: 0 } : { duration: 0.2 }}
       className="mb-[var(--space-6)]"
     >
       {!hideBack && onBack && (
         <motion.button
           onClick={onBack}
-          whileHover={{ x: -4 }}
-          transition={springs.spatialFast}
+          whileHover={reduceMotion ? undefined : { x: -4 }}
+          transition={reduceMotion ? { duration: 0 } : springs.spatialFast}
           className="mb-[var(--space-4)] flex items-center gap-[var(--space-1)] text-on-surface-variant transition-colors hover:text-on-surface"
         >
           <ArrowBackIcon className="w-4 h-4" />

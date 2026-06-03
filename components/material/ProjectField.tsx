@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { useReducedMotion } from "framer-motion";
 import { Project } from "@/components/ProjectCard";
 
 // Per-icon entrance directions, cycled so neighbours differ. The artwork starts
@@ -69,6 +70,7 @@ export function ProjectField({
   iconSize: iconSizeProp,
   gap,
 }: ProjectFieldProps) {
+  const reduceMotion = useReducedMotion();
   const [vw, setVw] = useState(1024);
   const [vh, setVh] = useState(768);
   useEffect(() => {
@@ -127,10 +129,13 @@ export function ProjectField({
   // Landing reveal: each icon's artwork slides in from a different edge (clipped
   // to its own frame), staggered, just after the name settles at the top.
   const [revealed, setRevealed] = useState(false);
+  const effectiveRevealed = Boolean(reduceMotion) || revealed;
   useEffect(() => {
+    if (reduceMotion) return;
+
     const t = setTimeout(() => setRevealed(true), 2250);
     return () => clearTimeout(t);
-  }, []);
+  }, [reduceMotion]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<HTMLDivElement>(null);
@@ -153,7 +158,7 @@ export function ProjectField({
   }, [clampX, clampY, paint, placement]);
 
   useEffect(() => {
-    if (clampX <= 1) {
+    if (reduceMotion || clampX <= 1) {
       pan.current.x = 0;
       pan.current.y = 0;
       paint();
@@ -167,7 +172,7 @@ export function ProjectField({
       const dt = Math.min(now - last, 48) / 1000;
       last = now;
 
-      if (revealed && !drag.current.active && now > autoPausedUntil.current) {
+      if (effectiveRevealed && !drag.current.active && now > autoPausedUntil.current) {
         const next = pan.current.x + autoDir.current * speed * dt;
         if (next >= clampX) {
           pan.current.x = clampX;
@@ -189,7 +194,7 @@ export function ProjectField({
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [clampX, isMobile, paint, revealed]);
+  }, [clampX, effectiveRevealed, isMobile, paint, reduceMotion]);
 
   const onPointerDown = (e: React.PointerEvent) => {
     autoPausedUntil.current = performance.now() + 2400;
@@ -250,12 +255,12 @@ export function ProjectField({
           // never shows before its icon; the artwork additionally slides in from
           // one edge, clipped to the frame.
           const boxReveal = {
-            opacity: revealed ? 1 : 0,
-            transition: `opacity 0.5s ease-out ${d}`,
+            opacity: effectiveRevealed ? 1 : 0,
+            transition: reduceMotion ? "none" : `opacity 0.5s ease-out ${d}`,
           };
           const revealStyle = {
-            transform: revealed ? "translate(0,0)" : REVEAL_OFFSETS[(i * 3) % REVEAL_OFFSETS.length],
-            transition: `transform 0.8s cubic-bezier(0.34, 1.28, 0.5, 1) ${d}`,
+            transform: effectiveRevealed ? "translate(0,0)" : REVEAL_OFFSETS[(i * 3) % REVEAL_OFFSETS.length],
+            transition: reduceMotion ? "none" : `transform 0.8s cubic-bezier(0.34, 1.28, 0.5, 1) ${d}`,
           };
           return (
             <button
@@ -280,12 +285,14 @@ export function ProjectField({
                 opacity: place.visible ? 1 : 0,
                 pointerEvents: place.visible ? "auto" : "none",
                 transform: `translate(${place.x}px, ${place.y}px)`,
-                transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
+                transition: reduceMotion ? "none" : "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease",
               }}
             >
               <div className="h-full w-full rounded-[var(--md-shape-lg)]" style={boxReveal}>
               <div
-                className="relative h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
+                className={`relative h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent ${
+                  reduceMotion ? "" : "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-95"
+                }`}
               >
                 <div className="absolute inset-0 rounded-[var(--md-shape-lg)]" style={revealStyle}>
                   {iconSrc ? (
@@ -295,12 +302,16 @@ export function ProjectField({
                       fill
                       sizes={`${Math.ceil(iconSize)}px`}
                       draggable={false}
-                      className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+                      className={`object-cover ${
+                        reduceMotion ? "" : "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+                      }`}
                       style={{ filter: "grayscale(1) contrast(1.03)" }}
                     />
                   ) : (
                     <div
-                      className={`w-full h-full flex items-center justify-center font-normal text-on-surface transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125 ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}
+                      className={`w-full h-full flex items-center justify-center font-normal text-on-surface ${
+                        reduceMotion ? "" : "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-125"
+                      } ${(project.glyph ?? "").length > 1 ? "text-lg tracking-tight" : "text-3xl"}`}
                       style={{ filter: "grayscale(1)" }}
                     >
                       {project.glyph ?? project.title.charAt(0)}

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
@@ -37,6 +37,7 @@ const LAB_TILE_HEIGHTS = [
 ] as const;
 const LAB_TILE_HEIGHT_VALUES = [460, 340, 460, 340, 500, 360] as const;
 const APPLE_EASE = [0.22, 1, 0.36, 1] as const;
+const INSTANT_TRANSITION = { duration: 0 } as const;
 const WORK_CARD_WIDTH = "min(74vw, 680px)";
 const WORK_CARD_GUTTER = `calc((100vw - ${WORK_CARD_WIDTH}) / 2)`;
 // Personal Information
@@ -153,7 +154,15 @@ function BuildMeta() {
   );
 }
 
-function ProjectMedia({ project, tone = "light" }: { project: Project; tone?: "light" | "dark" }) {
+function ProjectMedia({
+  project,
+  tone = "light",
+  reduceMotion = false,
+}: {
+  project: Project;
+  tone?: "light" | "dark";
+  reduceMotion?: boolean;
+}) {
   const src = project.image ?? project.icon;
   const isLogo = project.title === "Atlas" || project.title === "Portfolio AI";
   const mediaBg =
@@ -170,7 +179,9 @@ function ProjectMedia({ project, tone = "light" }: { project: Project; tone?: "l
           loading="lazy"
           decoding="async"
           draggable={false}
-          className={`h-full w-full object-contain transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035] ${
+          className={`h-full w-full object-contain ${
+            reduceMotion ? "" : "transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+          } ${
             isLogo ? "p-12 sm:p-20" : "p-8 sm:p-12"
           }`}
           style={{ filter: "grayscale(1) contrast(1.02)" }}
@@ -239,9 +250,10 @@ function SelectedProjectCard({
   project: Project;
   isActive: boolean;
 }) {
+  const reduceMotion = useReducedMotion();
   const cardContent = (
     <>
-      <ProjectMedia project={project} />
+      <ProjectMedia project={project} reduceMotion={Boolean(reduceMotion)} />
       <span className="mt-3 flex items-start justify-between gap-4">
         <span className="min-w-0">
           <span className="block text-[length:var(--type-0)] font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">{project.title}</span>
@@ -258,9 +270,9 @@ function SelectedProjectCard({
 
   return (
     <motion.div
-      animate={{ scale: isActive ? 1 : 0.8 }}
-      whileHover={isActive ? undefined : { scale: 0.84 }}
-      transition={{ type: "tween", duration: 0.52, ease: APPLE_EASE }}
+      animate={{ scale: reduceMotion ? 1 : isActive ? 1 : 0.8 }}
+      whileHover={reduceMotion || isActive ? undefined : { scale: 0.84 }}
+      transition={reduceMotion ? INSTANT_TRANSITION : { type: "tween", duration: 0.52, ease: APPLE_EASE }}
       data-work-card="true"
       className={`group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left outline-none transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-base)] ${
         isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
@@ -309,11 +321,14 @@ function WorkSection({
 }: {
   projects: Project[];
 }) {
+  const reduceMotion = useReducedMotion();
   const carouselRef = useRef<HTMLDivElement>(null);
   const programmaticScrollRef = useRef<number | null>(null);
   const scrollSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const indicatorMotion = { type: "tween" as const, duration: 0.4, ease: "easeInOut" as const };
+  const indicatorMotion = reduceMotion
+    ? INSTANT_TRANSITION
+    : { type: "tween" as const, duration: 0.4, ease: "easeInOut" as const };
 
   useEffect(() => {
     return () => {
@@ -367,7 +382,10 @@ function WorkSection({
     const delta = cardRect.left + cardRect.width / 2 - (scrollerRect.left + scrollerRect.width / 2);
     const target = scroller.scrollLeft + delta;
     const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-    scroller.scrollTo({ left: Math.min(Math.max(target, 0), maxScroll), behavior: "smooth" });
+    scroller.scrollTo({
+      left: Math.min(Math.max(target, 0), maxScroll),
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
     scrollSettleTimerRef.current = setTimeout(() => {
       programmaticScrollRef.current = null;
       scrollSettleTimerRef.current = null;
@@ -421,7 +439,7 @@ function WorkSection({
                   aria-hidden="true"
                   className="h-[3px] shrink-0 rounded-full bg-[var(--text-primary)]"
                   animate={{ width: isActive ? 36 : 3, opacity: isActive ? 1 : 0.38, scale: 1 }}
-                  whileHover={isActive ? undefined : { opacity: 0.72, scale: 1.08 }}
+                  whileHover={isActive ? undefined : reduceMotion ? { opacity: 0.72 } : { opacity: 0.72, scale: 1.08 }}
                   transition={indicatorMotion}
                 />
               </motion.button>
@@ -434,6 +452,7 @@ function WorkSection({
 }
 
 function LabChatTile() {
+  const reduceMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -442,9 +461,9 @@ function LabChatTile() {
   useEffect(() => {
     historyRef.current?.scrollTo({
       top: historyRef.current.scrollHeight,
-      behavior: "smooth",
+      behavior: reduceMotion ? "auto" : "smooth",
     });
-  }, [messages]);
+  }, [messages, reduceMotion]);
 
   const sendDraft = async () => {
     const message = draft.trim();
@@ -525,7 +544,9 @@ function LabChatTile() {
     >
       <form
         onSubmit={submit}
-        className="flex h-full min-h-0 w-full flex-col rounded-[var(--md-shape-lg)] bg-[var(--bg-surface)] p-4 text-[var(--text-primary)] transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className={`flex h-full min-h-0 w-full flex-col rounded-[var(--md-shape-lg)] bg-[var(--bg-surface)] p-4 text-[var(--text-primary)] ${
+          reduceMotion ? "" : "transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        }`}
       >
         <div
           ref={historyRef}
@@ -583,6 +604,7 @@ function LabProjectTile({
   index: number;
   className?: string;
 }) {
+  const reduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
   const showsLiveDemo = Boolean(previewVideo && LIVE_DEMO_TILE_TITLES.has(project.title));
@@ -618,7 +640,9 @@ function LabProjectTile({
             loading="lazy"
             decoding="async"
             draggable={false}
-            className="h-full w-full object-cover grayscale transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+            className={`h-full w-full object-cover grayscale ${
+              reduceMotion ? "" : "transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+            }`}
           />
         )}
         {previewVideo && (
@@ -643,15 +667,17 @@ function LabProjectTile({
               showsLiveDemo
                 ? "opacity-0"
                 : previewVideo
-                ? "opacity-100 group-hover:scale-[1.04] group-hover:opacity-0 group-focus-visible:opacity-0"
-                : "group-hover:scale-[1.04]"
+                ? `opacity-100 group-hover:opacity-0 group-focus-visible:opacity-0 ${reduceMotion ? "" : "group-hover:scale-[1.04]"}`
+                : reduceMotion ? "" : "group-hover:scale-[1.04]"
             }`}
           >
             <ProjectMark project={project} />
           </div>
         )}
       </div>
-      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-[rgba(247,248,248,0.92)] via-[rgba(247,248,248,0.72)] to-transparent p-[var(--space-2)] opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+      <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(247,248,248,0.92)] via-[rgba(247,248,248,0.72)] to-transparent p-[var(--space-2)] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 ${
+        reduceMotion ? "" : "translate-y-2 transition duration-300 group-hover:translate-y-0 group-focus-visible:translate-y-0"
+      }`}>
         <span className="flex items-end justify-between gap-[var(--space-2)]">
           <span className="min-w-0">
             <span className="block font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">{project.title}</span>
@@ -671,10 +697,11 @@ function LabProjectTile({
       onMouseLeave={stopPreview}
       onFocus={playPreview}
       onBlur={stopPreview}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
+      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
+      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
+      transition={reduceMotion ? INSTANT_TRANSITION : { ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
       className={`group relative w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left outline-none transition-colors hover:bg-[var(--bg-element)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] ${className}`}
     >
       {project.comingSoon ? (
@@ -743,6 +770,7 @@ function LabArchive({
 // Interface to store content snapshot for each message
 export default function Home() {
   const router = useRouter();
+  const reduceMotion = useReducedMotion();
   const [hasStarted, setHasStarted] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
@@ -775,10 +803,10 @@ export default function Home() {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
         top: chatContainerRef.current.scrollHeight,
-        behavior: 'smooth'
+        behavior: reduceMotion ? "auto" : "smooth"
       });
     }
-  }, [messages]);
+  }, [messages, reduceMotion]);
 
   useEffect(() => {
     if (!projectNotice) return;
@@ -887,7 +915,10 @@ export default function Home() {
     setHasStarted(false);
     setShowProfile(false);
     requestAnimationFrame(() => {
-      document.getElementById("profile")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      document.getElementById("profile")?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "center",
+      });
     });
   };
 
@@ -915,10 +946,12 @@ export default function Home() {
   }, [showProfile]);
 
   const sheetMotion = {
-    initial: { y: "100%", opacity: 1 },
+    initial: reduceMotion ? false : { y: "100%", opacity: 1 },
     animate: { y: 0, opacity: 1 },
-    exit: { y: "100%", opacity: 1 },
-    transition: { type: "tween", duration: 0.62, ease: [0.22, 1, 0.36, 1] as const },
+    exit: reduceMotion ? { y: 0, opacity: 1 } : { y: "100%", opacity: 1 },
+    transition: reduceMotion
+      ? INSTANT_TRANSITION
+      : { type: "tween" as const, duration: 0.62, ease: [0.22, 1, 0.36, 1] as const },
   } as const;
 
   return (
@@ -948,9 +981,9 @@ export default function Home() {
       </section>
 
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: introReady ? 1 : 0, y: introReady ? 0 : 8 }}
-        transition={{ type: "tween", duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
+        initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: introReady ? 1 : 0, y: reduceMotion ? 0 : introReady ? 0 : 8 }}
+        transition={reduceMotion ? INSTANT_TRANSITION : { type: "tween", duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
@@ -966,10 +999,10 @@ export default function Home() {
         {showProfile && (
           <motion.div
             key="profile-scrim"
-            initial={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.25 }}
             onClick={closeOverlay}
             style={{ backgroundColor: "var(--dark-overlay-38)" }}
             className="fixed inset-0 z-[68] backdrop-blur-[18px]"
@@ -1009,9 +1042,9 @@ export default function Home() {
                 <div className="grid grid-cols-2 gap-3">
                   <motion.button
                     onClick={() => setShowResume(!showResume)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={springs.pressMorph}
+                    whileHover={reduceMotion ? undefined : { scale: 1.02 }}
+                    whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+                    transition={reduceMotion ? INSTANT_TRANSITION : springs.pressMorph}
                     className="flex items-center justify-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3 text-on-surface font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
@@ -1020,9 +1053,9 @@ export default function Home() {
                   <motion.a
                     href="/resume.2025dec.pdf"
                     download="Minwook_Shin_Resume.pdf"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={springs.pressMorph}
+                    whileHover={reduceMotion ? undefined : { scale: 1.02 }}
+                    whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+                    transition={reduceMotion ? INSTANT_TRANSITION : springs.pressMorph}
                     className="flex items-center justify-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3 text-on-surface font-normal transition-all"
                   >
                     <FileText className="w-4 h-4" />
@@ -1032,10 +1065,10 @@ export default function Home() {
                 <AnimatePresence>
                   {showResume && (
                     <motion.div
-                      initial={{ opacity: 0, height: 0 }}
+                      initial={reduceMotion ? false : { opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
+                      exit={reduceMotion ? { opacity: 1, height: "auto" } : { opacity: 0, height: 0 }}
+                      transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.3 }}
                       className="overflow-hidden mt-4"
                     >
                       <div className="overflow-hidden rounded-[var(--md-shape-lg)] bg-surface-container-high">
@@ -1059,10 +1092,10 @@ export default function Home() {
         {projectNotice && (
           <motion.div
             key="project-notice"
-            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.98 }}
-            transition={springs.spatialFast}
+            exit={reduceMotion ? { opacity: 0, y: 0, scale: 1 } : { opacity: 0, y: 8, scale: 0.98 }}
+            transition={reduceMotion ? INSTANT_TRANSITION : springs.spatialFast}
             className="fixed left-1/2 bottom-32 z-[76] -translate-x-1/2 rounded-[var(--md-shape-sm)] border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
           >
             {projectNotice}
@@ -1080,10 +1113,10 @@ export default function Home() {
         {hasStarted && (messages.length > 0 || isStreaming) && chatOnTop && showProfile && (
           <motion.div
             key="chat-scrim"
-            initial={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.3 }}
             onClick={() => setChatOnTop(false)}
             className="fixed inset-0 z-[71] bg-surface/70 backdrop-blur-[3px]"
             aria-hidden
@@ -1097,11 +1130,11 @@ export default function Home() {
           <motion.div
             ref={chatContainerRef}
             key="chat"
-            initial={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className={`fixed left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 overflow-y-auto scroll-smooth ${chatOnTop ? "z-[72]" : "z-[35]"}`}
+            transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.3 }}
+            className={`fixed left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 overflow-y-auto ${reduceMotion ? "" : "scroll-smooth"} ${chatOnTop ? "z-[72]" : "z-[35]"}`}
             style={{
               bottom: 96,
               maxHeight: "calc(100dvh - 180px)",
@@ -1120,9 +1153,9 @@ export default function Home() {
                 return (
                   <motion.div
                     key={msg.id}
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={reduceMotion ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={springs.spatialFast}
+                    transition={reduceMotion ? INSTANT_TRANSITION : springs.spatialFast}
                     className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
@@ -1145,16 +1178,19 @@ export default function Home() {
                           {target && (
                             <motion.button
                               type="button"
-                              initial={{ opacity: 0, y: 4 }}
+                              initial={reduceMotion ? false : { opacity: 0, y: 4 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ ...springs.spatialFast, delay: 0.15 }}
+                              transition={reduceMotion ? INSTANT_TRANSITION : { ...springs.spatialFast, delay: 0.15 }}
                             onClick={() => {
                               setChatOnTop(false);
                               if (target === "profile") {
                                 openProfile();
                               } else if (target === "projects") {
                                 setShowProfile(false);
-                                document.getElementById("work")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                                document.getElementById("work")?.scrollIntoView({
+                                  behavior: reduceMotion ? "auto" : "smooth",
+                                  block: "center",
+                                });
                               } else if (target.comingSoon) {
                                 setProjectNotice(target.unavailableMessage ?? `${target.title} is not ready yet.`);
                               } else {
@@ -1177,10 +1213,10 @@ export default function Home() {
                           <motion.button
                             key={f}
                             type="button"
-                            initial={{ opacity: 0, y: 6 }}
+                            initial={reduceMotion ? false : { opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
-                            whileTap={{ scale: 0.96 }}
+                            transition={reduceMotion ? INSTANT_TRANSITION : { ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
+                            whileTap={reduceMotion ? undefined : { scale: 0.96 }}
                             onClick={() => handleMessage(f)}
                             className="inline-flex items-center rounded-[var(--md-shape-sm)] bg-surface-container-high px-3 py-2 text-xs font-normal text-on-surface transition-colors hover:bg-outline-variant"
                           >
@@ -1196,9 +1232,9 @@ export default function Home() {
 
               {isStreaming && (
                 <motion.div
-                  initial={{ opacity: 0, y: 18, scale: 0.97 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: 18, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={springs.spatialFast}
+                  transition={reduceMotion ? INSTANT_TRANSITION : springs.spatialFast}
                   className="flex justify-start"
                 >
                   <div className="rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3">
@@ -1206,8 +1242,8 @@ export default function Home() {
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
                           key={d}
-                          animate={{ opacity: [0.3, 1, 0.3] }}
-                          transition={{ duration: 1.4, repeat: Infinity, delay: d }}
+                          animate={reduceMotion ? { opacity: 1 } : { opacity: [0.3, 1, 0.3] }}
+                          transition={reduceMotion ? INSTANT_TRANSITION : { duration: 1.4, repeat: Infinity, delay: d }}
                           className="h-1.5 w-1.5 rounded-full bg-on-surface"
                         />
                       ))}

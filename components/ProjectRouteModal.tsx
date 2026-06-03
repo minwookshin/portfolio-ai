@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import type { PortfolioProject } from "@/data/projects";
 import { LIGHT_PROJECT_TOKENS, isFeaturedProject } from "@/data/projects";
@@ -18,6 +18,7 @@ const focusableSelector = [
 
 export default function ProjectRouteModal({ project }: { project: PortfolioProject }) {
   const router = useRouter();
+  const reduceMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const isFeatured = isFeaturedProject(project);
@@ -76,10 +77,10 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
       <motion.div
         style={LIGHT_PROJECT_TOKENS}
         onClick={() => router.back()}
-        initial={{ opacity: 0, y: 18 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+        exit={reduceMotion ? { opacity: 0, y: 0 } : { opacity: 0, y: -10 }}
+        transition={reduceMotion ? { duration: 0 } : { type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className="project-lightbox-close-zone fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-surface text-on-surface"
       >
         <div className="mx-auto flex w-full max-w-[1180px] justify-center px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
@@ -102,10 +103,10 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
   return (
     <motion.div
       onClick={() => router.back()}
-      initial={{ opacity: 0 }}
+      initial={reduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      transition={reduceMotion ? { duration: 0 } : { type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       style={{ backgroundColor: "var(--dark-overlay-56)" }}
       className="project-lightbox-close-zone fixed inset-0 z-[70] flex items-center justify-center p-[var(--space-2)] text-on-surface backdrop-blur-[10px] sm:p-[var(--space-3)]"
     >
@@ -116,10 +117,10 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
         aria-label={`${project.title} project detail`}
         tabIndex={-1}
         style={LIGHT_PROJECT_TOKENS}
-        initial={{ opacity: 0, y: 28, scale: 0.98 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 18, scale: 0.985 }}
-        transition={{ type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+        exit={reduceMotion ? { opacity: 0, y: 0, scale: 1 } : { opacity: 0, y: 18, scale: 0.985 }}
+        transition={reduceMotion ? { duration: 0 } : { type: "tween", duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         onClick={(event) => event.stopPropagation()}
         className="project-lightbox-content max-h-[86dvh] w-[min(92vw,980px)] overflow-y-auto rounded-[var(--md-shape-lg)] border border-outline-variant bg-surface px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-3)] text-on-surface outline-none sm:px-[var(--space-4)] sm:pt-[var(--space-4)]"
       >

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Github, Linkedin } from "lucide-react";
 import { springs } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
@@ -58,6 +58,7 @@ const reveal = {
   viewport: { once: true, margin: "-80px" },
   transition: springs.spatialDefault,
 } as const;
+const instantTransition = { duration: 0 } as const;
 
 // Translucent glass so components read as floating over the blurred backdrop
 // rather than sitting on a solid panel.
@@ -118,7 +119,15 @@ function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "
   );
 }
 
-function renderSection(section: DetailSection, i: number) {
+function getSectionMotion(reduceMotion: boolean) {
+  return reduceMotion
+    ? { initial: false, animate: { opacity: 1, y: 0 }, transition: instantTransition }
+    : reveal;
+}
+
+function renderSection(section: DetailSection, i: number, reduceMotion: boolean) {
+  const sectionMotion = getSectionMotion(reduceMotion);
+
   switch (section.kind) {
     case "hero": {
       const bullets = section.bullets?.filter(isVisibleBuilderValue) ?? [];
@@ -127,21 +136,21 @@ function renderSection(section: DetailSection, i: number) {
       return (
         <motion.section
           key={i}
-          variants={heroContainer}
-          initial="hidden"
-          animate="show"
+          {...(reduceMotion
+            ? { initial: false }
+            : { variants: heroContainer, initial: "hidden" as const, animate: "show" as const })}
           className="pt-2"
         >
-          <motion.h1 variants={heroItem} className="text-[length:var(--type-3)] sm:text-[length:var(--type-4)] font-normal tracking-[-0.02em] leading-[var(--leading-heading)] text-on-surface">
+          <motion.h1 {...(reduceMotion ? {} : { variants: heroItem })} className="text-[length:var(--type-3)] sm:text-[length:var(--type-4)] font-normal tracking-[-0.02em] leading-[var(--leading-heading)] text-on-surface">
             {section.title}
           </motion.h1>
           {section.subtitle && (
-            <motion.p variants={heroItem} className="mt-[var(--space-2)] max-w-[var(--measure)] text-[length:var(--type-1)] text-on-surface-variant font-light leading-[var(--leading-body)]">
+            <motion.p {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-2)] max-w-[var(--measure)] text-[length:var(--type-1)] text-on-surface-variant font-light leading-[var(--leading-body)]">
               {section.subtitle}
             </motion.p>
           )}
           {bullets.length > 0 && (
-            <motion.div variants={heroItem} className="mt-[var(--space-4)] space-y-[var(--space-2)]">
+            <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-4)] space-y-[var(--space-2)]">
               {bullets.map((b) => (
                 <div key={b} className="flex items-start gap-3">
                   <Dot />
@@ -150,9 +159,9 @@ function renderSection(section: DetailSection, i: number) {
               ))}
             </motion.div>
           )}
-          {tags.length > 0 && <motion.div variants={heroItem} className="mt-[var(--space-4)]"><Tags tags={tags} /></motion.div>}
+          {tags.length > 0 && <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-4)]"><Tags tags={tags} /></motion.div>}
           {section.image && (
-            <motion.div variants={heroItem} className="mt-[var(--space-5)]">
+            <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-5)]">
               <ProjectImage src={section.image} alt={section.title} style={section.imageStyle} />
             </motion.div>
           )}
@@ -162,7 +171,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "lead":
       return (
-        <motion.section key={i} {...reveal} className="max-w-2xl">
+        <motion.section key={i} {...sectionMotion} className="max-w-2xl">
           {section.eyebrow && <p className={`${eyebrowCls} mb-3`}>{section.eyebrow}</p>}
           <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
           <p className={bodyCls}>{section.body}</p>
@@ -175,7 +184,7 @@ function renderSection(section: DetailSection, i: number) {
       if (statsItems.length === 0) return null;
 
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className="grid grid-cols-2 gap-[var(--space-2)] sm:grid-cols-3">
             {statsItems.map((s) => (
@@ -193,7 +202,7 @@ function renderSection(section: DetailSection, i: number) {
       const problemStats = section.stats?.filter((stat) => isVisibleBuilderValue(stat.value)) ?? [];
 
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="grid gap-[var(--space-2)] md:grid-cols-5">
             <div className={`${card} p-6 sm:p-8 md:col-span-3`}>
@@ -231,7 +240,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "split":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
             {section.columns.map((c) => (
@@ -249,16 +258,20 @@ function renderSection(section: DetailSection, i: number) {
 
     case "features":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="space-y-10 sm:space-y-14">
             {section.items.map((f, fi) => (
               <motion.div
                 key={f.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={springs.spatialDefault}
+                {...(reduceMotion
+                  ? { initial: false, animate: { opacity: 1, y: 0 }, transition: instantTransition }
+                  : {
+                      initial: { opacity: 0, y: 20 },
+                      whileInView: { opacity: 1, y: 0 },
+                      viewport: { once: true, margin: "-60px" },
+                      transition: springs.spatialDefault,
+                    })}
                 className="grid items-center gap-[var(--space-3)] sm:grid-cols-2"
               >
                 {f.image && (
@@ -279,7 +292,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "flow":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="relative pl-8">
             <div className="absolute left-[11px] top-2 bottom-2 w-px bg-outline-variant" />
@@ -304,7 +317,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "quote":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           <blockquote className="border-l-2 border-on-surface pl-6">
             <p className="text-xl sm:text-2xl font-light leading-relaxed text-on-surface">{section.text}</p>
             {section.attribution && <p className="mt-4 text-sm text-on-surface-variant">{section.attribution}</p>}
@@ -314,7 +327,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "gallery":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className="grid items-start gap-[var(--space-2)] sm:grid-cols-2">
             {section.images.map((img, gi) => (
@@ -329,7 +342,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "video":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className={`${card} overflow-hidden`}>
             <video controls poster={section.poster} className="block w-full h-auto">
@@ -341,7 +354,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "links":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           <div className="flex flex-wrap items-center gap-3">
             {section.items.map((l, li) => {
               const isGithub = /github\.com/i.test(l.href);
@@ -384,7 +397,7 @@ function renderSection(section: DetailSection, i: number) {
 
     case "outcome":
       return (
-        <motion.section key={i} {...reveal}>
+        <motion.section key={i} {...sectionMotion}>
           <div className={`${card} p-8 sm:p-12`}>
           <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
             <div className="space-y-4">
@@ -410,18 +423,17 @@ function AskRow({
   onAsk,
   label,
   className = "",
+  reduceMotion,
 }: {
   prompts: string[];
   onAsk: (q: string) => void;
   label?: string;
   className?: string;
+  reduceMotion: boolean;
 }) {
   return (
     <motion.div
-      initial={reveal.initial}
-      whileInView={reveal.whileInView}
-      viewport={reveal.viewport}
-      transition={reveal.transition}
+      {...getSectionMotion(reduceMotion)}
       className={className}
     >
       {label && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{label}</p>}
@@ -434,7 +446,9 @@ function AskRow({
             className="glass-stroke-sm group inline-flex items-center gap-[var(--space-1)] rounded-[var(--md-shape-sm)] bg-surface-container/50 px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--1)] font-normal text-on-surface backdrop-blur-md transition-colors hover:bg-on-surface hover:text-surface"
           >
             {q}
-            <ArrowUpRight className="w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className={`w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface ${
+              reduceMotion ? "transition-colors" : "transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            }`} />
           </button>
         ))}
       </div>
@@ -443,19 +457,21 @@ function AskRow({
 }
 
 export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: string) => void }) {
+  const reduceMotion = Boolean(useReducedMotion());
+
   return (
     <div className="space-y-[var(--space-5)] sm:space-y-[var(--space-7)]">
       {data.sections.map((s, i) => (
         <div key={i}>
-          {renderSection(s, i)}
+          {renderSection(s, i, reduceMotion)}
           {/* Questions woven in right where they make sense in the narrative */}
-          {onAsk && s.ask && s.ask.length > 0 && <AskRow prompts={s.ask} onAsk={onAsk} className="mt-[var(--space-3)]" />}
+          {onAsk && s.ask && s.ask.length > 0 && <AskRow prompts={s.ask} onAsk={onAsk} className="mt-[var(--space-3)]" reduceMotion={reduceMotion} />}
         </div>
       ))}
 
       {/* Outro: loop back into the conversation */}
       {onAsk && data.ask && data.ask.length > 0 && (
-        <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="border-t border-outline-variant pt-10" />
+        <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="border-t border-outline-variant pt-10" reduceMotion={reduceMotion} />
       )}
     </div>
   );

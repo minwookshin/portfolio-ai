@@ -191,8 +191,10 @@ body::after {
 @tailwind utilities;
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -387,4 +389,24 @@ body::after {
 
 .animated-cursor--close .animated-cursor__x--b {
   transform: translate(-50%, -50%) rotate(-45deg) scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none !important;
+  }
+
+  .section-flash {
+    animation: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .dot-connect,
+  .animated-cursor,
+  .animated-cursor__frame,
+  .animated-cursor__core,
+  .animated-cursor__x {
+    transition: none !important;
+  }
 }

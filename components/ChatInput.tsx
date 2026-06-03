@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Mic, ArrowRight } from "lucide-react";
 import { LinkedInIcon } from "./LinkedInIcon";
 import { IconButton } from "@/components/material/IconButton";
@@ -25,6 +25,7 @@ const darkOutsideBtn =
 
 const appleEase = [0.22, 1, 0.36, 1] as const;
 const controlMotion = { type: "tween", duration: 0.34, ease: appleEase } as const;
+const instantMotion = { duration: 0 } as const;
 
 export default function ChatInput({
   onSend,
@@ -36,6 +37,8 @@ export default function ChatInput({
   onFocusInput,
   introReady = true,
 }: ChatInputProps) {
+  const reduceMotion = useReducedMotion();
+  const activeMotion = reduceMotion ? instantMotion : controlMotion;
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -139,8 +142,8 @@ export default function ChatInput({
       <motion.div
         className="fixed z-[80] inset-x-0 bottom-6 mx-auto w-full max-w-[700px] px-4 flex min-w-0 items-center justify-center gap-2"
         initial={false}
-        animate={{ opacity: introReady ? 1 : 0, y: introReady ? 0 : 36 }}
-        transition={controlMotion}
+        animate={{ opacity: introReady ? 1 : 0, y: reduceMotion ? 0 : introReady ? 0 : 36 }}
+        transition={activeMotion}
         style={{ pointerEvents: introReady ? undefined : "none" }}
       >
         {/* Close (esc) - OUTSIDE the textbox, slides out from behind the bar */}
@@ -148,15 +151,15 @@ export default function ChatInput({
           {(connectorKind === "project" || connectorKind === "profile") && onClose && (
             <motion.button
               key="esc"
-              layout
+              layout={reduceMotion ? false : true}
               type="button"
               onClick={onClose}
               aria-label="Close (Esc)"
-              whileTap={{ scale: 0.97 }}
-              initial={{ opacity: 0, scale: 0.96, x: 14 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.96, x: 14 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.96, x: 14 }}
-              transition={controlMotion}
+              exit={reduceMotion ? { opacity: 0, scale: 1, x: 0 } : { opacity: 0, scale: 0.96, x: 14 }}
+              transition={activeMotion}
               className="group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase tracking-wide text-on-surface transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-outline-variant"
             >
               <span className="relative">esc</span>
@@ -165,10 +168,10 @@ export default function ChatInput({
         </AnimatePresence>
         {/* Composer - a compact pill at rest; expands into the full input on tap */}
         <motion.div
-          layout="position"
+          layout={reduceMotion ? false : "position"}
           initial={false}
           animate={{ width: expanded ? 520 : (connectorKind === "project" || connectorKind === "profile") && connectorSrc ? 260 : 240 }}
-          transition={controlMotion}
+          transition={activeMotion}
           style={{ maxWidth: "min(100%, calc(100vw - 176px))" }}
           onClick={() => { if (!expanded) setFocused(true); }}
           className={`group relative flex h-16 min-w-0 items-center gap-1 rounded-[var(--md-shape-sm)] bg-surface-container-high pl-3 pr-2 text-on-surface ${expanded ? "" : "cursor-text"}`}
@@ -176,12 +179,12 @@ export default function ChatInput({
           {/* Current project / profile icon, inside the textbox on the left */}
           {(connectorKind === "project" || connectorKind === "profile") && connectorSrc && (
             <motion.button
-              layoutId="nav-circle"
+              layoutId={reduceMotion ? undefined : "nav-circle"}
               type="button"
               onClick={onClose}
               aria-label={connectorKind === "profile" ? "Profile" : "Current project"}
-              whileTap={{ scale: 0.97 }}
-              transition={controlMotion}
+              whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+              transition={activeMotion}
               className="h-10 w-10 shrink-0 overflow-hidden rounded-[var(--md-shape-sm)] border border-outline-variant"
             >
               <img src={connectorSrc} alt="" className="w-full h-full object-cover" style={{ filter: "grayscale(1) contrast(1.03)" }} decoding="async" />
@@ -227,16 +230,16 @@ export default function ChatInput({
         {connectorKind === "project" && linkedinUrl && (
           <motion.a
             key="linkedin"
-            layout
+            layout={reduceMotion ? false : true}
             href={linkedinUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn post"
-            whileTap={{ scale: 0.97 }}
-            initial={{ opacity: 0, scale: 0.96, x: -14 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.97 }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.96, x: -14 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.96, x: -14 }}
-            transition={controlMotion}
+            exit={reduceMotion ? { opacity: 0, scale: 1, x: 0 } : { opacity: 0, scale: 0.96, x: -14 }}
+            transition={activeMotion}
             className={darkOutsideBtn}
           >
             <LinkedInIcon className="w-6 h-6 relative z-10" />

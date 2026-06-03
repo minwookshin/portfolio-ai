@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { springs } from "@/lib/material/motion";
 import { LinkedInIcon } from "./LinkedInIcon";
@@ -22,19 +22,21 @@ export default function ProfileCard({
   linkedin,
   imagePath = "/profile-photo.jpg" // Default path - you can replace this later
 }: ProfileCardProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={springs.spatialDefault}
+      transition={reduceMotion ? { duration: 0 } : springs.spatialDefault}
       className="rounded-[var(--md-shape-lg)] bg-surface-container p-8 transition-all duration-300"
     >
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Profile Photo */}
         <div className="flex-shrink-0 mx-auto lg:mx-0">
           <motion.div
-            whileHover={{ scale: 1.03 }}
-            transition={springs.pressMorph}
+            whileHover={reduceMotion ? undefined : { scale: 1.03 }}
+            transition={reduceMotion ? { duration: 0 } : springs.pressMorph}
             className="h-40 w-40 overflow-hidden rounded-[var(--md-shape-lg)] bg-surface-container-high lg:h-48 lg:w-48"
           >
             <img
@@ -64,9 +66,9 @@ export default function ProfileCard({
           <div className="flex flex-wrap gap-3 justify-center lg:justify-start pt-2">
             <motion.a
               href={`mailto:${email}`}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              transition={springs.pressMorph}
+              whileHover={reduceMotion ? undefined : { scale: 1.05, y: -2 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.95 }}
+              transition={reduceMotion ? { duration: 0 } : springs.pressMorph}
               className="flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-6 py-3 text-sm font-normal text-on-surface transition-all duration-200 hover:bg-outline-variant"
             >
               <Mail className="w-4 h-4" />
@@ -76,9 +78,9 @@ export default function ProfileCard({
               href={linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              transition={springs.pressMorph}
+              whileHover={reduceMotion ? undefined : { scale: 1.05, y: -2 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.95 }}
+              transition={reduceMotion ? { duration: 0 } : springs.pressMorph}
               className="flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-6 py-3 text-sm font-normal text-on-surface transition-all duration-200 hover:bg-outline-variant"
             >
               <LinkedInIcon className="w-4 h-4" />
