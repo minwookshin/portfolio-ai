@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import ProjectDetailView from "@/components/ProjectDetailView";
 import type { PortfolioProject } from "@/data/projects";
+import { tweens } from "@/lib/material/motion";
 
 export default function ProjectCaseStudyShell({
   project,
@@ -17,6 +19,7 @@ export default function ProjectCaseStudyShell({
   onAction?: () => void;
   className?: string;
 }) {
+  const reduceMotion = useReducedMotion();
   const action = onAction ? (
     <button
       type="button"
@@ -35,7 +38,13 @@ export default function ProjectCaseStudyShell({
   ) : null;
 
   return (
-    <div className={`project-readable w-full ${className}`}>
+    <motion.div
+      initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
+      transition={reduceMotion ? tweens.none : tweens.slow}
+      className={`project-readable w-full ${className}`}
+    >
       <nav className="mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left leading-[var(--leading-body)] text-on-surface">
         <span className="flex min-w-0 items-center gap-[var(--space-1)]">
           <Link
@@ -50,6 +59,6 @@ export default function ProjectCaseStudyShell({
         {action}
       </nav>
       <ProjectDetailView project={project} hideBack onAsk={undefined} />
-    </div>
+    </motion.div>
   );
 }

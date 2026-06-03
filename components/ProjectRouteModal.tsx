@@ -80,10 +80,10 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
       <motion.div
         style={LIGHT_PROJECT_TOKENS}
         onClick={() => router.back()}
-        initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={reduceMotion ? { opacity: 0, y: 0 } : { opacity: 0, y: -10 }}
-        transition={reduceMotion ? tweens.none : tweens.slow}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={reduceMotion ? tweens.none : tweens.base}
         className="project-lightbox-close-zone fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-surface text-on-surface"
       >
         <div className="mx-auto flex w-full max-w-[1180px] justify-center px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">

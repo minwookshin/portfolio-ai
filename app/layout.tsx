@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import AnimatedCursor from "@/components/AnimatedCursor";
+import ModalSlot from "@/components/ModalSlot";
 import "./globals.css";
 
 // Geist Sans from Google Fonts. Used for the whole site.
@@ -58,7 +59,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={googleSans.variable}>
         {children}
-        {modal}
+        <ModalSlot>{modal}</ModalSlot>
         <AnimatedCursor />
       </body>
     </html>
