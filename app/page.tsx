@@ -37,6 +37,8 @@ const LAB_TILE_HEIGHTS = [
 ] as const;
 const LAB_TILE_HEIGHT_VALUES = [460, 340, 460, 340, 500, 360] as const;
 const APPLE_EASE = [0.22, 1, 0.36, 1] as const;
+const WORK_CARD_WIDTH = "min(74vw, 680px)";
+const WORK_CARD_GUTTER = `calc((100vw - ${WORK_CARD_WIDTH}) / 2)`;
 // Personal Information
 const PERSONAL_INFO = {
   name: "Minwook Shin",
@@ -391,7 +393,7 @@ function WorkSection({
       >
         <div
           className="flex w-max gap-[clamp(1.5rem,4vw,3.5rem)]"
-          style={{ paddingInline: "calc((100vw - min(74vw, 680px)) / 2)" }}
+          style={{ paddingInline: WORK_CARD_GUTTER }}
         >
           {projects.map((project, index) => (
             <SelectedProjectCard
@@ -701,10 +703,10 @@ function LabArchive({
 }: {
   projects: Project[];
 }) {
-  const labColumns: Array<Array<{ project: Project; index: number }>> = [[], [], [], []];
-  const labColumnHeights = [LAB_TILE_HEIGHT_VALUES[0], 0, 0, 0];
+  const labColumns: Array<Array<{ project: Project; index: number }>> = [[], [], []];
+  const labColumnHeights = [LAB_TILE_HEIGHT_VALUES[0], 0, 0];
   projects.forEach((project, index) => {
-    const preferredColumns = [1, 2, 3, 0];
+    const preferredColumns = [1, 2, 0];
     const columnIndex = preferredColumns.reduce((shortest, candidate) =>
       labColumnHeights[candidate] < labColumnHeights[shortest] ? candidate : shortest
     );
@@ -723,20 +725,22 @@ function LabArchive({
             </p>
           </div>
         </div>
-        <div className="mx-auto grid w-full max-w-[1040px] gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {labColumns.map((column, columnIndex) => (
-            <div key={columnIndex} className="flex min-w-0 flex-col gap-3">
-              {columnIndex === 0 && <LabChatTile />}
-              {column.map(({ project, index }) => (
-                <LabProjectTile
-                  key={project.id}
-                  project={project}
-                  index={index}
-                  className={LAB_TILE_HEIGHTS[(index + 1) % LAB_TILE_HEIGHTS.length]}
-                />
-              ))}
-            </div>
-          ))}
+        <div className="mx-auto w-full" style={{ maxWidth: WORK_CARD_WIDTH }}>
+          <div className="grid w-full gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {labColumns.map((column, columnIndex) => (
+              <div key={columnIndex} className="flex min-w-0 flex-col gap-3">
+                {columnIndex === 0 && <LabChatTile />}
+                {column.map(({ project, index }) => (
+                  <LabProjectTile
+                    key={project.id}
+                    project={project}
+                    index={index}
+                    className={LAB_TILE_HEIGHTS[(index + 1) % LAB_TILE_HEIGHTS.length]}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
         <div className="mx-auto mt-10 w-full max-w-[620px]">
           <BuildMeta />
