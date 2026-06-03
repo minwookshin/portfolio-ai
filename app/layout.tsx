@@ -14,11 +14,11 @@ const googleSans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.minwookshin.com"),
   title: {
-    default: "minwook shin",
-    template: "%s · minwook shin",
+    default: "Minwook Shin",
+    template: "%s · Minwook Shin",
   },
   description:
-    "design engineer building stuff: AI products, websites, prototypes, and fast-moving experiments from idea to working software.",
+    "I design and build interfaces for AI-native products, from early idea to working software.",
   keywords: [
     "Minwook Shin",
     "UX Engineer",
@@ -35,16 +35,16 @@ export const metadata: Metadata = {
   creator: "Minwook Shin",
   openGraph: {
     type: "website",
-    title: "minwook shin",
+    title: "Minwook Shin",
     description:
-      "design engineer building stuff: AI products, websites, prototypes, and fast-moving experiments from idea to working software.",
-    siteName: "minwook shin",
+      "I design and build interfaces for AI-native products, from early idea to working software.",
+    siteName: "Minwook Shin",
   },
   twitter: {
     card: "summary_large_image",
-    title: "minwook shin",
+    title: "Minwook Shin",
     description:
-      "design engineer building stuff: AI products, websites, prototypes, and fast-moving experiments from idea to working software.",
+      "I design and build interfaces for AI-native products, from early idea to working software.",
   },
 };
 

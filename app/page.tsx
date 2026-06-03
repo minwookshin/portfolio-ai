@@ -44,7 +44,7 @@ const WORK_CARD_GUTTER = `calc((100vw - ${WORK_CARD_WIDTH}) / 2)`;
 const PERSONAL_INFO = {
   name: "Minwook Shin",
   title: "Design Engineer",
-  bio: "I work as a hands-on design engineer and a compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.\n\n• Product strategy, UX systems, and polished interaction design.\n• Frontend builds with React, Next.js, SwiftUI, and production-ready motion.\n• AI websites, agents, and launchable demos for founders, teams, and agencies.",
+  bio: "I design and build interfaces for AI-native products, from early idea to working software.",
   email: "mwshin0703@gmail.com",
   linkedin: "https://www.linkedin.com/in/minwookshin",
   github: "https://github.com/YeYen1721",
@@ -314,14 +314,11 @@ function EditorialIntro() {
   return (
     <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[#F7F8F8] px-[var(--space-3)] pb-[var(--space-8)] pt-[92px] sm:px-[var(--space-5)] md:pb-[calc(var(--space-8)+var(--space-2))] md:pt-[122px]">
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">minwook shin</p>
+        <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</p>
         <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</p>
         <h1 className="mt-[var(--space-3)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-          Interfaces for AI products, websites, and prototypes that move from early idea to working software.
+          I design and build interfaces for AI-native products, from early idea to working software.
         </h1>
-        <p className="mt-[var(--space-2)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
-          I work as a hands-on design engineer and compact studio for AI-native products, websites, and prototypes. I shape the product, design the interface, and build the working experience in code.
-        </p>
         <p className="mt-[var(--space-4)] max-w-full whitespace-nowrap leading-[var(--leading-body)] text-[var(--text-muted)]">
           <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>Email</IntroLink>
           {", "}
