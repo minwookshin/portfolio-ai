@@ -7,9 +7,11 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { BUILD_UPDATED_AT, BUILD_VERSION } from "@/lib/buildMeta";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
@@ -170,13 +172,13 @@ function ProjectMedia({
   if (src) {
     return (
       <div className={`relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] ${mediaBg}`}>
-        <img
+        <BlurImage
           src={src}
           alt={project.title}
-          loading="lazy"
-          decoding="async"
+          fill
+          sizes="(max-width: 768px) 74vw, 680px"
           draggable={false}
-          className={`h-full w-full object-contain ${
+          className={`object-contain ${
             reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
           } ${
             isLogo ? "p-12 sm:p-20" : "p-8 sm:p-12"
@@ -200,15 +202,17 @@ function ProjectMark({ project, compact = false }: { project: Project; compact?:
 
   if (src) {
     return (
-      <img
-        src={src}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        draggable={false}
-        className={`h-full w-full ${isLogo ? "object-contain" : "object-cover"} ${compact ? "p-2" : "p-4"}`}
-        style={{ filter: "grayscale(1) contrast(1.04)" }}
-      />
+      <span className="relative block h-full w-full">
+        <BlurImage
+          src={src}
+          alt=""
+          fill
+          sizes={compact ? "40px" : "320px"}
+          draggable={false}
+          className={`${isLogo ? "object-contain" : "object-cover"} ${compact ? "p-2" : "p-4"}`}
+          style={{ filter: "grayscale(1) contrast(1.04)" }}
+        />
+      </span>
     );
   }
 
@@ -233,7 +237,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="text-[length:var(--type-0)] text-[var(--text-muted)] underline decoration-[var(--text-muted)] decoration-[1px] underline-offset-1 outline-none transition-colors duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] hover:text-[var(--accent-indigo)] hover:decoration-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)] focus-visible:decoration-[var(--accent-indigo)]"
+      className="micro-link micro-focus text-[length:var(--type-0)] text-[var(--text-muted)] hover:text-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)]"
     >
       {children}
     </a>
@@ -259,7 +263,7 @@ function SelectedProjectCard({
           </span>
         </span>
         {!project.comingSoon && (
-          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:opacity-100" />
+          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-within:opacity-100" />
         )}
       </span>
     </>
@@ -271,14 +275,14 @@ function SelectedProjectCard({
       whileHover={reduceMotion || isActive ? undefined : { scale: 0.84 }}
       transition={reduceMotion ? tweens.none : tweens.slower}
       data-work-card="true"
-      className={`group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left outline-none transition-opacity duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-base)] ${
+      className={`micro-card group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left ${
         isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
       }`}
     >
       {project.comingSoon ? (
         <div aria-disabled="true">{cardContent}</div>
       ) : (
-        <Link href={getProjectPath(project)} scroll={false} onClick={saveProjectOpenScroll} className="block outline-none">
+        <Link href={getProjectPath(project)} scroll={false} onClick={saveProjectOpenScroll} className="micro-focus micro-pressable block rounded-[var(--md-shape-lg)]">
           {cardContent}
         </Link>
       )}
@@ -428,7 +432,7 @@ function WorkSection({
                 aria-current={isActive ? "true" : undefined}
                 animate={{ width: isActive ? 40 : 24 }}
                 transition={indicatorMotion}
-                className={`group relative flex h-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] ${
+                className={`micro-focus micro-focus-tight micro-pressable group relative flex h-6 items-center justify-center rounded-full bg-transparent ${
                   isActive ? "" : "hover:bg-[var(--bg-element)] focus-visible:bg-[var(--bg-element)]"
                 }`}
               >
@@ -448,10 +452,27 @@ function WorkSection({
   );
 }
 
+type LabChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  status?: "error";
+};
+
+function LabMessageSkeleton() {
+  return (
+    <div className="w-[min(88%,260px)] rounded-[var(--md-shape-sm)] border border-[var(--border-light)] bg-[var(--bg-element)] px-3 py-3" aria-label="loading response">
+      <span className="micro-skeleton-line w-11/12" />
+      <span className="micro-skeleton-line mt-2 w-8/12" />
+      <span className="micro-skeleton-line mt-2 w-5/12" />
+    </div>
+  );
+}
+
 function LabChatTile() {
   const reduceMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
-  const [messages, setMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
+  const [messages, setMessages] = useState<LabChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const historyRef = useRef<HTMLDivElement>(null);
 
@@ -465,7 +486,7 @@ function LabChatTile() {
   const sendDraft = async () => {
     const message = draft.trim();
     if (!message || isStreaming) return;
-    const userMessage = { id: `${Date.now()}-user`, role: "user" as const, content: message };
+    const userMessage: LabChatMessage = { id: `${Date.now()}-user`, role: "user", content: message };
     const nextMessages = [...messages, userMessage];
     const assistantId = `${Date.now()}-assistant`;
 
@@ -511,7 +532,7 @@ function LabChatTile() {
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantId
-            ? { ...msg, content: "I hit an error in this demo. Try again in a moment." }
+            ? { ...msg, content: "i could not reach the ai demo. try again in a moment.", status: "error" }
             : msg
         )
       );
@@ -549,26 +570,38 @@ function LabChatTile() {
           ref={historyRef}
           className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1"
         >
+          {!hasMessages && (
+            <div className="flex h-full flex-col justify-end pb-2 text-[length:var(--type--1)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+              <p>ask about a project, stack, or how i build.</p>
+            </div>
+          )}
           {messages.map((msg) => {
             const body = msg.role === "assistant" ? parseAssistant(msg.content).body : msg.content;
             const isUser = msg.role === "user";
+            const isLoadingAssistant = msg.role === "assistant" && !body && isStreaming;
             return (
               <div key={msg.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-                <div
-                  className={`max-w-[88%] rounded-[var(--md-shape-sm)] border px-3 py-2 leading-snug ${
-                    isUser
-                      ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-[var(--bg-surface)]"
-                      : "border-[var(--border-light)] bg-[var(--bg-element)] text-[var(--text-primary)]"
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap">{body || (isStreaming ? "..." : "")}</p>
-                </div>
+                {isLoadingAssistant ? (
+                  <LabMessageSkeleton />
+                ) : (
+                  <div
+                    className={`max-w-[88%] rounded-[var(--md-shape-sm)] border px-3 py-2 leading-snug ${
+                      isUser
+                        ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-[var(--bg-surface)]"
+                        : msg.status === "error"
+                        ? "border-[var(--border-light)] bg-[var(--bg-surface)] text-[var(--text-muted)]"
+                        : "border-[var(--border-light)] bg-[var(--bg-element)] text-[var(--text-primary)]"
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap">{body}</p>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
         <div
-          className="mt-3 flex h-16 w-full min-w-0 rounded-[var(--md-shape-sm)] border border-[var(--border-light)] bg-[var(--bg-element)]"
+          className="micro-field mt-3 flex h-16 w-full min-w-0 rounded-[var(--md-shape-sm)] border border-[var(--border-light)] bg-[var(--bg-element)]"
         >
           <input
             value={draft}
@@ -582,7 +615,7 @@ function LabChatTile() {
             type="submit"
             aria-label="Send"
             disabled={!draft.trim() || isStreaming}
-            className="flex h-full w-16 shrink-0 items-center justify-center border-l border-[var(--border-light)] text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-surface)] disabled:opacity-30"
+            className="micro-focus micro-focus-tight micro-pressable flex h-full w-16 shrink-0 items-center justify-center border-l border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--bg-surface)] disabled:opacity-30"
           >
             <ArrowRight className="h-5 w-5" strokeWidth={2.25} />
           </button>
@@ -606,6 +639,7 @@ function LabProjectTile({
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
   const showsLiveDemo = Boolean(previewVideo && LIVE_DEMO_TILE_TITLES.has(project.title));
   const src = project.image ?? project.icon;
+  const videoPoster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
 
   useEffect(() => {
     if (!showsLiveDemo) return;
@@ -631,13 +665,13 @@ function LabProjectTile({
     <>
       <div className="absolute inset-0 overflow-hidden">
         {src && (
-          <img
+          <BlurImage
             src={src}
             alt=""
-            loading="lazy"
-            decoding="async"
+            fill
+            sizes="(max-width: 768px) 50vw, 360px"
             draggable={false}
-            className={`h-full w-full object-cover grayscale ${
+            className={`object-cover grayscale ${
               reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
             }`}
           />
@@ -650,9 +684,9 @@ function LabProjectTile({
             playsInline
             autoPlay={showsLiveDemo}
             preload={showsLiveDemo ? "auto" : "metadata"}
-            poster={project.image ?? project.icon}
+            poster={videoPoster}
             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] ${
-              showsLiveDemo ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+              showsLiveDemo ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
             }`}
           >
             <source src={previewVideo} type="video/mp4" />
@@ -664,7 +698,7 @@ function LabProjectTile({
               showsLiveDemo
                 ? "opacity-0"
                 : previewVideo
-                ? `opacity-100 group-hover:opacity-0 group-focus-visible:opacity-0 ${reduceMotion ? "" : "group-hover:scale-[1.04]"}`
+                ? `opacity-100 group-hover:opacity-0 group-focus-within:opacity-0 ${reduceMotion ? "" : "group-hover:scale-[1.04]"}`
                 : reduceMotion ? "" : "group-hover:scale-[1.04]"
             }`}
           >
@@ -672,8 +706,8 @@ function LabProjectTile({
           </div>
         )}
       </div>
-      <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(247,248,248,0.92)] via-[rgba(247,248,248,0.72)] to-transparent p-[var(--space-2)] opacity-0 transition-opacity duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-visible:opacity-100 ${
-        reduceMotion ? "" : "translate-y-2 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-visible:translate-y-0"
+      <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(247,248,248,0.92)] via-[rgba(247,248,248,0.72)] to-transparent p-[var(--space-2)] opacity-0 transition-opacity duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-within:opacity-100 ${
+        reduceMotion ? "" : "translate-y-2 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-within:translate-y-0"
       }`}>
         <span className="flex items-end justify-between gap-[var(--space-2)]">
           <span className="min-w-0">
@@ -699,12 +733,12 @@ function LabProjectTile({
       animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
       viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
       transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
-      className={`group relative w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left outline-none transition-colors hover:bg-[var(--bg-element)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] ${className}`}
+      className={`micro-card group relative w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left hover:bg-[var(--bg-element)] ${className}`}
     >
       {project.comingSoon ? (
         <div aria-disabled="true">{tileContent}</div>
       ) : (
-        <Link href={getProjectPath(project)} scroll={false} onClick={saveProjectOpenScroll} className="absolute inset-0 block outline-none">
+        <Link href={getProjectPath(project)} scroll={false} onClick={saveProjectOpenScroll} className="micro-focus micro-pressable absolute inset-0 block rounded-[var(--md-shape-lg)]">
           {tileContent}
         </Link>
       )}
@@ -789,7 +823,7 @@ export default function Home() {
   // Chat state. The /api/chat route streams plain text, so we manage messages
   // directly (see handleMessage) rather than via the AI SDK's useChat, whose v5
   // message/transport shape doesn't match this plain-text endpoint.
-  type ChatMessage = { id: string; role: 'user' | 'assistant'; content: string };
+  type ChatMessage = { id: string; role: 'user' | 'assistant'; content: string; status?: "error" };
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
 
@@ -869,11 +903,18 @@ export default function Home() {
 
     } catch (err) {
       console.error('Chat error:', err);
-      setMessages(prev => [...prev, {
-        id: `assistant-error-${messageIdSeed}`,
-        role: 'assistant' as const,
-        content: 'Sorry, I encountered an error. Please try again.'
-      }]);
+      setMessages(prev => {
+        const errorMessage: ChatMessage = {
+          id: `assistant-error-${messageIdSeed}`,
+          role: 'assistant' as const,
+          content: 'i could not reach the ai demo. try again in a moment.',
+          status: "error"
+        };
+
+        return prev.some((msg) => msg.id === assistantId)
+          ? prev.map((msg) => (msg.id === assistantId ? { ...errorMessage, id: assistantId } : msg))
+          : [...prev, errorMessage];
+      });
     } finally {
       setIsStreaming(false);
     }
@@ -936,8 +977,8 @@ export default function Home() {
         </ul>
         <h3>Contact</h3>
         <p>
-          Email <a href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</a>,{" "}
-          <a href={PERSONAL_INFO.linkedin}>LinkedIn</a>, <a href={PERSONAL_INFO.github}>GitHub</a>.
+          Email <a href={`mailto:${PERSONAL_INFO.email}`} tabIndex={-1}>{PERSONAL_INFO.email}</a>,{" "}
+          <a href={PERSONAL_INFO.linkedin} tabIndex={-1}>LinkedIn</a>, <a href={PERSONAL_INFO.github} tabIndex={-1}>GitHub</a>.
         </p>
       </section>
 
@@ -994,6 +1035,7 @@ export default function Home() {
             <div className="flex min-h-full flex-col justify-end gap-3 pb-7">
               {messages.map((msg, mi) => {
                 const isUser = msg.role === "user";
+                const isError = msg.status === "error";
                 const { body, followups, show } = isUser
                   ? { body: msg.content, followups: [] as string[], show: null }
                   : parseAssistant(msg.content);
@@ -1014,6 +1056,8 @@ export default function Home() {
                       className={`rounded-[var(--md-shape-sm)] px-4 py-3 ${
                         isUser
                           ? "bg-on-surface text-surface"
+                          : isError
+                          ? "border border-outline-variant bg-surface-container text-on-surface-variant"
                           : "bg-surface-container-high text-on-surface"
                       }`}
                     >
@@ -1021,7 +1065,7 @@ export default function Home() {
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{body}</p>
                       ) : (
                         <>
-                          <div className="prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:rounded-[var(--md-shape-sm)] prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:font-mono prose-code:text-xs prose-code:text-on-surface prose-code:before:content-none prose-code:after:content-none prose-pre:my-2 prose-pre:overflow-x-auto prose-pre:rounded-[var(--md-shape-sm)] prose-pre:border prose-pre:border-outline-variant prose-pre:bg-surface-container-high prose-pre:p-3 prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:font-normal prose-a:underline">
+                          <div className="micro-richtext prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-base prose-h2:text-sm prose-h3:text-sm prose-p:my-2 prose-p:text-on-surface prose-p:text-sm prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:rounded-[var(--md-shape-sm)] prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:font-mono prose-code:text-xs prose-code:text-on-surface prose-code:before:content-none prose-code:after:content-none prose-pre:my-2 prose-pre:overflow-x-auto prose-pre:rounded-[var(--md-shape-sm)] prose-pre:border prose-pre:border-outline-variant prose-pre:bg-surface-container-high prose-pre:p-3 prose-ul:my-2 prose-ul:text-sm prose-ol:my-2 prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:font-normal prose-a:no-underline">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {body}
                             </ReactMarkdown>
@@ -1047,7 +1091,7 @@ export default function Home() {
                                 openProjectFromChat(target);
                               }
                             }}
-                            className="mt-3 inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-2 text-xs font-normal text-on-surface transition-colors hover:bg-outline-variant"
+                            className="micro-focus micro-focus-tight micro-pressable mt-3 inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-2 text-xs font-normal text-on-surface hover:bg-outline-variant"
                           >
                               {target === "profile" ? "View profile" : target === "projects" ? "View work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1067,7 +1111,7 @@ export default function Home() {
                             transition={reduceMotion ? tweens.none : { ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={reduceMotion ? undefined : { scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="inline-flex items-center rounded-[var(--md-shape-sm)] bg-surface-container-high px-3 py-2 text-xs font-normal text-on-surface transition-colors hover:bg-outline-variant"
+                            className="micro-focus micro-focus-tight micro-pressable inline-flex items-center rounded-[var(--md-shape-sm)] bg-surface-container-high px-3 py-2 text-xs font-normal text-on-surface hover:bg-outline-variant"
                           >
                             {f}
                           </motion.button>

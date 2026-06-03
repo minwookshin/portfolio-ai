@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Mic, ArrowRight } from "lucide-react";
 import { LinkedInIcon } from "./LinkedInIcon";
 import { IconButton } from "@/components/material/IconButton";
+import BlurImage from "@/components/BlurImage";
 import { tweens } from "@/lib/material/motion";
 
 type ConnectorKind = "profile" | "project" | "chat" | null;
@@ -22,7 +23,7 @@ interface ChatInputProps {
 
 
 const darkOutsideBtn =
-  `group shrink-0 w-16 h-16 rounded-[var(--md-shape-sm)] bg-surface-container-high text-on-surface border border-outline-variant flex items-center justify-center transition-colors relative`;
+  `micro-focus micro-focus-tight micro-pressable group shrink-0 w-16 h-16 rounded-[var(--md-shape-sm)] bg-surface-container-high text-on-surface border border-outline-variant flex items-center justify-center relative`;
 
 export default function ChatInput({
   onSend,
@@ -157,7 +158,7 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={reduceMotion ? { opacity: 0, scale: 1, x: 0 } : { opacity: 0, scale: 0.96, x: 14 }}
               transition={activeMotion}
-              className="group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase tracking-wide text-on-surface transition-colors duration-[var(--motion-duration-base)] ease-[var(--motion-ease-in-out)] hover:bg-outline-variant"
+              className="micro-focus micro-focus-tight micro-pressable group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase tracking-wide text-on-surface hover:bg-outline-variant"
             >
               <span className="relative">esc</span>
             </motion.button>
@@ -171,7 +172,7 @@ export default function ChatInput({
           transition={activeMotion}
           style={{ maxWidth: "min(100%, calc(100vw - 176px))" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`group relative flex h-16 min-w-0 items-center gap-1 rounded-[var(--md-shape-sm)] bg-surface-container-high pl-3 pr-2 text-on-surface ${expanded ? "" : "cursor-text"}`}
+          className={`micro-field group relative flex h-16 min-w-0 items-center gap-1 rounded-[var(--md-shape-sm)] bg-surface-container-high pl-3 pr-2 text-on-surface ${expanded ? "" : "cursor-text"}`}
         >
           {/* Current project / profile icon, inside the textbox on the left */}
           {(connectorKind === "project" || connectorKind === "profile") && connectorSrc && (
@@ -182,9 +183,16 @@ export default function ChatInput({
               aria-label={connectorKind === "profile" ? "Profile" : "Current project"}
               whileTap={reduceMotion ? undefined : { scale: 0.97 }}
               transition={activeMotion}
-              className="h-10 w-10 shrink-0 overflow-hidden rounded-[var(--md-shape-sm)] border border-outline-variant"
+              className="micro-focus micro-focus-tight micro-pressable relative h-10 w-10 shrink-0 overflow-hidden rounded-[var(--md-shape-sm)] border border-outline-variant"
             >
-              <img src={connectorSrc} alt="" className="w-full h-full object-cover" style={{ filter: "grayscale(1) contrast(1.03)" }} decoding="async" />
+              <BlurImage
+                src={connectorSrc}
+                alt=""
+                fill
+                sizes="40px"
+                className="object-cover"
+                style={{ filter: "grayscale(1) contrast(1.03)" }}
+              />
             </motion.button>
           )}
           <input

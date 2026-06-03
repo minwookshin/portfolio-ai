@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
+import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { ArrowLeft as ArrowBackIcon } from "lucide-react";
 import { Project } from "./ProjectCard";
 import { CaseStudy } from "./detail/CaseStudy";
@@ -47,7 +48,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
                 href={proof.status.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline decoration-on-surface/55 underline-offset-2 hover:decoration-on-surface"
+                className="micro-link micro-focus text-on-surface hover:text-on-surface focus-visible:text-on-surface"
               >
                 {proof.status.label}
               </a>
@@ -66,6 +67,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
               controls
               playsInline
               preload="metadata"
+              poster={makeVideoPosterDataUrl(proof.demo.label)}
               className="block w-full bg-surface-container"
             >
               <source src={proof.demo.video} type="video/mp4" />
@@ -75,7 +77,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
               href={proof.demo.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center justify-center bg-on-surface px-[var(--space-3)] text-surface underline decoration-surface/55 underline-offset-2 transition-opacity hover:opacity-85"
+              className="micro-focus micro-focus-tight micro-pressable inline-flex min-h-12 items-center justify-center bg-on-surface px-[var(--space-3)] text-surface hover:opacity-85"
             >
               {proof.demo.label}
             </a>
@@ -179,7 +181,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           onClick={onBack}
           whileHover={reduceMotion ? undefined : { x: -4 }}
           transition={reduceMotion ? tweens.none : springs.spatialFast}
-          className="mb-[var(--space-4)] flex items-center gap-[var(--space-1)] text-on-surface-variant transition-colors hover:text-on-surface"
+          className="micro-focus micro-pressable mb-[var(--space-4)] flex items-center gap-[var(--space-1)] text-on-surface-variant hover:text-on-surface"
         >
           <ArrowBackIcon className="w-4 h-4" />
           <span className="text-sm font-normal">Back to projects</span>

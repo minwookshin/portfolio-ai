@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Github, Linkedin } from "lucide-react";
 import { springs, tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
+import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 
 /**
  * Data-driven case-study renderer. A project's detail page is described as an
@@ -344,7 +345,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
         <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className={`${card} overflow-hidden`}>
-            <video controls poster={section.poster} className="block w-full h-auto">
+            <video controls poster={section.poster ?? makeVideoPosterDataUrl(section.heading ?? "project demo")} className="block w-full h-auto">
               <source src={section.src} type="video/mp4" />
             </video>
           </div>
@@ -367,7 +368,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={isGithub ? "GitHub" : "LinkedIn"}
-                    className="glass-stroke-sm inline-flex h-12 w-12 items-center justify-center rounded-[var(--md-shape-sm)] bg-surface-container/50 text-on-surface backdrop-blur-md transition-colors hover:bg-surface-container"
+                    className="micro-focus micro-focus-tight micro-pressable glass-stroke-sm inline-flex h-12 w-12 items-center justify-center rounded-[var(--md-shape-sm)] bg-surface-container/50 text-on-surface backdrop-blur-md hover:bg-surface-container"
                   >
                     <Icon className="w-5 h-5" />
                   </a>
@@ -381,8 +382,8 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                   rel="noopener noreferrer"
                   className={
                     li === 0
-                      ? "inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-on-surface px-6 py-3 text-sm font-normal text-surface transition-opacity hover:opacity-90"
-                      : "glass-stroke-sm inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container/50 px-6 py-3 text-sm font-normal text-on-surface backdrop-blur-md transition-colors"
+                      ? "micro-focus micro-focus-tight micro-pressable inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-on-surface px-6 py-3 text-sm font-normal text-surface hover:opacity-90"
+                      : "micro-focus micro-focus-tight micro-pressable glass-stroke-sm inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container/50 px-6 py-3 text-sm font-normal text-on-surface backdrop-blur-md hover:bg-surface-container"
                   }
                 >
                   {l.label}
@@ -442,7 +443,7 @@ function AskRow({
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="glass-stroke-sm group inline-flex items-center gap-[var(--space-1)] rounded-[var(--md-shape-sm)] bg-surface-container/50 px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--1)] font-normal text-on-surface backdrop-blur-md transition-colors hover:bg-on-surface hover:text-surface"
+            className="micro-focus micro-focus-tight micro-pressable glass-stroke-sm group inline-flex items-center gap-[var(--space-1)] rounded-[var(--md-shape-sm)] bg-surface-container/50 px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--1)] font-normal text-on-surface backdrop-blur-md hover:bg-on-surface hover:text-surface"
           >
             {q}
             <ArrowUpRight className={`w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface ${

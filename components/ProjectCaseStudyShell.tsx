@@ -24,14 +24,14 @@ export default function ProjectCaseStudyShell({
     <button
       type="button"
       onClick={onAction}
-      className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
+      className="micro-link micro-focus shrink-0 text-on-surface-variant hover:text-on-surface focus-visible:text-on-surface"
     >
       {actionLabel ?? "back"}
     </button>
   ) : actionHref ? (
     <Link
       href={actionHref}
-      className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
+      className="micro-link micro-focus shrink-0 text-on-surface-variant hover:text-on-surface focus-visible:text-on-surface"
     >
       {actionLabel ?? "back"}
     </Link>
@@ -49,7 +49,7 @@ export default function ProjectCaseStudyShell({
         <span className="flex min-w-0 items-center gap-[var(--space-1)]">
           <Link
             href="/"
-            className="shrink-0 text-on-surface-variant underline decoration-on-surface-variant/55 underline-offset-2 transition-colors hover:text-on-surface hover:decoration-on-surface"
+            className="micro-link micro-focus shrink-0 text-on-surface-variant hover:text-on-surface focus-visible:text-on-surface"
           >
             minwook shin
           </Link>

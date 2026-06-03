@@ -234,6 +234,109 @@ body::after {
   border: 1px solid var(--md-hairline);
 }
 
+.micro-focus {
+  outline: none;
+}
+
+.micro-focus:focus-visible {
+  outline: 1px solid var(--md-primary);
+  outline-offset: 4px;
+  border-radius: var(--md-shape-sm);
+}
+
+.micro-focus-tight:focus-visible {
+  outline-offset: 2px;
+}
+
+.micro-link,
+.micro-richtext :is(a) {
+  --micro-link-rest-line: color-mix(in srgb, currentColor 48%, transparent);
+  text-decoration: none;
+  background-image:
+    linear-gradient(var(--micro-link-rest-line), var(--micro-link-rest-line)),
+    linear-gradient(currentColor, currentColor);
+  background-position:
+    0 calc(100% - 0.02em),
+    0 calc(100% - 0.02em);
+  background-repeat: no-repeat;
+  background-size:
+    100% 1px,
+    0 1px;
+  transition:
+    color var(--motion-duration-base) var(--motion-ease-standard),
+    background-size var(--motion-duration-base) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.micro-link:hover,
+.micro-link:focus-visible,
+.micro-richtext :is(a:hover, a:focus-visible) {
+  background-size:
+    100% 1px,
+    100% 1px;
+}
+
+.micro-richtext :is(a) {
+  outline: none;
+}
+
+.micro-richtext :is(a:focus-visible) {
+  outline: 1px solid var(--md-primary);
+  outline-offset: 3px;
+  border-radius: var(--md-shape-sm);
+}
+
+.micro-pressable {
+  transition:
+    color var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.micro-pressable:not(:disabled):active {
+  opacity: calc(1 - var(--md-state-press));
+}
+
+.micro-card {
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.micro-card:has(:focus-visible) {
+  outline: 1px solid var(--md-primary);
+  outline-offset: 4px;
+  border-radius: var(--md-shape-lg);
+}
+
+.micro-field {
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    outline-color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.micro-field:focus-within {
+  outline-color: var(--md-primary);
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.48; }
+  50% { opacity: 0.82; }
+}
+
+.micro-skeleton-line {
+  display: block;
+  height: 0.7rem;
+  border-radius: var(--md-shape-sm);
+  background: color-mix(in srgb, var(--text-muted) 18%, transparent);
+  animation: skeletonPulse var(--motion-duration-ambient) var(--motion-ease-in-out) infinite;
+}
+
 .site-lowercase,
 .site-lowercase :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
   text-transform: lowercase !important;
@@ -410,5 +513,15 @@ body::after {
   .animated-cursor__core,
   .animated-cursor__x {
     transition: none !important;
+  }
+
+  .micro-link,
+  .micro-richtext :is(a),
+  .micro-pressable,
+  .micro-card,
+  .micro-field,
+  .micro-skeleton-line {
+    transition: none !important;
+    animation: none !important;
   }
 }
