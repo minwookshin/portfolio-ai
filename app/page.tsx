@@ -313,11 +313,7 @@ function WorkSection({
   const programmaticScrollRef = useRef<number | null>(null);
   const scrollSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const indicatorCell = 24;
-  const indicatorGap = 8;
-  const indicatorStride = indicatorCell + indicatorGap;
-  const activeIndicatorWidth = 36;
-  const activeIndicatorX = activeIndex * indicatorStride + (indicatorCell - activeIndicatorWidth) / 2;
+  const indicatorMotion = { type: "tween" as const, duration: 0.4, ease: "easeInOut" as const };
 
   useEffect(() => {
     return () => {
@@ -405,15 +401,7 @@ function WorkSection({
         </div>
       </div>
       <div className="mx-auto mt-4 flex w-full max-w-[620px] justify-center" aria-label="Selected work carousel">
-        <div className="relative flex items-center gap-2">
-          <div className="pointer-events-none absolute left-0 top-1/2 h-[3px] w-full -translate-y-1/2">
-            <motion.span
-              aria-hidden="true"
-              className="block h-[3px] w-9 rounded-full bg-[var(--text-primary)]"
-              animate={{ x: activeIndicatorX }}
-              transition={{ type: "tween", duration: 0.48, ease: APPLE_EASE }}
-            />
-          </div>
+        <div className="flex items-center gap-2">
           {projects.map((project, index) => {
             const isActive = index === activeIndex;
             return (
@@ -423,16 +411,18 @@ function WorkSection({
                 onClick={() => scrollToProject(index)}
                 aria-label={`Show ${project.title}`}
                 aria-current={isActive ? "true" : undefined}
-                className={`group relative flex h-6 w-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 ${
+                animate={{ width: isActive ? 40 : 24 }}
+                transition={indicatorMotion}
+                className={`group relative flex h-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 ${
                   isActive ? "" : "hover:bg-[var(--bg-element)] focus-visible:bg-[var(--bg-element)]"
                 }`}
               >
                 <motion.span
                   aria-hidden="true"
-                  className="h-[3px] w-[3px] shrink-0 rounded-full bg-[var(--text-primary)]"
-                  animate={{ opacity: isActive ? 0 : 0.38, scale: isActive ? 0.75 : 1 }}
+                  className="h-[3px] shrink-0 rounded-full bg-[var(--text-primary)]"
+                  animate={{ width: isActive ? 36 : 3, opacity: isActive ? 1 : 0.38, scale: 1 }}
                   whileHover={isActive ? undefined : { opacity: 0.72, scale: 1.08 }}
-                  transition={{ type: "tween", duration: 0.32, ease: APPLE_EASE }}
+                  transition={indicatorMotion}
                 />
               </motion.button>
             );
