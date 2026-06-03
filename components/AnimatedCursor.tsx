@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -8,8 +8,9 @@ import {
   useReducedMotion,
 } from "framer-motion";
 
-type CursorMode = "dot" | "interactive" | "close";
+type CursorMode = "dot" | "interactive" | "play" | "close";
 type CursorTone = "dark" | "light";
+type CursorState = { mode: CursorMode; tone: CursorTone };
 
 const interactiveSelector = [
   "a[href]",
@@ -21,7 +22,37 @@ const interactiveSelector = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",");
 
-function getCursorState(target: EventTarget | null): { mode: CursorMode; tone: CursorTone } {
+const explicitCursorModes: Record<string, CursorMode> = {
+  interactive: "interactive",
+  view: "interactive",
+  play: "play",
+  close: "close",
+};
+
+const cursorLabels: Partial<Record<CursorMode, string>> = {
+  play: "play",
+};
+
+const finePointerQuery = "(hover: hover) and (pointer: fine)";
+
+function subscribeFinePointer(onChange: () => void) {
+  if (typeof window === "undefined") return () => {};
+
+  const pointerQuery = window.matchMedia(finePointerQuery);
+  pointerQuery.addEventListener("change", onChange);
+  return () => pointerQuery.removeEventListener("change", onChange);
+}
+
+function getFinePointerSnapshot() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia(finePointerQuery).matches;
+}
+
+function getCursorTone(target: Element): CursorTone {
+  return target.closest(".dark-embed") ? "light" : "dark";
+}
+
+function getCursorState(target: EventTarget | null): CursorState {
   if (!(target instanceof Element)) return { mode: "dot", tone: "dark" };
 
   const closeZone = target.closest(".project-lightbox-close-zone");
@@ -33,22 +64,37 @@ function getCursorState(target: EventTarget | null): { mode: CursorMode; tone: C
     };
   }
 
-  const tone: CursorTone = target.closest(".dark-embed") ? "light" : "dark";
+  const tone = getCursorTone(target);
+  const explicitTarget = target.closest<HTMLElement>("[data-cursor]");
+  const explicitMode = explicitTarget?.dataset.cursor;
+  if (explicitMode && explicitCursorModes[explicitMode]) {
+    return { mode: explicitCursorModes[explicitMode], tone };
+  }
+
+  if (target.closest("video")) return { mode: "play", tone };
+
   const interactive = target.closest(interactiveSelector);
   return { mode: interactive ? "interactive" : "dot", tone };
 }
 
 export default function AnimatedCursor() {
   const reduceMotion = useReducedMotion();
+  const hasFinePointer = useSyncExternalStore(
+    subscribeFinePointer,
+    getFinePointerSnapshot,
+    () => false,
+  );
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
   const transform = useMotionTemplate`translate3d(${rawX}px, ${rawY}px, 0) translate(-50%, -50%)`;
-  const [mode, setMode] = useState<CursorMode>("dot");
-  const [tone, setTone] = useState<CursorTone>("dark");
+  const [cursorState, setCursorState] = useState<CursorState>({ mode: "dot", tone: "dark" });
   const [visible, setVisible] = useState(false);
+  const cursorStateRef = useRef(cursorState);
+  const visibleRef = useRef(false);
+  const canUseCursor = hasFinePointer && !reduceMotion;
 
   useEffect(() => {
-    if (reduceMotion || window.matchMedia("(pointer: coarse)").matches) return;
+    if (!canUseCursor) return;
 
     document.documentElement.classList.add("animated-cursor-active");
 
@@ -56,12 +102,23 @@ export default function AnimatedCursor() {
       rawX.set(event.clientX);
       rawY.set(event.clientY);
       const next = getCursorState(event.target);
-      setMode(next.mode);
-      setTone(next.tone);
-      setVisible(true);
+      if (
+        next.mode !== cursorStateRef.current.mode ||
+        next.tone !== cursorStateRef.current.tone
+      ) {
+        cursorStateRef.current = next;
+        setCursorState(next);
+      }
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        setVisible(true);
+      }
     };
 
-    const hide = () => setVisible(false);
+    const hide = () => {
+      visibleRef.current = false;
+      setVisible(false);
+    };
 
     window.addEventListener("pointermove", update, { passive: true });
     window.addEventListener("pointerenter", update, { passive: true });
@@ -75,20 +132,23 @@ export default function AnimatedCursor() {
       window.removeEventListener("pointerleave", hide);
       window.removeEventListener("blur", hide);
     };
-  }, [rawX, rawY, reduceMotion]);
+  }, [canUseCursor, rawX, rawY]);
 
-  if (reduceMotion) return null;
+  if (!canUseCursor) return null;
+
+  const label = cursorLabels[cursorState.mode] ?? "";
 
   return (
     <motion.div
       aria-hidden="true"
-      className={`animated-cursor animated-cursor--${mode} animated-cursor--${tone} ${
+      className={`animated-cursor animated-cursor--${cursorState.mode} animated-cursor--${cursorState.tone} ${
         visible ? "is-visible" : ""
       }`}
       style={{ transform }}
     >
       <span className="animated-cursor__frame" />
       <span className="animated-cursor__core" />
+      <span className="animated-cursor__label">{label}</span>
       <span className="animated-cursor__x animated-cursor__x--a" />
       <span className="animated-cursor__x animated-cursor__x--b" />
     </motion.div>

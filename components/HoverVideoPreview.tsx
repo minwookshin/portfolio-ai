@@ -121,6 +121,7 @@ export default function HoverVideoPreview({
   return (
     <video
       ref={videoRef}
+      data-cursor="play"
       muted
       loop
       playsInline

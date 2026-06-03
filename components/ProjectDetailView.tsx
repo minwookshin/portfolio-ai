@@ -64,6 +64,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
         <div className="space-y-[var(--space-2)]">
           {proof.demo.video ? (
             <video
+              data-cursor="play"
               controls
               playsInline
               preload="metadata"

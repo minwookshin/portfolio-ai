@@ -231,6 +231,7 @@ function ProjectTextRow({
           href={getProjectPath(project)}
           scroll={false}
           onClick={saveProjectOpenScroll}
+          data-cursor="view"
           className={rowClass}
         >
           {rowText}
