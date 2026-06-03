@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowUpRight } from "lucide-react";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug, getProjectMetadataDescription } from "@/data/projects";
+import { getWritingPostsForWork } from "@/lib/writing";
+import type { WritingPostMeta } from "@/lib/writingTypes";
 
 type WorkPageProps = {
   params: Promise<{ slug: string }>;
@@ -47,11 +51,35 @@ export async function generateMetadata({ params }: WorkPageProps): Promise<Metad
   };
 }
 
+function RelatedWriting({ posts }: { posts: WritingPostMeta[] }) {
+  if (posts.length === 0) return null;
+
+  return (
+    <aside className="border-t border-outline-variant pt-[var(--space-3)]">
+      <p className="leading-[var(--leading-body)] text-on-surface-variant">related writing</p>
+      <div className="mt-[var(--space-1)] flex flex-col gap-[var(--space-1)]">
+        {posts.map((post) => (
+          <Link
+            key={post.slug}
+            href={`/writing/${post.slug}`}
+            className="micro-link micro-focus inline-flex w-fit items-center gap-1 leading-[var(--leading-body)] text-on-surface hover:text-on-surface focus-visible:text-on-surface"
+          >
+            {post.title}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
 export default async function WorkProjectPage({ params }: WorkPageProps) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
 
   if (!project || project.comingSoon) notFound();
+
+  const relatedWriting = getWritingPostsForWork(project.slug);
 
   return (
     <main
@@ -64,6 +92,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
           actionLabel="all work"
           actionHref="/#work"
         />
+        <RelatedWriting posts={relatedWriting} />
       </div>
     </main>
   );
