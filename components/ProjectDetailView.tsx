@@ -8,6 +8,7 @@ import { ArrowLeft as ArrowBackIcon } from "lucide-react";
 import { Project } from "./ProjectCard";
 import { CaseStudy } from "./detail/CaseStudy";
 import { getCaseStudy } from "@/data/caseStudies";
+import { isVisibleBuilderValue } from "@/data/projects";
 import type { BuilderProof, PortfolioProject } from "@/data/projects";
 
 interface ProjectDetailViewProps {
@@ -29,11 +30,15 @@ function hasBuilderProof(project: Project | PortfolioProject): project is Portfo
 }
 
 function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
+  const stack = proof.stack.filter(isVisibleBuilderValue).join(", ");
+  const demoNote = isVisibleBuilderValue(proof.demo?.note) ? proof.demo?.note : proof.demo?.label;
+  const hasDemo = Boolean(proof.demo?.video || proof.demo?.href);
+
   return (
     <section className="mb-[var(--space-7)] space-y-[var(--space-4)]">
       <div className="grid gap-[var(--space-2)] border-y border-outline-variant py-[var(--space-3)] sm:grid-cols-2">
         <SummaryItem label="role" value={proof.role} />
-        <SummaryItem label="stack" value={proof.stack.join(", ")} />
+        {stack && <SummaryItem label="stack" value={stack} />}
         <SummaryItem
           label="status"
           value={
@@ -54,7 +59,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
         <SummaryItem label="what it does" value={proof.oneLiner} />
       </div>
 
-      {proof.demo && (
+      {proof.demo && hasDemo && (
         <div className="space-y-[var(--space-2)]">
           {proof.demo.video ? (
             <video
@@ -75,15 +80,19 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
               {proof.demo.label}
             </a>
           ) : null}
-          <p className="text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">
-            {proof.demo.note ?? proof.demo.label}
-          </p>
+          {isVisibleBuilderValue(demoNote) && (
+            <p className="text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">
+              {demoNote}
+            </p>
+          )}
         </div>
       )}
 
-      <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">
-        {proof.pipeline}
-      </p>
+      {isVisibleBuilderValue(proof.pipeline) && (
+        <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">
+          {proof.pipeline}
+        </p>
+      )}
 
       <MetricGrid title="engineering scope" items={proof.scope} />
       <MetricGrid title="results" items={proof.results} />
@@ -101,15 +110,19 @@ function SummaryItem({ label, value }: { label: string; value: ReactNode }) {
 }
 
 function MetricGrid({ title, items }: { title: string; items: BuilderProof["scope"] }) {
+  const visibleItems = items.filter((item) => isVisibleBuilderValue(item.value));
+
+  if (visibleItems.length === 0) return null;
+
   return (
     <section className="space-y-[var(--space-2)]">
       <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-heading)] text-on-surface">{title}</h2>
       <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
-        {items.map((item) => (
+        {visibleItems.map((item) => (
           <div key={`${title}-${item.label}`} className="bg-surface-container px-[var(--space-3)] py-[var(--space-2)]">
             <p className="font-mono text-[length:var(--type--2)] leading-[var(--leading-tight)] text-on-surface-variant">{item.label}</p>
             <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">{item.value}</p>
-            {item.note && <p className="mt-[var(--space-1)] text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">{item.note}</p>}
+            {isVisibleBuilderValue(item.note) && <p className="mt-[var(--space-1)] text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">{item.note}</p>}
           </div>
         ))}
       </div>

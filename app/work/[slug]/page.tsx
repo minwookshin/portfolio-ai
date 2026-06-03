@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
-import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug } from "@/data/projects";
+import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug, getProjectMetadataDescription } from "@/data/projects";
 
 type WorkPageProps = {
   params: Promise<{ slug: string }>;
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: WorkPageProps): Promise<Metad
     };
   }
 
-  const description = `${project.builder.oneLiner} ${project.builder.pipeline}`;
+  const description = getProjectMetadataDescription(project);
   const url = `https://www.minwookshin.com/work/${project.slug}`;
 
   return {

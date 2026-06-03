@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github, Linkedin } from "lucide-react";
 import { springs } from "@/lib/material/motion";
+import { isVisibleBuilderValue } from "@/data/projects";
 
 /**
  * Data-driven case-study renderer. A project's detail page is described as an
@@ -119,7 +120,10 @@ function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "
 
 function renderSection(section: DetailSection, i: number) {
   switch (section.kind) {
-    case "hero":
+    case "hero": {
+      const bullets = section.bullets?.filter(isVisibleBuilderValue) ?? [];
+      const tags = section.tags?.filter(isVisibleBuilderValue) ?? [];
+
       return (
         <motion.section
           key={i}
@@ -136,9 +140,9 @@ function renderSection(section: DetailSection, i: number) {
               {section.subtitle}
             </motion.p>
           )}
-          {section.bullets && section.bullets.length > 0 && (
+          {bullets.length > 0 && (
             <motion.div variants={heroItem} className="mt-[var(--space-4)] space-y-[var(--space-2)]">
-              {section.bullets.map((b) => (
+              {bullets.map((b) => (
                 <div key={b} className="flex items-start gap-3">
                   <Dot />
                   <p className="text-[length:var(--type-0)] text-on-surface-variant leading-[var(--leading-body)]">{b}</p>
@@ -146,7 +150,7 @@ function renderSection(section: DetailSection, i: number) {
               ))}
             </motion.div>
           )}
-          {section.tags && section.tags.length > 0 && <motion.div variants={heroItem} className="mt-[var(--space-4)]"><Tags tags={section.tags} /></motion.div>}
+          {tags.length > 0 && <motion.div variants={heroItem} className="mt-[var(--space-4)]"><Tags tags={tags} /></motion.div>}
           {section.image && (
             <motion.div variants={heroItem} className="mt-[var(--space-5)]">
               <ProjectImage src={section.image} alt={section.title} style={section.imageStyle} />
@@ -154,6 +158,7 @@ function renderSection(section: DetailSection, i: number) {
           )}
         </motion.section>
       );
+    }
 
     case "lead":
       return (
@@ -164,12 +169,16 @@ function renderSection(section: DetailSection, i: number) {
         </motion.section>
       );
 
-    case "stats":
+    case "stats": {
+      const statsItems = section.items.filter((item) => isVisibleBuilderValue(item.value));
+
+      if (statsItems.length === 0) return null;
+
       return (
         <motion.section key={i} {...reveal}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className="grid grid-cols-2 gap-[var(--space-2)] sm:grid-cols-3">
-            {section.items.map((s) => (
+            {statsItems.map((s) => (
               <div key={s.label} className={`${card} p-6`}>
                 <p className="text-3xl sm:text-4xl font-normal tracking-tight text-on-surface">{s.value}</p>
                 <p className="mt-[var(--space-1)] text-[length:var(--type--1)] text-on-surface-variant">{s.label}</p>
@@ -178,17 +187,20 @@ function renderSection(section: DetailSection, i: number) {
           </div>
         </motion.section>
       );
+    }
 
-    case "problem":
+    case "problem": {
+      const problemStats = section.stats?.filter((stat) => isVisibleBuilderValue(stat.value)) ?? [];
+
       return (
         <motion.section key={i} {...reveal}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="grid gap-[var(--space-2)] md:grid-cols-5">
             <div className={`${card} p-6 sm:p-8 md:col-span-3`}>
               <p className={bodyCls}>{section.body}</p>
-              {section.stats && section.stats.length > 0 && (
+              {problemStats.length > 0 && (
                 <div className="mt-[var(--space-3)] grid grid-cols-2 gap-[var(--space-3)] border-t border-outline-variant pt-[var(--space-3)]">
-                  {section.stats.map((s) => (
+                  {problemStats.map((s) => (
                     <div key={s.label}>
                       <p className="text-2xl sm:text-3xl font-normal tracking-tight text-on-surface">{s.value}</p>
                       <p className="mt-[var(--space-1)] text-[length:var(--type--2)] text-on-surface-variant">{s.label}</p>
@@ -215,6 +227,7 @@ function renderSection(section: DetailSection, i: number) {
           </div>
         </motion.section>
       );
+    }
 
     case "split":
       return (

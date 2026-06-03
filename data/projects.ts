@@ -30,8 +30,28 @@ export type BuilderProof = {
 
 export type PortfolioProject = Project & {
   slug: string;
+  metadataDescription?: string;
   builder: BuilderProof;
 };
+
+export function hasFillPlaceholder(value: string) {
+  return /\{\{FILL(?::[^}]*)?\}\}/.test(value);
+}
+
+export function isVisibleBuilderValue(value?: string | null): value is string {
+  if (!value?.trim()) return false;
+  return !hasFillPlaceholder(value);
+}
+
+export function getProjectMetadataDescription(project: PortfolioProject) {
+  if (isVisibleBuilderValue(project.metadataDescription)) {
+    return project.metadataDescription;
+  }
+
+  return [project.builder.oneLiner, project.builder.pipeline]
+    .filter(isVisibleBuilderValue)
+    .join(" ");
+}
 
 export const MAIN_PROJECTS: PortfolioProject[] = [
   {
@@ -41,7 +61,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     description: "Predictive Home Maintenance iOS App",
     fullDescription:
       "A native iOS app built in 48 hours that transforms home maintenance from reactive crisis management to proactive risk mitigation. Winner of Google x SCAD FLUX Hackathon 2025.",
-    role: "UX Engineer (Design + Native iOS Development)",
+    role: "Design Engineer — designed & built",
     timeline: "2 days (48-hour hackathon)",
     team: "Hyunsoo, Madelyn",
     tags: ["Swift", "SwiftUI", "Figma", "Predictive Data"],
@@ -55,7 +75,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     themeColor: "#F59E0B",
     overview: "From Idea to Native iOS App in 48 Hours. Sentinel is a predictive home maintenance app that helps homeowners move from gut feeling to data-driven decision making, preventing invisible risks before they become $200,000 disasters.",
     builder: {
-      role: "Designed & Built with a hackathon team",
+      role: "Design Engineer — designed & built",
       stack: ["Figma", "Swift", "SwiftUI", "weather data"],
       status: { label: "Shipped in 48h" },
       oneLiner: "Predictive iOS maintenance app that turns weather risk into prioritized homeowner actions.",
@@ -63,13 +83,9 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       demo: { label: "Watch demo", video: "/projects/sentinel/demo.mp4" },
       scope: [
         { label: "Build time", value: "48h" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: weather/data APIs}}" },
-        { label: "Performance", value: "{{FILL: load time / app performance}}" },
       ],
       results: [
         { label: "Actual", value: "Winner · Google × SCAD FLUX Hackathon 2025" },
-        { label: "Target", value: "{{FILL: homeowner validation metric}}" },
       ],
     },
     contentSections: [
@@ -88,7 +104,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     description: "An AI-native studio website that explains work, qualifies intent, and routes visitors to the right proof.",
     fullDescription:
       "A conversational product-studio site built with Next.js, React, and Gemini. It answers questions, runs lightweight project intake, and opens relevant case studies in real time.",
-    role: "UX Engineer / Full-Stack Developer",
+    role: "Design Engineer — designed & built solo",
     timeline: "2 weeks",
     team: "Solo Project",
     tags: ["Next.js", "React", "Gemini API", "TypeScript", "Framer Motion"],
@@ -102,7 +118,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     themeColor: "#8B5CF6",
     overview: "An AI-native studio site that turns passive browsing into a live project briefing.",
     builder: {
-      role: "Designed & Built solo",
+      role: "Design Engineer — designed & built solo",
       stack: ["Next.js", "React", "TypeScript", "Gemini API", "Framer Motion"],
       status: { label: "🟢 Live", href: "https://www.minwookshin.com" },
       oneLiner: "AI-native portfolio that answers questions, qualifies intent, and opens relevant proof.",
@@ -110,13 +126,10 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       demo: { label: "Try live site", href: "https://www.minwookshin.com" },
       scope: [
         { label: "Build time", value: "2 weeks" },
-        { label: "Screens", value: "{{FILL: page / state count}}" },
         { label: "API integrations", value: "Gemini API, Vercel server routes" },
-        { label: "Performance", value: "{{FILL: Lighthouse score / load time}}" },
       ],
       results: [
         { label: "Actual", value: "Live production site" },
-        { label: "Target", value: "{{FILL: recruiter/client conversion metric}}" },
       ],
     },
     features: [
@@ -142,18 +155,13 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     comingSoon: true,
     unavailableMessage: "Atlas is not ready yet.",
     builder: {
-      role: "Designed & Built",
-      stack: ["{{FILL: stack}}"],
+      role: "Design Engineer — in preparation",
+      stack: [],
       status: { label: "Coming soon" },
       oneLiner: "Atlas is still being prepared.",
-      pipeline: "Designed in Figma → Shipped in {{FILL: stack}}.",
-      scope: [
-        { label: "Build time", value: "{{FILL: build time}}" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: integrations}}" },
-        { label: "Performance", value: "{{FILL: load time}}" },
-      ],
-      results: [{ label: "Target", value: "{{FILL: target result}}" }],
+      pipeline: "In preparation.",
+      scope: [],
+      results: [],
     },
   },
   {
@@ -182,13 +190,8 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       oneLiner: "Interactive event website with grid-based navigation and bespoke motion.",
       pipeline: "Designed in Figma → Shipped in HTML, CSS, and JavaScript.",
       demo: { label: "Open live site", href: "https://www.scadflux.com/fluxathon" },
-      scope: [
-        { label: "Build time", value: "{{FILL: build time}}" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: integrations or none}}" },
-        { label: "Performance", value: "{{FILL: Lighthouse score / load time}}" },
-      ],
-      results: [{ label: "Target", value: "{{FILL: event traffic / usability result}}" }],
+      scope: [],
+      results: [],
     },
   },
   {
@@ -198,7 +201,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     description: "AI-Powered Gambling Addiction Recovery Tool",
     fullDescription:
       "An AI-powered support system designed to help young adults overcome betting addiction through real-time intervention, smart journaling, and behavioral pattern recognition.",
-    role: "AI UX Designer / UX Researcher",
+    role: "Product Designer & UX Researcher",
     timeline: "10 weeks",
     team: "Brynn, Giuseppe, Max, Zhenghao, Leo",
     tags: ["AI Chatbot", "UX Research"],
@@ -210,22 +213,19 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     studioLabel: "Behavioral AI product",
     themeColor: "#3B82F6",
     overview: "Mindline shifts the focus from 'restriction' to 'awareness'. An AI-powered tool that helps young adults (18-26) combat betting addiction through real-time emotional analysis, smart journaling, and behavioral interventions.",
+    metadataDescription:
+      "Behavioral AI product that turns emotional triggers into real-time intervention — a 10-week research and design sprint targeting young adults.",
     builder: {
-      role: "Designed & Built with a product team",
-      stack: ["Figma", "AI UX flows", "{{FILL: prototype/build stack}}"],
+      role: "Product Designer & UX Researcher",
+      stack: ["Figma", "AI UX flows"],
       status: { label: "Prototype" },
       oneLiner: "Behavioral AI product that turns emotional triggers into real-time intervention.",
-      pipeline: "Designed in Figma → Shipped as {{FILL: prototype/build format}}.",
-      demo: { label: "Demo placeholder", note: "{{FILL: live demo or video link}}" },
+      pipeline: "Designed in Figma → prototyped as a research-backed AI UX concept.",
       scope: [
         { label: "Build time", value: "10 weeks" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: AI/model integrations}}" },
-        { label: "Performance", value: "{{FILL: prototype performance metric}}" },
       ],
       results: [
         { label: "Actual", value: "6 research interviews" },
-        { label: "Target", value: "{{FILL: behavior-change validation metric}}" },
       ],
     },
     contentSections: [
@@ -252,19 +252,13 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     overview: "From ideation to a high-fidelity concept.",
     gallery: ["/projects/nameme/nmmainfin.jpg", "/projects/nameme/nmhificoncept.png", "/projects/nameme/nmmidfi.png", "/projects/nameme/nmlowfi.png"],
     builder: {
-      role: "Designed & Built",
-      stack: ["Figma", "{{FILL: prototype/build stack}}"],
+      role: "Product Designer",
+      stack: ["Figma"],
       status: { label: "Prototype" },
       oneLiner: "Concept-to-hi-fi product exploration around identity and naming.",
-      pipeline: "Designed in Figma → Shipped as {{FILL: prototype/build format}}.",
-      demo: { label: "Demo placeholder", note: "{{FILL: prototype link or video}}" },
-      scope: [
-        { label: "Build time", value: "{{FILL: build time}}" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: integrations or none}}" },
-        { label: "Performance", value: "{{FILL: load time}}" },
-      ],
-      results: [{ label: "Target", value: "{{FILL: concept validation metric}}" }],
+      pipeline: "Designed in Figma → prototyped as a high-fidelity UX concept.",
+      scope: [],
+      results: [],
     },
   },
   {
@@ -281,18 +275,13 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     linkedin: "https://www.linkedin.com/posts/minwookshin_buildinpublic-hat-ugcPost-7432477739208777729-sZlv/",
     builder: {
       role: "Designed & Built solo",
-      stack: ["{{FILL: stack}}"],
+      stack: [],
       status: { label: "Live demo" },
       oneLiner: "Interactive product demo for exploring caps.",
-      pipeline: "Designed in Figma → Shipped in {{FILL: stack}}.",
+      pipeline: "Designed in Figma → prepared as an interactive product demo.",
       demo: { label: "Watch demo", video: "/projects/capexplorer/demo.mp4" },
-      scope: [
-        { label: "Build time", value: "{{FILL: build time}}" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: integrations}}" },
-        { label: "Performance", value: "{{FILL: load time}}" },
-      ],
-      results: [{ label: "Target", value: "{{FILL: target result}}" }],
+      scope: [],
+      results: [],
     },
   },
   {
@@ -309,18 +298,13 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     linkedin: "https://www.linkedin.com/posts/minwookshin_technology-innovation-ugcPost-7432812004098084865-AGvW/",
     builder: {
       role: "Designed & Built solo",
-      stack: ["{{FILL: stack}}"],
+      stack: [],
       status: { label: "Live demo" },
       oneLiner: "Interactive product demo exploration.",
-      pipeline: "Designed in Figma → Shipped in {{FILL: stack}}.",
+      pipeline: "Designed in Figma → prepared as an interactive product demo.",
       demo: { label: "Watch demo", video: "/projects/tomo/demo.mp4" },
-      scope: [
-        { label: "Build time", value: "{{FILL: build time}}" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: integrations}}" },
-        { label: "Performance", value: "{{FILL: load time}}" },
-      ],
-      results: [{ label: "Target", value: "{{FILL: target result}}" }],
+      scope: [],
+      results: [],
     },
   },
   {
@@ -338,18 +322,13 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     linkedin: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
     builder: {
       role: "Designed & Built solo",
-      stack: ["SwiftUI", "{{FILL: supporting stack}}"],
+      stack: ["SwiftUI"],
       status: { label: "Prototype" },
       oneLiner: "iOS UX prototype focused on burnout and quitting signals.",
       pipeline: "Designed in Figma → Shipped in SwiftUI.",
       demo: { label: "Watch demo", video: "/projects/caret/demo.mp4" },
-      scope: [
-        { label: "Build time", value: "{{FILL: build time}}" },
-        { label: "Screens", value: "{{FILL: screen count}}" },
-        { label: "API integrations", value: "{{FILL: integrations}}" },
-        { label: "Performance", value: "{{FILL: app performance}}" },
-      ],
-      results: [{ label: "Target", value: "{{FILL: target result}}" }],
+      scope: [],
+      results: [],
     },
   },
 ];

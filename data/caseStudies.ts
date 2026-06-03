@@ -14,7 +14,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         title: "Sentinel",
         subtitle: "Predictive home maintenance powered by climate-risk AI.",
         bullets: [
-          "UX Engineer, design through code",
+          "Design Engineer — designed & built",
           "48-hour hackathon sprint",
           "Native iOS (Swift + SwiftUI)",
         ],
@@ -120,7 +120,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         title: "Portfolio AI",
         subtitle: "An AI-native studio site that turns passive browsing into a live project briefing.",
         bullets: [
-          "Product strategist, designer & full-stack developer",
+          "Design Engineer — designed & built solo",
           "Token-by-token streaming responses",
           "Project-intake flow wired to real case studies",
         ],
@@ -159,9 +159,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         eyebrow: "Studio proof",
         heading: "What this demonstrates",
         items: [
-          { value: "{{FILL: time to first token}}", label: "Time to first token" },
           { value: "8", label: "Selected work examples" },
-          { value: "{{FILL: service lane count}}", label: "Studio service lanes" },
         ],
       },
       {
@@ -192,7 +190,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         title: "Mindline",
         subtitle: "Breaking the cycle, AI-powered intervention for betting addiction.",
         bullets: [
-          "AI UX Designer & UX Researcher",
+          "Product Designer & UX Researcher",
           "10-week research & design sprint",
           "Target: young adults, 18–26",
         ],
@@ -273,7 +271,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Project impact",
         heading: "Outcome & reflection",
         body: [
-          "Mindline shifts the paradigm from restriction to awareness. 6 research interviews surfaced the trigger patterns; outcome validation is still a placeholder: {{FILL: behavior-change validation metric}}.",
+          "Mindline shifts the paradigm from restriction to awareness. 6 research interviews surfaced trigger patterns around emotional states, social pressure, and relapse timing.",
           "Rather than blocking access, which users bypass within minutes, it builds self-awareness, real-time emotional analysis, and proactive intervention: the foundation for sustainable behavioral change.",
         ],
       },
