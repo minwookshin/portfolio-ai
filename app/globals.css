@@ -286,6 +286,22 @@ body::after {
   border-radius: var(--md-shape-sm);
 }
 
+.project-row-title-line {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 calc(100% - 0.02em);
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition:
+    background-size var(--motion-duration-base) var(--motion-ease-standard),
+    color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.group:hover .project-row-title-line,
+.group:focus-within .project-row-title-line {
+  background-size: 100% 1px;
+}
+
 .micro-pressable {
   transition:
     color var(--motion-duration-base) var(--motion-ease-standard),
@@ -592,14 +608,14 @@ body::after {
 
 .animated-cursor--interactive .animated-cursor__frame {
   width: 18px;
-  height: 3px;
-  border-width: 0;
-  background: currentColor;
+  height: 18px;
+  border-width: 1px;
+  background: transparent;
 }
 
 .animated-cursor--interactive .animated-cursor__core {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.45);
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .animated-cursor--play .animated-cursor__frame {

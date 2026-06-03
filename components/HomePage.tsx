@@ -194,10 +194,16 @@ function ProjectTextRow({
   const descriptor = getProjectDescriptor(project);
   const rowClass =
     "micro-focus micro-pressable flex min-h-12 w-full items-baseline justify-between gap-[var(--space-2)] border-b border-[var(--border-light)] py-[var(--space-1)] text-left";
+  const titleClass = [
+    "font-normal leading-[var(--leading-body)] text-[var(--text-primary)]",
+    project.comingSoon ? "" : "project-row-title-line",
+  ]
+    .filter(Boolean)
+    .join(" ");
   const rowText = (
     <>
       <span className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0">
-        <span className="font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+        <span className={titleClass}>
           {project.title}
         </span>
         <span aria-hidden="true" className="text-[var(--text-muted)]">—</span>
