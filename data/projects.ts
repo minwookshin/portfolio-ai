@@ -333,7 +333,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
   },
 ];
 
-export const FEATURED_PROJECT_IDS = ["11", "3", "1", "2"] as const;
+export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Sentinel: "/projects/sentinel/demo.mp4",

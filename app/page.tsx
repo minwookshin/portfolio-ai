@@ -379,7 +379,7 @@ function WorkSection({
     <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-7)] sm:px-[var(--space-5)] md:py-[calc(var(--space-8)+var(--space-2))]">
       <div className="mb-[var(--space-3)] flex justify-center">
         <div className="w-full max-w-[620px] text-left">
-          <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)]">Selected work</h2>
+          <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)]">Work</h2>
         </div>
       </div>
       <div
@@ -400,7 +400,7 @@ function WorkSection({
           ))}
         </div>
       </div>
-      <div className="mx-auto mt-4 flex w-full max-w-[620px] justify-center" aria-label="Selected work carousel">
+      <div className="mx-auto mt-4 flex w-full max-w-[620px] justify-center" aria-label="Work carousel">
         <div className="flex items-center gap-2">
           {projects.map((project, index) => {
             const isActive = index === activeIndex;
@@ -931,7 +931,7 @@ export default function Home() {
       <section className="sr-only">
         <h2>{PERSONAL_INFO.name}, {PERSONAL_INFO.title}</h2>
         <p>{PERSONAL_INFO.bio}</p>
-        <h3>Selected work</h3>
+        <h3>Work</h3>
         <ul>
           {MAIN_PROJECTS.map((p) => (
             <li key={p.id}>
@@ -1164,7 +1164,7 @@ export default function Home() {
                             }}
                             className="mt-3 inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-2 text-xs font-normal text-on-surface transition-colors hover:bg-outline-variant"
                           >
-                              {target === "profile" ? "View profile" : target === "projects" ? "View selected work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
+                              {target === "profile" ? "View profile" : target === "projects" ? "View work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
                             </motion.button>
                           )}

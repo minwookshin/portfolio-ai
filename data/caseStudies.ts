@@ -159,7 +159,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         eyebrow: "Studio proof",
         heading: "What this demonstrates",
         items: [
-          { value: "8", label: "Selected work examples" },
+          { value: "8", label: "Work examples" },
         ],
       },
       {
