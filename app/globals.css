@@ -96,6 +96,21 @@
   --md-state-hover: 0.08;
   --md-state-focus: 0.1;
   --md-state-press: 0.1;
+
+  /* Motion timing scale. Keep these names in sync with lib/material/motion.ts. */
+  --motion-duration-none: 0ms;
+  --motion-duration-instant: 120ms;
+  --motion-duration-fast: 180ms;
+  --motion-duration-base: 250ms;
+  --motion-duration-slow: 350ms;
+  --motion-duration-slower: 500ms;
+  --motion-duration-extended: 700ms;
+  --motion-duration-reveal: 800ms;
+  --motion-duration-ambient: 1400ms;
+  --motion-duration-flash: 2400ms;
+  --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --motion-ease-emphasized: cubic-bezier(0.34, 1.28, 0.5, 1);
 }
 
 /* Base font */
@@ -106,7 +121,7 @@ body {
   letter-spacing: -0.02em;
   background-color: var(--bg-base);
   color: var(--text-primary);
-  transition: background-color 0.3s ease;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 /* Custom cursor: a filled near-black dot everywhere, including over interactive
@@ -160,7 +175,7 @@ body {
   100% { background-color: color-mix(in srgb, var(--accent-indigo) 0%, transparent); box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-indigo) 0%, transparent); }
 }
 .section-flash {
-  animation: sectionFlash 2.4s ease-out;
+  animation: sectionFlash var(--motion-duration-flash) var(--motion-ease-standard);
   border-radius: 0;
   padding: 4px 8px;
   margin: -4px -8px;
@@ -171,7 +186,9 @@ body {
    element during Framer Motion transforms and the globe rAF loop,
    which is the main source of animation jank. */
 body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 body::after {
@@ -215,22 +232,6 @@ body::after {
 }
 .glass-stroke-sm {
   border: 1px solid var(--md-hairline);
-}
-
-/* Dotted SVG outline that, on hover/focus of the parent group, grows its dashes
-   until they connect into a solid stroke (period stays constant so the dots
-   simply fill the gaps between them). Replaces the gray hover tint. */
-.dot-connect {
-  stroke-dasharray: 0.01 9;
-  stroke-width: 2;
-  opacity: 0.45;
-  transition: stroke-dasharray 0.35s ease, stroke-width 0.35s ease, opacity 0.35s ease;
-}
-.group:hover .dot-connect,
-.group:focus-within .dot-connect {
-  stroke-dasharray: 9 0.01;
-  stroke-width: 1;
-  opacity: 0.9;
 }
 
 .site-lowercase,
@@ -291,7 +292,9 @@ body::after {
   color: var(--text-primary);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 120ms ease, color 160ms ease;
+  transition:
+    opacity var(--motion-duration-instant) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
   will-change: transform;
 }
 
@@ -321,12 +324,12 @@ body::after {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
   transition:
-    width 180ms cubic-bezier(0.22, 1, 0.36, 1),
-    height 180ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-width 180ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 160ms ease,
-    opacity 140ms ease,
-    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+    width var(--motion-duration-fast) var(--motion-ease-standard),
+    height var(--motion-duration-fast) var(--motion-ease-standard),
+    border-width var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .animated-cursor__core {
@@ -337,8 +340,8 @@ body::after {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.45);
   transition:
-    opacity 150ms ease,
-    transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .animated-cursor__x {
@@ -349,8 +352,8 @@ body::after {
   opacity: 0;
   transform: translate(-50%, -50%) rotate(0deg) scaleX(0.35);
   transition:
-    opacity 130ms ease,
-    transform 190ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .animated-cursor--interactive .animated-cursor__frame {
@@ -402,7 +405,6 @@ body::after {
     box-shadow: none !important;
   }
 
-  .dot-connect,
   .animated-cursor,
   .animated-cursor__frame,
   .animated-cursor__core,

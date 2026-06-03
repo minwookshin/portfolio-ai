@@ -69,21 +69,6 @@ const config: Config = {
         glow: "0 0 30px rgba(255, 64, 0, 0.2)",
         "glow-blue": "0 0 30px rgba(1, 81, 254, 0.2)",
       },
-      animation: {
-        "fade-in-up": "fadeInUp 0.5s ease-out",
-      },
-      keyframes: {
-        fadeInUp: {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(20px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
-        },
-      },
     },
   },
   plugins: [

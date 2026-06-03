@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Mic, ArrowRight } from "lucide-react";
 import { LinkedInIcon } from "./LinkedInIcon";
 import { IconButton } from "@/components/material/IconButton";
+import { tweens } from "@/lib/material/motion";
 
 type ConnectorKind = "profile" | "project" | "chat" | null;
 
@@ -23,10 +24,6 @@ interface ChatInputProps {
 const darkOutsideBtn =
   `group shrink-0 w-16 h-16 rounded-[var(--md-shape-sm)] bg-surface-container-high text-on-surface border border-outline-variant flex items-center justify-center transition-colors relative`;
 
-const appleEase = [0.22, 1, 0.36, 1] as const;
-const controlMotion = { type: "tween", duration: 0.34, ease: appleEase } as const;
-const instantMotion = { duration: 0 } as const;
-
 export default function ChatInput({
   onSend,
   hasStarted = true,
@@ -38,7 +35,7 @@ export default function ChatInput({
   introReady = true,
 }: ChatInputProps) {
   const reduceMotion = useReducedMotion();
-  const activeMotion = reduceMotion ? instantMotion : controlMotion;
+  const activeMotion = reduceMotion ? tweens.none : tweens.slow;
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -160,7 +157,7 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={reduceMotion ? { opacity: 0, scale: 1, x: 0 } : { opacity: 0, scale: 0.96, x: 14 }}
               transition={activeMotion}
-              className="group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase tracking-wide text-on-surface transition-colors duration-300 ease-[cubic-bezier(0.45,0,0.55,1)] hover:bg-outline-variant"
+              className="group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase tracking-wide text-on-surface transition-colors duration-[var(--motion-duration-base)] ease-[var(--motion-ease-in-out)] hover:bg-outline-variant"
             >
               <span className="relative">esc</span>
             </motion.button>

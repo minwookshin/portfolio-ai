@@ -8,10 +8,9 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
-import ProfileCard from "@/components/ProfileCard";
 import type { Project } from "@/components/ProjectCard";
-import { ArrowRight, FileText, ArrowUpRight } from "lucide-react";
-import { springs } from "@/lib/material/motion";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import {
   FEATURED_PROJECT_IDS,
   LIVE_DEMO_TILE_TITLES,
@@ -36,8 +35,6 @@ const LAB_TILE_HEIGHTS = [
   "h-[300px] sm:h-[360px]",
 ] as const;
 const LAB_TILE_HEIGHT_VALUES = [460, 340, 460, 340, 500, 360] as const;
-const APPLE_EASE = [0.22, 1, 0.36, 1] as const;
-const INSTANT_TRANSITION = { duration: 0 } as const;
 const WORK_CARD_WIDTH = "min(74vw, 680px)";
 const WORK_CARD_GUTTER = `calc((100vw - ${WORK_CARD_WIDTH}) / 2)`;
 // Personal Information
@@ -180,7 +177,7 @@ function ProjectMedia({
           decoding="async"
           draggable={false}
           className={`h-full w-full object-contain ${
-            reduceMotion ? "" : "transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+            reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
           } ${
             isLogo ? "p-12 sm:p-20" : "p-8 sm:p-12"
           }`}
@@ -236,7 +233,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="text-[length:var(--type-0)] text-[var(--text-muted)] underline decoration-[var(--text-muted)] decoration-[1px] underline-offset-1 outline-none transition-colors duration-300 hover:text-[var(--accent-indigo)] hover:decoration-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)] focus-visible:decoration-[var(--accent-indigo)]"
+      className="text-[length:var(--type-0)] text-[var(--text-muted)] underline decoration-[var(--text-muted)] decoration-[1px] underline-offset-1 outline-none transition-colors duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] hover:text-[var(--accent-indigo)] hover:decoration-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)] focus-visible:decoration-[var(--accent-indigo)]"
     >
       {children}
     </a>
@@ -262,7 +259,7 @@ function SelectedProjectCard({
           </span>
         </span>
         {!project.comingSoon && (
-          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+          <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:opacity-100" />
         )}
       </span>
     </>
@@ -272,9 +269,9 @@ function SelectedProjectCard({
     <motion.div
       animate={{ scale: reduceMotion ? 1 : isActive ? 1 : 0.8 }}
       whileHover={reduceMotion || isActive ? undefined : { scale: 0.84 }}
-      transition={reduceMotion ? INSTANT_TRANSITION : { type: "tween", duration: 0.52, ease: APPLE_EASE }}
+      transition={reduceMotion ? tweens.none : tweens.slower}
       data-work-card="true"
-      className={`group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left outline-none transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-base)] ${
+      className={`group w-[min(74vw,680px)] shrink-0 snap-center origin-center text-left outline-none transition-opacity duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-base)] ${
         isActive ? "opacity-100" : "opacity-60 hover:opacity-100"
       }`}
     >
@@ -327,8 +324,8 @@ function WorkSection({
   const scrollSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const indicatorMotion = reduceMotion
-    ? INSTANT_TRANSITION
-    : { type: "tween" as const, duration: 0.4, ease: "easeInOut" as const };
+    ? tweens.none
+    : tweens.slowInOut;
 
   useEffect(() => {
     return () => {
@@ -360,7 +357,7 @@ function WorkSection({
         programmaticScrollRef.current = null;
         scrollSettleTimerRef.current = null;
         setActiveIndex(getClosestProjectIndex() ?? lockedIndex ?? 0);
-      }, 180);
+      }, motionDurations.fast * 1000);
       return;
     }
 
@@ -390,7 +387,7 @@ function WorkSection({
       programmaticScrollRef.current = null;
       scrollSettleTimerRef.current = null;
       setActiveIndex(getClosestProjectIndex() ?? index);
-    }, 700);
+    }, motionDurations.extended * 1000);
   };
 
   return (
@@ -431,7 +428,7 @@ function WorkSection({
                 aria-current={isActive ? "true" : undefined}
                 animate={{ width: isActive ? 40 : 24 }}
                 transition={indicatorMotion}
-                className={`group relative flex h-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-300 ${
+                className={`group relative flex h-6 items-center justify-center rounded-full bg-transparent outline-none transition-colors duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] ${
                   isActive ? "" : "hover:bg-[var(--bg-element)] focus-visible:bg-[var(--bg-element)]"
                 }`}
               >
@@ -545,7 +542,7 @@ function LabChatTile() {
       <form
         onSubmit={submit}
         className={`flex h-full min-h-0 w-full flex-col rounded-[var(--md-shape-lg)] bg-[var(--bg-surface)] p-4 text-[var(--text-primary)] ${
-          reduceMotion ? "" : "transition-[height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          reduceMotion ? "" : "transition-[height] duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)]"
         }`}
       >
         <div
@@ -641,7 +638,7 @@ function LabProjectTile({
             decoding="async"
             draggable={false}
             className={`h-full w-full object-cover grayscale ${
-              reduceMotion ? "" : "transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.035]"
+              reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
             }`}
           />
         )}
@@ -654,7 +651,7 @@ function LabProjectTile({
             autoPlay={showsLiveDemo}
             preload={showsLiveDemo ? "auto" : "metadata"}
             poster={project.image ?? project.icon}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] ${
               showsLiveDemo ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
             }`}
           >
@@ -663,7 +660,7 @@ function LabProjectTile({
         )}
         {!src && (
           <div
-            className={`absolute inset-0 flex items-center justify-center bg-[var(--bg-element)] text-[var(--text-primary)] transition duration-500 ${
+            className={`absolute inset-0 flex items-center justify-center bg-[var(--bg-element)] text-[var(--text-primary)] transition duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] ${
               showsLiveDemo
                 ? "opacity-0"
                 : previewVideo
@@ -675,8 +672,8 @@ function LabProjectTile({
           </div>
         )}
       </div>
-      <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(247,248,248,0.92)] via-[rgba(247,248,248,0.72)] to-transparent p-[var(--space-2)] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 ${
-        reduceMotion ? "" : "translate-y-2 transition duration-300 group-hover:translate-y-0 group-focus-visible:translate-y-0"
+      <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(247,248,248,0.92)] via-[rgba(247,248,248,0.72)] to-transparent p-[var(--space-2)] opacity-0 transition-opacity duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-visible:opacity-100 ${
+        reduceMotion ? "" : "translate-y-2 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-visible:translate-y-0"
       }`}>
         <span className="flex items-end justify-between gap-[var(--space-2)]">
           <span className="min-w-0">
@@ -701,7 +698,7 @@ function LabProjectTile({
       whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
       viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? INSTANT_TRANSITION : { ...springs.spatialDefault, delay: Math.min(index * 0.035, 0.18) }}
+      transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
       className={`group relative w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left outline-none transition-colors hover:bg-[var(--bg-element)] focus-visible:ring-2 focus-visible:ring-[var(--accent-indigo)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] ${className}`}
     >
       {project.comingSoon ? (
@@ -772,11 +769,10 @@ export default function Home() {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
   const [hasStarted, setHasStarted] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
-  // (project detail / profile / globe) instead of snapping back home. The
-  // backing view stays mounted, dimmed behind a scrim. Opening a view
-  // explicitly (tapping an icon, "Open X", profile/globe) drops the chat back
+  // (for example, a page section) instead of snapping back home. The
+  // backing view stays mounted behind the chat. Opening a view
+  // explicitly (for example, "Open X" or profile) drops the chat back
   // behind it so that view is in focus again.
   const [chatOnTop, setChatOnTop] = useState(false);
   const [projectNotice, setProjectNotice] = useState<string | null>(null);
@@ -788,7 +784,6 @@ export default function Home() {
     const timer = setTimeout(() => setIntroReady(true), 80);
     return () => clearTimeout(timer);
   }, []);
-  const [showResume, setShowResume] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Chat state. The /api/chat route streams plain text, so we manage messages
@@ -818,15 +813,13 @@ export default function Home() {
     if (!hasStarted) {
       setHasStarted(true);
     }
-    // Bring the chat forward over whatever the user is currently looking at,
-    // keeping that view as a dimmed backdrop rather than resetting to home.
+    // Bring the chat forward over whatever the user is currently looking at
+    // rather than resetting to home.
     setChatOnTop(true);
 
     // Tell the backend what the user is currently looking at, so the AI can
     // resolve "this"/"it" and ground its answer in that screen.
-    const viewContext = showProfile
-      ? `The user is viewing my profile / resume / contact page.`
-      : '';
+    const viewContext = '';
 
     const messageIdSeed = `${messages.length}-${message.length}`;
     const userMsg = { id: `user-${messageIdSeed}`, role: 'user' as const, content: message };
@@ -890,16 +883,6 @@ export default function Home() {
   const leaveChat = () => {
     setHasStarted(false);
     setChatOnTop(false);
-    setShowProfile(false);
-    setShowResume(false);
-  };
-
-  // Close the local profile/chat overlay state. Project detail is now URL-backed.
-  const closeOverlay = () => {
-    setHasStarted(false);
-    setChatOnTop(false);
-    setShowProfile(false);
-    setShowResume(false);
   };
 
   // Re-open the chat (with history) when the user re-engages the composer
@@ -913,7 +896,6 @@ export default function Home() {
   const openProfile = () => {
     setChatOnTop(false);
     setHasStarted(false);
-    setShowProfile(false);
     requestAnimationFrame(() => {
       document.getElementById("profile")?.scrollIntoView({
         behavior: reduceMotion ? "auto" : "smooth",
@@ -929,30 +911,8 @@ export default function Home() {
     }
     setHasStarted(false);
     setChatOnTop(false);
-    setShowProfile(false);
-    setShowResume(false);
     router.push(getProjectPath(project));
   };
-
-  // Esc closes whichever local overlay is open (pairs with the on-screen ESC keycap).
-  useEffect(() => {
-    if (!showProfile) return;
-    const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key !== "Escape") return;
-      closeOverlay();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [showProfile]);
-
-  const sheetMotion = {
-    initial: reduceMotion ? false : { y: "100%", opacity: 1 },
-    animate: { y: 0, opacity: 1 },
-    exit: reduceMotion ? { y: 0, opacity: 1 } : { y: "100%", opacity: 1 },
-    transition: reduceMotion
-      ? INSTANT_TRANSITION
-      : { type: "tween" as const, duration: 0.62, ease: [0.22, 1, 0.36, 1] as const },
-  } as const;
 
   return (
     <main
@@ -983,7 +943,7 @@ export default function Home() {
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: introReady ? 1 : 0, y: reduceMotion ? 0 : introReady ? 0 : 8 }}
-        transition={reduceMotion ? INSTANT_TRANSITION : { type: "tween", duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
+        transition={reduceMotion ? tweens.none : tweens.slower}
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
@@ -994,100 +954,6 @@ export default function Home() {
         />
       </motion.div>
 
-      {/* Profile - same sheet language as project detail. */}
-      <AnimatePresence>
-        {showProfile && (
-          <motion.div
-            key="profile-scrim"
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.25 }}
-            onClick={closeOverlay}
-            style={{ backgroundColor: "var(--dark-overlay-38)" }}
-            className="fixed inset-0 z-[68] backdrop-blur-[18px]"
-            aria-hidden
-          />
-        )}
-        {showProfile && (
-          <motion.div
-            key="profile"
-            {...sheetMotion}
-            onClick={(e) => { if (e.target === e.currentTarget) closeOverlay(); }}
-            className="dark-embed fixed inset-x-0 bottom-0 z-[70] max-h-[calc(100dvh-22px)] overflow-hidden rounded-t-[var(--md-shape-lg)] border-t border-[var(--dark-border)] bg-[var(--dark-bg-base)]"
-          >
-            <div
-              style={{ backgroundColor: "var(--dark-overlay-85)" }}
-              className="sticky top-0 z-10 flex justify-center pb-3 pt-4 backdrop-blur-xl"
-            >
-              <button
-                type="button"
-                onClick={closeOverlay}
-                aria-label="Close profile"
-                className="h-1.5 w-14 rounded-full bg-[var(--dark-text-muted)]"
-              />
-            </div>
-            <div className="max-h-[calc(100dvh-62px)] overflow-y-auto overscroll-contain pb-28">
-            <div className="mx-auto w-full max-w-2xl px-5 sm:px-6 py-8">
-
-              <ProfileCard
-                name={PERSONAL_INFO.name}
-                title={PERSONAL_INFO.title}
-                bio={PERSONAL_INFO.bio}
-                email={PERSONAL_INFO.email}
-                linkedin={PERSONAL_INFO.linkedin}
-              />
-
-              <div className="mt-4 rounded-[var(--md-shape-lg)] bg-surface-container p-6">
-                <div className="grid grid-cols-2 gap-3">
-                  <motion.button
-                    onClick={() => setShowResume(!showResume)}
-                    whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-                    whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                    transition={reduceMotion ? INSTANT_TRANSITION : springs.pressMorph}
-                    className="flex items-center justify-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3 text-on-surface font-normal transition-all"
-                  >
-                    <FileText className="w-4 h-4" />
-                    {showResume ? 'Hide Resume' : 'View Resume'}
-                  </motion.button>
-                  <motion.a
-                    href="/resume.2025dec.pdf"
-                    download="Minwook_Shin_Resume.pdf"
-                    whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-                    whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                    transition={reduceMotion ? INSTANT_TRANSITION : springs.pressMorph}
-                    className="flex items-center justify-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3 text-on-surface font-normal transition-all"
-                  >
-                    <FileText className="w-4 h-4" />
-                    Download PDF
-                  </motion.a>
-                </div>
-                <AnimatePresence>
-                  {showResume && (
-                    <motion.div
-                      initial={reduceMotion ? false : { opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={reduceMotion ? { opacity: 1, height: "auto" } : { opacity: 0, height: 0 }}
-                      transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.3 }}
-                      className="overflow-hidden mt-4"
-                    >
-                      <div className="overflow-hidden rounded-[var(--md-shape-lg)] bg-surface-container-high">
-                        <img
-                          src="/resume.2025dec.jpg"
-                          alt="Resume - Minwook Shin"
-                          className="w-full h-auto object-contain"
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <AnimatePresence>
         {projectNotice && (
           <motion.div
@@ -1095,7 +961,7 @@ export default function Home() {
             initial={reduceMotion ? false : { opacity: 0, y: 8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? { opacity: 0, y: 0, scale: 1 } : { opacity: 0, y: 8, scale: 0.98 }}
-            transition={reduceMotion ? INSTANT_TRANSITION : springs.spatialFast}
+            transition={reduceMotion ? tweens.none : springs.spatialFast}
             className="fixed left-1/2 bottom-32 z-[76] -translate-x-1/2 rounded-[var(--md-shape-sm)] border border-on-surface/10 bg-surface/90 px-4 py-2 text-xs text-on-surface shadow-sm backdrop-blur-md"
           >
             {projectNotice}
@@ -1108,22 +974,6 @@ export default function Home() {
         <div className="fixed inset-0 z-[34]" onClick={leaveChat} aria-hidden />
       )}
 
-      {/* Scrim - dims the view the chat is floating over; tap it to drop back into that view */}
-      <AnimatePresence>
-        {hasStarted && (messages.length > 0 || isStreaming) && chatOnTop && showProfile && (
-          <motion.div
-            key="chat-scrim"
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.3 }}
-            onClick={() => setChatOnTop(false)}
-            className="fixed inset-0 z-[71] bg-surface/70 backdrop-blur-[3px]"
-            aria-hidden
-          />
-        )}
-      </AnimatePresence>
-
       {/* Chat - floating capsules rising from the bottom over the page, gradient-faded at top */}
       <AnimatePresence>
         {hasStarted && (messages.length > 0 || isStreaming) && (
@@ -1133,7 +983,7 @@ export default function Home() {
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={reduceMotion ? INSTANT_TRANSITION : { duration: 0.3 }}
+            transition={reduceMotion ? tweens.none : tweens.base}
             className={`fixed left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 overflow-y-auto ${reduceMotion ? "" : "scroll-smooth"} ${chatOnTop ? "z-[72]" : "z-[35]"}`}
             style={{
               bottom: 96,
@@ -1155,7 +1005,7 @@ export default function Home() {
                     key={msg.id}
                     initial={reduceMotion ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={reduceMotion ? INSTANT_TRANSITION : springs.spatialFast}
+                    transition={reduceMotion ? tweens.none : springs.spatialFast}
                     className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
@@ -1180,13 +1030,12 @@ export default function Home() {
                               type="button"
                               initial={reduceMotion ? false : { opacity: 0, y: 4 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={reduceMotion ? INSTANT_TRANSITION : { ...springs.spatialFast, delay: 0.15 }}
+                              transition={reduceMotion ? tweens.none : { ...springs.spatialFast, delay: 0.15 }}
                             onClick={() => {
                               setChatOnTop(false);
                               if (target === "profile") {
                                 openProfile();
                               } else if (target === "projects") {
-                                setShowProfile(false);
                                 document.getElementById("work")?.scrollIntoView({
                                   behavior: reduceMotion ? "auto" : "smooth",
                                   block: "center",
@@ -1194,7 +1043,6 @@ export default function Home() {
                               } else if (target.comingSoon) {
                                 setProjectNotice(target.unavailableMessage ?? `${target.title} is not ready yet.`);
                               } else {
-                                setShowProfile(false);
                                 openProjectFromChat(target);
                               }
                             }}
@@ -1215,7 +1063,7 @@ export default function Home() {
                             type="button"
                             initial={reduceMotion ? false : { opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={reduceMotion ? INSTANT_TRANSITION : { ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
+                            transition={reduceMotion ? tweens.none : { ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={reduceMotion ? undefined : { scale: 0.96 }}
                             onClick={() => handleMessage(f)}
                             className="inline-flex items-center rounded-[var(--md-shape-sm)] bg-surface-container-high px-3 py-2 text-xs font-normal text-on-surface transition-colors hover:bg-outline-variant"
@@ -1234,7 +1082,7 @@ export default function Home() {
                 <motion.div
                   initial={reduceMotion ? false : { opacity: 0, y: 18, scale: 0.97 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={reduceMotion ? INSTANT_TRANSITION : springs.spatialFast}
+                  transition={reduceMotion ? tweens.none : springs.spatialFast}
                   className="flex justify-start"
                 >
                   <div className="rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3">
@@ -1243,7 +1091,7 @@ export default function Home() {
                         <motion.div
                           key={d}
                           animate={reduceMotion ? { opacity: 1 } : { opacity: [0.3, 1, 0.3] }}
-                          transition={reduceMotion ? INSTANT_TRANSITION : { duration: 1.4, repeat: Infinity, delay: d }}
+                          transition={reduceMotion ? tweens.none : { duration: motionDurations.ambient, repeat: Infinity, delay: d }}
                           className="h-1.5 w-1.5 rounded-full bg-on-surface"
                         />
                       ))}
@@ -1256,14 +1104,12 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Floating Input appears only when chat or profile is active. Project detail uses a LinkedIn-only action. */}
-      {(hasStarted || showProfile) && (
+      {/* Floating Input appears only when chat is active. Project detail uses a LinkedIn-only action. */}
+      {hasStarted && (
         <ChatInput
           onSend={handleMessage}
           hasStarted={hasStarted}
-          connectorKind={showProfile ? "profile" : hasStarted ? "chat" : null}
-          connectorSrc={showProfile ? "/profile-photo.jpg" : undefined}
-          onClose={showProfile ? closeOverlay : undefined}
+          connectorKind="chat"
           onFocusInput={reopenChat}
           introReady={introReady}
         />

@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Github, Linkedin } from "lucide-react";
-import { springs } from "@/lib/material/motion";
+import { springs, tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 
 /**
@@ -58,7 +58,6 @@ const reveal = {
   viewport: { once: true, margin: "-80px" },
   transition: springs.spatialDefault,
 } as const;
-const instantTransition = { duration: 0 } as const;
 
 // Translucent glass so components read as floating over the blurred backdrop
 // rather than sitting on a solid panel.
@@ -121,7 +120,7 @@ function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "
 
 function getSectionMotion(reduceMotion: boolean) {
   return reduceMotion
-    ? { initial: false, animate: { opacity: 1, y: 0 }, transition: instantTransition }
+    ? { initial: false, animate: { opacity: 1, y: 0 }, transition: tweens.none }
     : reveal;
 }
 
@@ -265,7 +264,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
               <motion.div
                 key={f.title}
                 {...(reduceMotion
-                  ? { initial: false, animate: { opacity: 1, y: 0 }, transition: instantTransition }
+                  ? { initial: false, animate: { opacity: 1, y: 0 }, transition: tweens.none }
                   : {
                       initial: { opacity: 0, y: 20 },
                       whileInView: { opacity: 1, y: 0 },
@@ -447,7 +446,9 @@ function AskRow({
           >
             {q}
             <ArrowUpRight className={`w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface ${
-              reduceMotion ? "transition-colors" : "transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              reduceMotion
+                ? "transition-colors duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)]"
+                : "transition-[color,transform] duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
             }`} />
           </button>
         ))}

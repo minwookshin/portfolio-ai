@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { springs } from "@/lib/material/motion";
+import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { ArrowLeft as ArrowBackIcon } from "lucide-react";
 import { Project } from "./ProjectCard";
 import { CaseStudy } from "./detail/CaseStudy";
@@ -155,7 +155,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
       if (target) {
         target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
         target.classList.add("section-flash");
-        setTimeout(() => target.classList.remove("section-flash"), 2400);
+        setTimeout(() => target.classList.remove("section-flash"), motionDurations.flash * 1000);
       }
     }, 480);
     return () => clearTimeout(timer);
@@ -171,14 +171,14 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
       initial={reduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={reduceMotion ? { duration: 0 } : { duration: 0.2 }}
+      transition={reduceMotion ? tweens.none : tweens.fast}
       className="mb-[var(--space-6)]"
     >
       {!hideBack && onBack && (
         <motion.button
           onClick={onBack}
           whileHover={reduceMotion ? undefined : { x: -4 }}
-          transition={reduceMotion ? { duration: 0 } : springs.spatialFast}
+          transition={reduceMotion ? tweens.none : springs.spatialFast}
           className="mb-[var(--space-4)] flex items-center gap-[var(--space-1)] text-on-surface-variant transition-colors hover:text-on-surface"
         >
           <ArrowBackIcon className="w-4 h-4" />

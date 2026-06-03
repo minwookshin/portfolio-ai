@@ -3,8 +3,8 @@
 ## Source of truth
 - Status: Active
 - Last refreshed: 2026-06-01
-- Primary product surfaces: portfolio homepage, selected-work browsing, project detail sheets, profile/contact sheet, AI assistant input.
-- Evidence reviewed: `app/page.tsx`, `app/globals.css`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/material/ProjectField.tsx`, `components/detail/CaseStudy.tsx`, `public/projects/**`, Marvin Schwaibold reference site.
+- Primary product surfaces: portfolio homepage, selected-work browsing, project detail sheets, main-page profile/contact block, AI assistant input.
+- Evidence reviewed: `app/page.tsx`, `app/globals.css`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/detail/CaseStudy.tsx`, `public/projects/**`, Marvin Schwaibold reference site.
 
 ## Brand
 - Personality: quiet, editorial, precise, technical, image-led, confident without marketing noise.
@@ -23,7 +23,7 @@
 
 ## Information architecture
 - Primary navigation: minimal header identity plus scrollable content; fixed assistant controls at the bottom.
-- Core routes/screens: home, project sheet, profile sheet, chat overlay.
+- Core routes/screens: home, project sheet, main-page profile/contact block, chat overlay.
 - Content hierarchy: identity statement, selected work, studio/profile pitch, lab/archive, footer/contact.
 
 ## Design principles
@@ -40,9 +40,9 @@
 - Imagery/iconography: large project screenshots/videos first; icons are supporting identity marks.
 
 ## Components
-- Existing components to reuse: `ChatInput`, `ProjectDetailView`, `ProfileCard`, material buttons/icons, project data in `app/page.tsx`.
+- Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `app/page.tsx`.
 - New/changed components: editorial project cards, selected-work carousel/grid, lab/archive section, sheet-style overlays.
-- Variants and states: selected work, archived/lab work, coming-soon project notice, profile/contact state, chat-on-top state.
+- Variants and states: selected work, archived/lab work, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 
 ## Accessibility
@@ -61,7 +61,7 @@
 - Loading: existing intro and chat streaming states stay subtle.
 - Empty: home still shows selected work without chat.
 - Error: chat retains existing error message.
-- Success: project/profile sheets open with clear context and dismiss controls.
+- Success: project sheets open with clear context and dismiss controls; profile/contact details stay available on the main page.
 - Disabled: coming-soon Atlas announces unavailable state.
 - Offline/slow network, if applicable: image/video loading should degrade to static project text.
 
