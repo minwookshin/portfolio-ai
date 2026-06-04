@@ -441,14 +441,14 @@ function LabPanel() {
       <p className="max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
         Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
       </p>
-      <HomeSectionMeta />
       <LabArchiveGrid className="relative left-1/2 mt-[var(--space-5)] w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]" />
+      <HomeSectionMeta className="relative left-1/2 w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]" />
     </div>
   );
 }
 
-function HomeSectionMeta() {
-  return <BuildMeta className="mt-[calc(var(--space-4)*2)] text-[length:var(--type--1)]" />;
+function HomeSectionMeta({ className = "" }: { className?: string }) {
+  return <BuildMeta className={`mt-[calc(var(--space-4)*2)] text-[length:var(--type-0)] ${className}`} />;
 }
 
 function HomeExploreSection({
