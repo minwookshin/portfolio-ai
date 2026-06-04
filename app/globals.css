@@ -297,7 +297,8 @@ body::after {
     color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-.home-tab-button {
+.home-tab-button,
+.intro-contact-link {
   color: var(--text-muted);
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
@@ -312,7 +313,9 @@ body::after {
 
 .home-tab-button:hover,
 .home-tab-button:focus-visible,
-.home-tab-button[data-active="true"] {
+.home-tab-button[data-active="true"],
+.intro-contact-link:hover,
+.intro-contact-link:focus-visible {
   color: var(--text-primary);
   background-size: 100% 1px;
 }
@@ -671,6 +674,7 @@ body::after {
   .micro-link,
   .micro-richtext :is(a),
   .home-tab-button,
+  .intro-contact-link,
   .micro-pressable,
   .micro-card,
   .micro-field,

@@ -180,7 +180,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="micro-focus micro-pressable text-[length:var(--type-0)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+      className="intro-contact-link micro-focus micro-pressable text-[length:var(--type-0)]"
     >
       {children}
     </a>
