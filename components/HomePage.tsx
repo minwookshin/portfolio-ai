@@ -8,6 +8,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
+import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
 import HoverVideoPreview, { useHoverVideoPreview } from "@/components/HoverVideoPreview";
 import type { Project } from "@/components/ProjectCard";
@@ -524,6 +525,21 @@ function HomeLabBentoTile({
 function LabPanel({ projects }: { projects: Project[] }) {
   return (
     <div className="pt-1">
+      <div className="mb-[var(--space-2)]">
+        <p className="max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+          Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
+        </p>
+        <div className="mt-[var(--space-1)] flex flex-wrap items-center gap-x-3 gap-y-1">
+          <Link
+            href="/lab"
+            className="micro-link micro-focus inline-flex items-center gap-1 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+          >
+            <span>full lab / archive</span>
+            <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+          </Link>
+          <BuildMeta className="text-[length:var(--type--1)]" />
+        </div>
+      </div>
       <ul className="grid grid-cols-2 gap-[var(--space-2)]">
         {projects.map((project, index) => (
           <HomeLabBentoTile
@@ -533,15 +549,6 @@ function LabPanel({ projects }: { projects: Project[] }) {
             className={HOME_LAB_TILE_CLASSES[index % HOME_LAB_TILE_CLASSES.length]}
           />
         ))}
-        <li className="col-span-2 min-h-12 list-none">
-          <Link
-            href="/lab"
-            className="micro-focus micro-pressable flex h-full min-h-12 items-center justify-between rounded-[var(--md-shape-lg)] border border-[var(--border-light)] px-3 text-[length:var(--type-0)] leading-[var(--leading-tight)] text-[var(--text-muted)] hover:border-[var(--text-primary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-          >
-            <span>full lab / archive</span>
-            <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
-          </Link>
-        </li>
       </ul>
     </div>
   );
