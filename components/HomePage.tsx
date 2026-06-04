@@ -723,7 +723,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
           />
         </div>
       </motion.div>
-      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] px-[var(--space-3)] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:px-[var(--space-5)]" />
+      <BuildMeta className="mx-auto mt-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[620px] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:w-[calc(100%_-_(var(--space-5)*2))]" />
 
       <AnimatePresence>
         {projectNotice && (
