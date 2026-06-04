@@ -210,7 +210,7 @@ function ProjectTextRow({
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
   const rowClass =
-    "micro-focus micro-pressable relative z-10 inline-flex min-h-8 max-w-full items-baseline gap-[var(--space-1)] rounded-[var(--md-shape-lg)] px-2 py-0.5 text-left";
+    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full items-center gap-[var(--space-1)] rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
     "font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]",
     project.comingSoon ? "" : "project-row-title-line",
