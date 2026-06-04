@@ -373,20 +373,17 @@ function WorkSection({
       </div>
       {canShowFixedPreview && (
         <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden md:block">
-          <AnimatePresence>
-            {previewProject && (
-              <motion.div
-                key={previewProject.id}
-                className="h-fit w-[min(34vw,360px)] transform-gpu"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
-                animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
-                transition={reduceMotion ? tweens.instant : { type: "spring", duration: 0.6, bounce: 0 }}
-              >
-                <WorkFixedPreview project={previewProject} reduceMotion={reduceMotion} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {previewProject && (
+            <motion.div
+              key={previewProject.id}
+              className="h-fit w-[min(34vw,360px)] transform-gpu"
+              initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
+              animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+              transition={reduceMotion ? tweens.instant : { type: "spring", duration: 0.6, bounce: 0 }}
+            >
+              <WorkFixedPreview project={previewProject} reduceMotion={reduceMotion} />
+            </motion.div>
+          )}
         </div>
       )}
     </div>
