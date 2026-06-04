@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ArrowUpRight } from "lucide-react";
+import BuildMeta from "@/components/BuildMeta";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import { getRelatedWorkLinks, getWritingPost, getWritingPosts } from "@/lib/writing";
 
@@ -67,7 +68,7 @@ export default async function WritingPostPage({ params }: WritingPostPageProps) 
   const relatedWork = getRelatedWorkLinks(post);
 
   return (
-    <main className="site-lowercase min-h-screen bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
+    <main className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
       <article className="mx-auto w-full max-w-[620px]">
         <nav className="mb-[var(--space-5)] flex items-center justify-between gap-[var(--space-2)] leading-[var(--leading-body)]">
           <span className="flex min-w-0 items-center gap-[var(--space-1)]">
@@ -117,6 +118,7 @@ export default async function WritingPostPage({ params }: WritingPostPageProps) 
           <MDXRemote source={post.content} components={mdxComponents} />
         </div>
       </article>
+      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

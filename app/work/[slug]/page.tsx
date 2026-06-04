@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
+import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug, getProjectMetadataDescription } from "@/data/projects";
 import { getWritingPostsForWork } from "@/lib/writing";
@@ -84,7 +85,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
   return (
     <main
       style={LIGHT_PROJECT_TOKENS}
-      className="site-lowercase min-h-screen bg-surface px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-on-surface sm:px-[var(--space-5)] md:pt-[122px]"
+      className="site-lowercase flex min-h-dvh flex-col bg-surface px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-on-surface sm:px-[var(--space-5)] md:pt-[122px]"
     >
       <div className="mx-auto w-full max-w-[620px]">
         <ProjectCaseStudyShell
@@ -94,6 +95,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
         />
         <RelatedWriting posts={relatedWriting} />
       </div>
+      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

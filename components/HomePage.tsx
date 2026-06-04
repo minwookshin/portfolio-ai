@@ -446,10 +446,6 @@ function LabPanel() {
   );
 }
 
-function HomeSectionMeta() {
-  return <BuildMeta className="mt-[calc(var(--space-4)*2)] text-[length:var(--type-0)]" />;
-}
-
 function HomeExploreSection({
   projects,
   writingPosts,
@@ -462,7 +458,7 @@ function HomeExploreSection({
   const activeTabLabel = HOME_TABS.find((tab) => tab.id === activeTab)?.label ?? "work";
 
   return (
-    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
+    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
         <div
           aria-label="home sections"
@@ -515,7 +511,6 @@ function HomeExploreSection({
               {activeTab === "lab" && <LabPanel />}
             </motion.div>
           </AnimatePresence>
-          <HomeSectionMeta />
           <span className="sr-only">{activeTabLabel} selected</span>
         </div>
       </div>
@@ -682,7 +677,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
 
   return (
     <main
-      className="site-lowercase min-h-screen overflow-x-hidden bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]"
+      className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
@@ -718,6 +713,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
         initial={reduceMotion ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: introReady ? 1 : 0, y: reduceMotion ? 0 : introReady ? 0 : 8 }}
         transition={reduceMotion ? tweens.none : tweens.slower}
+        className="flex-1"
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
@@ -727,6 +723,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
           />
         </div>
       </motion.div>
+      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] px-[var(--space-3)] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:px-[var(--space-5)]" />
 
       <AnimatePresence>
         {projectNotice && (

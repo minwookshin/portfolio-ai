@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BuildMeta from "@/components/BuildMeta";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import { getWritingPosts } from "@/lib/writing";
 
@@ -27,7 +28,7 @@ export default function WritingPage() {
   const posts = getWritingPosts();
 
   return (
-    <main className="site-lowercase min-h-screen bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
+    <main className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
       <div className="mx-auto w-full max-w-[620px]">
         <nav className="mb-[var(--space-5)] flex items-center justify-between gap-[var(--space-2)] leading-[var(--leading-body)]">
           <Link href="/" className="micro-link micro-focus text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]">
@@ -63,6 +64,7 @@ export default function WritingPage() {
           ))}
         </ul>
       </div>
+      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

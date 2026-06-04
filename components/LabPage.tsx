@@ -6,7 +6,7 @@ import LabArchiveGrid from "@/components/LabArchiveGrid";
 
 export default function LabPage() {
   return (
-    <main className="site-lowercase min-h-screen bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
+    <main className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
       <div className="mx-auto w-full max-w-[1180px]">
         <div className="mx-auto w-full max-w-[620px]">
           <nav className="mb-[var(--space-5)] flex items-center justify-between gap-[var(--space-2)] leading-[var(--leading-body)]">
@@ -23,12 +23,12 @@ export default function LabPage() {
             <p className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
               Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
             </p>
-            <BuildMeta className="mt-[var(--space-1)]" />
           </header>
         </div>
 
         <LabArchiveGrid className="mx-auto mt-[var(--space-5)] w-full max-w-[980px]" />
       </div>
+      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }
