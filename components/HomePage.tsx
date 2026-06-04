@@ -210,7 +210,7 @@ function ProjectTextRow({
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
   const rowClass =
-    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full items-center gap-[var(--space-1)] rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
+    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
     "font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]",
     project.comingSoon ? "" : "project-row-title-line",
@@ -219,12 +219,11 @@ function ProjectTextRow({
     .join(" ");
   const rowText = (
     <>
-      <span className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0">
+      <span className="flex min-w-0 flex-col items-start gap-0.5">
         <span className={titleClass}>
           {project.title}
         </span>
-        <span aria-hidden="true" className="text-[var(--text-muted)]">—</span>
-        <span className="min-w-0 leading-[var(--leading-tight)] text-[var(--text-muted)]">
+        <span className="min-w-0 text-[length:calc(var(--type-0)_-_4px)] leading-[1.2] text-[var(--text-muted)]">
           {descriptor}
         </span>
       </span>
