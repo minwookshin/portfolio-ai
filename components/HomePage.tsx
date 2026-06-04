@@ -9,6 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
+import HoverVideoPreview, { useHoverVideoPreview } from "@/components/HoverVideoPreview";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -37,6 +38,14 @@ const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
 ];
 
 const HOME_LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
+
+const HOME_LAB_TILE_CLASSES = [
+  "col-span-2 min-h-[178px]",
+  "min-h-[132px]",
+  "min-h-[132px]",
+  "min-h-[132px]",
+  "min-h-[132px]",
+] as const;
 
 function useCanShowWorkPreview() {
   const [canShow, setCanShow] = useState(false);
@@ -425,24 +434,102 @@ function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
   );
 }
 
+function HomeLabBentoTile({
+  className = "",
+  index,
+  project,
+}: {
+  className?: string;
+  index: number;
+  project: Project;
+}) {
+  const reduceMotion = Boolean(useReducedMotion());
+  const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+  const previewState = useHoverVideoPreview({ videoSrc: previewVideo });
+  const src = project.image ?? project.icon;
+  const poster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
+
+  return (
+    <motion.li
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
+      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
+      transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
+      className={`list-none ${className}`}
+    >
+      <Link
+        {...previewState.previewHandlers}
+        href={getProjectPath(project)}
+        scroll={false}
+        onClick={saveProjectOpenScroll}
+        data-cursor="view"
+        aria-label={`Open ${project.title}`}
+        className="micro-focus micro-pressable group relative flex h-full w-full min-w-0 overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left"
+      >
+        <span className="absolute inset-0 overflow-hidden">
+          {src ? (
+            <BlurImage
+              src={src}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 92vw, 300px"
+              draggable={false}
+              className={`object-cover grayscale ${
+                reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035] group-focus-within:scale-[1.035]"
+              }`}
+            />
+          ) : (
+            <span className="absolute inset-0 flex items-center justify-center bg-[var(--bg-element)] text-[length:var(--type-2)] text-[var(--text-primary)]">
+              {project.glyph ?? project.title.charAt(0)}
+            </span>
+          )}
+          <HoverVideoPreview
+            canPlayVideo={previewState.canPlayVideo}
+            isAlwaysOn={previewState.isAlwaysOn}
+            videoSrc={previewVideo}
+            poster={poster}
+            preload="none"
+            reduceMotion={previewState.reduceMotion}
+            videoRef={previewState.videoRef}
+          />
+          <span className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
+        </span>
+        <span className="relative z-10 mt-auto flex w-full items-end justify-between gap-3 p-3">
+          <span className="min-w-0">
+            <span className="block truncate text-[length:var(--type-0)] font-normal leading-[var(--leading-tight)] text-white">
+              {project.title}
+            </span>
+            <span className="mt-1 block line-clamp-2 text-[length:var(--type--1)] leading-[var(--leading-tight)] text-white/70">
+              {project.studioLabel ?? project.description}
+            </span>
+          </span>
+          <ArrowUpRight className="h-4 w-4 shrink-0 text-white" strokeWidth={2} />
+        </span>
+      </Link>
+    </motion.li>
+  );
+}
+
 function LabPanel({ projects }: { projects: Project[] }) {
   return (
-    <div>
-      <ul className="space-y-1">
+    <div className="pt-1">
+      <ul className="grid grid-cols-2 gap-[var(--space-2)]">
         {projects.map((project, index) => (
-          <ProjectTextRow
+          <HomeLabBentoTile
             key={project.id}
             project={project}
             index={index}
-            list="lab"
+            className={HOME_LAB_TILE_CLASSES[index % HOME_LAB_TILE_CLASSES.length]}
           />
         ))}
-        <li className="-mx-2 list-none">
+        <li className="col-span-2 min-h-12 list-none">
           <Link
             href="/lab"
-            className="micro-link micro-focus inline-flex px-2 py-0.5 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+            className="micro-focus micro-pressable flex h-full min-h-12 items-center justify-between rounded-[var(--md-shape-lg)] border border-[var(--border-light)] px-3 text-[length:var(--type-0)] leading-[var(--leading-tight)] text-[var(--text-muted)] hover:border-[var(--text-primary)] hover:text-[var(--text-primary)] focus-visible:border-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
           >
-            full lab / archive
+            <span>full lab / archive</span>
+            <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
           </Link>
         </li>
       </ul>
