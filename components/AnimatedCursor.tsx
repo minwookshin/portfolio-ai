@@ -244,19 +244,19 @@ export default function AnimatedCursor() {
         const normalizedY = pointerY * 2 - 1;
         const aspect = Math.max(1, width / Math.max(1, height));
 
-        targetRotateX.set(-normalizedY * Math.min(2.7, 0.95 + aspect * 0.2));
-        targetRotateY.set(normalizedX * 1.28);
-        targetShiftX.set(13 * easeOutSigned(normalizedX, 2));
-        targetShiftY.set(9 * easeOutSigned(normalizedY, 2));
-        targetOriginX.set(14 + pointerX * 72);
-        targetOriginY.set(14 + pointerY * 72);
-        targetShineX.set(18 + pointerX * 64);
-        targetShineY.set(8 + pointerY * 54);
+        targetRotateX.set(-normalizedY * Math.min(1.35, 0.5 + aspect * 0.1));
+        targetRotateY.set(normalizedX * 0.58);
+        targetShiftX.set(4 * easeOutSigned(normalizedX, 2));
+        targetShiftY.set(3 * easeOutSigned(normalizedY, 2));
+        targetOriginX.set(30 + pointerX * 40);
+        targetOriginY.set(30 + pointerY * 40);
+        targetShineX.set(34 + pointerX * 32);
+        targetShineY.set(24 + pointerY * 28);
       }
 
       if (isFreshTarget) {
         if (revealFrameRef.current !== null) cancelAnimationFrame(revealFrameRef.current);
-        targetScale.set(0.66);
+        targetScale.set(0.82);
         revealFrameRef.current = requestAnimationFrame(() => {
           revealFrameRef.current = null;
           targetScale.set(1);
