@@ -118,18 +118,20 @@ export default function AnimatedCursor() {
   const targetShiftY = useMotionValue(0);
   const targetOriginX = useMotionValue(50);
   const targetOriginY = useMotionValue(50);
-  const targetXSpring = useSpring(targetX, { stiffness: 430, damping: 30, mass: 0.26 });
-  const targetYSpring = useSpring(targetY, { stiffness: 430, damping: 30, mass: 0.26 });
-  const targetWidthSpring = useSpring(targetWidth, { stiffness: 420, damping: 28, mass: 0.28 });
-  const targetHeightSpring = useSpring(targetHeight, { stiffness: 420, damping: 28, mass: 0.28 });
-  const targetRadiusSpring = useSpring(targetRadius, { stiffness: 420, damping: 30, mass: 0.24 });
-  const targetRotateXSpring = useSpring(targetRotateX, { stiffness: 360, damping: 28, mass: 0.25 });
-  const targetRotateYSpring = useSpring(targetRotateY, { stiffness: 360, damping: 28, mass: 0.25 });
-  const targetShiftXSpring = useSpring(targetShiftX, { stiffness: 360, damping: 27, mass: 0.28 });
-  const targetShiftYSpring = useSpring(targetShiftY, { stiffness: 360, damping: 27, mass: 0.28 });
-  const targetOriginXSpring = useSpring(targetOriginX, { stiffness: 500, damping: 42, mass: 0.18 });
-  const targetOriginYSpring = useSpring(targetOriginY, { stiffness: 500, damping: 42, mass: 0.18 });
-  const targetHaloTransform = useMotionTemplate`perspective(1400px) translate3d(${targetXSpring}px, ${targetYSpring}px, 0) translate3d(${targetShiftXSpring}px, ${targetShiftYSpring}px, 0) rotateX(${targetRotateXSpring}deg) rotateY(${targetRotateYSpring}deg)`;
+  const targetScale = useMotionValue(0.86);
+  const targetXSpring = useSpring(targetX, { stiffness: 500, damping: 26, mass: 0.3 });
+  const targetYSpring = useSpring(targetY, { stiffness: 500, damping: 26, mass: 0.3 });
+  const targetWidthSpring = useSpring(targetWidth, { stiffness: 380, damping: 22, mass: 0.34 });
+  const targetHeightSpring = useSpring(targetHeight, { stiffness: 380, damping: 22, mass: 0.34 });
+  const targetRadiusSpring = useSpring(targetRadius, { stiffness: 360, damping: 23, mass: 0.28 });
+  const targetRotateXSpring = useSpring(targetRotateX, { stiffness: 330, damping: 20, mass: 0.28 });
+  const targetRotateYSpring = useSpring(targetRotateY, { stiffness: 330, damping: 20, mass: 0.28 });
+  const targetShiftXSpring = useSpring(targetShiftX, { stiffness: 330, damping: 21, mass: 0.32 });
+  const targetShiftYSpring = useSpring(targetShiftY, { stiffness: 330, damping: 21, mass: 0.32 });
+  const targetOriginXSpring = useSpring(targetOriginX, { stiffness: 620, damping: 36, mass: 0.16 });
+  const targetOriginYSpring = useSpring(targetOriginY, { stiffness: 620, damping: 36, mass: 0.16 });
+  const targetScaleSpring = useSpring(targetScale, { stiffness: 430, damping: 20, mass: 0.28 });
+  const targetHaloTransform = useMotionTemplate`perspective(1400px) translate3d(${targetXSpring}px, ${targetYSpring}px, 0) translate3d(${targetShiftXSpring}px, ${targetShiftYSpring}px, 0) rotateX(${targetRotateXSpring}deg) rotateY(${targetRotateYSpring}deg) scale(${targetScaleSpring})`;
   const targetTransformOrigin = useMotionTemplate`${targetOriginXSpring}% ${targetOriginYSpring}%`;
   const [cursorState, setCursorState] = useState<CursorState>({ mode: "idle", tone: "dark" });
   const [targetHaloState, setTargetHaloState] = useState<TargetHaloState>({
@@ -140,6 +142,7 @@ export default function AnimatedCursor() {
   const cursorStateRef = useRef(cursorState);
   const targetHaloStateRef = useRef(targetHaloState);
   const activeTargetRef = useRef<HTMLElement | null>(null);
+  const revealFrameRef = useRef<number | null>(null);
   const visibleRef = useRef(false);
   const canUseCursor = hasFinePointer && !reduceMotion;
 
@@ -165,6 +168,7 @@ export default function AnimatedCursor() {
       targetShiftY.set(0);
       targetOriginX.set(50);
       targetOriginY.set(50);
+      targetScale.set(0.86);
     };
 
     const syncTargetHalo = (
@@ -180,6 +184,7 @@ export default function AnimatedCursor() {
         return;
       }
 
+      const isFreshTarget = activeTargetRef.current !== target || !targetHaloStateRef.current.visible;
       const width = rect.width + targetHaloPadding * 2;
       const height = rect.height + targetHaloPadding * 2;
       targetX.set(rect.left - targetHaloPadding);
@@ -197,16 +202,31 @@ export default function AnimatedCursor() {
         const normalizedY = pointerY * 2 - 1;
         const aspect = Math.max(1, rect.width / Math.max(1, rect.height));
 
-        targetRotateX.set(-normalizedY * Math.min(2.2, 0.8 + aspect * 0.16));
-        targetRotateY.set(normalizedX * 1.05);
-        targetShiftX.set(10 * easeOutSigned(normalizedX, 2));
-        targetShiftY.set(7 * easeOutSigned(normalizedY, 2));
-        targetOriginX.set(30 + pointerX * 40);
-        targetOriginY.set(30 + pointerY * 40);
+        targetRotateX.set(-normalizedY * Math.min(2.7, 0.95 + aspect * 0.2));
+        targetRotateY.set(normalizedX * 1.28);
+        targetShiftX.set(13 * easeOutSigned(normalizedX, 2));
+        targetShiftY.set(9 * easeOutSigned(normalizedY, 2));
+        targetOriginX.set(14 + pointerX * 72);
+        targetOriginY.set(14 + pointerY * 72);
+      }
+
+      if (isFreshTarget) {
+        if (revealFrameRef.current !== null) cancelAnimationFrame(revealFrameRef.current);
+        targetScale.set(0.66);
+        revealFrameRef.current = requestAnimationFrame(() => {
+          revealFrameRef.current = null;
+          targetScale.set(1);
+        });
+      } else {
+        targetScale.set(1);
       }
     };
 
     const hideTargetHalo = () => {
+      if (revealFrameRef.current !== null) {
+        cancelAnimationFrame(revealFrameRef.current);
+        revealFrameRef.current = null;
+      }
       activeTargetRef.current = null;
       setTargetHalo({ tone: targetHaloStateRef.current.tone, visible: false });
       resetTargetTilt();
@@ -266,6 +286,7 @@ export default function AnimatedCursor() {
       window.removeEventListener("blur", hide);
       window.removeEventListener("scroll", refreshTargetHalo, true);
       window.removeEventListener("resize", refreshTargetHalo);
+      if (revealFrameRef.current !== null) cancelAnimationFrame(revealFrameRef.current);
     };
   }, [
     canUseCursor,
@@ -277,6 +298,7 @@ export default function AnimatedCursor() {
     targetRadius,
     targetRotateX,
     targetRotateY,
+    targetScale,
     targetShiftX,
     targetShiftY,
     targetWidth,
