@@ -6,9 +6,10 @@ import {
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
+  useSpring,
 } from "framer-motion";
 
-type CursorMode = "dot" | "interactive" | "close";
+type CursorMode = "idle" | "interactive" | "close";
 type CursorTone = "dark" | "light";
 type CursorState = { mode: CursorMode; tone: CursorTone };
 
@@ -48,7 +49,7 @@ function getCursorTone(target: Element): CursorTone {
 }
 
 function getCursorState(target: EventTarget | null): CursorState {
-  if (!(target instanceof Element)) return { mode: "dot", tone: "dark" };
+  if (!(target instanceof Element)) return { mode: "idle", tone: "dark" };
 
   const closeZone = target.closest(".project-lightbox-close-zone");
   const closeContent = target.closest(".project-lightbox-content");
@@ -67,7 +68,7 @@ function getCursorState(target: EventTarget | null): CursorState {
   }
 
   const interactive = target.closest(interactiveSelector);
-  return { mode: interactive ? "interactive" : "dot", tone };
+  return { mode: interactive ? "interactive" : "idle", tone };
 }
 
 export default function AnimatedCursor() {
@@ -79,8 +80,11 @@ export default function AnimatedCursor() {
   );
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
-  const transform = useMotionTemplate`translate3d(${rawX}px, ${rawY}px, 0) translate(-50%, -50%)`;
-  const [cursorState, setCursorState] = useState<CursorState>({ mode: "dot", tone: "dark" });
+  const haloX = useSpring(rawX, { stiffness: 520, damping: 38, mass: 0.22 });
+  const haloY = useSpring(rawY, { stiffness: 520, damping: 38, mass: 0.22 });
+  const pointerTransform = useMotionTemplate`translate3d(${rawX}px, ${rawY}px, 0)`;
+  const haloTransform = useMotionTemplate`translate3d(${haloX}px, ${haloY}px, 0) translate(-50%, -50%)`;
+  const [cursorState, setCursorState] = useState<CursorState>({ mode: "idle", tone: "dark" });
   const [visible, setVisible] = useState(false);
   const cursorStateRef = useRef(cursorState);
   const visibleRef = useRef(false);
@@ -130,17 +134,25 @@ export default function AnimatedCursor() {
   if (!canUseCursor) return null;
 
   return (
-    <motion.div
-      aria-hidden="true"
-      className={`animated-cursor animated-cursor--${cursorState.mode} animated-cursor--${cursorState.tone} ${
-        visible ? "is-visible" : ""
-      }`}
-      style={{ transform }}
-    >
-      <span className="animated-cursor__frame" />
-      <span className="animated-cursor__core" />
-      <span className="animated-cursor__x animated-cursor__x--a" />
-      <span className="animated-cursor__x animated-cursor__x--b" />
-    </motion.div>
+    <>
+      <motion.div
+        aria-hidden="true"
+        className={`animated-cursor animated-cursor--${cursorState.mode} animated-cursor--${cursorState.tone} ${
+          visible ? "is-visible" : ""
+        }`}
+        style={{ transform: haloTransform }}
+      >
+        <span className="animated-cursor__halo" />
+      </motion.div>
+      <motion.div
+        aria-hidden="true"
+        className={`animated-cursor-pointer animated-cursor-pointer--${cursorState.mode} animated-cursor-pointer--${cursorState.tone} ${
+          visible ? "is-visible" : ""
+        }`}
+        style={{ transform: pointerTransform }}
+      >
+        <span className="animated-cursor__arrow" />
+      </motion.div>
+    </>
   );
 }
