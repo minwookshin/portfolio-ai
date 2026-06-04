@@ -180,7 +180,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="micro-link micro-focus text-[length:var(--type-0)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+      className="micro-focus micro-pressable text-[length:var(--type-0)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
     >
       {children}
     </a>
@@ -310,7 +310,9 @@ function EditorialIntro() {
           <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
           {", "}
           <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
-          {", and "}
+          {", "}
+          <span className="text-[var(--text-primary)]">and</span>
+          {" "}
           <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
           {"."}
         </p>
