@@ -8,6 +8,7 @@
 
   --text-primary: #111214;
   --text-muted: #62666D;
+  --text-underline-muted: color-mix(in srgb, var(--text-muted) 52%, transparent);
   --font-sans: "Switzer", "Helvetica Neue", Arial, sans-serif;
 
   /* Embedded Dark Mode (For Project Cards/Code Blocks) */
@@ -294,7 +295,7 @@ body::after {
 .intro-contact-link {
   color: var(--text-muted);
   text-decoration-line: underline;
-  text-decoration-color: transparent;
+  text-decoration-color: var(--text-underline-muted);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
   text-decoration-skip-ink: none;
