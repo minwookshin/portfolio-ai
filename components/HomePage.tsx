@@ -373,15 +373,15 @@ function WorkSection({
       </div>
       {canShowFixedPreview && (
         <div aria-hidden="true" className="pointer-events-none fixed left-1/2 top-0 z-20 hidden h-screen w-full md:block">
-          <AnimatePresence>
+          <AnimatePresence mode="popLayout">
             {previewProject && (
               <motion.div
                 key={previewProject.id}
                 className="relative left-6 top-1/2 h-fit w-[min(34vw,360px)] -translate-y-1/2 transform-gpu lg:left-8 lg:w-[min(36vw,484px)]"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1 } : { opacity: 0, filter: "blur(6px)", scale: 0.985 }}
+                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
                 animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.99 }}
-                transition={reduceMotion ? tweens.instant : tweens.fast}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
+                transition={reduceMotion ? tweens.instant : { type: "spring", duration: 0.6, bounce: 0 }}
               >
                 <WorkFixedPreview project={previewProject} reduceMotion={reduceMotion} />
               </motion.div>
