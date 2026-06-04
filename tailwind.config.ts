@@ -43,8 +43,8 @@ const config: Config = {
         "shape-full": "var(--md-shape-full)",
       },
       fontFamily: {
-        sans: ["var(--font-google-sans)", "sans-serif"],
-        mono: ["var(--font-google-sans)", "sans-serif"],
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-sans)"],
       },
       fontSize: {
         "step--2": ["var(--type--2)", { lineHeight: "var(--leading-body)" }],

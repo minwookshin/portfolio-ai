@@ -8,6 +8,7 @@
 
   --text-primary: #111214;
   --text-muted: #62666D;
+  --font-sans: "Switzer", "Helvetica Neue", Arial, sans-serif;
 
   /* Embedded Dark Mode (For Project Cards/Code Blocks) */
   --dark-bg-base: #08090A;
@@ -115,7 +116,7 @@
 
 /* Base font */
 body {
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-sans);
   font-size: var(--type-0);
   line-height: var(--leading-body);
   letter-spacing: -0.02em;
