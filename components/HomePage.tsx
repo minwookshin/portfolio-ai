@@ -11,6 +11,7 @@ import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
 import HoverVideoPreview from "@/components/HoverVideoPreview";
+import LabArchiveGrid from "@/components/LabArchiveGrid";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -440,16 +441,8 @@ function LabPanel() {
       <p className="max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
         Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
       </p>
-      <div className="mt-[var(--space-1)] flex flex-wrap items-center gap-x-3 gap-y-1">
-        <Link
-          href="/lab"
-          className="micro-link micro-focus inline-flex items-center gap-1 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-        >
-          <span>full lab / archive</span>
-          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
-        </Link>
-        <BuildMeta className="text-[length:var(--type--1)]" />
-      </div>
+      <BuildMeta className="mt-[var(--space-1)] text-[length:var(--type--1)]" />
+      <LabArchiveGrid className="relative left-1/2 mt-[var(--space-5)] w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]" />
     </div>
   );
 }
