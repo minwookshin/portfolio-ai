@@ -311,10 +311,10 @@ function EditorialIntro() {
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
         <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</p>
         <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</p>
-        <h1 className="mt-[var(--space-3)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+        <h1 className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
           I design and build interfaces for AI-native products, from early idea to working software.
         </h1>
-        <p className="mt-[var(--space-4)] max-w-full whitespace-nowrap leading-[var(--leading-body)] text-[var(--text-muted)]">
+        <p className="mt-[var(--space-1)] max-w-full whitespace-nowrap leading-[var(--leading-body)] text-[var(--text-muted)]">
           <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>Email</IntroLink>
           {", "}
           <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
