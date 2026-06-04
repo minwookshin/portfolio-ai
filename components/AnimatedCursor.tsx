@@ -6,7 +6,6 @@ import {
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
-  useSpring,
 } from "framer-motion";
 
 type CursorMode = "idle" | "interactive" | "close";
@@ -80,10 +79,7 @@ export default function AnimatedCursor() {
   );
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
-  const haloX = useSpring(rawX, { stiffness: 520, damping: 38, mass: 0.22 });
-  const haloY = useSpring(rawY, { stiffness: 520, damping: 38, mass: 0.22 });
   const pointerTransform = useMotionTemplate`translate3d(${rawX}px, ${rawY}px, 0)`;
-  const haloTransform = useMotionTemplate`translate3d(${haloX}px, ${haloY}px, 0) translate(-50%, -50%)`;
   const [cursorState, setCursorState] = useState<CursorState>({ mode: "idle", tone: "dark" });
   const [visible, setVisible] = useState(false);
   const cursorStateRef = useRef(cursorState);
@@ -134,27 +130,16 @@ export default function AnimatedCursor() {
   if (!canUseCursor) return null;
 
   return (
-    <>
-      <motion.div
-        aria-hidden="true"
-        className={`animated-cursor animated-cursor--${cursorState.mode} animated-cursor--${cursorState.tone} ${
-          visible ? "is-visible" : ""
-        }`}
-        style={{ transform: haloTransform }}
-      >
-        <span className="animated-cursor__halo" />
-      </motion.div>
-      <motion.div
-        aria-hidden="true"
-        className={`animated-cursor-pointer animated-cursor-pointer--${cursorState.mode} animated-cursor-pointer--${cursorState.tone} ${
-          visible ? "is-visible" : ""
-        }`}
-        style={{ transform: pointerTransform }}
-      >
-        <svg className="animated-cursor__arrow" viewBox="0 0 18 22">
-          <path d="M2.45 1.18C1.62 0.61 0.55 1.21 0.55 2.24v15.49c0 1.06 1.28 1.6 2.04 0.85l3.92-3.86 2.52 5.73c0.31 0.71 1.14 1.03 1.85 0.72l2.19-0.96c0.71-0.31 1.03-1.14 0.72-1.85l-2.48-5.66h5.03c1.2 0 1.7-1.53 0.74-2.25L2.45 1.18Z" />
-        </svg>
-      </motion.div>
-    </>
+    <motion.div
+      aria-hidden="true"
+      className={`animated-cursor-pointer animated-cursor-pointer--${cursorState.mode} animated-cursor-pointer--${cursorState.tone} ${
+        visible ? "is-visible" : ""
+      }`}
+      style={{ transform: pointerTransform }}
+    >
+      <svg className="animated-cursor__arrow" viewBox="0 0 18 22">
+        <path d="M2.45 1.18C1.62 0.61 0.55 1.21 0.55 2.24v15.49c0 1.06 1.28 1.6 2.04 0.85l3.92-3.86 2.52 5.73c0.31 0.71 1.14 1.03 1.85 0.72l2.19-0.96c0.71-0.31 1.03-1.14 0.72-1.85l-2.48-5.66h5.03c1.2 0 1.7-1.53 0.74-2.25L2.45 1.18Z" />
+      </svg>
+    </motion.div>
   );
 }
