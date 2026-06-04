@@ -33,6 +33,15 @@ const explicitCursorModes: Record<string, CursorMode> = {
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
 const targetHaloPadding = 6;
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function easeOutSigned(value: number, power = 2) {
+  const clamped = clamp(value, -1, 1);
+  return Math.sign(clamped) * (1 - Math.pow(1 - Math.abs(clamped), 1 / power));
+}
+
 function subscribeFinePointer(onChange: () => void) {
   if (typeof window === "undefined") return () => {};
 
@@ -103,12 +112,25 @@ export default function AnimatedCursor() {
   const targetWidth = useMotionValue(0);
   const targetHeight = useMotionValue(0);
   const targetRadius = useMotionValue(18);
+  const targetRotateX = useMotionValue(0);
+  const targetRotateY = useMotionValue(0);
+  const targetShiftX = useMotionValue(0);
+  const targetShiftY = useMotionValue(0);
+  const targetOriginX = useMotionValue(50);
+  const targetOriginY = useMotionValue(50);
   const targetXSpring = useSpring(targetX, { stiffness: 430, damping: 30, mass: 0.26 });
   const targetYSpring = useSpring(targetY, { stiffness: 430, damping: 30, mass: 0.26 });
   const targetWidthSpring = useSpring(targetWidth, { stiffness: 420, damping: 28, mass: 0.28 });
   const targetHeightSpring = useSpring(targetHeight, { stiffness: 420, damping: 28, mass: 0.28 });
   const targetRadiusSpring = useSpring(targetRadius, { stiffness: 420, damping: 30, mass: 0.24 });
-  const targetHaloTransform = useMotionTemplate`translate3d(${targetXSpring}px, ${targetYSpring}px, 0)`;
+  const targetRotateXSpring = useSpring(targetRotateX, { stiffness: 360, damping: 28, mass: 0.25 });
+  const targetRotateYSpring = useSpring(targetRotateY, { stiffness: 360, damping: 28, mass: 0.25 });
+  const targetShiftXSpring = useSpring(targetShiftX, { stiffness: 360, damping: 27, mass: 0.28 });
+  const targetShiftYSpring = useSpring(targetShiftY, { stiffness: 360, damping: 27, mass: 0.28 });
+  const targetOriginXSpring = useSpring(targetOriginX, { stiffness: 500, damping: 42, mass: 0.18 });
+  const targetOriginYSpring = useSpring(targetOriginY, { stiffness: 500, damping: 42, mass: 0.18 });
+  const targetHaloTransform = useMotionTemplate`perspective(1400px) translate3d(${targetXSpring}px, ${targetYSpring}px, 0) translate3d(${targetShiftXSpring}px, ${targetShiftYSpring}px, 0) rotateX(${targetRotateXSpring}deg) rotateY(${targetRotateYSpring}deg)`;
+  const targetTransformOrigin = useMotionTemplate`${targetOriginXSpring}% ${targetOriginYSpring}%`;
   const [cursorState, setCursorState] = useState<CursorState>({ mode: "idle", tone: "dark" });
   const [targetHaloState, setTargetHaloState] = useState<TargetHaloState>({
     tone: "dark",
@@ -136,11 +158,25 @@ export default function AnimatedCursor() {
       }
     };
 
-    const syncTargetHalo = (target: HTMLElement, tone: CursorTone) => {
+    const resetTargetTilt = () => {
+      targetRotateX.set(0);
+      targetRotateY.set(0);
+      targetShiftX.set(0);
+      targetShiftY.set(0);
+      targetOriginX.set(50);
+      targetOriginY.set(50);
+    };
+
+    const syncTargetHalo = (
+      target: HTMLElement,
+      tone: CursorTone,
+      pointer?: { x: number; y: number },
+    ) => {
       const rect = target.getBoundingClientRect();
       if (rect.width < 1 || rect.height < 1) {
         activeTargetRef.current = null;
         setTargetHalo({ tone, visible: false });
+        resetTargetTilt();
         return;
       }
 
@@ -153,11 +189,27 @@ export default function AnimatedCursor() {
       targetRadius.set(readTargetRadius(target, height));
       activeTargetRef.current = target;
       setTargetHalo({ tone, visible: true });
+
+      if (pointer) {
+        const pointerX = clamp((pointer.x - rect.left) / rect.width, 0, 1);
+        const pointerY = clamp((pointer.y - rect.top) / rect.height, 0, 1);
+        const normalizedX = pointerX * 2 - 1;
+        const normalizedY = pointerY * 2 - 1;
+        const aspect = Math.max(1, rect.width / Math.max(1, rect.height));
+
+        targetRotateX.set(-normalizedY * Math.min(2.2, 0.8 + aspect * 0.16));
+        targetRotateY.set(normalizedX * 1.05);
+        targetShiftX.set(10 * easeOutSigned(normalizedX, 2));
+        targetShiftY.set(7 * easeOutSigned(normalizedY, 2));
+        targetOriginX.set(30 + pointerX * 40);
+        targetOriginY.set(30 + pointerY * 40);
+      }
     };
 
     const hideTargetHalo = () => {
       activeTargetRef.current = null;
       setTargetHalo({ tone: targetHaloStateRef.current.tone, visible: false });
+      resetTargetTilt();
     };
 
     const refreshTargetHalo = () => {
@@ -183,7 +235,7 @@ export default function AnimatedCursor() {
         setCursorState(next);
       }
       if (target) {
-        syncTargetHalo(target, next.tone);
+        syncTargetHalo(target, next.tone, { x: event.clientX, y: event.clientY });
       } else {
         hideTargetHalo();
       }
@@ -215,7 +267,22 @@ export default function AnimatedCursor() {
       window.removeEventListener("scroll", refreshTargetHalo, true);
       window.removeEventListener("resize", refreshTargetHalo);
     };
-  }, [canUseCursor, rawX, rawY, targetHeight, targetRadius, targetWidth, targetX, targetY]);
+  }, [
+    canUseCursor,
+    rawX,
+    rawY,
+    targetHeight,
+    targetOriginX,
+    targetOriginY,
+    targetRadius,
+    targetRotateX,
+    targetRotateY,
+    targetShiftX,
+    targetShiftY,
+    targetWidth,
+    targetX,
+    targetY,
+  ]);
 
   if (!canUseCursor) return null;
 
@@ -230,6 +297,7 @@ export default function AnimatedCursor() {
           borderRadius: targetRadiusSpring,
           height: targetHeightSpring,
           transform: targetHaloTransform,
+          transformOrigin: targetTransformOrigin,
           width: targetWidthSpring,
         }}
       >
