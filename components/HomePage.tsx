@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect, useRef } from "react";
+import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import type { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import ChatInput from "@/components/ChatInput";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
+import { formatWritingDate } from "@/lib/writingDisplay";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -27,6 +28,8 @@ import {
 type HomePageProps = {
   latestWritingPosts: WritingPostMeta[];
 };
+
+type HomeTab = "work" | "writing" | "lab";
 
 type WorkHighlightRect = {
   height: number;
@@ -54,6 +57,14 @@ const WORK_POINTER_REST: WorkPointerState = {
   shiftX: 0,
   shiftY: 0,
 };
+
+const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
+  { id: "work", label: "work" },
+  { id: "writing", label: "writing" },
+  { id: "lab", label: "lab" },
+];
+
+const HOME_LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -220,7 +231,7 @@ function getProjectDescriptor(project: Project) {
 }
 
 function ProjectTextRow({
-  active,
+  active = false,
   onActivate,
   onDeactivate,
   project,
@@ -228,13 +239,13 @@ function ProjectTextRow({
   list,
   registerRow,
 }: {
-  active: boolean;
-  onActivate: () => void;
-  onDeactivate: () => void;
+  active?: boolean;
+  onActivate?: () => void;
+  onDeactivate?: () => void;
   project: Project;
   index: number;
   list: "work" | "lab";
-  registerRow: (node: HTMLLIElement | null) => void;
+  registerRow?: (node: HTMLLIElement | null) => void;
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
@@ -476,53 +487,50 @@ function WorkSection({
       };
 
   return (
-    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-4)] sm:px-[var(--space-5)]">
-      <div className="mx-auto w-full max-w-[620px] text-left">
-        <h2 className="text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)]">Work</h2>
-        <div className="relative z-0 mt-[var(--space-2)]">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ perspective: 1200 }}>
-            <motion.span
-              className="work-row-highlight absolute pointer-events-none overflow-hidden rounded-[var(--md-shape-lg)] transform-gpu will-change-transform"
-              initial={false}
-              animate={{
-                height: highlightRect?.height ?? 0,
-                left: highlightRect?.left ?? 0,
-                opacity: highlightVisible ? 1 : 0,
-                rotateX: reduceMotion ? 0 : pointerState.rotateX,
-                rotateY: reduceMotion ? 0 : pointerState.rotateY,
-                top: highlightRect?.top ?? 0,
-                width: highlightRect?.width ?? 0,
-                x: reduceMotion ? 0 : pointerState.shiftX,
-                y: reduceMotion ? 0 : pointerState.shiftY,
-              }}
-              transition={highlightTransition}
-              style={{
-                transformOrigin: `${pointerState.originX}% ${pointerState.originY}%`,
+    <>
+      <div className="relative z-0">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ perspective: 1200 }}>
+          <motion.span
+            className="work-row-highlight absolute pointer-events-none overflow-hidden rounded-[var(--md-shape-lg)] transform-gpu will-change-transform"
+            initial={false}
+            animate={{
+              height: highlightRect?.height ?? 0,
+              left: highlightRect?.left ?? 0,
+              opacity: highlightVisible ? 1 : 0,
+              rotateX: reduceMotion ? 0 : pointerState.rotateX,
+              rotateY: reduceMotion ? 0 : pointerState.rotateY,
+              top: highlightRect?.top ?? 0,
+              width: highlightRect?.width ?? 0,
+              x: reduceMotion ? 0 : pointerState.shiftX,
+              y: reduceMotion ? 0 : pointerState.shiftY,
+            }}
+            transition={highlightTransition}
+            style={{
+              transformOrigin: `${pointerState.originX}% ${pointerState.originY}%`,
+            }}
+          />
+        </div>
+        <ul
+          ref={listRef}
+          className="relative z-10"
+          onMouseMove={handlePointerMove}
+          onPointerMove={handlePointerMove}
+        >
+          {projects.map((project, index) => (
+            <ProjectTextRow
+              active={activeIndex === index && highlightVisible}
+              key={project.id}
+              onActivate={() => activateRow(index)}
+              onDeactivate={deactivateRow}
+              project={project}
+              index={index}
+              list="work"
+              registerRow={(node) => {
+                rowRefs.current[index] = node;
               }}
             />
-          </div>
-          <ul
-            ref={listRef}
-            className="relative z-10"
-            onMouseMove={handlePointerMove}
-            onPointerMove={handlePointerMove}
-          >
-            {projects.map((project, index) => (
-              <ProjectTextRow
-                active={activeIndex === index && highlightVisible}
-                key={project.id}
-                onActivate={() => activateRow(index)}
-                onDeactivate={deactivateRow}
-                project={project}
-                index={index}
-                list="work"
-                registerRow={(node) => {
-                  rowRefs.current[index] = node;
-                }}
-              />
-            ))}
-          </ul>
-        </div>
+          ))}
+        </ul>
       </div>
       {canShowFixedPreview && (
         <div aria-hidden="true" className="pointer-events-none fixed left-1/2 top-0 z-20 hidden h-screen w-full md:block">
@@ -542,35 +550,140 @@ function WorkSection({
           </AnimatePresence>
         </div>
       )}
-    </section>
+    </>
   );
 }
 
-function WritingSection() {
+function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
   return (
-    <section className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] py-[var(--space-4)] sm:px-[var(--space-5)]">
-      <div className="mx-auto w-full max-w-[620px] text-left">
-        <Link
-          href="/writing"
-          className="micro-link micro-focus text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)] hover:text-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)]"
-        >
-          writing
-        </Link>
-      </div>
-    </section>
+    <div>
+      <ul className="space-y-1">
+        {posts.map((post) => (
+          <li key={post.slug} className="-mx-2 list-none">
+            <Link
+              href={`/writing/${post.slug}`}
+              className="micro-focus micro-pressable group inline-flex min-h-8 max-w-full items-baseline gap-[var(--space-1)] rounded-[var(--md-shape-lg)] px-2 py-0.5 text-left text-[length:var(--type-0)]"
+            >
+              <span className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0">
+                <span className="project-row-title-line font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">
+                  {post.title}
+                </span>
+                <span aria-hidden="true" className="text-[var(--text-muted)]">—</span>
+                <span className="min-w-0 leading-[var(--leading-tight)] text-[var(--text-muted)]">
+                  {formatWritingDate(post.date)}, {post.description}
+                </span>
+              </span>
+              <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-within:opacity-100" />
+            </Link>
+          </li>
+        ))}
+        <li className="-mx-2 list-none">
+          <Link
+            href="/writing"
+            className="micro-link micro-focus inline-flex px-2 py-0.5 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+          >
+            all writing
+          </Link>
+        </li>
+      </ul>
+    </div>
   );
 }
 
-function LabEntrySection() {
+function LabPanel({ projects }: { projects: Project[] }) {
   return (
-    <section className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
+    <div>
+      <ul className="space-y-1">
+        {projects.map((project, index) => (
+          <ProjectTextRow
+            key={project.id}
+            project={project}
+            index={index}
+            list="lab"
+          />
+        ))}
+        <li className="-mx-2 list-none">
+          <Link
+            href="/lab"
+            className="micro-link micro-focus inline-flex px-2 py-0.5 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+          >
+            full lab / archive
+          </Link>
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+function HomeExploreSection({
+  labProjects,
+  projects,
+  writingPosts,
+}: {
+  labProjects: Project[];
+  projects: Project[];
+  writingPosts: WritingPostMeta[];
+}) {
+  const reduceMotion = Boolean(useReducedMotion());
+  const [activeTab, setActiveTab] = useState<HomeTab>("work");
+  const activeTabLabel = HOME_TABS.find((tab) => tab.id === activeTab)?.label ?? "work";
+
+  return (
+    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[calc(var(--space-8)*2.75)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <Link
-          href="/lab"
-          className="micro-link micro-focus text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-[var(--text-primary)] hover:text-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)]"
+        <div
+          aria-label="home sections"
+          className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
+          role="tablist"
         >
-          lab
-        </Link>
+          {HOME_TABS.map((tab, index) => {
+            const selected = activeTab === tab.id;
+
+            return (
+              <Fragment key={tab.id}>
+                <button
+                  aria-controls="home-section-panel"
+                  aria-selected={selected}
+                  className="home-tab-button micro-focus micro-focus-tight"
+                  data-active={selected ? "true" : "false"}
+                  id={`home-tab-${tab.id}`}
+                  onClick={() => setActiveTab(tab.id)}
+                  role="tab"
+                  type="button"
+                >
+                  {tab.label}
+                </button>
+                {index < HOME_TABS.length - 1 && (
+                  <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]" role="presentation">
+                    ,
+                  </span>
+                )}
+              </Fragment>
+            );
+          })}
+        </div>
+
+        <div
+          aria-labelledby={`home-tab-${activeTab}`}
+          className="mt-[var(--space-2)]"
+          id="home-section-panel"
+          role="tabpanel"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeTab}
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
+              transition={reduceMotion ? tweens.none : tweens.base}
+            >
+              {activeTab === "work" && <WorkSection projects={projects} />}
+              {activeTab === "writing" && <WritingPanel posts={writingPosts} />}
+              {activeTab === "lab" && <LabPanel projects={labProjects} />}
+            </motion.div>
+          </AnimatePresence>
+          <span className="sr-only">{activeTabLabel} selected</span>
+        </div>
       </div>
     </section>
   );
@@ -710,6 +823,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
   };
 
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
+  const labProjects = orderProjects(MAIN_PROJECTS, HOME_LAB_PROJECT_IDS);
 
   const openProfile = () => {
     setChatOnTop(false);
@@ -774,10 +888,12 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
-          <WorkSection projects={featuredProjects} />
-          <WritingSection />
+          <HomeExploreSection
+            labProjects={labProjects}
+            projects={featuredProjects}
+            writingPosts={latestWritingPosts}
+          />
         </div>
-        <LabEntrySection />
       </motion.div>
 
       <AnimatePresence>

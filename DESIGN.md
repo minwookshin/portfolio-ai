@@ -2,7 +2,7 @@
 
 ## Source of truth
 - Status: Active
-- Last refreshed: 2026-06-01
+- Last refreshed: 2026-06-04
 - Primary product surfaces: portfolio homepage, selected-work browsing, project detail sheets, main-page profile/contact block, AI assistant input.
 - Evidence reviewed: `app/page.tsx`, `app/globals.css`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/detail/CaseStudy.tsx`, `public/projects/**`, Marvin Schwaibold reference site.
 
@@ -22,9 +22,9 @@
 - Key contexts of use: desktop portfolio review, mobile link click, recruiter/client scan, live conversation during outreach.
 
 ## Information architecture
-- Primary navigation: minimal header identity plus scrollable content; fixed assistant controls at the bottom.
+- Primary navigation: minimal header identity plus a single inline `work, writing, lab` tab row on the homepage; fixed assistant controls at the bottom.
 - Core routes/screens: home, project sheet, main-page profile/contact block, chat overlay.
-- Content hierarchy: identity statement, selected work, studio/profile pitch, lab/archive, footer/contact.
+- Content hierarchy: identity statement, inline homepage section switcher, selected content panel, fixed assistant entry.
 
 ## Design principles
 - Principle 1: Let project media carry the page before labels explain it.
@@ -32,10 +32,10 @@
 - Tradeoffs: preserve the existing assistant and case-study system while replacing the icon-field homepage with an editorial browsing model.
 
 ## Visual language
-- Color: dark canvas, soft white text, charcoal surfaces, restrained gray secondary copy.
+- Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and sparse indigo only for directional affordances.
 - Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, wider project media rows.
-- Shape/radius/elevation: cards use modest 8-12px radius; sheets use large top radius; avoid nested cards.
+- Shape/radius/elevation: modest 8px radius; avoid nested cards and glassmorphism on the homepage; prefer flat ink, hairline, and paper-press states.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover.
 - Imagery/iconography: large project screenshots/videos first; icons are supporting identity marks.
 
