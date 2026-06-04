@@ -441,10 +441,14 @@ function LabPanel() {
       <p className="max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
         Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
       </p>
-      <BuildMeta className="mt-[var(--space-1)] text-[length:var(--type--1)]" />
+      <HomeSectionMeta />
       <LabArchiveGrid className="relative left-1/2 mt-[var(--space-5)] w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]" />
     </div>
   );
+}
+
+function HomeSectionMeta() {
+  return <BuildMeta className="mt-[var(--space-1)] text-[length:var(--type--1)]" />;
 }
 
 function HomeExploreSection({
@@ -507,8 +511,18 @@ function HomeExploreSection({
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
               transition={reduceMotion ? tweens.none : tweens.base}
             >
-              {activeTab === "work" && <WorkSection projects={projects} />}
-              {activeTab === "writing" && <WritingPanel posts={writingPosts} />}
+              {activeTab === "work" && (
+                <>
+                  <WorkSection projects={projects} />
+                  <HomeSectionMeta />
+                </>
+              )}
+              {activeTab === "writing" && (
+                <>
+                  <WritingPanel posts={writingPosts} />
+                  <HomeSectionMeta />
+                </>
+              )}
               {activeTab === "lab" && <LabPanel />}
             </motion.div>
           </AnimatePresence>
