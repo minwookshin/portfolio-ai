@@ -356,7 +356,7 @@ function WorkSection({
   const previewProject = previewIndex === null ? null : projects[previewIndex];
 
   return (
-    <>
+    <div className="relative">
       <div>
         <ul>
           {projects.map((project, index) => (
@@ -372,12 +372,12 @@ function WorkSection({
         </ul>
       </div>
       {canShowFixedPreview && (
-        <div aria-hidden="true" className="pointer-events-none fixed left-1/2 top-0 z-20 hidden h-screen w-full md:block">
-          <AnimatePresence mode="popLayout">
+        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden md:block">
+          <AnimatePresence>
             {previewProject && (
               <motion.div
                 key={previewProject.id}
-                className="relative left-6 top-1/2 h-fit w-[min(34vw,360px)] -translate-y-1/2 transform-gpu lg:left-8 lg:w-[min(36vw,484px)]"
+                className="h-fit w-[min(34vw,360px)] transform-gpu"
                 initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
                 animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
                 exit={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
@@ -389,7 +389,7 @@ function WorkSection({
           </AnimatePresence>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
