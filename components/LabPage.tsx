@@ -251,7 +251,6 @@ function LabProjectTile({
         href={getProjectPath(project)}
         scroll={false}
         onClick={saveProjectOpenScroll}
-        data-cursor="view"
         className="micro-focus micro-pressable group relative block h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left"
       >
         <span className="absolute inset-0 overflow-hidden">

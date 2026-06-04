@@ -10,7 +10,7 @@ import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
-import HoverVideoPreview, { useHoverVideoPreview } from "@/components/HoverVideoPreview";
+import HoverVideoPreview from "@/components/HoverVideoPreview";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -37,16 +37,6 @@ const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
   { id: "writing", label: "writing" },
   { id: "lab", label: "lab" },
 ];
-
-const HOME_LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
-
-const HOME_LAB_TILE_CLASSES = [
-  "col-span-2 min-h-[178px]",
-  "min-h-[132px]",
-  "min-h-[132px]",
-  "min-h-[132px]",
-  "min-h-[132px]",
-] as const;
 
 function useCanShowWorkPreview() {
   const [canShow, setCanShow] = useState(false);
@@ -265,7 +255,6 @@ function ProjectTextRow({
           href={getProjectPath(project)}
           scroll={false}
           onClick={saveProjectOpenScroll}
-          data-cursor="view"
           className={rowClass}
         >
           {rowText}
@@ -445,121 +434,30 @@ function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
   );
 }
 
-function HomeLabBentoTile({
-  className = "",
-  index,
-  project,
-}: {
-  className?: string;
-  index: number;
-  project: Project;
-}) {
-  const reduceMotion = Boolean(useReducedMotion());
-  const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
-  const previewState = useHoverVideoPreview({ videoSrc: previewVideo });
-  const src = project.image ?? project.icon;
-  const poster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
-
-  return (
-    <motion.li
-      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
-      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
-      className={`list-none ${className}`}
-    >
-      <Link
-        {...previewState.previewHandlers}
-        href={getProjectPath(project)}
-        scroll={false}
-        onClick={saveProjectOpenScroll}
-        data-cursor="view"
-        aria-label={`Open ${project.title}`}
-        className="micro-focus micro-pressable group relative flex h-full w-full min-w-0 overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left"
-      >
-        <span className="absolute inset-0 overflow-hidden">
-          {src ? (
-            <BlurImage
-              src={src}
-              alt=""
-              fill
-              sizes="(max-width: 768px) 92vw, 300px"
-              draggable={false}
-              className={`object-cover grayscale ${
-                reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035] group-focus-within:scale-[1.035]"
-              }`}
-            />
-          ) : (
-            <span className="absolute inset-0 flex items-center justify-center bg-[var(--bg-element)] text-[length:var(--type-2)] text-[var(--text-primary)]">
-              {project.glyph ?? project.title.charAt(0)}
-            </span>
-          )}
-          <HoverVideoPreview
-            canPlayVideo={previewState.canPlayVideo}
-            isAlwaysOn={previewState.isAlwaysOn}
-            videoSrc={previewVideo}
-            poster={poster}
-            preload="none"
-            reduceMotion={previewState.reduceMotion}
-            videoRef={previewState.videoRef}
-          />
-          <span className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
-        </span>
-        <span className="relative z-10 mt-auto flex w-full items-end justify-between gap-3 p-3">
-          <span className="min-w-0">
-            <span className="block truncate text-[length:var(--type-0)] font-normal leading-[var(--leading-tight)] text-white">
-              {project.title}
-            </span>
-            <span className="mt-1 block line-clamp-2 text-[length:var(--type--1)] leading-[var(--leading-tight)] text-white/70">
-              {project.studioLabel ?? project.description}
-            </span>
-          </span>
-          <ArrowUpRight className="h-4 w-4 shrink-0 text-white" strokeWidth={2} />
-        </span>
-      </Link>
-    </motion.li>
-  );
-}
-
-function LabPanel({ projects }: { projects: Project[] }) {
+function LabPanel() {
   return (
     <div className="pt-1">
-      <div className="mb-[var(--space-2)]">
-        <p className="max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-          Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
-        </p>
-        <div className="mt-[var(--space-1)] flex flex-wrap items-center gap-x-3 gap-y-1">
-          <Link
-            href="/lab"
-            className="micro-link micro-focus inline-flex items-center gap-1 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-          >
-            <span>full lab / archive</span>
-            <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
-          </Link>
-          <BuildMeta className="text-[length:var(--type--1)]" />
-        </div>
+      <p className="max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+        Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
+      </p>
+      <div className="mt-[var(--space-1)] flex flex-wrap items-center gap-x-3 gap-y-1">
+        <Link
+          href="/lab"
+          className="micro-link micro-focus inline-flex items-center gap-1 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+        >
+          <span>full lab / archive</span>
+          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+        </Link>
+        <BuildMeta className="text-[length:var(--type--1)]" />
       </div>
-      <ul className="grid grid-cols-2 gap-[var(--space-2)]">
-        {projects.map((project, index) => (
-          <HomeLabBentoTile
-            key={project.id}
-            project={project}
-            index={index}
-            className={HOME_LAB_TILE_CLASSES[index % HOME_LAB_TILE_CLASSES.length]}
-          />
-        ))}
-      </ul>
     </div>
   );
 }
 
 function HomeExploreSection({
-  labProjects,
   projects,
   writingPosts,
 }: {
-  labProjects: Project[];
   projects: Project[];
   writingPosts: WritingPostMeta[];
 }) {
@@ -618,7 +516,7 @@ function HomeExploreSection({
             >
               {activeTab === "work" && <WorkSection projects={projects} />}
               {activeTab === "writing" && <WritingPanel posts={writingPosts} />}
-              {activeTab === "lab" && <LabPanel projects={labProjects} />}
+              {activeTab === "lab" && <LabPanel />}
             </motion.div>
           </AnimatePresence>
           <span className="sr-only">{activeTabLabel} selected</span>
@@ -762,7 +660,6 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
   };
 
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
-  const labProjects = orderProjects(MAIN_PROJECTS, HOME_LAB_PROJECT_IDS);
 
   const openProfile = () => {
     setChatOnTop(false);
@@ -828,7 +725,6 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
           <HomeExploreSection
-            labProjects={labProjects}
             projects={featuredProjects}
             writingPosts={latestWritingPosts}
           />
