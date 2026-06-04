@@ -448,7 +448,7 @@ function LabPanel() {
 }
 
 function HomeSectionMeta() {
-  return <BuildMeta className="mt-[var(--space-1)] text-[length:var(--type--1)]" />;
+  return <BuildMeta className="mt-[calc(var(--space-4)*2)] text-[length:var(--type--1)]" />;
 }
 
 function HomeExploreSection({
