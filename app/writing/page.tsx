@@ -52,13 +52,11 @@ export default function WritingPage() {
                 href={`/writing/${post.slug}`}
                 className="micro-focus micro-pressable group flex min-h-12 w-full items-baseline justify-between gap-[var(--space-2)] py-[var(--space-1)] text-left"
               >
-                <span className="flex min-w-0 flex-col gap-0">
-                  <span className="font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-                    {post.title}
-                  </span>
-                  <span className="leading-[var(--leading-body)] text-[var(--text-muted)]">
-                    {formatWritingDate(post.date)}, {post.description}
-                  </span>
+                <span className="project-row-title-line min-w-0 truncate font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+                  {post.title}
+                </span>
+                <span className="shrink-0 leading-[var(--leading-body)] text-[var(--text-muted)]">
+                  {formatWritingDate(post.date)}
                 </span>
               </Link>
             </li>

@@ -258,6 +258,8 @@ body::after {
   background-position:
     0 calc(100% - 0.02em),
     0 calc(100% - 0.02em);
+  background-origin: content-box;
+  background-clip: content-box;
   background-repeat: no-repeat;
   background-size:
     100% 1px,
@@ -290,6 +292,8 @@ body::after {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
   background-position: 0 calc(100% - 0.02em);
+  background-origin: content-box;
+  background-clip: content-box;
   background-repeat: no-repeat;
   background-size: 0 1px;
   transition:
@@ -303,6 +307,8 @@ body::after {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
   background-position: 0 calc(100% - 0.02em);
+  background-origin: content-box;
+  background-clip: content-box;
   background-repeat: no-repeat;
   background-size: 0 1px;
   transition:

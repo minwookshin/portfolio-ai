@@ -417,19 +417,16 @@ function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
     <div>
       <ul className="space-y-1">
         {posts.map((post) => (
-          <li key={post.slug} className="-mx-2 list-none">
+          <li key={post.slug} className="-mx-2 max-w-[var(--measure)] list-none">
             <Link
               href={`/writing/${post.slug}`}
-              className="micro-focus micro-pressable group inline-flex min-h-8 max-w-full items-baseline gap-[var(--space-1)] rounded-[var(--md-shape-lg)] px-2 py-0.5 text-left text-[length:var(--type-0)]"
+              className="micro-focus micro-pressable group flex min-h-8 w-full items-baseline justify-between gap-[var(--space-2)] rounded-[var(--md-shape-lg)] px-2 py-0.5 text-left text-[length:var(--type-0)]"
             >
-              <span className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0">
-                <span className="project-row-title-line font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">
-                  {post.title}
-                </span>
-                <span aria-hidden="true" className="text-[var(--text-muted)]">—</span>
-                <span className="min-w-0 leading-[var(--leading-tight)] text-[var(--text-muted)]">
-                  {formatWritingDate(post.date)}, {post.description}
-                </span>
+              <span className="project-row-title-line min-w-0 truncate font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">
+                {post.title}
+              </span>
+              <span className="shrink-0 leading-[var(--leading-tight)] text-[var(--text-muted)]">
+                {formatWritingDate(post.date)}
               </span>
             </Link>
           </li>
