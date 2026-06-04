@@ -18,6 +18,8 @@ const MAX_MESSAGE_LENGTH = 4000;
 const MAX_CONTEXT_LENGTH = 1200;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 10;
+const GEMINI_MAX_OUTPUT_TOKENS = 768;
+const DEFAULT_GEMINI_MODELS = ["gemini-2.5-flash-lite", "gemini-2.5-flash"];
 
 const requestWindows = new Map<string, { count: number; resetAt: number }>();
 
@@ -152,7 +154,7 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
 
 2.  **Portfolio AI (This Website)**
     - **Summary:** Developed an AI-native studio website using Next.js and Gemini API to answer questions, qualify project intent, and route visitors to the right case study.
-    - **Tech Stack:** Next.js 16, React 19, Gemini API (2.5 Flash), Tailwind CSS.
+    - **Tech Stack:** Next.js 16, React 19, Gemini API (2.5 Flash-Lite with Flash fallback), Tailwind CSS.
     - **Key Tech:** Engineered with Server-Sent Events (SSE) for sub-100ms latency and implemented military-grade security layers.
 
 3.  **Mindline (Web App)**
@@ -377,7 +379,7 @@ Q: How do you prevent the AI from lying?
 A: I use RAG (Retrieval-Augmented Generation). The AI is restricted to answer only based on the specific context data I provide about my resume.
 
 Q: What model are you using?
-A: I'm running on Google's Gemini 2.5 Flash for its speed and large context window, with automatic fallback to 2.0/1.5 Flash for reliability.
+A: I'm running on Google's Gemini 2.5 Flash-Lite first because it keeps the portfolio chat fast and inexpensive, with Gemini 2.5 Flash as the fallback for reliability.
 
 Q: Is this website responsive?
 A: Yes, fully responsive. I used Tailwind CSS grid and flexbox to ensure the chat interface and project cards adapt perfectly to mobile and desktop screens.
@@ -481,9 +483,10 @@ export async function POST(req: Request) {
     // Log only that a request happened, not the user's question content (privacy).
     console.log(`[LOG] Chat request at ${new Date().toISOString()}`);
 
-    // Initialize Gemini AI with fallback models
+    // Prefer the low-cost current Gemini model, with a stable Flash fallback.
     const genAI = new GoogleGenerativeAI(apiKey);
-    const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+    const configuredModel = process.env.GEMINI_MODEL?.trim();
+    const models = Array.from(new Set([configuredModel, ...DEFAULT_GEMINI_MODELS].filter(Boolean) as string[]));
 
     // Build conversation history for context
     const chatHistory = messages.slice(0, -1).map((msg) => ({
@@ -493,7 +496,7 @@ export async function POST(req: Request) {
 
     // Try each model until one works
     let result;
-    for (const modelName of MODELS) {
+    for (const modelName of models) {
       try {
         const model = genAI.getGenerativeModel({
           model: modelName,
@@ -501,7 +504,7 @@ export async function POST(req: Request) {
           generationConfig: {
             temperature: 0.7,
             topP: 0.95,
-            maxOutputTokens: 1024,
+            maxOutputTokens: GEMINI_MAX_OUTPUT_TOKENS,
           },
         });
         const chat = model.startChat({ history: chatHistory });
@@ -511,7 +514,7 @@ export async function POST(req: Request) {
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
         console.warn(`[WARN] Model ${modelName} failed: ${message}`);
-        if (modelName === MODELS[MODELS.length - 1]) throw err;
+        if (modelName === models[models.length - 1]) throw err;
       }
     }
     const encoder = new TextEncoder();
