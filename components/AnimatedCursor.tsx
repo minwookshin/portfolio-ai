@@ -395,7 +395,9 @@ export default function AnimatedCursor() {
         }`}
         style={{ transform: pointerTransform }}
       >
-        <span className="animated-cursor__arrow" />
+        <svg className="animated-cursor__arrow" viewBox="0 0 18 22">
+          <path d="M2.1 1.1C1.45 0.65 0.55 1.1 0.55 1.9v16.15c0 0.9 1.08 1.35 1.72 0.72l4.18-4.12 2.67 6.05c0.26 0.58 0.94 0.85 1.52 0.59l2.55-1.12c0.57-0.25 0.83-0.92 0.58-1.49l-2.63-5.98h5.43c0.94 0 1.34-1.19 0.59-1.75L2.1 1.1Z" />
+        </svg>
       </motion.div>
     </>
   );

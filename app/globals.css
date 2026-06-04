@@ -624,16 +624,16 @@ body::after {
 
 .animated-cursor__arrow {
   position: absolute;
-  left: -1px;
+  left: 0;
   top: -1px;
-  width: 15px;
-  height: 20px;
-  background: rgb(var(--cursor-rgb));
-  clip-path: polygon(0 0, 0 17px, 4.6px 12.4px, 7.4px 19.2px, 10.2px 18px, 7.2px 11.5px, 14px 11.5px);
+  width: 18px;
+  height: 22px;
+  fill: rgb(var(--cursor-rgb));
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.22));
-  transform-origin: 1px 1px;
+  transform: rotate(-10deg);
+  transform-origin: 2px 2px;
   transition:
-    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    fill var(--motion-duration-fast) var(--motion-ease-standard),
     filter var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
@@ -654,7 +654,7 @@ body::after {
 }
 
 .animated-cursor-pointer--interactive .animated-cursor__arrow {
-  transform: translate(1px, 1px) scale(0.92);
+  transform: translate(1px, 1px) rotate(-10deg) scale(0.92);
 }
 
 .animated-cursor--close {
@@ -670,7 +670,7 @@ body::after {
 }
 
 .animated-cursor-pointer--close .animated-cursor__arrow {
-  transform: rotate(-8deg) scale(0.94);
+  transform: rotate(-14deg) scale(0.94);
 }
 
 @media (prefers-reduced-motion: reduce) {
