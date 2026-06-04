@@ -8,7 +8,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 
-type CursorMode = "dot" | "interactive" | "play" | "close";
+type CursorMode = "dot" | "interactive" | "close";
 type CursorTone = "dark" | "light";
 type CursorState = { mode: CursorMode; tone: CursorTone };
 
@@ -25,12 +25,7 @@ const interactiveSelector = [
 const explicitCursorModes: Record<string, CursorMode> = {
   interactive: "interactive",
   view: "interactive",
-  play: "play",
   close: "close",
-};
-
-const cursorLabels: Partial<Record<CursorMode, string>> = {
-  play: "play",
 };
 
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
@@ -70,8 +65,6 @@ function getCursorState(target: EventTarget | null): CursorState {
   if (explicitMode && explicitCursorModes[explicitMode]) {
     return { mode: explicitCursorModes[explicitMode], tone };
   }
-
-  if (target.closest("video")) return { mode: "play", tone };
 
   const interactive = target.closest(interactiveSelector);
   return { mode: interactive ? "interactive" : "dot", tone };
@@ -136,8 +129,6 @@ export default function AnimatedCursor() {
 
   if (!canUseCursor) return null;
 
-  const label = cursorLabels[cursorState.mode] ?? "";
-
   return (
     <motion.div
       aria-hidden="true"
@@ -148,7 +139,6 @@ export default function AnimatedCursor() {
     >
       <span className="animated-cursor__frame" />
       <span className="animated-cursor__core" />
-      <span className="animated-cursor__label">{label}</span>
       <span className="animated-cursor__x animated-cursor__x--a" />
       <span className="animated-cursor__x animated-cursor__x--b" />
     </motion.div>

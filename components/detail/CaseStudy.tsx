@@ -345,7 +345,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
         <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className={`${card} overflow-hidden`}>
-            <video data-cursor="play" controls poster={section.poster ?? makeVideoPosterDataUrl(section.heading ?? "project demo")} className="block w-full h-auto">
+            <video controls poster={section.poster ?? makeVideoPosterDataUrl(section.heading ?? "project demo")} className="block w-full h-auto">
               <source src={section.src} type="video/mp4" />
             </video>
           </div>
