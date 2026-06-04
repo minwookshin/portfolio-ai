@@ -442,7 +442,6 @@ function LabPanel() {
         Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
       </p>
       <LabArchiveGrid className="relative left-1/2 mt-[var(--space-5)] w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]" />
-      <HomeSectionMeta className="relative left-1/2 w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]" />
     </div>
   );
 }
@@ -511,21 +510,18 @@ function HomeExploreSection({
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
               transition={reduceMotion ? tweens.none : tweens.base}
             >
-              {activeTab === "work" && (
-                <>
-                  <WorkSection projects={projects} />
-                  <HomeSectionMeta />
-                </>
-              )}
-              {activeTab === "writing" && (
-                <>
-                  <WritingPanel posts={writingPosts} />
-                  <HomeSectionMeta />
-                </>
-              )}
+              {activeTab === "work" && <WorkSection projects={projects} />}
+              {activeTab === "writing" && <WritingPanel posts={writingPosts} />}
               {activeTab === "lab" && <LabPanel />}
             </motion.div>
           </AnimatePresence>
+          <HomeSectionMeta
+            className={
+              activeTab === "lab"
+                ? "relative left-1/2 w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]"
+                : ""
+            }
+          />
           <span className="sr-only">{activeTabLabel} selected</span>
         </div>
       </div>
