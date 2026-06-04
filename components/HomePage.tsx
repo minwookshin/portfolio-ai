@@ -446,8 +446,8 @@ function LabPanel() {
   );
 }
 
-function HomeSectionMeta({ className = "" }: { className?: string }) {
-  return <BuildMeta className={`mt-[calc(var(--space-4)*2)] text-[length:var(--type-0)] ${className}`} />;
+function HomeSectionMeta() {
+  return <BuildMeta className="mt-[calc(var(--space-4)*2)] text-[length:var(--type-0)]" />;
 }
 
 function HomeExploreSection({
@@ -515,13 +515,7 @@ function HomeExploreSection({
               {activeTab === "lab" && <LabPanel />}
             </motion.div>
           </AnimatePresence>
-          <HomeSectionMeta
-            className={
-              activeTab === "lab"
-                ? "relative left-1/2 w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]"
-                : ""
-            }
-          />
+          <HomeSectionMeta />
           <span className="sr-only">{activeTabLabel} selected</span>
         </div>
       </div>
