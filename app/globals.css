@@ -479,8 +479,8 @@ body::after {
 }
 
 .animated-cursor {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   transition:
     opacity var(--motion-duration-instant) var(--motion-ease-standard),
     width var(--motion-duration-fast) var(--motion-ease-standard),
@@ -489,8 +489,8 @@ body::after {
 
 .animated-cursor-pointer {
   z-index: 2147483647;
-  width: 16px;
-  height: 20px;
+  width: 15px;
+  height: 18px;
 }
 
 .animated-cursor.is-visible,
@@ -528,8 +528,8 @@ body::after {
   position: absolute;
   left: 0;
   top: -1px;
-  width: 16px;
-  height: 20px;
+  width: 15px;
+  height: 18px;
   fill: rgb(var(--cursor-rgb));
   stroke: rgb(var(--cursor-rgb));
   stroke-width: 0.7px;
@@ -546,8 +546,8 @@ body::after {
 }
 
 .animated-cursor--interactive {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   --cursor-fill-alpha: 0.035;
   --cursor-stroke-alpha: 0.16;
 }
@@ -565,8 +565,8 @@ body::after {
 }
 
 .animated-cursor--close {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   --cursor-fill-alpha: 0.1;
   --cursor-stroke-alpha: 0.34;
 }
