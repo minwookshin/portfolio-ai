@@ -34,8 +34,8 @@ const explicitCursorModes: Record<string, CursorMode> = {
 
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
 const targetHaloPaddingByKind: Record<TargetHaloKind, { x: number; y: number }> = {
-  default: { x: 6, y: 6 },
-  text: { x: 12, y: 2 },
+  default: { x: 5, y: 6 },
+  text: { x: 9, y: 2 },
 };
 
 function clamp(value: number, min: number, max: number) {
