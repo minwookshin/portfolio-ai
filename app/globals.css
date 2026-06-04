@@ -462,6 +462,7 @@ body::after {
   }
 }
 
+.animated-cursor-target,
 .animated-cursor,
 .animated-cursor-pointer {
   position: fixed;
@@ -476,6 +477,15 @@ body::after {
   transition:
     opacity var(--motion-duration-instant) var(--motion-ease-standard);
   will-change: transform, opacity;
+}
+
+.animated-cursor-target {
+  z-index: 2147483645;
+  overflow: hidden;
+  --cursor-fill-alpha: 0.045;
+  --cursor-stroke-alpha: 0.2;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .animated-cursor {
@@ -493,11 +503,13 @@ body::after {
   height: 22px;
 }
 
+.animated-cursor-target.is-visible,
 .animated-cursor.is-visible,
 .animated-cursor-pointer.is-visible {
   opacity: 1;
 }
 
+.animated-cursor-target--light,
 .animated-cursor--light,
 .animated-cursor-pointer--light {
   --cursor-rgb: 247 248 248;
@@ -505,6 +517,7 @@ body::after {
   --cursor-stroke-alpha: 0.32;
 }
 
+.animated-cursor-target__halo,
 .animated-cursor__halo {
   position: absolute;
   inset: 0;
@@ -524,6 +537,19 @@ body::after {
     transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+.animated-cursor-target__halo {
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(var(--cursor-rgb), 0.08), transparent 62%),
+    rgba(var(--cursor-rgb), var(--cursor-fill-alpha));
+  box-shadow:
+    0 0 0 1px rgba(var(--cursor-rgb), 0.04),
+    0 10px 28px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(2.5px);
+  transform: scale(0.985);
+}
+
 .animated-cursor__arrow {
   position: absolute;
   left: -1px;
@@ -541,18 +567,18 @@ body::after {
 }
 
 .animated-cursor--interactive {
-  width: 34px;
-  height: 34px;
-  --cursor-fill-alpha: 0.09;
-  --cursor-stroke-alpha: 0.32;
+  width: 22px;
+  height: 22px;
+  --cursor-fill-alpha: 0.035;
+  --cursor-stroke-alpha: 0.16;
 }
 
 .animated-cursor--interactive .animated-cursor__halo {
-  border-radius: 12px;
-  transform: scale(1);
+  border-radius: 999px;
+  transform: scale(0.86);
   box-shadow:
-    0 14px 36px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 10px 28px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .animated-cursor-pointer--interactive .animated-cursor__arrow {
@@ -586,8 +612,10 @@ body::after {
     box-shadow: none !important;
   }
 
+  .animated-cursor-target,
   .animated-cursor,
   .animated-cursor-pointer,
+  .animated-cursor-target__halo,
   .animated-cursor__halo,
   .animated-cursor__arrow {
     transition: none !important;
