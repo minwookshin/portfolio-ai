@@ -17,8 +17,8 @@
   --dark-text-muted: #8A8F98;
 
   /* Accent & Interactions */
-  --accent-indigo: #5E6AD2;
-  --accent-indigo-hover: #828FFF;
+  --accent-indigo: var(--text-primary);
+  --accent-indigo-hover: var(--text-primary);
   --accent-mono: #000000;
   --dark-overlay-38: color-mix(in srgb, var(--dark-bg-base) 38%, transparent);
   --dark-overlay-56: color-mix(in srgb, var(--dark-bg-base) 56%, transparent);
@@ -67,7 +67,7 @@
   --btn-secondary-bg: var(--bg-element);
   --btn-secondary-text: var(--text-primary);
   --btn-secondary-border: var(--border-light);
-  --accent: var(--accent-indigo);
+  --accent: var(--text-primary);
   --gradient-fade: rgba(247, 248, 248, 0);
 
   /* Material-role bridge for the existing component API. */
@@ -78,7 +78,7 @@
   --md-on-surface-variant: var(--text-muted);
   --md-outline: var(--border-light);
   --md-outline-variant: var(--border-light);
-  --md-primary: var(--accent-indigo);
+  --md-primary: var(--text-primary);
   --md-on-primary: var(--dark-text-primary);
   --md-primary-container: var(--bg-element);
   --md-on-primary-container: var(--text-primary);
@@ -351,27 +351,6 @@ body::after {
   border-radius: var(--md-shape-lg);
 }
 
-.work-row-highlight {
-  border: 1px solid color-mix(in srgb, var(--text-primary) 10%, transparent);
-  background: color-mix(in srgb, var(--text-primary) 5%, var(--bg-base));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.58),
-    inset 0 -1px 0 rgb(17 18 20 / 0.06),
-    0 8px 20px -18px rgb(17 18 20 / 0.42);
-}
-
-.work-row-highlight::after {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 7px;
-  height: 1px;
-  border-radius: inherit;
-  background: color-mix(in srgb, var(--text-primary) 9%, transparent);
-  content: "";
-  pointer-events: none;
-}
-
 .article-body {
   max-width: var(--measure);
   color: var(--text-primary);
@@ -502,7 +481,7 @@ body::after {
   --md-on-surface-variant: var(--dark-text-muted);
   --md-outline: var(--dark-border);
   --md-outline-variant: var(--dark-border);
-  --md-primary: var(--accent-indigo-hover);
+  --md-primary: var(--dark-text-primary);
   --md-on-primary: var(--dark-bg-base);
   --md-primary-container: var(--dark-bg-surface);
   --md-on-primary-container: var(--dark-text-primary);

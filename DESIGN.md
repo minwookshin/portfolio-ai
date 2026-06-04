@@ -32,10 +32,10 @@
 - Tradeoffs: preserve the existing assistant and case-study system while replacing the icon-field homepage with an editorial browsing model.
 
 ## Visual language
-- Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and sparse indigo only for directional affordances.
+- Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and no blue accent on the homepage; highlights use the site black.
 - Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, wider project media rows.
-- Shape/radius/elevation: modest 8px radius; avoid nested cards and glassmorphism on the homepage; prefer flat ink, hairline, and paper-press states.
+- Shape/radius/elevation: modest 8px radius; avoid nested cards and glassmorphism on the homepage; prefer flat ink and black hairline states over filled highlight slabs.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover.
 - Imagery/iconography: large project screenshots/videos first; icons are supporting identity marks.
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import { getWritingPosts } from "@/lib/writing";
 
@@ -61,7 +60,6 @@ export default function WritingPage() {
                     {formatWritingDate(post.date)}, {post.description}
                   </span>
                 </span>
-                <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-visible:opacity-100" />
               </Link>
             </li>
           ))}

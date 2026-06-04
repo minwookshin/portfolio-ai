@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useCallback, useState, useEffect, useRef } from "react";
-import type { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -31,33 +30,6 @@ type HomePageProps = {
 
 type HomeTab = "work" | "writing" | "lab";
 
-type WorkHighlightRect = {
-  height: number;
-  left: number;
-  top: number;
-  width: number;
-};
-
-type WorkPointerState = {
-  originX: number;
-  originY: number;
-  rotateX: number;
-  rotateY: number;
-  shiftX: number;
-  shiftY: number;
-};
-
-type WorkListPointerEvent = ReactMouseEvent<HTMLUListElement> | ReactPointerEvent<HTMLUListElement>;
-
-const WORK_POINTER_REST: WorkPointerState = {
-  originX: 50,
-  originY: 50,
-  rotateX: 0,
-  rotateY: 0,
-  shiftX: 0,
-  shiftY: 0,
-};
-
 const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
   { id: "work", label: "work" },
   { id: "writing", label: "writing" },
@@ -65,15 +37,6 @@ const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
 ];
 
 const HOME_LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
-
-function softenPointer(value: number, power = 2) {
-  const clamped = clamp(value, -1, 1);
-  return Math.sign(clamped) * (1 - Math.pow(1 - Math.abs(clamped), 1 / Math.max(1, power)));
-}
 
 function useCanShowWorkPreview() {
   const [canShow, setCanShow] = useState(false);
@@ -217,7 +180,7 @@ function IntroLink({
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="micro-link micro-focus text-[length:var(--type-0)] text-[var(--text-muted)] hover:text-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)]"
+      className="micro-link micro-focus text-[length:var(--type-0)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
     >
       {children}
     </a>
@@ -231,21 +194,17 @@ function getProjectDescriptor(project: Project) {
 }
 
 function ProjectTextRow({
-  active = false,
   onActivate,
   onDeactivate,
   project,
   index,
   list,
-  registerRow,
 }: {
-  active?: boolean;
   onActivate?: () => void;
   onDeactivate?: () => void;
   project: Project;
   index: number;
   list: "work" | "lab";
-  registerRow?: (node: HTMLLIElement | null) => void;
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
@@ -268,17 +227,11 @@ function ProjectTextRow({
           {descriptor}
         </span>
       </span>
-      {!project.comingSoon && (
-        <ArrowUpRight className={`mt-1 h-4 w-4 shrink-0 text-[var(--accent-indigo)] transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] ${
-          active ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
-        }`} />
-      )}
     </>
   );
 
   return (
     <motion.li
-      ref={registerRow}
       onBlur={onDeactivate}
       onFocus={onActivate}
       onMouseEnter={onActivate}
@@ -373,14 +326,8 @@ function WorkSection({
 }) {
   const reduceMotion = Boolean(useReducedMotion());
   const canShowFixedPreview = useCanShowWorkPreview();
-  const listRef = useRef<HTMLUListElement | null>(null);
-  const rowRefs = useRef<Array<HTMLLIElement | null>>([]);
   const hidePreviewTimer = useRef<number | null>(null);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const [highlightVisible, setHighlightVisible] = useState(false);
-  const [highlightRect, setHighlightRect] = useState<WorkHighlightRect | null>(null);
-  const [pointerState, setPointerState] = useState<WorkPointerState>(WORK_POINTER_REST);
 
   const clearHideTimer = useCallback(() => {
     if (!hidePreviewTimer.current) return;
@@ -388,146 +335,36 @@ function WorkSection({
     hidePreviewTimer.current = null;
   }, []);
 
-  const measureRow = useCallback((index: number) => {
-    const list = listRef.current;
-    const row = rowRefs.current[index];
-
-    if (!list || !row) return null;
-
-    const listRect = list.getBoundingClientRect();
-    const rowRect = row.getBoundingClientRect();
-    const nextRect = {
-      height: rowRect.height,
-      left: rowRect.left - listRect.left,
-      top: rowRect.top - listRect.top,
-      width: rowRect.width,
-    };
-
-    setHighlightRect(nextRect);
-    return nextRect;
-  }, []);
-
   const activateRow = useCallback((index: number) => {
     clearHideTimer();
-    setActiveIndex(index);
     setPreviewIndex(index);
-    setHighlightVisible(true);
-    measureRow(index);
-  }, [clearHideTimer, measureRow]);
+  }, [clearHideTimer]);
 
   const deactivateRow = useCallback(() => {
     clearHideTimer();
     hidePreviewTimer.current = window.setTimeout(() => {
-      setActiveIndex(null);
       setPreviewIndex(null);
-      setHighlightVisible(false);
-      setPointerState(WORK_POINTER_REST);
     }, 280);
   }, [clearHideTimer]);
-
-  const handlePointerMove = useCallback((event: WorkListPointerEvent) => {
-    if (reduceMotion || activeIndex === null) return;
-
-    const list = listRef.current;
-    const rect = measureRow(activeIndex);
-
-    if (!list || !rect) return;
-
-    const listBounds = list.getBoundingClientRect();
-    const absoluteLeft = listBounds.left + rect.left;
-    const absoluteTop = listBounds.top + rect.top;
-    const centerX = absoluteLeft + rect.width / 2;
-    const centerY = absoluteTop + rect.height / 2;
-    const pointerX = clamp((event.clientX - centerX) / Math.max(1, rect.width / 2), -1, 1);
-    const pointerY = clamp((event.clientY - centerY) / Math.max(1, rect.height / 2), -1, 1);
-    const localX = clamp((event.clientX - absoluteLeft) / Math.max(1, rect.width), 0, 1);
-    const localY = clamp((event.clientY - absoluteTop) / Math.max(1, rect.height), 0, 1);
-    const aspect = Math.max(1, rect.width / Math.max(1, rect.height));
-
-    setPointerState({
-      originX: 30 + 40 * localX,
-      originY: 30 + 40 * localY,
-      rotateX: -pointerY * Math.min(1.6, 0.7 + 0.18 * aspect),
-      rotateY: 0.8 * pointerX,
-      shiftX: 10 * softenPointer(pointerX),
-      shiftY: 6 * softenPointer(pointerY),
-    });
-  }, [activeIndex, measureRow, reduceMotion]);
-
-  useEffect(() => {
-    if (activeIndex === null) return;
-
-    const update = () => measureRow(activeIndex);
-    const frame = window.requestAnimationFrame(update);
-
-    window.addEventListener("resize", update);
-    window.addEventListener("scroll", update, true);
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("resize", update);
-      window.removeEventListener("scroll", update, true);
-    };
-  }, [activeIndex, measureRow]);
 
   useEffect(() => {
     return () => clearHideTimer();
   }, [clearHideTimer]);
 
   const previewProject = previewIndex === null ? null : projects[previewIndex];
-  const highlightTransition = reduceMotion
-    ? tweens.fast
-    : {
-        ...springs.spatialDefault,
-        opacity: tweens.base,
-        rotateX: { type: "spring", duration: 0.45, bounce: 0.06 },
-        rotateY: { type: "spring", duration: 0.45, bounce: 0.06 },
-        x: { type: "spring", duration: 0.6, bounce: 0.15 },
-        y: { type: "spring", duration: 0.6, bounce: 0.15 },
-      };
 
   return (
     <>
-      <div className="relative z-0">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0" style={{ perspective: 1200 }}>
-          <motion.span
-            className="work-row-highlight absolute pointer-events-none overflow-hidden rounded-[var(--md-shape-lg)] transform-gpu will-change-transform"
-            initial={false}
-            animate={{
-              height: highlightRect?.height ?? 0,
-              left: highlightRect?.left ?? 0,
-              opacity: highlightVisible ? 1 : 0,
-              rotateX: reduceMotion ? 0 : pointerState.rotateX,
-              rotateY: reduceMotion ? 0 : pointerState.rotateY,
-              top: highlightRect?.top ?? 0,
-              width: highlightRect?.width ?? 0,
-              x: reduceMotion ? 0 : pointerState.shiftX,
-              y: reduceMotion ? 0 : pointerState.shiftY,
-            }}
-            transition={highlightTransition}
-            style={{
-              transformOrigin: `${pointerState.originX}% ${pointerState.originY}%`,
-            }}
-          />
-        </div>
-        <ul
-          ref={listRef}
-          className="relative z-10"
-          onMouseMove={handlePointerMove}
-          onPointerMove={handlePointerMove}
-        >
+      <div>
+        <ul>
           {projects.map((project, index) => (
             <ProjectTextRow
-              active={activeIndex === index && highlightVisible}
               key={project.id}
               onActivate={() => activateRow(index)}
               onDeactivate={deactivateRow}
               project={project}
               index={index}
               list="work"
-              registerRow={(node) => {
-                rowRefs.current[index] = node;
-              }}
             />
           ))}
         </ul>
@@ -573,7 +410,6 @@ function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
                   {formatWritingDate(post.date)}, {post.description}
                 </span>
               </span>
-              <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-[var(--accent-indigo)] opacity-0 transition-opacity duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:opacity-100 group-focus-within:opacity-100" />
             </Link>
           </li>
         ))}
