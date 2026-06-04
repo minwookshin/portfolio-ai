@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   motion,
+  type MotionStyle,
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
@@ -118,6 +119,8 @@ export default function AnimatedCursor() {
   const targetShiftY = useMotionValue(0);
   const targetOriginX = useMotionValue(50);
   const targetOriginY = useMotionValue(50);
+  const targetShineX = useMotionValue(50);
+  const targetShineY = useMotionValue(18);
   const targetScale = useMotionValue(0.86);
   const targetXSpring = useSpring(targetX, { stiffness: 500, damping: 26, mass: 0.3 });
   const targetYSpring = useSpring(targetY, { stiffness: 500, damping: 26, mass: 0.3 });
@@ -130,9 +133,13 @@ export default function AnimatedCursor() {
   const targetShiftYSpring = useSpring(targetShiftY, { stiffness: 330, damping: 21, mass: 0.32 });
   const targetOriginXSpring = useSpring(targetOriginX, { stiffness: 620, damping: 36, mass: 0.16 });
   const targetOriginYSpring = useSpring(targetOriginY, { stiffness: 620, damping: 36, mass: 0.16 });
+  const targetShineXSpring = useSpring(targetShineX, { stiffness: 520, damping: 34, mass: 0.18 });
+  const targetShineYSpring = useSpring(targetShineY, { stiffness: 520, damping: 34, mass: 0.18 });
   const targetScaleSpring = useSpring(targetScale, { stiffness: 430, damping: 20, mass: 0.28 });
   const targetHaloTransform = useMotionTemplate`perspective(1400px) translate3d(${targetXSpring}px, ${targetYSpring}px, 0) translate3d(${targetShiftXSpring}px, ${targetShiftYSpring}px, 0) rotateX(${targetRotateXSpring}deg) rotateY(${targetRotateYSpring}deg) scale(${targetScaleSpring})`;
   const targetTransformOrigin = useMotionTemplate`${targetOriginXSpring}% ${targetOriginYSpring}%`;
+  const targetShineXPosition = useMotionTemplate`${targetShineXSpring}%`;
+  const targetShineYPosition = useMotionTemplate`${targetShineYSpring}%`;
   const [cursorState, setCursorState] = useState<CursorState>({ mode: "idle", tone: "dark" });
   const [targetHaloState, setTargetHaloState] = useState<TargetHaloState>({
     tone: "dark",
@@ -168,6 +175,8 @@ export default function AnimatedCursor() {
       targetShiftY.set(0);
       targetOriginX.set(50);
       targetOriginY.set(50);
+      targetShineX.set(50);
+      targetShineY.set(18);
       targetScale.set(0.86);
     };
 
@@ -208,6 +217,8 @@ export default function AnimatedCursor() {
         targetShiftY.set(9 * easeOutSigned(normalizedY, 2));
         targetOriginX.set(14 + pointerX * 72);
         targetOriginY.set(14 + pointerY * 72);
+        targetShineX.set(18 + pointerX * 64);
+        targetShineY.set(8 + pointerY * 54);
       }
 
       if (isFreshTarget) {
@@ -299,6 +310,8 @@ export default function AnimatedCursor() {
     targetRotateX,
     targetRotateY,
     targetScale,
+    targetShineX,
+    targetShineY,
     targetShiftX,
     targetShiftY,
     targetWidth,
@@ -308,6 +321,16 @@ export default function AnimatedCursor() {
 
   if (!canUseCursor) return null;
 
+  const targetHaloStyle = {
+    "--cursor-glass-x": targetShineXPosition,
+    "--cursor-glass-y": targetShineYPosition,
+    borderRadius: targetRadiusSpring,
+    height: targetHeightSpring,
+    transform: targetHaloTransform,
+    transformOrigin: targetTransformOrigin,
+    width: targetWidthSpring,
+  } as MotionStyle;
+
   return (
     <>
       <motion.div
@@ -315,13 +338,7 @@ export default function AnimatedCursor() {
         className={`animated-cursor-target animated-cursor-target--${targetHaloState.tone} ${
           targetHaloState.visible ? "is-visible" : ""
         }`}
-        style={{
-          borderRadius: targetRadiusSpring,
-          height: targetHeightSpring,
-          transform: targetHaloTransform,
-          transformOrigin: targetTransformOrigin,
-          width: targetWidthSpring,
-        }}
+        style={targetHaloStyle}
       >
         <span className="animated-cursor-target__halo" />
       </motion.div>
