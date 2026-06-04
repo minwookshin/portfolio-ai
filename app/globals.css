@@ -251,31 +251,21 @@ body::after {
 .micro-link,
 .micro-richtext :is(a) {
   --micro-link-rest-line: color-mix(in srgb, currentColor 48%, transparent);
-  text-decoration: none;
-  background-image:
-    linear-gradient(var(--micro-link-rest-line), var(--micro-link-rest-line)),
-    linear-gradient(currentColor, currentColor);
-  background-position:
-    0 calc(100% - 0.02em),
-    0 calc(100% - 0.02em);
-  background-origin: content-box;
-  background-clip: content-box;
-  background-repeat: no-repeat;
-  background-size:
-    100% 1px,
-    0 1px;
+  text-decoration-line: underline;
+  text-decoration-color: var(--micro-link-rest-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-skip-ink: none;
   transition:
     color var(--motion-duration-base) var(--motion-ease-standard),
-    background-size var(--motion-duration-base) var(--motion-ease-standard),
+    text-decoration-color var(--motion-duration-base) var(--motion-ease-standard),
     opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .micro-link:hover,
 .micro-link:focus-visible,
 .micro-richtext :is(a:hover, a:focus-visible) {
-  background-size:
-    100% 1px,
-    100% 1px;
+  text-decoration-color: currentColor;
 }
 
 .micro-richtext :is(a) {
@@ -289,31 +279,27 @@ body::after {
 }
 
 .project-row-title-line {
-  text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-position: 0 calc(100% - 0.02em);
-  background-origin: content-box;
-  background-clip: content-box;
-  background-repeat: no-repeat;
-  background-size: 0 1px;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-skip-ink: none;
   transition:
-    background-size var(--motion-duration-base) var(--motion-ease-standard),
+    text-decoration-color var(--motion-duration-base) var(--motion-ease-standard),
     color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
 .home-tab-button,
 .intro-contact-link {
   color: var(--text-muted);
-  text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-position: 0 calc(100% - 0.02em);
-  background-origin: content-box;
-  background-clip: content-box;
-  background-repeat: no-repeat;
-  background-size: 0 1px;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-skip-ink: none;
   transition:
     color var(--motion-duration-base) var(--motion-ease-standard),
-    background-size var(--motion-duration-base) var(--motion-ease-standard),
+    text-decoration-color var(--motion-duration-base) var(--motion-ease-standard),
     opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
@@ -323,7 +309,7 @@ body::after {
 .intro-contact-link:hover,
 .intro-contact-link:focus-visible {
   color: var(--text-primary);
-  background-size: 100% 1px;
+  text-decoration-color: currentColor;
 }
 
 .home-tab-button[data-active="false"]:hover {
@@ -332,7 +318,7 @@ body::after {
 
 .group:hover .project-row-title-line,
 .group:focus-within .project-row-title-line {
-  background-size: 100% 1px;
+  text-decoration-color: currentColor;
 }
 
 .micro-pressable {
