@@ -381,18 +381,31 @@ function WorkSection({
         </ul>
       </div>
       {canShowFixedPreview && (
-        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden md:block">
-          {previewProject && (
-            <motion.div
-              key={previewProject.id}
-              className="h-fit w-[min(34vw,360px)] transform-gpu"
-              initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1 } : { opacity: 0, filter: "blur(10px)", scale: 0.97 }}
-              animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-              transition={reduceMotion ? tweens.instant : { type: "spring", duration: 0.6, bounce: 0 }}
-            >
-              <WorkFixedPreview project={previewProject} reduceMotion={reduceMotion} />
-            </motion.div>
-          )}
+        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block">
+          <AnimatePresence initial={false}>
+            {previewProject && (
+              <motion.div
+                key={previewProject.id}
+                className="absolute inset-0 transform-gpu"
+                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(12px)", scale: 0.985, y: 7 }}
+                animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(8px)", scale: 0.992, y: -4 }}
+                transition={
+                  reduceMotion
+                    ? tweens.instant
+                    : {
+                        opacity: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
+                        filter: { type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+                        scale: { type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+                        y: { type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+                      }
+                }
+                style={{ willChange: "opacity, filter, transform" }}
+              >
+                <WorkFixedPreview project={previewProject} reduceMotion={reduceMotion} />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
     </div>
