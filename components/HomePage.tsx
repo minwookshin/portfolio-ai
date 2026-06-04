@@ -410,12 +410,12 @@ function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
           <li key={post.slug} className="-mx-2 max-w-[var(--measure)] list-none">
             <Link
               href={`/writing/${post.slug}`}
-              className="micro-focus micro-pressable group flex min-h-8 w-full items-baseline justify-between gap-[var(--space-2)] rounded-[var(--md-shape-lg)] px-2 py-0.5 text-left text-[length:var(--type-0)]"
+              className="micro-focus micro-pressable group flex min-h-12 w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left text-[length:var(--type-0)]"
             >
               <span className="project-row-title-line min-w-0 truncate font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">
                 {post.title}
               </span>
-              <span className="shrink-0 leading-[var(--leading-tight)] text-[var(--text-muted)]">
+              <span className="text-[length:calc(var(--type-0)_-_4px)] leading-[1.2] text-[var(--text-muted)]">
                 {formatWritingDate(post.date)}
               </span>
             </Link>
