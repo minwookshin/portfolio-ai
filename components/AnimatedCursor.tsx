@@ -35,7 +35,7 @@ const explicitCursorModes: Record<string, CursorMode> = {
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
 const targetHaloPaddingByKind: Record<TargetHaloKind, { x: number; y: number }> = {
   default: { x: 6, y: 6 },
-  text: { x: 16, y: 8 },
+  text: { x: 12, y: 5 },
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -87,7 +87,7 @@ function readTargetRadius(
 ) {
   const styles = window.getComputedStyle(target);
   const radius = Number.parseFloat(styles.borderTopLeftRadius);
-  const pillRadius = Math.min(height / 2, 22);
+  const pillRadius = Math.min(height / 2, 18);
   return Math.max(
     Number.isFinite(radius) ? radius + Math.max(padding.x, padding.y) : 0,
     pillRadius,
