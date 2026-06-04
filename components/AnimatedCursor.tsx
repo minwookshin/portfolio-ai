@@ -35,7 +35,7 @@ const explicitCursorModes: Record<string, CursorMode> = {
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
 const targetHaloPaddingByKind: Record<TargetHaloKind, { x: number; y: number }> = {
   default: { x: 6, y: 6 },
-  text: { x: 12, y: 5 },
+  text: { x: 12, y: 2 },
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -69,8 +69,13 @@ function getInteractiveTarget(target: EventTarget | null) {
   return target.closest<HTMLElement>(interactiveSelector);
 }
 
+function getTargetFrame(target: HTMLElement) {
+  return target.querySelector<HTMLElement>("[data-cursor-frame]") ?? target;
+}
+
 function getTargetHaloKind(target: HTMLElement, rect: DOMRect): TargetHaloKind {
   if (
+    target.querySelector("[data-cursor-frame]") ||
     target.matches(".home-tab-button, .intro-contact-link, .micro-link") ||
     (rect.height <= 34 && rect.width <= 180)
   ) {
@@ -208,7 +213,8 @@ export default function AnimatedCursor() {
       tone: CursorTone,
       pointer?: { x: number; y: number },
     ) => {
-      const rect = target.getBoundingClientRect();
+      const frame = getTargetFrame(target);
+      const rect = frame.getBoundingClientRect();
       if (rect.width < 1 || rect.height < 1) {
         activeTargetRef.current = null;
         setTargetHalo({ kind: targetHaloStateRef.current.kind, tone, visible: false });
@@ -227,7 +233,7 @@ export default function AnimatedCursor() {
       targetY.set(targetTop);
       targetWidth.set(width);
       targetHeight.set(height);
-      targetRadius.set(readTargetRadius(target, height, padding));
+      targetRadius.set(readTargetRadius(frame, height, padding));
       activeTargetRef.current = target;
       setTargetHalo({ kind, tone, visible: true });
 
