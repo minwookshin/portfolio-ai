@@ -219,7 +219,7 @@ function ProjectTextRow({
     .join(" ");
   const rowText = (
     <>
-      <span data-cursor-frame="true" className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0">
+      <span className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0">
         <span className={titleClass}>
           {project.title}
         </span>

@@ -462,7 +462,6 @@ body::after {
   }
 }
 
-.animated-cursor-target,
 .animated-cursor,
 .animated-cursor-pointer {
   position: fixed;
@@ -477,21 +476,6 @@ body::after {
   transition:
     opacity var(--motion-duration-instant) var(--motion-ease-standard);
   will-change: transform, opacity;
-}
-
-.animated-cursor-target {
-  z-index: 2147483645;
-  overflow: hidden;
-  --cursor-glass-x: 50%;
-  --cursor-glass-y: 18%;
-  --cursor-glass-border: rgba(255, 255, 255, 0.54);
-  --cursor-glass-rim: rgba(17, 18, 20, 0.15);
-  --cursor-glass-top: rgba(255, 255, 255, 0.26);
-  --cursor-glass-bottom: rgba(255, 255, 255, 0.075);
-  --cursor-glass-glow: rgba(255, 255, 255, 0.5);
-  --cursor-glass-shadow: rgba(17, 18, 20, 0.17);
-  transition:
-    opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .animated-cursor {
@@ -509,17 +493,11 @@ body::after {
   height: 20px;
 }
 
-.animated-cursor-target.is-visible,
 .animated-cursor.is-visible,
 .animated-cursor-pointer.is-visible {
   opacity: 1;
 }
 
-.animated-cursor-target.is-visible {
-  opacity: 0.94;
-}
-
-.animated-cursor-target--light,
 .animated-cursor--light,
 .animated-cursor-pointer--light {
   --cursor-rgb: 247 248 248;
@@ -527,38 +505,6 @@ body::after {
   --cursor-stroke-alpha: 0.32;
 }
 
-.animated-cursor-target--light {
-  --cursor-glass-border: rgba(255, 255, 255, 0.48);
-  --cursor-glass-rim: rgba(255, 255, 255, 0.26);
-  --cursor-glass-top: rgba(255, 255, 255, 0.18);
-  --cursor-glass-bottom: rgba(255, 255, 255, 0.05);
-  --cursor-glass-glow: rgba(255, 255, 255, 0.34);
-  --cursor-glass-shadow: rgba(0, 0, 0, 0.28);
-}
-
-.animated-cursor-target--text {
-  --cursor-glass-border: rgba(255, 255, 255, 0.7);
-  --cursor-glass-rim: rgba(17, 18, 20, 0.22);
-  --cursor-glass-top: rgba(255, 255, 255, 0.34);
-  --cursor-glass-bottom: rgba(255, 255, 255, 0.11);
-  --cursor-glass-glow: rgba(255, 255, 255, 0.62);
-  --cursor-glass-shadow: rgba(17, 18, 20, 0.24);
-}
-
-.animated-cursor-target--text.animated-cursor-target--light {
-  --cursor-glass-border: rgba(255, 255, 255, 0.56);
-  --cursor-glass-rim: rgba(255, 255, 255, 0.32);
-  --cursor-glass-top: rgba(255, 255, 255, 0.22);
-  --cursor-glass-bottom: rgba(255, 255, 255, 0.07);
-  --cursor-glass-glow: rgba(255, 255, 255, 0.42);
-  --cursor-glass-shadow: rgba(0, 0, 0, 0.34);
-}
-
-.animated-cursor-target--text.is-visible {
-  opacity: 0.98;
-}
-
-.animated-cursor-target__halo,
 .animated-cursor__halo {
   position: absolute;
   inset: 0;
@@ -576,50 +522,6 @@ body::after {
     background-color var(--motion-duration-fast) var(--motion-ease-standard),
     box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.animated-cursor-target__halo {
-  border-color: var(--cursor-glass-border);
-  border-radius: inherit;
-  background:
-    radial-gradient(circle at var(--cursor-glass-x) var(--cursor-glass-y), rgba(255, 255, 255, 0.34), transparent 38%),
-    linear-gradient(180deg, var(--cursor-glass-top), var(--cursor-glass-bottom)),
-    rgba(255, 255, 255, 0.026);
-  box-shadow:
-    inset 0 1px 0 0 var(--cursor-glass-glow),
-    inset 0 -2px 4px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -8px 18px 0 rgba(255, 255, 255, 0.18),
-    inset 0 4px 10px 0 rgba(110, 110, 116, 0.08),
-    0 0 0 1px var(--cursor-glass-rim),
-    0 4px 14px -10px rgba(53, 53, 79, 0.28),
-    0 14px 34px -20px var(--cursor-glass-shadow);
-  -webkit-backdrop-filter: blur(16px) saturate(1.8) brightness(1.08) contrast(1.02);
-  backdrop-filter: blur(16px) saturate(1.8) brightness(1.08) contrast(1.02);
-  transform: scale(0.992);
-}
-
-.animated-cursor-target__halo::before,
-.animated-cursor-target__halo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.animated-cursor-target__halo::before {
-  background:
-    radial-gradient(circle at var(--cursor-glass-x) var(--cursor-glass-y), rgba(255, 255, 255, 0.42), transparent 34%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
-  opacity: 0.68;
-  transform: translateY(-18%);
-}
-
-.animated-cursor-target__halo::after {
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
-    inset 0 -10px 18px rgba(255, 255, 255, 0.12);
-  opacity: 0.82;
 }
 
 .animated-cursor__arrow {
@@ -684,10 +586,8 @@ body::after {
     box-shadow: none !important;
   }
 
-  .animated-cursor-target,
   .animated-cursor,
   .animated-cursor-pointer,
-  .animated-cursor-target__halo,
   .animated-cursor__halo,
   .animated-cursor__arrow {
     transition: none !important;
