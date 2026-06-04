@@ -13,7 +13,8 @@ import {
 type CursorMode = "idle" | "interactive" | "close";
 type CursorTone = "dark" | "light";
 type CursorState = { mode: CursorMode; tone: CursorTone };
-type TargetHaloState = { tone: CursorTone; visible: boolean };
+type TargetHaloKind = "default" | "text";
+type TargetHaloState = { kind: TargetHaloKind; tone: CursorTone; visible: boolean };
 
 const interactiveSelector = [
   "a[href]",
@@ -32,7 +33,10 @@ const explicitCursorModes: Record<string, CursorMode> = {
 };
 
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
-const targetHaloPadding = 6;
+const targetHaloPaddingByKind: Record<TargetHaloKind, { x: number; y: number }> = {
+  default: { x: 6, y: 6 },
+  text: { x: 16, y: 8 },
+};
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -65,11 +69,29 @@ function getInteractiveTarget(target: EventTarget | null) {
   return target.closest<HTMLElement>(interactiveSelector);
 }
 
-function readTargetRadius(target: HTMLElement, height: number) {
+function getTargetHaloKind(target: HTMLElement, rect: DOMRect): TargetHaloKind {
+  if (
+    target.matches(".home-tab-button, .intro-contact-link, .micro-link") ||
+    (rect.height <= 34 && rect.width <= 180)
+  ) {
+    return "text";
+  }
+
+  return "default";
+}
+
+function readTargetRadius(
+  target: HTMLElement,
+  height: number,
+  padding: { x: number; y: number },
+) {
   const styles = window.getComputedStyle(target);
   const radius = Number.parseFloat(styles.borderTopLeftRadius);
-  const pillRadius = Math.min(height / 2, 18);
-  return Math.max(Number.isFinite(radius) ? radius + targetHaloPadding : 0, pillRadius);
+  const pillRadius = Math.min(height / 2, 22);
+  return Math.max(
+    Number.isFinite(radius) ? radius + Math.max(padding.x, padding.y) : 0,
+    pillRadius,
+  );
 }
 
 function getCursorState(target: EventTarget | null): CursorState {
@@ -142,6 +164,7 @@ export default function AnimatedCursor() {
   const targetShineYPosition = useMotionTemplate`${targetShineYSpring}%`;
   const [cursorState, setCursorState] = useState<CursorState>({ mode: "idle", tone: "dark" });
   const [targetHaloState, setTargetHaloState] = useState<TargetHaloState>({
+    kind: "default",
     tone: "dark",
     visible: false,
   });
@@ -188,28 +211,32 @@ export default function AnimatedCursor() {
       const rect = target.getBoundingClientRect();
       if (rect.width < 1 || rect.height < 1) {
         activeTargetRef.current = null;
-        setTargetHalo({ tone, visible: false });
+        setTargetHalo({ kind: targetHaloStateRef.current.kind, tone, visible: false });
         resetTargetTilt();
         return;
       }
 
       const isFreshTarget = activeTargetRef.current !== target || !targetHaloStateRef.current.visible;
-      const width = rect.width + targetHaloPadding * 2;
-      const height = rect.height + targetHaloPadding * 2;
-      targetX.set(rect.left - targetHaloPadding);
-      targetY.set(rect.top - targetHaloPadding);
+      const kind = getTargetHaloKind(target, rect);
+      const padding = targetHaloPaddingByKind[kind];
+      const targetLeft = rect.left - padding.x;
+      const targetTop = rect.top - padding.y;
+      const width = rect.width + padding.x * 2;
+      const height = rect.height + padding.y * 2;
+      targetX.set(targetLeft);
+      targetY.set(targetTop);
       targetWidth.set(width);
       targetHeight.set(height);
-      targetRadius.set(readTargetRadius(target, height));
+      targetRadius.set(readTargetRadius(target, height, padding));
       activeTargetRef.current = target;
-      setTargetHalo({ tone, visible: true });
+      setTargetHalo({ kind, tone, visible: true });
 
       if (pointer) {
-        const pointerX = clamp((pointer.x - rect.left) / rect.width, 0, 1);
-        const pointerY = clamp((pointer.y - rect.top) / rect.height, 0, 1);
+        const pointerX = clamp((pointer.x - targetLeft) / width, 0, 1);
+        const pointerY = clamp((pointer.y - targetTop) / height, 0, 1);
         const normalizedX = pointerX * 2 - 1;
         const normalizedY = pointerY * 2 - 1;
-        const aspect = Math.max(1, rect.width / Math.max(1, rect.height));
+        const aspect = Math.max(1, width / Math.max(1, height));
 
         targetRotateX.set(-normalizedY * Math.min(2.7, 0.95 + aspect * 0.2));
         targetRotateY.set(normalizedX * 1.28);
@@ -239,7 +266,11 @@ export default function AnimatedCursor() {
         revealFrameRef.current = null;
       }
       activeTargetRef.current = null;
-      setTargetHalo({ tone: targetHaloStateRef.current.tone, visible: false });
+      setTargetHalo({
+        kind: targetHaloStateRef.current.kind,
+        tone: targetHaloStateRef.current.tone,
+        visible: false,
+      });
       resetTargetTilt();
     };
 
@@ -335,7 +366,7 @@ export default function AnimatedCursor() {
     <>
       <motion.div
         aria-hidden="true"
-        className={`animated-cursor-target animated-cursor-target--${targetHaloState.tone} ${
+        className={`animated-cursor-target animated-cursor-target--${targetHaloState.tone} animated-cursor-target--${targetHaloState.kind} ${
           targetHaloState.visible ? "is-visible" : ""
         }`}
         style={targetHaloStyle}
