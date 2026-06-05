@@ -93,28 +93,28 @@ export default async function WritingPostPage({ params }: WritingPostPageProps) 
           </p>
         </header>
 
+        <div className="article-body micro-richtext mt-[var(--space-5)]">
+          <MDXRemote source={post.content} components={mdxComponents} />
+        </div>
+
         {relatedWork.length > 0 && (
-          <div className="mt-[var(--space-4)] border-y border-[var(--border-light)] py-[var(--space-2)]">
+          <aside className="mt-[var(--space-5)] border-t border-[var(--border-light)] pt-[var(--space-3)]">
             <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
               related work
             </p>
-            <div className="mt-[var(--space-1)] flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
+            <div className="mt-[var(--space-1)] flex flex-col gap-[var(--space-1)]">
               {relatedWork.map((work) => (
                 <Link
                   key={work.slug}
                   href={work.href}
-                  className="intro-contact-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
+                  className="related-work-link micro-focus micro-pressable inline-flex w-fit text-[length:var(--type-0)] leading-[var(--leading-body)]"
                 >
                   {work.title}
                 </Link>
               ))}
             </div>
-          </div>
+          </aside>
         )}
-
-        <div className="article-body micro-richtext mt-[var(--space-5)]">
-          <MDXRemote source={post.content} components={mdxComponents} />
-        </div>
       </article>
       <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
