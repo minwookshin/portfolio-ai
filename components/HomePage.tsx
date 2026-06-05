@@ -296,7 +296,7 @@ function WorkFixedPreview({
 
 function EditorialIntro() {
   return (
-    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[#F7F8F8] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
+    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
       <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
         <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</p>
         <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</p>

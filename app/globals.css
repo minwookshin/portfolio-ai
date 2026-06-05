@@ -1,22 +1,22 @@
 /* Industrial minimalist design tokens */
 :root {
   /* Global Canvas (Light Mode Base) */
-  --bg-base: #F7F8F8;
+  --bg-base: #FFFFFF;
   --bg-surface: #FFFFFF;
-  --bg-element: #F1F2F4;
+  --bg-element: #F4F4F5;
   --border-light: #E2E4E9;
 
-  --text-primary: #111214;
-  --text-muted: #62666D;
-  --text-underline-muted: color-mix(in srgb, var(--text-muted) 52%, transparent);
+  --text-primary: #000000;
+  --text-muted: #A1A1AA;
+  --text-underline-muted: #F4F4F5;
   --font-sans: "Switzer", "Helvetica Neue", Arial, sans-serif;
 
   /* Embedded Dark Mode (For Project Cards/Code Blocks) */
   --dark-bg-base: #08090A;
   --dark-bg-surface: #121314;
   --dark-border: #222326;
-  --dark-text-primary: #F7F8F8;
-  --dark-text-muted: #8A8F98;
+  --dark-text-primary: #FFFFFF;
+  --dark-text-muted: #A1A1AA;
 
   /* Accent & Interactions */
   --accent-indigo: var(--text-primary);
@@ -70,7 +70,7 @@
   --btn-secondary-text: var(--text-primary);
   --btn-secondary-border: var(--border-light);
   --accent: var(--text-primary);
-  --gradient-fade: rgba(247, 248, 248, 0);
+  --gradient-fade: rgba(255, 255, 255, 0);
 
   /* Material-role bridge for the existing component API. */
   --md-surface: var(--bg-base);
@@ -222,7 +222,7 @@ body::after {
 
 .micro-link,
 .micro-richtext :is(a) {
-  --micro-link-rest-line: color-mix(in srgb, currentColor 48%, transparent);
+  --micro-link-rest-line: var(--text-underline-muted);
   text-decoration-line: underline;
   text-decoration-color: var(--micro-link-rest-line);
   text-decoration-thickness: 1px;
@@ -252,7 +252,7 @@ body::after {
 
 .project-row-title-line {
   text-decoration-line: underline;
-  text-decoration-color: transparent;
+  text-decoration-color: var(--text-underline-muted);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
   text-decoration-skip-ink: none;
