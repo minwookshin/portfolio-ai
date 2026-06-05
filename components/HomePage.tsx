@@ -433,17 +433,20 @@ function WritingSection({ posts }: { posts: WritingPostMeta[] }) {
           animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
           viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
           transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
+          data-project-row="writing"
           className="-mx-2 group list-none text-[length:var(--type-0)]"
         >
           <Link
             href={`/writing/${post.slug}`}
             className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
           >
-            <span className="project-row-title-line max-w-full font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">
-              {post.title}
-            </span>
-            <span className="mt-2 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-              {formatWritingDate(post.date)}
+            <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
+              <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
+                {post.title}
+              </span>
+              <span className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+                {formatWritingDate(post.date)}
+              </span>
             </span>
           </Link>
         </motion.li>

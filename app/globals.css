@@ -302,7 +302,9 @@ body::after {
 }
 
 [data-project-row="work"]:hover .project-row-copy,
-[data-project-row="work"]:focus-within .project-row-copy {
+[data-project-row="work"]:focus-within .project-row-copy,
+[data-project-row="writing"]:hover .project-row-copy,
+[data-project-row="writing"]:focus-within .project-row-copy {
   transform: translateX(12px);
 }
 
@@ -313,7 +315,9 @@ body::after {
 }
 
 [data-project-row="work"]:hover .project-row-title-line--lateral,
-[data-project-row="work"]:focus-within .project-row-title-line--lateral {
+[data-project-row="work"]:focus-within .project-row-title-line--lateral,
+[data-project-row="writing"]:hover .project-row-title-line--lateral,
+[data-project-row="writing"]:focus-within .project-row-title-line--lateral {
   color: var(--text-primary);
 }
 
@@ -322,7 +326,9 @@ body::after {
 }
 
 [data-project-row="work"]:hover .project-row-meta,
-[data-project-row="work"]:focus-within .project-row-meta {
+[data-project-row="work"]:focus-within .project-row-meta,
+[data-project-row="writing"]:hover .project-row-meta,
+[data-project-row="writing"]:focus-within .project-row-meta {
   color: #71717a;
 }
 
@@ -562,7 +568,9 @@ body::after {
   }
 
   [data-project-row="work"]:hover .project-row-copy,
-  [data-project-row="work"]:focus-within .project-row-copy {
+  [data-project-row="work"]:focus-within .project-row-copy,
+  [data-project-row="writing"]:hover .project-row-copy,
+  [data-project-row="writing"]:focus-within .project-row-copy {
     transform: none !important;
   }
 
