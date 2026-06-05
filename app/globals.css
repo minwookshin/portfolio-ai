@@ -406,7 +406,8 @@ body::after {
 }
 
 .work-preview-sentinel-video {
-  border-radius: calc(var(--md-shape-lg) + 6px);
+  border-radius: 0;
+  background: var(--bg-base);
   -webkit-mask-image: none;
   mask-image: none;
 }
