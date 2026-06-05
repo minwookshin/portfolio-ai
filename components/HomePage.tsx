@@ -277,10 +277,16 @@ function WorkFixedPreview({
   reduceMotion: boolean;
 }) {
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+  const previewFrameClass = [
+    "work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]",
+    project.slug === "sentinel" ? "work-preview-sentinel-video" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (previewVideo && !reduceMotion) {
     return (
-      <div className="work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]">
+      <div className={previewFrameClass}>
         <video
           autoPlay
           loop
@@ -288,7 +294,7 @@ function WorkFixedPreview({
           playsInline
           preload="auto"
           src={previewVideo}
-          className="h-full w-full object-cover"
+          className="block h-full w-full object-cover"
         />
       </div>
     );
