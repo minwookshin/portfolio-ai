@@ -293,6 +293,11 @@ body::after {
   text-decoration-color: currentColor;
 }
 
+.group:hover .project-row-title-line--shared,
+.group:focus-within .project-row-title-line--shared {
+  text-decoration-color: var(--text-underline-muted);
+}
+
 .micro-pressable {
   transition:
     color var(--motion-duration-base) var(--motion-ease-standard),

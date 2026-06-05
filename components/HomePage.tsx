@@ -4,7 +4,7 @@ import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup, useReducedMotion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
@@ -199,29 +199,57 @@ function ProjectTextRow({
   onDeactivate,
   project,
   index,
+  isActive = false,
   list,
 }: {
   onActivate?: () => void;
   onDeactivate?: () => void;
   project: Project;
   index: number;
+  isActive?: boolean;
   list: "work" | "lab";
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
+  const showSharedUnderline = list === "work" && isActive && !project.comingSoon;
   const rowClass =
     "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
     "font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]",
     project.comingSoon ? "" : "project-row-title-line",
+    list === "work" && !project.comingSoon ? "project-row-title-line--shared" : "",
   ]
     .filter(Boolean)
     .join(" ");
   const rowText = (
     <>
       <span className="flex min-w-0 flex-col items-start gap-2">
-        <span className={titleClass}>
-          {project.title}
+        <span className="relative inline-flex min-w-0 items-start">
+          <span className={titleClass}>
+            {project.title}
+          </span>
+          <AnimatePresence initial={false}>
+            {showSharedUnderline && (
+              <motion.span
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 right-0 h-px bg-[var(--text-primary)]"
+                initial={reduceMotion ? false : { opacity: 0, scaleX: 0.82 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scaleX: 0.9 }}
+                layoutId="work-row-shared-underline"
+                style={{ bottom: "0.14em", transformOrigin: "center" }}
+                transition={
+                  reduceMotion
+                    ? tweens.none
+                    : {
+                        opacity: { type: "tween", duration: 0.12, ease: [0.22, 1, 0.36, 1] },
+                        scaleX: { type: "spring", stiffness: 620, damping: 40, mass: 0.2 },
+                        layout: { type: "spring", stiffness: 640, damping: 46, mass: 0.2 },
+                      }
+                }
+              />
+            )}
+          </AnimatePresence>
         </span>
         <span className="min-w-0 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
           {descriptor}
@@ -357,18 +385,21 @@ function WorkSection({
   return (
     <div className="relative">
       <div>
-        <ul className="space-y-[var(--space-2)]">
-          {projects.map((project, index) => (
-            <ProjectTextRow
-              key={project.id}
-              onActivate={() => activateRow(index)}
-              onDeactivate={deactivateRow}
-              project={project}
-              index={index}
-              list="work"
-            />
-          ))}
-        </ul>
+        <LayoutGroup id="work-row-shared-underline">
+          <ul className="space-y-[var(--space-2)]">
+            {projects.map((project, index) => (
+              <ProjectTextRow
+                key={project.id}
+                onActivate={() => activateRow(index)}
+                onDeactivate={deactivateRow}
+                project={project}
+                index={index}
+                isActive={previewIndex === index}
+                list="work"
+              />
+            ))}
+          </ul>
+        </LayoutGroup>
       </div>
       {canShowFixedPreview && (
         <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block">
