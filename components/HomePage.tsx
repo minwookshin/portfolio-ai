@@ -4,7 +4,7 @@ import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, LayoutGroup, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
@@ -199,21 +199,18 @@ function ProjectTextRow({
   onDeactivate,
   project,
   index,
-  isActive = false,
   list,
 }: {
   onActivate?: () => void;
   onDeactivate?: () => void;
   project: Project;
   index: number;
-  isActive?: boolean;
   list: "work" | "lab";
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
-  const showHighlight = list === "work" && isActive && !project.comingSoon;
   const rowClass =
-    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 overflow-hidden rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
+    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
     "font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]",
     project.comingSoon ? "" : "project-row-title-line",
@@ -222,39 +219,14 @@ function ProjectTextRow({
     .join(" ");
   const rowText = (
     <>
-      <AnimatePresence initial={false}>
-        {showHighlight && (
-          <motion.span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 rounded-[var(--md-shape-lg)] bg-[var(--text-underline-muted)]"
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.985 }}
-            layoutId="work-row-highlight"
-            transition={
-              reduceMotion
-                ? tweens.none
-                : {
-                    opacity: { type: "tween", duration: 0.12, ease: [0.22, 1, 0.36, 1] },
-                    scale: { type: "spring", stiffness: 520, damping: 38, mass: 0.2 },
-                    layout: { type: "spring", stiffness: 560, damping: 42, mass: 0.22 },
-                  }
-            }
-          />
-        )}
-      </AnimatePresence>
-      <motion.span
-        animate={reduceMotion || list !== "work" ? { x: 0 } : { x: showHighlight ? 2 : 0 }}
-        className="relative z-10 flex min-w-0 flex-col items-start gap-2"
-        transition={reduceMotion ? tweens.none : { type: "spring", stiffness: 520, damping: 42, mass: 0.22 }}
-      >
+      <span className="flex min-w-0 flex-col items-start gap-2">
         <span className={titleClass}>
           {project.title}
         </span>
         <span className="min-w-0 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
           {descriptor}
         </span>
-      </motion.span>
+      </span>
     </>
   );
 
@@ -386,19 +358,16 @@ function WorkSection({
     <div className="relative">
       <div>
         <ul className="space-y-[var(--space-2)]">
-          <LayoutGroup id="work-row-highlight">
-            {projects.map((project, index) => (
-              <ProjectTextRow
-                key={project.id}
-                onActivate={() => activateRow(index)}
-                onDeactivate={deactivateRow}
-                project={project}
-                index={index}
-                isActive={previewIndex === index}
-                list="work"
-              />
-            ))}
-          </LayoutGroup>
+          {projects.map((project, index) => (
+            <ProjectTextRow
+              key={project.id}
+              onActivate={() => activateRow(index)}
+              onDeactivate={deactivateRow}
+              project={project}
+              index={index}
+              list="work"
+            />
+          ))}
         </ul>
       </div>
       {canShowFixedPreview && (
