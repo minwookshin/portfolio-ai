@@ -12,10 +12,11 @@ import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import {
+  LAB_PROJECT_IDS,
   LIVE_DEMO_TILE_TITLES,
   MAIN_PROJECTS,
   PROJECT_PREVIEW_VIDEOS,
-  getProjectPath,
+  getLabProjectPath,
   orderProjects,
 } from "@/data/projects";
 
@@ -26,7 +27,6 @@ type LabChatMessage = {
   status?: "error";
 };
 
-const LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
 const LAB_CHAT_EMPTY_HEIGHT = "h-[420px] sm:h-[460px]";
 const LAB_TILE_HEIGHTS = [
   "h-[300px] sm:h-[340px]",
@@ -247,7 +247,7 @@ function LabProjectTile({
     >
       <Link
         {...previewState.previewHandlers}
-        href={getProjectPath(project)}
+        href={getLabProjectPath(project)}
         scroll={false}
         onClick={saveProjectOpenScroll}
         className="micro-focus micro-pressable group relative block h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left"

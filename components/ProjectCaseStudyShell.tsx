@@ -11,12 +11,14 @@ export default function ProjectCaseStudyShell({
   actionLabel,
   actionHref,
   onAction,
+  baseHref = "/work",
   className = "",
 }: {
   project: PortfolioProject;
   actionLabel?: string;
   actionHref?: string;
   onAction?: () => void;
+  baseHref?: string;
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
@@ -48,7 +50,7 @@ export default function ProjectCaseStudyShell({
       <nav className="mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
         <span className="flex min-w-0 items-center gap-[var(--space-1)]">
           <Link
-            href="/work"
+            href={baseHref}
             className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
           >
             minwook shin

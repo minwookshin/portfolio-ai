@@ -22,7 +22,9 @@ import {
   FEATURED_PROJECT_IDS,
   MAIN_PROJECTS,
   PROJECT_PREVIEW_VIDEOS,
+  getLabProjectPath,
   getProjectPath,
+  isLabProject,
   orderProjects,
 } from "@/data/projects";
 
@@ -674,7 +676,11 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     setHasStarted(false);
     setChatOnTop(false);
     saveProjectOpenScroll();
-    router.push(getProjectPath(project), { scroll: false });
+    const projectPath =
+      activeSection === "lab" && isLabProject(project)
+        ? getLabProjectPath(project)
+        : getProjectPath(project);
+    router.push(projectPath, { scroll: false });
   };
 
   const handleSectionNavigate = useCallback((section: HomeTab, href: string, event: MouseEvent<HTMLAnchorElement>) => {

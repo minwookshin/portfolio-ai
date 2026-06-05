@@ -18,7 +18,13 @@ const focusableSelector = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",");
 
-export default function ProjectRouteModal({ project }: { project: PortfolioProject }) {
+export default function ProjectRouteModal({
+  project,
+  baseHref = "/work",
+}: {
+  project: PortfolioProject;
+  baseHref?: string;
+}) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -96,7 +102,12 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
             className="project-lightbox-content w-full max-w-[620px] outline-none"
             onClick={(event) => event.stopPropagation()}
           >
-            <ProjectCaseStudyShell project={project} actionLabel="back" onAction={() => router.back()} />
+            <ProjectCaseStudyShell
+              project={project}
+              actionLabel="back"
+              onAction={() => router.back()}
+              baseHref={baseHref}
+            />
           </div>
         </div>
       </motion.div>
@@ -127,7 +138,12 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
         onClick={(event) => event.stopPropagation()}
         className="project-lightbox-content max-h-[86dvh] w-[min(92vw,620px)] overflow-y-auto border border-[var(--border-light)] bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-3)] text-[var(--text-primary)] outline-none sm:px-[var(--space-4)] sm:pt-[var(--space-4)]"
       >
-        <ProjectCaseStudyShell project={project} actionLabel="back" onAction={() => router.back()} />
+        <ProjectCaseStudyShell
+          project={project}
+          actionLabel="back"
+          onAction={() => router.back()}
+          baseHref={baseHref}
+        />
       </motion.div>
     </motion.div>
   );

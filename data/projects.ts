@@ -334,6 +334,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
 ];
 
 export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
+export const LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Sentinel: "/projects/sentinel/demo.mp4",
@@ -369,9 +370,20 @@ export function isFeaturedProject(project: Project) {
   return FEATURED_PROJECT_IDS.includes(project.id as typeof FEATURED_PROJECT_IDS[number]);
 }
 
+export function isLabProject(project: Project) {
+  return LAB_PROJECT_IDS.includes(project.id as typeof LAB_PROJECT_IDS[number]);
+}
+
+export function getLabProjects() {
+  return orderProjects(MAIN_PROJECTS, LAB_PROJECT_IDS).filter((project) => !project.comingSoon);
+}
+
 export function getProjectPath(project: Project) {
-  const slug = "slug" in project && typeof project.slug === "string" ? project.slug : slugifyProjectTitle(project.title);
-  return `/work/${slug}`;
+  return `/work/${getProjectSlug(project)}`;
+}
+
+export function getLabProjectPath(project: Project) {
+  return `/lab/${getProjectSlug(project)}`;
 }
 
 export function getProjectBySlug(slug: string) {
@@ -384,4 +396,8 @@ export function getOpenableProjects() {
 
 function slugifyProjectTitle(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function getProjectSlug(project: Project) {
+  return "slug" in project && typeof project.slug === "string" ? project.slug : slugifyProjectTitle(project.title);
 }
