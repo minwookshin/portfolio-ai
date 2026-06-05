@@ -293,41 +293,37 @@ body::after {
   text-decoration-color: currentColor;
 }
 
-.project-row-title-line--directional {
-  position: relative;
-  display: inline-block;
+.project-row-copy {
+  transform: translateX(0);
+  transition:
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+[data-project-row="work"]:hover .project-row-copy,
+[data-project-row="work"]:focus-within .project-row-copy {
+  transform: translateX(12px);
+}
+
+.project-row-title-line--lateral {
+  color: #404040;
   text-decoration-line: none;
+  transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.project-row-title-line--directional::before,
-.project-row-title-line--directional::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.02em;
-  height: 1px;
-  pointer-events: none;
+[data-project-row="work"]:hover .project-row-title-line--lateral,
+[data-project-row="work"]:focus-within .project-row-title-line--lateral {
+  color: var(--text-primary);
 }
 
-.project-row-title-line--directional::before {
-  background: var(--text-underline-muted);
+.project-row-meta {
+  transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.project-row-title-line--directional::after {
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-[data-underline-origin="right"] .project-row-title-line--directional::after {
-  transform-origin: right center;
-}
-
-.group:hover .project-row-title-line--directional::after,
-.group:focus-within .project-row-title-line--directional::after {
-  transform: scaleX(1);
+[data-project-row="work"]:hover .project-row-meta,
+[data-project-row="work"]:focus-within .project-row-meta {
+  color: #71717a;
 }
 
 .micro-pressable {
@@ -565,6 +561,11 @@ body::after {
     box-shadow: none !important;
   }
 
+  [data-project-row="work"]:hover .project-row-copy,
+  [data-project-row="work"]:focus-within .project-row-copy {
+    transform: none !important;
+  }
+
   .animated-cursor-pointer,
   .animated-cursor__arrow {
     transition: none !important;
@@ -577,7 +578,9 @@ body::after {
   .micro-pressable,
   .micro-card,
   .micro-field,
-  .project-row-title-line--directional::after,
+  .project-row-copy,
+  .project-row-title-line--lateral,
+  .project-row-meta,
   .micro-skeleton-line {
     transition: none !important;
     animation: none !important;

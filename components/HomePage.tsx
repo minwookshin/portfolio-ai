@@ -198,33 +198,32 @@ function ProjectTextRow({
   project,
   index,
   list,
-  underlineOrigin = "left",
 }: {
   onActivate?: () => void;
   onDeactivate?: () => void;
   project: Project;
   index: number;
   list: "work" | "lab";
-  underlineOrigin?: "left" | "right";
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
+  const isWorkRow = list === "work" && !project.comingSoon;
   const rowClass =
     "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
-    "font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]",
-    project.comingSoon ? "" : "project-row-title-line",
-    list === "work" && !project.comingSoon ? "project-row-title-line--directional" : "",
+    "font-normal leading-[var(--leading-tight)]",
+    isWorkRow ? "project-row-title-line--lateral" : "text-[var(--text-primary)]",
+    project.comingSoon ? "" : isWorkRow ? "" : "project-row-title-line",
   ]
     .filter(Boolean)
     .join(" ");
   const rowText = (
     <>
-      <span className="flex min-w-0 flex-col items-start gap-2">
+      <span className="project-row-copy flex min-w-0 flex-col items-start gap-2">
         <span className={titleClass}>
           {project.title}
         </span>
-        <span className="min-w-0 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+        <span className="project-row-meta min-w-0 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
           {descriptor}
         </span>
       </span>
@@ -245,7 +244,6 @@ function ProjectTextRow({
       viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
       transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
       data-project-row={list}
-      data-underline-origin={list === "work" && !project.comingSoon ? underlineOrigin : undefined}
       className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
     >
       {project.comingSoon ? (
@@ -330,9 +328,7 @@ function WorkSection({
   const reduceMotion = Boolean(useReducedMotion());
   const canShowFixedPreview = useCanShowWorkPreview();
   const hidePreviewTimer = useRef<number | null>(null);
-  const previousPreviewIndex = useRef<number | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const [underlineOrigin, setUnderlineOrigin] = useState<"left" | "right">("left");
 
   const clearHideTimer = useCallback(() => {
     if (!hidePreviewTimer.current) return;
@@ -342,11 +338,6 @@ function WorkSection({
 
   const activateRow = useCallback((index: number) => {
     clearHideTimer();
-    const previousIndex = previousPreviewIndex.current;
-    if (previousIndex !== index) {
-      setUnderlineOrigin(previousIndex !== null && index < previousIndex ? "right" : "left");
-      previousPreviewIndex.current = index;
-    }
     setPreviewIndex(index);
   }, [clearHideTimer]);
 
@@ -375,7 +366,6 @@ function WorkSection({
               project={project}
               index={index}
               list="work"
-              underlineOrigin={previewIndex === index ? underlineOrigin : "left"}
             />
           ))}
         </ul>
