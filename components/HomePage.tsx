@@ -146,7 +146,7 @@ function ProjectMedia({
 
   if (src) {
     return (
-      <div className="relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)]">
+      <div className="work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)]">
         <BlurImage
           src={src}
           alt={project.title}
@@ -163,7 +163,7 @@ function ProjectMedia({
   }
 
   return (
-    <div className={`relative flex aspect-[1.5] w-full items-center justify-center overflow-hidden rounded-[var(--md-shape-lg)] ${mediaBg} text-4xl text-[var(--dark-text-primary)]`}>
+    <div className={`work-preview-soft-edge relative flex aspect-[1.5] w-full items-center justify-center overflow-hidden rounded-[var(--md-shape-lg)] ${mediaBg} text-4xl text-[var(--dark-text-primary)]`}>
       {project.glyph ?? project.title.charAt(0)}
       {previewLayer}
     </div>
@@ -280,7 +280,7 @@ function WorkFixedPreview({
 
   if (previewVideo && !reduceMotion) {
     return (
-      <div className="relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]">
+      <div className="work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]">
         <video
           autoPlay
           loop

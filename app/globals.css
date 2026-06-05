@@ -344,6 +344,11 @@ body::after {
   color: #71717a;
 }
 
+.work-preview-soft-edge {
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 78%, rgba(0, 0, 0, 0.94) 86%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 78%, rgba(0, 0, 0, 0.94) 86%, transparent 100%);
+}
+
 .micro-pressable {
   transition:
     color var(--motion-duration-base) var(--motion-ease-standard),
