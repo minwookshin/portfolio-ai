@@ -66,7 +66,7 @@ const PERSONAL_INFO = {
   name: "Minwook Shin",
   title: "Design Engineer",
   bio: "I design and build interfaces for AI-native products, from early idea to working software.",
-  email: "mwshin0703@gmail.com",
+  email: "ind3432@gmail.com",
   linkedin: "https://www.linkedin.com/in/minwookshin",
   github: "https://github.com/YeYen1721",
   resume: "https://drive.google.com/file/d/1DpEUz-h7ZgHIkNNdbAr6VIUho4m33v3-/view?usp=sharing",
@@ -312,8 +312,8 @@ function EditorialIntro() {
         <h1 className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
           I design and build interfaces for AI-native products, from early idea to working software.
         </h1>
-        <p className="mt-[var(--space-1)] max-w-full whitespace-nowrap leading-[var(--leading-body)] text-[var(--text-muted)]">
-          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>Email</IntroLink>
+        <p className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
           {", "}
           <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
           {", "}
