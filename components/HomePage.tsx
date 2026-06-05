@@ -29,6 +29,7 @@ import {
 
 type HomePageProps = {
   latestWritingPosts: WritingPostMeta[];
+  showAllWritingLink: boolean;
 };
 
 type HomeTab = "work" | "writing" | "lab";
@@ -414,7 +415,13 @@ function WorkSection({
   );
 }
 
-function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
+function WritingPanel({
+  posts,
+  showAllWritingLink,
+}: {
+  posts: WritingPostMeta[];
+  showAllWritingLink: boolean;
+}) {
   return (
     <div>
       <ul className="space-y-1">
@@ -433,14 +440,16 @@ function WritingPanel({ posts }: { posts: WritingPostMeta[] }) {
             </Link>
           </li>
         ))}
-        <li className="-mx-2 list-none">
-          <Link
-            href="/writing"
-            className="micro-link micro-focus inline-flex px-2 py-0.5 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-          >
-            all writing
-          </Link>
-        </li>
+        {showAllWritingLink && (
+          <li className="-mx-2 list-none">
+            <Link
+              href="/writing"
+              className="micro-link micro-focus inline-flex px-2 py-0.5 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
+            >
+              all writing
+            </Link>
+          </li>
+        )}
       </ul>
     </div>
   );
@@ -459,9 +468,11 @@ function LabPanel() {
 
 function HomeExploreSection({
   projects,
+  showAllWritingLink,
   writingPosts,
 }: {
   projects: Project[];
+  showAllWritingLink: boolean;
   writingPosts: WritingPostMeta[];
 }) {
   const reduceMotion = Boolean(useReducedMotion());
@@ -518,7 +529,7 @@ function HomeExploreSection({
               transition={reduceMotion ? tweens.none : tweens.base}
             >
               {activeTab === "work" && <WorkSection projects={projects} />}
-              {activeTab === "writing" && <WritingPanel posts={writingPosts} />}
+              {activeTab === "writing" && <WritingPanel posts={writingPosts} showAllWritingLink={showAllWritingLink} />}
               {activeTab === "lab" && <LabPanel />}
             </motion.div>
           </AnimatePresence>
@@ -530,7 +541,7 @@ function HomeExploreSection({
 }
 
 // Interface to store content snapshot for each message
-export default function HomePage({ latestWritingPosts }: HomePageProps) {
+export default function HomePage({ latestWritingPosts, showAllWritingLink }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
   const [hasStarted, setHasStarted] = useState(false);
@@ -730,6 +741,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
           <EditorialIntro />
           <HomeExploreSection
             projects={featuredProjects}
+            showAllWritingLink={showAllWritingLink}
             writingPosts={latestWritingPosts}
           />
         </div>
