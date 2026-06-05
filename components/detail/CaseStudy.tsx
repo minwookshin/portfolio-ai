@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Github, Linkedin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { springs, tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -352,37 +352,17 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           <div className="flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
-            {section.items.map((l) => {
-              const isGithub = /github\.com/i.test(l.href);
-              const isLinkedin = /linkedin\.com/i.test(l.href);
-              if (isGithub || isLinkedin) {
-                const Icon = isGithub ? Github : Linkedin;
-                return (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={isGithub ? "GitHub" : "LinkedIn"}
-                    className="micro-focus micro-focus-tight micro-pressable inline-flex h-8 w-8 items-center justify-center border border-[var(--border-light)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-element)]"
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                );
-              }
-              return (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="intro-contact-link micro-focus micro-pressable inline-flex items-center gap-1 text-[length:var(--type-0)]"
-                >
-                  {l.label}
-                  <ArrowUpRight className="w-4 h-4" />
-                </a>
-              );
-            })}
+            {section.items.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="intro-contact-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
+              >
+                {l.label}
+              </a>
+            ))}
           </div>
         </motion.section>
       );

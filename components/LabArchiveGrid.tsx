@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import BlurImage from "@/components/BlurImage";
 import HoverVideoPreview, { useHoverVideoPreview } from "@/components/HoverVideoPreview";
 import type { Project } from "@/components/ProjectCard";
@@ -286,7 +286,7 @@ function LabProjectTile({
         <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/28 to-transparent p-4 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 ${
           reduceMotion ? "" : "translate-y-2 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-within:translate-y-0"
         }`}>
-          <span className="flex items-end justify-between gap-4">
+          <span className="flex items-end">
             <span className="min-w-0">
               <span className="block font-normal leading-[var(--leading-heading)] text-white">
                 {project.title}
@@ -295,7 +295,6 @@ function LabProjectTile({
                 {project.studioLabel ?? project.description}
               </span>
             </span>
-            <ArrowUpRight className="h-4 w-4 shrink-0 text-white" />
           </span>
         </span>
       </Link>
