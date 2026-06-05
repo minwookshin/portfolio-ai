@@ -357,7 +357,7 @@ function WorkSection({
   return (
     <div className="relative">
       <div>
-        <ul>
+        <ul className="space-y-[var(--space-2)]">
           {projects.map((project, index) => (
             <ProjectTextRow
               key={project.id}
