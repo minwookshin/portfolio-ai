@@ -446,7 +446,7 @@ function WritingPanel({
               href="/writing"
               className="micro-link micro-focus inline-flex px-2 py-0.5 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
             >
-              all writing
+              view more
             </Link>
           </li>
         )}
