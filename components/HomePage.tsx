@@ -14,7 +14,6 @@ import HoverVideoPreview from "@/components/HoverVideoPreview";
 import LabArchiveGrid from "@/components/LabArchiveGrid";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
-import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import { formatWritingDate } from "@/lib/writingDisplay";
@@ -278,7 +277,6 @@ function WorkFixedPreview({
   reduceMotion: boolean;
 }) {
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
-  const poster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
 
   if (previewVideo && !reduceMotion) {
     return (
@@ -289,7 +287,6 @@ function WorkFixedPreview({
           muted
           playsInline
           preload="auto"
-          poster={poster}
           src={previewVideo}
           className="h-full w-full object-cover"
         />
