@@ -11,11 +11,13 @@ import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
 import HoverVideoPreview from "@/components/HoverVideoPreview";
+import LabArchiveGrid from "@/components/LabArchiveGrid";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
+import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 import {
   FEATURED_PROJECT_IDS,
@@ -25,11 +27,12 @@ import {
   orderProjects,
 } from "@/data/projects";
 
-type HomePageProps = {
-  latestWritingPosts: WritingPostMeta[];
-};
-
 type HomeTab = "work" | "writing" | "lab";
+
+type HomePageProps = {
+  activeSection?: HomeTab;
+  writingPosts: WritingPostMeta[];
+};
 
 const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = [
   { href: "/work", id: "work", label: "work" },
@@ -402,20 +405,66 @@ function WorkSection({
   );
 }
 
-function HomeExploreSection({
-  projects,
-}: {
-  projects: Project[];
-}) {
+function WritingSection({ posts }: { posts: WritingPostMeta[] }) {
+  const reduceMotion = useReducedMotion();
+
+  if (posts.length === 0) {
+    return (
+      <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+        writing is coming soon.
+      </p>
+    );
+  }
+
   return (
-    <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
+    <ul className="space-y-[var(--space-2)]">
+      {posts.map((post, index) => (
+        <motion.li
+          key={post.slug}
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
+          viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
+          transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
+          className="-mx-2 group list-none text-[length:var(--type-0)]"
+        >
+          <Link
+            href={`/writing/${post.slug}`}
+            className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
+          >
+            <span className="project-row-title-line max-w-full font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">
+              {post.title}
+            </span>
+            <span className="mt-2 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+              {formatWritingDate(post.date)}
+            </span>
+          </Link>
+        </motion.li>
+      ))}
+    </ul>
+  );
+}
+
+function HomeExploreSection({
+  activeSection,
+  projects,
+  writingPosts,
+}: {
+  activeSection: HomeTab;
+  projects: Project[];
+  writingPosts: WritingPostMeta[];
+}) {
+  const isLab = activeSection === "lab";
+
+  return (
+    <section id={activeSection} className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
         <nav
           aria-label="sections"
           className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
         >
           {HOME_SECTION_LINKS.map((link, index) => {
-            const selected = link.id === "work";
+            const selected = link.id === activeSection;
 
             return (
               <Fragment key={link.id}>
@@ -436,17 +485,19 @@ function HomeExploreSection({
             );
           })}
         </nav>
+      </div>
 
-        <div className="mt-[var(--space-2)]">
-          <WorkSection projects={projects} />
-        </div>
+      <div className={`mx-auto mt-[var(--space-2)] w-full ${isLab ? "max-w-[980px]" : "max-w-[620px] text-left"}`}>
+        {activeSection === "work" && <WorkSection projects={projects} />}
+        {activeSection === "writing" && <WritingSection posts={writingPosts} />}
+        {activeSection === "lab" && <LabArchiveGrid className="w-full" />}
       </div>
     </section>
   );
 }
 
 // Interface to store content snapshot for each message
-export default function HomePage({ latestWritingPosts }: HomePageProps) {
+export default function HomePage({ activeSection = "work", writingPosts }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
   const [hasStarted, setHasStarted] = useState(false);
@@ -500,7 +551,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
 
     // Tell the backend what the user is currently looking at, so the AI can
     // resolve "this"/"it" and ground its answer in that screen.
-    const viewContext = '';
+    const viewContext = activeSection;
 
     const messageIdSeed = `${messages.length}-${message.length}`;
     const userMsg = { id: `user-${messageIdSeed}`, role: 'user' as const, content: message };
@@ -614,7 +665,7 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
         <p>{PERSONAL_INFO.bio}</p>
         <h3>Writing</h3>
         <ul>
-          {latestWritingPosts.map((post) => (
+          {writingPosts.map((post) => (
             <li key={post.slug}>
               <strong>{post.title}</strong>, {post.date}, {post.description}
             </li>
@@ -645,7 +696,9 @@ export default function HomePage({ latestWritingPosts }: HomePageProps) {
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
           <HomeExploreSection
+            activeSection={activeSection}
             projects={featuredProjects}
+            writingPosts={writingPosts}
           />
         </div>
       </motion.div>

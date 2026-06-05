@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import LabPage from "@/components/LabPage";
+import HomePage from "@/components/HomePage";
+import { getWritingPosts } from "@/lib/writing";
 
 export const metadata: Metadata = {
   title: "lab / archive",
@@ -22,5 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default function LabRoutePage() {
-  return <LabPage />;
+  const writingPosts = getWritingPosts();
+
+  return <HomePage activeSection="lab" writingPosts={writingPosts} />;
 }

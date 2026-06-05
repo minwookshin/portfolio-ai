@@ -1,8 +1,8 @@
 import HomePage from "@/components/HomePage";
-import { getLatestWritingPosts } from "@/lib/writing";
+import { getWritingPosts } from "@/lib/writing";
 
 export default function Page() {
-  const latestWritingPosts = getLatestWritingPosts(6);
+  const writingPosts = getWritingPosts();
 
-  return <HomePage latestWritingPosts={latestWritingPosts} />;
+  return <HomePage activeSection="work" writingPosts={writingPosts} />;
 }

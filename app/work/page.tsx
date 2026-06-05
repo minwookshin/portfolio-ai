@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import HomePage from "@/components/HomePage";
-import { getLatestWritingPosts } from "@/lib/writing";
+import { getWritingPosts } from "@/lib/writing";
 
 export const metadata: Metadata = {
   title: "work",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default function WorkPage() {
-  const latestWritingPosts = getLatestWritingPosts(6);
+  const writingPosts = getWritingPosts();
 
-  return <HomePage latestWritingPosts={latestWritingPosts} />;
+  return <HomePage activeSection="work" writingPosts={writingPosts} />;
 }
