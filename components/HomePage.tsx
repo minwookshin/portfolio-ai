@@ -140,7 +140,6 @@ function ProjectMedia({
   reduceMotion?: boolean;
 }) {
   const src = project.image ?? project.icon;
-  const isLogo = project.title === "Atlas" || project.title === "Portfolio AI";
   const mediaBg =
     tone === "dark"
       ? "border border-[var(--dark-border)] bg-[var(--dark-bg-surface)]"
@@ -148,19 +147,16 @@ function ProjectMedia({
 
   if (src) {
     return (
-      <div className={`relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] ${mediaBg}`}>
+      <div className="relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)]">
         <BlurImage
           src={src}
           alt={project.title}
           fill
           sizes="(max-width: 768px) 74vw, 680px"
           draggable={false}
-          className={`object-contain ${
+          className={`object-cover ${
             reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
-          } ${
-            isLogo ? "p-12 sm:p-20" : "p-8 sm:p-12"
           }`}
-          style={{ filter: "grayscale(1) contrast(1.02)" }}
         />
         {previewLayer}
       </div>
