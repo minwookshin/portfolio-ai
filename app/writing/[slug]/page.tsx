@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { ArrowUpRight } from "lucide-react";
 import BuildMeta from "@/components/BuildMeta";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import { getRelatedWorkLinks, getWritingPost, getWritingPosts } from "@/lib/writing";
@@ -72,11 +71,11 @@ export default async function WritingPostPage({ params }: WritingPostPageProps) 
       <article className="mx-auto w-full max-w-[620px]">
         <nav className="mb-[var(--space-5)] flex items-center justify-between gap-[var(--space-2)] leading-[var(--leading-body)]">
           <span className="flex min-w-0 items-center gap-[var(--space-1)]">
-            <Link href="/work" className="micro-link micro-focus shrink-0 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]">
+            <Link href="/work" className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]">
               minwook shin
             </Link>
             <span className="text-[var(--text-muted)]">/</span>
-            <Link href="/writing" className="micro-link micro-focus shrink-0 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]">
+            <Link href="/writing" className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]">
               writing
             </Link>
           </span>
@@ -104,10 +103,9 @@ export default async function WritingPostPage({ params }: WritingPostPageProps) 
                 <Link
                   key={work.slug}
                   href={work.href}
-                  className="micro-link micro-focus inline-flex items-center gap-1 text-[var(--text-primary)] hover:text-[var(--accent-indigo)] focus-visible:text-[var(--accent-indigo)]"
+                  className="intro-contact-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
                 >
                   {work.title}
-                  <ArrowUpRight className="h-3.5 w-3.5" />
                 </Link>
               ))}
             </div>
