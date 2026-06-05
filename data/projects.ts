@@ -319,6 +319,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     icon: "/projects/caret/Caret_icon.png",
     image: "/projects/caret/icon.png",
     studioLabel: "iOS UX prototype",
+    github: "https://github.com/YeYen1721/Caret",
     linkedin: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
     builder: {
       role: "Design Engineer",

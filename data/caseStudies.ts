@@ -322,6 +322,12 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         subtitle: "A website for exploring caps.",
         tags: ["Web", "UI/UX Design"],
       },
+      {
+        kind: "links",
+        items: [
+          { label: "LinkedIn", href: "https://www.linkedin.com/posts/minwookshin_buildinpublic-hat-ugcPost-7432477739208777729-sZlv/" },
+        ],
+      },
     ],
   },
 
@@ -334,6 +340,12 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         subtitle: "Interactive demo.",
         tags: ["Product Design"],
       },
+      {
+        kind: "links",
+        items: [
+          { label: "LinkedIn", href: "https://www.linkedin.com/posts/minwookshin_technology-innovation-ugcPost-7432812004098084865-AGvW/" },
+        ],
+      },
     ],
   },
 
@@ -345,6 +357,13 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         title: "Caret",
         subtitle: "An iOS app and UX design project.",
         tags: ["iOS", "UX Design"],
+      },
+      {
+        kind: "links",
+        items: [
+          { label: "GitHub", href: "https://github.com/YeYen1721/Caret" },
+          { label: "LinkedIn", href: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/" },
+        ],
       },
     ],
   },
