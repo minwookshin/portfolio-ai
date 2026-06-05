@@ -322,12 +322,6 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         subtitle: "A website for exploring caps.",
         tags: ["Web", "UI/UX Design"],
       },
-      {
-        kind: "video",
-        eyebrow: "Demo",
-        heading: "CapExplorer in action",
-        src: "/projects/capexplorer/demo.mp4",
-      },
     ],
   },
 
@@ -340,12 +334,6 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         subtitle: "Interactive demo.",
         tags: ["Product Design"],
       },
-      {
-        kind: "video",
-        eyebrow: "Demo",
-        heading: "Tomo in action",
-        src: "/projects/tomo/demo.mp4",
-      },
     ],
   },
 
@@ -357,12 +345,6 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         title: "Caret",
         subtitle: "An iOS app and UX design project.",
         tags: ["iOS", "UX Design"],
-      },
-      {
-        kind: "video",
-        eyebrow: "Demo",
-        heading: "Caret in action",
-        src: "/projects/caret/demo.mp4",
       },
     ],
   },

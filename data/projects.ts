@@ -321,7 +321,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     studioLabel: "iOS UX prototype",
     linkedin: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
     builder: {
-      role: "Designed & Built solo",
+      role: "Design Engineer",
       stack: ["SwiftUI"],
       status: { label: "Prototype" },
       oneLiner: "iOS UX prototype focused on burnout and quitting signals.",
