@@ -31,7 +31,7 @@ export default function WritingPage() {
     <main className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
       <div className="mx-auto w-full max-w-[620px]">
         <nav className="mb-[var(--space-5)] flex items-center justify-between gap-[var(--space-2)] leading-[var(--leading-body)]">
-          <Link href="/" className="micro-link micro-focus text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]">
+          <Link href="/work" className="micro-link micro-focus text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]">
             minwook shin
           </Link>
           <span className="text-[var(--text-muted)]">writing</span>

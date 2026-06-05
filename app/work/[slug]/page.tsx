@@ -91,7 +91,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
         <ProjectCaseStudyShell
           project={project}
           actionLabel="all work"
-          actionHref="/#work"
+          actionHref="/work"
         />
         <RelatedWriting posts={relatedWriting} />
       </div>

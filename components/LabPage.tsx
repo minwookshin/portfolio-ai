@@ -10,7 +10,7 @@ export default function LabPage() {
       <div className="mx-auto w-full max-w-[1180px]">
         <div className="mx-auto w-full max-w-[620px]">
           <nav className="mb-[var(--space-5)] flex items-center justify-between gap-[var(--space-2)] leading-[var(--leading-body)]">
-            <Link href="/" className="micro-link micro-focus text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]">
+            <Link href="/work" className="micro-link micro-focus text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]">
               minwook shin
             </Link>
             <span className="text-[var(--text-muted)]">lab / archive</span>

@@ -48,7 +48,7 @@ export default function ProjectCaseStudyShell({
       <nav className="mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left leading-[var(--leading-body)] text-on-surface">
         <span className="flex min-w-0 items-center gap-[var(--space-1)]">
           <Link
-            href="/"
+            href="/work"
             className="micro-link micro-focus shrink-0 text-on-surface-variant hover:text-on-surface focus-visible:text-on-surface"
           >
             minwook shin

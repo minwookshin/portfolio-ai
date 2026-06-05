@@ -11,11 +11,9 @@ import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
 import HoverVideoPreview from "@/components/HoverVideoPreview";
-import LabArchiveGrid from "@/components/LabArchiveGrid";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
-import { formatWritingDate } from "@/lib/writingDisplay";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -29,15 +27,14 @@ import {
 
 type HomePageProps = {
   latestWritingPosts: WritingPostMeta[];
-  showAllWritingLink: boolean;
 };
 
 type HomeTab = "work" | "writing" | "lab";
 
-const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
-  { id: "work", label: "work" },
-  { id: "writing", label: "writing" },
-  { id: "lab", label: "lab" },
+const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = [
+  { href: "/work", id: "work", label: "work" },
+  { href: "/writing", id: "writing", label: "writing" },
+  { href: "/lab", id: "lab", label: "lab" },
 ];
 
 function useCanShowWorkPreview() {
@@ -415,96 +412,32 @@ function WorkSection({
   );
 }
 
-function WritingPanel({
-  posts,
-  showAllWritingLink,
-}: {
-  posts: WritingPostMeta[];
-  showAllWritingLink: boolean;
-}) {
-  return (
-    <div>
-      <ul className="space-y-1">
-        {posts.map((post) => (
-          <li key={post.slug} className="-mx-2 max-w-[var(--measure)] list-none">
-            <Link
-              href={`/writing/${post.slug}`}
-              className="micro-focus micro-pressable group flex min-h-12 w-full flex-col items-start justify-center gap-2 rounded-[var(--md-shape-lg)] px-2 py-1 text-left text-[length:var(--type-0)]"
-            >
-              <span className="project-row-title-line min-w-0 truncate font-normal leading-[var(--leading-tight)] text-[var(--text-primary)]">
-                {post.title}
-              </span>
-              <span className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-                {formatWritingDate(post.date)}
-              </span>
-            </Link>
-          </li>
-        ))}
-        {showAllWritingLink && (
-          <li className="-mx-2 list-none">
-            <Link
-              href="/writing"
-              className="micro-link micro-focus inline-flex px-2 py-0.5 leading-[var(--leading-tight)] text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:text-[var(--text-primary)]"
-            >
-              view more
-            </Link>
-          </li>
-        )}
-      </ul>
-    </div>
-  );
-}
-
-function LabPanel() {
-  return (
-    <div className="pt-1">
-      <p className="max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-        Smaller demos, experiments, and product sketches. This page is intentionally more interactive than the homepage.
-      </p>
-      <LabArchiveGrid className="relative left-1/2 mt-[var(--space-5)] w-[min(980px,calc(100vw-(var(--space-3)*2)))] max-w-[980px] -translate-x-1/2 sm:w-[min(980px,calc(100vw-(var(--space-5)*2)))]" />
-    </div>
-  );
-}
-
 function HomeExploreSection({
   projects,
-  showAllWritingLink,
-  writingPosts,
 }: {
   projects: Project[];
-  showAllWritingLink: boolean;
-  writingPosts: WritingPostMeta[];
 }) {
-  const reduceMotion = Boolean(useReducedMotion());
-  const [activeTab, setActiveTab] = useState<HomeTab>("work");
-  const activeTabLabel = HOME_TABS.find((tab) => tab.id === activeTab)?.label ?? "work";
-
   return (
     <section id="work" className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <div
-          aria-label="home sections"
+        <nav
+          aria-label="sections"
           className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
-          role="tablist"
         >
-          {HOME_TABS.map((tab, index) => {
-            const selected = activeTab === tab.id;
+          {HOME_SECTION_LINKS.map((link, index) => {
+            const selected = link.id === "work";
 
             return (
-              <Fragment key={tab.id}>
-                <button
-                  aria-controls="home-section-panel"
-                  aria-selected={selected}
+              <Fragment key={link.id}>
+                <Link
+                  aria-current={selected ? "page" : undefined}
                   className="home-tab-button micro-focus micro-focus-tight"
                   data-active={selected ? "true" : "false"}
-                  id={`home-tab-${tab.id}`}
-                  onClick={() => setActiveTab(tab.id)}
-                  role="tab"
-                  type="button"
+                  href={link.href}
                 >
-                  {tab.label}
-                </button>
-                {index < HOME_TABS.length - 1 && (
+                  {link.label}
+                </Link>
+                {index < HOME_SECTION_LINKS.length - 1 && (
                   <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]" role="presentation">
                     ,
                   </span>
@@ -512,28 +445,10 @@ function HomeExploreSection({
               </Fragment>
             );
           })}
-        </div>
+        </nav>
 
-        <div
-          aria-labelledby={`home-tab-${activeTab}`}
-          className="mt-[var(--space-2)]"
-          id="home-section-panel"
-          role="tabpanel"
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={activeTab}
-              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
-              transition={reduceMotion ? tweens.none : tweens.base}
-            >
-              {activeTab === "work" && <WorkSection projects={projects} />}
-              {activeTab === "writing" && <WritingPanel posts={writingPosts} showAllWritingLink={showAllWritingLink} />}
-              {activeTab === "lab" && <LabPanel />}
-            </motion.div>
-          </AnimatePresence>
-          <span className="sr-only">{activeTabLabel} selected</span>
+        <div className="mt-[var(--space-2)]">
+          <WorkSection projects={projects} />
         </div>
       </div>
     </section>
@@ -541,7 +456,7 @@ function HomeExploreSection({
 }
 
 // Interface to store content snapshot for each message
-export default function HomePage({ latestWritingPosts, showAllWritingLink }: HomePageProps) {
+export default function HomePage({ latestWritingPosts }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
   const [hasStarted, setHasStarted] = useState(false);
@@ -741,8 +656,6 @@ export default function HomePage({ latestWritingPosts, showAllWritingLink }: Hom
           <EditorialIntro />
           <HomeExploreSection
             projects={featuredProjects}
-            showAllWritingLink={showAllWritingLink}
-            writingPosts={latestWritingPosts}
           />
         </div>
       </motion.div>
