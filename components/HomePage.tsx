@@ -282,7 +282,7 @@ function WorkFixedPreview({
 
   if (previewVideo && !reduceMotion) {
     return (
-      <div className="relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--dark-border)] bg-[var(--dark-bg-base)]">
+      <div className="relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]">
         <video
           autoPlay
           loop
