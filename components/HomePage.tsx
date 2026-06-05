@@ -4,7 +4,7 @@ import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup, useReducedMotion } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
@@ -199,16 +199,19 @@ function ProjectTextRow({
   onDeactivate,
   project,
   index,
+  isActive = false,
   list,
 }: {
   onActivate?: () => void;
   onDeactivate?: () => void;
   project: Project;
   index: number;
+  isActive?: boolean;
   list: "work" | "lab";
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
+  const showDot = list === "work" && isActive && !project.comingSoon;
   const rowClass =
     "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
@@ -220,8 +223,33 @@ function ProjectTextRow({
   const rowText = (
     <>
       <span className="flex min-w-0 flex-col items-start gap-2">
-        <span className={titleClass}>
-          {project.title}
+        <span className="relative inline-flex min-w-0 items-start">
+          <AnimatePresence initial={false}>
+            {showDot && (
+              <motion.span
+                aria-hidden="true"
+                className="pointer-events-none absolute left-[-14px] top-1/2 h-2 w-2"
+                initial={reduceMotion ? false : { opacity: 0, scale: 0.62 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.7 }}
+                layoutId="work-row-hover-dot"
+                transition={
+                  reduceMotion
+                    ? tweens.none
+                    : {
+                        opacity: { type: "tween", duration: 0.12, ease: [0.22, 1, 0.36, 1] },
+                        scale: { type: "spring", stiffness: 620, damping: 34, mass: 0.18 },
+                        layout: { type: "spring", stiffness: 620, damping: 42, mass: 0.18 },
+                      }
+                }
+              >
+                <span className="block h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-[var(--text-primary)]" />
+              </motion.span>
+            )}
+          </AnimatePresence>
+          <span className={titleClass}>
+            {project.title}
+          </span>
         </span>
         <span className="min-w-0 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
           {descriptor}
@@ -357,18 +385,21 @@ function WorkSection({
   return (
     <div className="relative">
       <div>
-        <ul className="space-y-[var(--space-2)]">
-          {projects.map((project, index) => (
-            <ProjectTextRow
-              key={project.id}
-              onActivate={() => activateRow(index)}
-              onDeactivate={deactivateRow}
-              project={project}
-              index={index}
-              list="work"
-            />
-          ))}
-        </ul>
+        <LayoutGroup id="work-row-hover-dot">
+          <ul className="space-y-[var(--space-2)]">
+            {projects.map((project, index) => (
+              <ProjectTextRow
+                key={project.id}
+                onActivate={() => activateRow(index)}
+                onDeactivate={deactivateRow}
+                project={project}
+                index={index}
+                isActive={previewIndex === index}
+                list="work"
+              />
+            ))}
+          </ul>
+        </LayoutGroup>
       </div>
       {canShowFixedPreview && (
         <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block">
