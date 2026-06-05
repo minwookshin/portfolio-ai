@@ -289,15 +289,12 @@ body::after {
   text-decoration-color: currentColor;
 }
 
-.home-tab-button:hover,
-.home-tab-button:focus-visible {
-  transform: translate3d(3px, 0, 0);
-}
-
 .home-tab-button[data-active="false"]:hover {
   opacity: 0.82;
 }
 
+.home-tab-button:hover,
+.home-tab-button:focus-visible,
 .intro-contact-link:hover,
 .intro-contact-link:focus-visible {
   transform: translate3d(0, -1px, 0);
