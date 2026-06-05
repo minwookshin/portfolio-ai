@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useCallback, useState, useEffect, useRef } from "react";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -39,6 +39,13 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
   { href: "/writing", id: "writing", label: "writing" },
   { href: "/lab", id: "lab", label: "lab" },
 ];
+
+function getHomeSectionFromPath(pathname: string): HomeTab | null {
+  const segment = pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
+  if (!segment || segment === "work") return "work";
+  if (segment === "writing" || segment === "lab") return segment;
+  return null;
+}
 
 function useCanShowWorkPreview() {
   const [canShow, setCanShow] = useState(false);
@@ -447,10 +454,12 @@ function WritingSection({ posts }: { posts: WritingPostMeta[] }) {
 
 function HomeExploreSection({
   activeSection,
+  onSectionNavigate,
   projects,
   writingPosts,
 }: {
   activeSection: HomeTab;
+  onSectionNavigate?: (section: HomeTab, href: string, event: MouseEvent<HTMLAnchorElement>) => void;
   projects: Project[];
   writingPosts: WritingPostMeta[];
 }) {
@@ -473,6 +482,7 @@ function HomeExploreSection({
                   className="home-tab-button micro-focus micro-focus-tight"
                   data-active={selected ? "true" : "false"}
                   href={link.href}
+                  onClick={(event) => onSectionNavigate?.(link.id, link.href, event)}
                 >
                   {link.label}
                 </Link>
@@ -500,6 +510,8 @@ function HomeExploreSection({
 export default function HomePage({ activeSection = "work", writingPosts }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
+  const [localSection, setLocalSection] = useState<HomeTab | null>(null);
+  const currentSection = localSection ?? activeSection;
   const [hasStarted, setHasStarted] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (for example, a page section) instead of snapping back home. The
@@ -515,6 +527,16 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   useEffect(() => {
     const timer = setTimeout(() => setIntroReady(true), 80);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const nextSection = getHomeSectionFromPath(window.location.pathname);
+      if (nextSection) setLocalSection(nextSection);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -551,7 +573,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
 
     // Tell the backend what the user is currently looking at, so the AI can
     // resolve "this"/"it" and ground its answer in that screen.
-    const viewContext = activeSection;
+    const viewContext = currentSection;
 
     const messageIdSeed = `${messages.length}-${message.length}`;
     const userMsg = { id: `user-${messageIdSeed}`, role: 'user' as const, content: message };
@@ -653,6 +675,27 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     router.push(getProjectPath(project), { scroll: false });
   };
 
+  const handleSectionNavigate = useCallback((section: HomeTab, href: string, event: MouseEvent<HTMLAnchorElement>) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.shiftKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    setLocalSection(section);
+    setChatOnTop(false);
+
+    if (window.location.pathname !== href) {
+      window.history.pushState(null, "", href);
+    }
+  }, []);
+
   return (
     <main
       className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]"
@@ -696,7 +739,8 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <EditorialIntro />
           <HomeExploreSection
-            activeSection={activeSection}
+            activeSection={currentSection}
+            onSectionNavigate={handleSectionNavigate}
             projects={featuredProjects}
             writingPosts={writingPosts}
           />
