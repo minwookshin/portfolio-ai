@@ -36,8 +36,8 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
   const hasDemo = Boolean(proof.demo?.video || proof.demo?.href);
 
   return (
-    <section className="mb-[var(--space-7)] space-y-[var(--space-4)]">
-      <div className="grid gap-[var(--space-2)] border-y border-outline-variant py-[var(--space-3)] sm:grid-cols-2">
+    <section className="mb-[var(--space-6)] space-y-[var(--space-4)]">
+      <div className="grid gap-x-[var(--space-3)] gap-y-[var(--space-2)] border-y border-[var(--border-light)] py-[var(--space-3)] sm:grid-cols-2">
         <SummaryItem label="role" value={proof.role} />
         {stack && <SummaryItem label="stack" value={stack} />}
         <SummaryItem
@@ -48,7 +48,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
                 href={proof.status.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="micro-link micro-focus text-on-surface hover:text-on-surface focus-visible:text-on-surface"
+                className="intro-contact-link micro-focus micro-pressable text-[length:var(--type-0)]"
               >
                 {proof.status.label}
               </a>
@@ -68,7 +68,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
               playsInline
               preload="metadata"
               poster={makeVideoPosterDataUrl(proof.demo.label)}
-              className="block w-full bg-surface-container"
+              className="block w-full bg-[var(--bg-element)]"
             >
               <source src={proof.demo.video} type="video/mp4" />
             </video>
@@ -77,13 +77,13 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
               href={proof.demo.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="micro-focus micro-focus-tight micro-pressable inline-flex min-h-12 items-center justify-center bg-on-surface px-[var(--space-3)] text-surface hover:opacity-85"
+              className="intro-contact-link micro-focus micro-pressable inline-flex items-center text-[length:var(--type-0)]"
             >
               {proof.demo.label}
             </a>
           ) : null}
           {isVisibleBuilderValue(demoNote) && (
-            <p className="text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">
+            <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-muted)]">
               {demoNote}
             </p>
           )}
@@ -91,7 +91,7 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
       )}
 
       {isVisibleBuilderValue(proof.pipeline) && (
-        <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">
+        <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
           {proof.pipeline}
         </p>
       )}
@@ -105,8 +105,8 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
 function SummaryItem({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div>
-      <p className="font-mono text-[length:var(--type--2)] leading-[var(--leading-tight)] text-on-surface-variant">{label}</p>
-      <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">{value}</p>
+      <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{label}</p>
+      <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">{value}</p>
     </div>
   );
 }
@@ -118,13 +118,13 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
 
   return (
     <section className="space-y-[var(--space-2)]">
-      <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-heading)] text-on-surface">{title}</h2>
+      <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{title}</h2>
       <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
         {visibleItems.map((item) => (
-          <div key={`${title}-${item.label}`} className="bg-surface-container px-[var(--space-3)] py-[var(--space-2)]">
-            <p className="font-mono text-[length:var(--type--2)] leading-[var(--leading-tight)] text-on-surface-variant">{item.label}</p>
-            <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">{item.value}</p>
-            {isVisibleBuilderValue(item.note) && <p className="mt-[var(--space-1)] text-[length:var(--type--1)] leading-[var(--leading-body)] text-on-surface-variant">{item.note}</p>}
+          <div key={`${title}-${item.label}`} className="border border-[var(--border-light)] bg-[var(--bg-surface)] px-[var(--space-2)] py-[var(--space-2)]">
+            <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{item.label}</p>
+            <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">{item.value}</p>
+            {isVisibleBuilderValue(item.note) && <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-muted)]">{item.note}</p>}
           </div>
         ))}
       </div>
@@ -181,10 +181,10 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           onClick={onBack}
           whileHover={reduceMotion ? undefined : { x: -4 }}
           transition={reduceMotion ? tweens.none : springs.spatialFast}
-          className="micro-focus micro-pressable mb-[var(--space-4)] flex items-center gap-[var(--space-1)] text-on-surface-variant hover:text-on-surface"
+          className="intro-contact-link micro-focus micro-pressable mb-[var(--space-4)] flex w-fit items-center gap-[var(--space-1)] text-[length:var(--type-0)]"
         >
           <ArrowBackIcon className="w-4 h-4" />
-          <span className="text-sm font-normal">Back to projects</span>
+          <span>Back to projects</span>
         </motion.button>
       )}
       {hasBuilderProof(project) && <BuilderProofIntro proof={project.builder} />}

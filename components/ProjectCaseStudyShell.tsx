@@ -24,14 +24,14 @@ export default function ProjectCaseStudyShell({
     <button
       type="button"
       onClick={onAction}
-      className="micro-link micro-focus shrink-0 text-on-surface-variant hover:text-on-surface focus-visible:text-on-surface"
+      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
     >
       {actionLabel ?? "back"}
     </button>
   ) : actionHref ? (
     <Link
       href={actionHref}
-      className="micro-link micro-focus shrink-0 text-on-surface-variant hover:text-on-surface focus-visible:text-on-surface"
+      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
     >
       {actionLabel ?? "back"}
     </Link>
@@ -45,16 +45,16 @@ export default function ProjectCaseStudyShell({
       transition={reduceMotion ? tweens.none : tweens.slow}
       className={`project-readable w-full ${className}`}
     >
-      <nav className="mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left leading-[var(--leading-body)] text-on-surface">
+      <nav className="mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
         <span className="flex min-w-0 items-center gap-[var(--space-1)]">
           <Link
             href="/work"
-            className="micro-link micro-focus shrink-0 text-on-surface-variant hover:text-on-surface focus-visible:text-on-surface"
+            className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
           >
             minwook shin
           </Link>
-          <span className="text-on-surface-variant">/</span>
-          <span className="truncate text-on-surface">{project.title}</span>
+          <span className="text-[var(--text-muted)]">/</span>
+          <span className="truncate text-[var(--text-primary)]">{project.title}</span>
         </span>
         {action}
       </nav>

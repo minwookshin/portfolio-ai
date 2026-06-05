@@ -56,14 +56,14 @@ function RelatedWriting({ posts }: { posts: WritingPostMeta[] }) {
   if (posts.length === 0) return null;
 
   return (
-    <aside className="border-t border-outline-variant pt-[var(--space-3)]">
-      <p className="leading-[var(--leading-body)] text-on-surface-variant">related writing</p>
+    <aside className="border-t border-[var(--border-light)] pt-[var(--space-3)]">
+      <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">related writing</p>
       <div className="mt-[var(--space-1)] flex flex-col gap-[var(--space-1)]">
         {posts.map((post) => (
           <Link
             key={post.slug}
             href={`/writing/${post.slug}`}
-            className="micro-link micro-focus inline-flex w-fit items-center gap-1 leading-[var(--leading-body)] text-on-surface hover:text-on-surface focus-visible:text-on-surface"
+            className="intro-contact-link micro-focus micro-pressable inline-flex w-fit items-center gap-1 text-[length:var(--type-0)] leading-[var(--leading-body)]"
           >
             {post.title}
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -85,7 +85,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
   return (
     <main
       style={LIGHT_PROJECT_TOKENS}
-      className="site-lowercase flex min-h-dvh flex-col bg-surface px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-on-surface sm:px-[var(--space-5)] md:pt-[122px]"
+      className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
     >
       <div className="mx-auto w-full max-w-[620px]">
         <ProjectCaseStudyShell

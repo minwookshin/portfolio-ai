@@ -9,9 +9,8 @@ import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 /**
  * Data-driven case-study renderer. A project's detail page is described as an
  * ordered array of `DetailSection`s; each kind picks the layout that suits that
- * content. One shared spring drives every reveal, and the surfaces reuse the
- * chat's card language (rounded `surface-container`) so detail + chat feel like
- * one product. Rolling a project onto this system = authoring its sections.
+ * content. The visual language follows the homepage: tight type, monochrome
+ * text, quiet rules, and thin white surfaces only where structure needs them.
  */
 
 export type DetailSection = ({
@@ -60,16 +59,13 @@ const reveal = {
   transition: springs.spatialDefault,
 } as const;
 
-// Translucent glass so components read as floating over the blurred backdrop
-// rather than sitting on a solid panel.
-const card = "glass-stroke rounded-[var(--md-shape-lg)] bg-surface-container/45 backdrop-blur-xl";
-const eyebrowCls = "font-mono font-light text-[length:var(--type--2)] leading-[var(--leading-tight)] text-on-surface-variant";
-const h2Cls = "text-[length:var(--type-1)] sm:text-[length:var(--type-2)] font-normal tracking-[-0.01em] leading-[var(--leading-heading)] text-on-surface";
-const bodyCls = "text-[length:var(--type-0)] text-on-surface-variant leading-[var(--leading-body)]";
+const card = "border border-[var(--border-light)] bg-[var(--bg-surface)]";
+const eyebrowCls = "text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]";
+const h2Cls = "text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]";
+const bodyCls = "text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]";
 
-// Hero content staggers in after the panel has morphed into place (delayChildren),
-// then each line settles one after another — like the Dynamic Island filling its
-// expanded shape with content.
+// Hero content staggers gently so the detail page keeps the homepage's quiet
+// cadence while still feeling responsive.
 const heroContainer = {
   hidden: {},
   show: { transition: { staggerChildren: 0.06, delayChildren: 0.12 } },
@@ -89,12 +85,12 @@ function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }
 }
 
 function Dot() {
-  return <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-on-surface" />;
+  return <span className="mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-[var(--text-muted)]" />;
 }
 
 function Tags({ tags }: { tags: string[] }) {
   return (
-    <div className="flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)] text-[length:var(--type--2)] font-normal text-on-surface-variant">
+    <div className="flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] font-normal leading-[1.2] text-[var(--text-muted)]">
       {tags.map((t) => (
         <span key={t}>
           {t}
@@ -139,29 +135,29 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
           {...(reduceMotion
             ? { initial: false }
             : { variants: heroContainer, initial: "hidden" as const, animate: "show" as const })}
-          className="pt-2"
+          className="pt-0"
         >
-          <motion.h1 {...(reduceMotion ? {} : { variants: heroItem })} className="text-[length:var(--type-3)] sm:text-[length:var(--type-4)] font-normal tracking-[-0.02em] leading-[var(--leading-heading)] text-on-surface">
+          <motion.h1 {...(reduceMotion ? {} : { variants: heroItem })} className="max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
             {section.title}
           </motion.h1>
           {section.subtitle && (
-            <motion.p {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-2)] max-w-[var(--measure)] text-[length:var(--type-1)] text-on-surface-variant font-light leading-[var(--leading-body)]">
+            <motion.p {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
               {section.subtitle}
             </motion.p>
           )}
           {bullets.length > 0 && (
-            <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-4)] space-y-[var(--space-2)]">
+            <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-3)] space-y-[var(--space-2)]">
               {bullets.map((b) => (
-                <div key={b} className="flex items-start gap-3">
+                <div key={b} className="flex items-start gap-[var(--space-1)]">
                   <Dot />
-                  <p className="text-[length:var(--type-0)] text-on-surface-variant leading-[var(--leading-body)]">{b}</p>
+                  <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">{b}</p>
                 </div>
               ))}
             </motion.div>
           )}
-          {tags.length > 0 && <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-4)]"><Tags tags={tags} /></motion.div>}
+          {tags.length > 0 && <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-3)]"><Tags tags={tags} /></motion.div>}
           {section.image && (
-            <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-5)]">
+            <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-4)]">
               <ProjectImage src={section.image} alt={section.title} style={section.imageStyle} />
             </motion.div>
           )}
@@ -188,9 +184,9 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className="grid grid-cols-2 gap-[var(--space-2)] sm:grid-cols-3">
             {statsItems.map((s) => (
-              <div key={s.label} className={`${card} p-6`}>
-                <p className="text-3xl sm:text-4xl font-normal tracking-tight text-on-surface">{s.value}</p>
-                <p className="mt-[var(--space-1)] text-[length:var(--type--1)] text-on-surface-variant">{s.label}</p>
+              <div key={s.label} className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
+                <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.value}</p>
+                <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{s.label}</p>
               </div>
             ))}
           </div>
@@ -205,29 +201,29 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
         <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="grid gap-[var(--space-2)] md:grid-cols-5">
-            <div className={`${card} p-6 sm:p-8 md:col-span-3`}>
+            <div className={`${card} px-[var(--space-2)] py-[var(--space-2)] md:col-span-3`}>
               <p className={bodyCls}>{section.body}</p>
               {problemStats.length > 0 && (
-                <div className="mt-[var(--space-3)] grid grid-cols-2 gap-[var(--space-3)] border-t border-outline-variant pt-[var(--space-3)]">
+                <div className="mt-[var(--space-3)] grid grid-cols-2 gap-[var(--space-3)] border-t border-[var(--border-light)] pt-[var(--space-3)]">
                   {problemStats.map((s) => (
                     <div key={s.label}>
-                      <p className="text-2xl sm:text-3xl font-normal tracking-tight text-on-surface">{s.value}</p>
-                      <p className="mt-[var(--space-1)] text-[length:var(--type--2)] text-on-surface-variant">{s.label}</p>
+                      <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.value}</p>
+                      <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{s.label}</p>
                     </div>
                   ))}
                 </div>
               )}
             </div>
             {section.persona && (
-              <div className={`${card} p-6 sm:p-8 md:col-span-2`}>
+              <div className={`${card} px-[var(--space-2)] py-[var(--space-2)] md:col-span-2`}>
                 <p className={`${eyebrowCls} mb-[var(--space-2)]`}>Target user</p>
-                <h3 className="text-lg font-normal text-on-surface">{section.persona.name}</h3>
-                <p className="mb-[var(--space-2)] text-[length:var(--type--1)] text-on-surface-variant">{section.persona.role}</p>
-                <div className="space-y-[var(--space-2)] border-t border-outline-variant pt-[var(--space-2)]">
+                <h3 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{section.persona.name}</h3>
+                <p className="mb-[var(--space-2)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{section.persona.role}</p>
+                <div className="space-y-[var(--space-2)] border-t border-[var(--border-light)] pt-[var(--space-2)]">
                   {section.persona.points.map((p) => (
-                    <div key={p} className="flex items-start gap-3">
+                    <div key={p} className="flex items-start gap-[var(--space-1)]">
                       <Dot />
-                      <p className="text-sm text-on-surface leading-snug">{p}</p>
+                      <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-primary)]">{p}</p>
                     </div>
                   ))}
                 </div>
@@ -244,11 +240,11 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
             {section.columns.map((c) => (
-              <div key={c.label} className={`${card} p-6 sm:p-8`}>
-                <span className="mb-[var(--space-3)] inline-block rounded-[var(--md-shape-sm)] bg-on-surface px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--2)] font-normal text-surface">
+              <div key={c.label} className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
+                <span className={`${eyebrowCls} mb-[var(--space-2)] inline-block`}>
                   {c.label}
                 </span>
-                <h3 className="mb-[var(--space-1)] text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-on-surface">{c.title}</h3>
+                <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{c.title}</h3>
                 <p className={bodyCls}>{c.body}</p>
               </div>
             ))}
@@ -260,7 +256,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
-          <div className="space-y-10 sm:space-y-14">
+          <div className="space-y-[var(--space-5)]">
             {section.items.map((f, fi) => (
               <motion.div
                 key={f.title}
@@ -281,7 +277,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                 )}
                 <div className={fi % 2 === 1 ? "sm:order-1" : ""}>
                   <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{`Feature ${fi + 1}`}</p>
-                  <h3 className="mb-[var(--space-1)] text-[length:var(--type-1)] font-normal leading-[var(--leading-heading)] text-on-surface">{f.title}</h3>
+                  <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{f.title}</h3>
                   <p className={bodyCls}>{f.description}</p>
                 </div>
               </motion.div>
@@ -295,16 +291,16 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
         <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="relative pl-8">
-            <div className="absolute left-[11px] top-2 bottom-2 w-px bg-outline-variant" />
-            <div className="space-y-6">
+            <div className="absolute left-[11px] top-2 bottom-2 w-px bg-[var(--border-light)]" />
+            <div className="space-y-[var(--space-2)]">
               {section.steps.map((s, si) => (
                 <div key={s.title} className="relative">
-                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center rounded-[var(--md-shape-sm)] bg-on-surface text-xs font-normal text-surface">
+                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center border border-[var(--border-light)] bg-[var(--bg-surface)] text-[length:calc(var(--type-0)_-_2px)] font-normal leading-none text-[var(--text-muted)]">
                     {si + 1}
                   </span>
-                  <div className={`${card} p-5 sm:p-6`}>
+                  <div className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
                     {s.tag && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{s.tag}</p>}
-                    <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-heading)] text-on-surface">{s.title}</h3>
+                    <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.title}</h3>
                     <p className={bodyCls}>{s.body}</p>
                   </div>
                 </div>
@@ -318,9 +314,9 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
     case "quote":
       return (
         <motion.section key={i} {...sectionMotion}>
-          <blockquote className="border-l-2 border-on-surface pl-6">
-            <p className="text-xl sm:text-2xl font-light leading-relaxed text-on-surface">{section.text}</p>
-            {section.attribution && <p className="mt-4 text-sm text-on-surface-variant">{section.attribution}</p>}
+          <blockquote className="border-l border-[var(--border-light)] pl-[var(--space-2)]">
+            <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{section.text}</p>
+            {section.attribution && <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{section.attribution}</p>}
           </blockquote>
         </motion.section>
       );
@@ -333,7 +329,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
             {section.images.map((img, gi) => (
               <figure key={gi} className="overflow-hidden">
                 <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
-                {img.caption && <figcaption className="px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--2)] text-on-surface-variant">{img.caption}</figcaption>}
+                {img.caption && <figcaption className="py-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{img.caption}</figcaption>}
               </figure>
             ))}
           </div>
@@ -344,7 +340,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className={`${card} overflow-hidden`}>
+          <div className="overflow-hidden bg-[var(--bg-element)]">
             <video controls poster={section.poster ?? makeVideoPosterDataUrl(section.heading ?? "project demo")} className="block w-full h-auto">
               <source src={section.src} type="video/mp4" />
             </video>
@@ -355,8 +351,8 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
     case "links":
       return (
         <motion.section key={i} {...sectionMotion}>
-          <div className="flex flex-wrap items-center gap-3">
-            {section.items.map((l, li) => {
+          <div className="flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
+            {section.items.map((l) => {
               const isGithub = /github\.com/i.test(l.href);
               const isLinkedin = /linkedin\.com/i.test(l.href);
               if (isGithub || isLinkedin) {
@@ -368,9 +364,9 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={isGithub ? "GitHub" : "LinkedIn"}
-                    className="micro-focus micro-focus-tight micro-pressable glass-stroke-sm inline-flex h-12 w-12 items-center justify-center rounded-[var(--md-shape-sm)] bg-surface-container/50 text-on-surface backdrop-blur-md hover:bg-surface-container"
+                    className="micro-focus micro-focus-tight micro-pressable inline-flex h-8 w-8 items-center justify-center border border-[var(--border-light)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-element)]"
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-4 h-4" />
                   </a>
                 );
               }
@@ -380,11 +376,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={
-                    li === 0
-                      ? "micro-focus micro-focus-tight micro-pressable inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-on-surface px-6 py-3 text-sm font-normal text-surface hover:opacity-90"
-                      : "micro-focus micro-focus-tight micro-pressable glass-stroke-sm inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container/50 px-6 py-3 text-sm font-normal text-on-surface backdrop-blur-md hover:bg-surface-container"
-                  }
+                  className="intro-contact-link micro-focus micro-pressable inline-flex items-center gap-1 text-[length:var(--type-0)]"
                 >
                   {l.label}
                   <ArrowUpRight className="w-4 h-4" />
@@ -398,11 +390,11 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
     case "outcome":
       return (
         <motion.section key={i} {...sectionMotion}>
-          <div className={`${card} p-8 sm:p-12`}>
-          <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
-            <div className="space-y-4">
+          <div className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
+            <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
+            <div className="space-y-[var(--space-2)]">
               {section.body.map((p, pi) => (
-                <p key={pi} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-on-surface">
+                <p key={pi} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
                   {p}
                 </p>
               ))}
@@ -443,10 +435,10 @@ function AskRow({
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="micro-focus micro-focus-tight micro-pressable glass-stroke-sm group inline-flex items-center gap-[var(--space-1)] rounded-[var(--md-shape-sm)] bg-surface-container/50 px-[var(--space-2)] py-[var(--space-1)] text-[length:var(--type--1)] font-normal text-on-surface backdrop-blur-md hover:bg-on-surface hover:text-surface"
+            className="micro-focus micro-focus-tight micro-pressable group inline-flex items-center gap-[var(--space-1)] border border-[var(--border-light)] bg-[var(--bg-surface)] px-[var(--space-2)] py-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] font-normal text-[var(--text-primary)] hover:bg-[var(--bg-element)]"
           >
             {q}
-            <ArrowUpRight className={`w-3.5 h-3.5 text-on-surface-variant group-hover:text-surface ${
+            <ArrowUpRight className={`w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] ${
               reduceMotion
                 ? "transition-colors duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)]"
                 : "transition-[color,transform] duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -462,7 +454,7 @@ export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: st
   const reduceMotion = Boolean(useReducedMotion());
 
   return (
-    <div className="space-y-[var(--space-5)] sm:space-y-[var(--space-7)]">
+    <div className="space-y-[var(--space-5)]">
       {data.sections.map((s, i) => (
         <div key={i}>
           {renderSection(s, i, reduceMotion)}
@@ -473,7 +465,7 @@ export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: st
 
       {/* Outro: loop back into the conversation */}
       {onAsk && data.ask && data.ask.length > 0 && (
-        <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="border-t border-outline-variant pt-10" reduceMotion={reduceMotion} />
+        <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="border-t border-[var(--border-light)] pt-[var(--space-4)]" reduceMotion={reduceMotion} />
       )}
     </div>
   );

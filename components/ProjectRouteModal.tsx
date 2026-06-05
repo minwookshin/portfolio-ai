@@ -84,7 +84,7 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={reduceMotion ? tweens.none : tweens.base}
-        className="project-lightbox-close-zone fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-surface text-on-surface"
+        className="project-lightbox-close-zone fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]"
       >
         <div className="mx-auto flex w-full max-w-[1180px] justify-center px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
           <div
@@ -111,7 +111,7 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
       exit={{ opacity: 0 }}
       transition={reduceMotion ? tweens.none : tweens.base}
       style={{ backgroundColor: "var(--dark-overlay-56)" }}
-      className="project-lightbox-close-zone fixed inset-0 z-[70] flex items-center justify-center p-[var(--space-2)] text-on-surface backdrop-blur-[10px] sm:p-[var(--space-3)]"
+      className="project-lightbox-close-zone fixed inset-0 z-[70] flex items-center justify-center p-[var(--space-2)] text-[length:var(--type-0)] text-[var(--text-primary)] sm:p-[var(--space-3)]"
     >
       <motion.div
         ref={dialogRef}
@@ -125,7 +125,7 @@ export default function ProjectRouteModal({ project }: { project: PortfolioProje
         exit={reduceMotion ? { opacity: 0, y: 0, scale: 1 } : { opacity: 0, y: 18, scale: 0.985 }}
         transition={reduceMotion ? tweens.none : tweens.slow}
         onClick={(event) => event.stopPropagation()}
-        className="project-lightbox-content max-h-[86dvh] w-[min(92vw,980px)] overflow-y-auto rounded-[var(--md-shape-lg)] border border-outline-variant bg-surface px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-3)] text-on-surface outline-none sm:px-[var(--space-4)] sm:pt-[var(--space-4)]"
+        className="project-lightbox-content max-h-[86dvh] w-[min(92vw,620px)] overflow-y-auto border border-[var(--border-light)] bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-3)] text-[var(--text-primary)] outline-none sm:px-[var(--space-4)] sm:pt-[var(--space-4)]"
       >
         <ProjectCaseStudyShell project={project} actionLabel="back" onAction={() => router.back()} />
       </motion.div>
