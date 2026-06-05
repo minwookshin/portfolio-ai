@@ -293,9 +293,41 @@ body::after {
   text-decoration-color: currentColor;
 }
 
-.group:hover .project-row-title-line--shared,
-.group:focus-within .project-row-title-line--shared {
-  text-decoration-color: var(--text-underline-muted);
+.project-row-title-line--directional {
+  position: relative;
+  display: inline-block;
+  text-decoration-line: none;
+}
+
+.project-row-title-line--directional::before,
+.project-row-title-line--directional::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.02em;
+  height: 1px;
+  pointer-events: none;
+}
+
+.project-row-title-line--directional::before {
+  background: var(--text-underline-muted);
+}
+
+.project-row-title-line--directional::after {
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+[data-underline-origin="right"] .project-row-title-line--directional::after {
+  transform-origin: right center;
+}
+
+.group:hover .project-row-title-line--directional::after,
+.group:focus-within .project-row-title-line--directional::after {
+  transform: scaleX(1);
 }
 
 .micro-pressable {
@@ -545,6 +577,7 @@ body::after {
   .micro-pressable,
   .micro-card,
   .micro-field,
+  .project-row-title-line--directional::after,
   .micro-skeleton-line {
     transition: none !important;
     animation: none !important;
