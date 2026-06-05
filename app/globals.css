@@ -345,12 +345,55 @@ body::after {
 }
 
 .work-preview-soft-edge {
+  --work-preview-fade-soft: 8px;
+  --work-preview-fade-mid: 22px;
+  --work-preview-fade-full: 36px;
   -webkit-mask-image:
-    linear-gradient(to right, transparent 0, rgba(0, 0, 0, 0.95) 10px, #000 18px, #000 calc(100% - 18px), rgba(0, 0, 0, 0.95) calc(100% - 10px), transparent 100%),
-    linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.95) 10px, #000 18px, #000 calc(100% - 18px), rgba(0, 0, 0, 0.95) calc(100% - 10px), transparent 100%);
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.32) var(--work-preview-fade-soft),
+      rgba(0, 0, 0, 0.76) var(--work-preview-fade-mid),
+      #000 var(--work-preview-fade-full),
+      #000 calc(100% - var(--work-preview-fade-full)),
+      rgba(0, 0, 0, 0.76) calc(100% - var(--work-preview-fade-mid)),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--work-preview-fade-soft)),
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.32) var(--work-preview-fade-soft),
+      rgba(0, 0, 0, 0.76) var(--work-preview-fade-mid),
+      #000 var(--work-preview-fade-full),
+      #000 calc(100% - var(--work-preview-fade-full)),
+      rgba(0, 0, 0, 0.76) calc(100% - var(--work-preview-fade-mid)),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--work-preview-fade-soft)),
+      transparent 100%
+    );
   mask-image:
-    linear-gradient(to right, transparent 0, rgba(0, 0, 0, 0.95) 10px, #000 18px, #000 calc(100% - 18px), rgba(0, 0, 0, 0.95) calc(100% - 10px), transparent 100%),
-    linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.95) 10px, #000 18px, #000 calc(100% - 18px), rgba(0, 0, 0, 0.95) calc(100% - 10px), transparent 100%);
+    linear-gradient(
+      to right,
+      transparent 0,
+      rgba(0, 0, 0, 0.32) var(--work-preview-fade-soft),
+      rgba(0, 0, 0, 0.76) var(--work-preview-fade-mid),
+      #000 var(--work-preview-fade-full),
+      #000 calc(100% - var(--work-preview-fade-full)),
+      rgba(0, 0, 0, 0.76) calc(100% - var(--work-preview-fade-mid)),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--work-preview-fade-soft)),
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.32) var(--work-preview-fade-soft),
+      rgba(0, 0, 0, 0.76) var(--work-preview-fade-mid),
+      #000 var(--work-preview-fade-full),
+      #000 calc(100% - var(--work-preview-fade-full)),
+      rgba(0, 0, 0, 0.76) calc(100% - var(--work-preview-fade-mid)),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--work-preview-fade-soft)),
+      transparent 100%
+    );
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
