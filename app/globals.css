@@ -344,7 +344,8 @@ body::after {
   color: #71717a;
 }
 
-.related-work-link {
+.related-work-link,
+.studio-lateral-link {
   color: var(--text-muted);
   text-decoration-line: none;
   transform: translate3d(0, 0, 0);
@@ -355,9 +356,17 @@ body::after {
 }
 
 .related-work-link:hover,
-.related-work-link:focus-visible {
+.related-work-link:focus-visible,
+.studio-lateral-link:hover,
+.studio-lateral-link:focus-visible {
   color: var(--text-primary);
   transform: translate3d(8px, 0, 0);
+}
+
+.work-preview-stage {
+  contain: paint;
+  isolation: isolate;
+  transform: translateZ(0);
 }
 
 .work-preview-soft-edge {
@@ -415,6 +424,41 @@ body::after {
 .work-preview-sentinel-video > video {
   transform: scale(1.01);
   transform-origin: center;
+}
+
+.studio-detail {
+  --studio-detail-rule: var(--border-light);
+}
+
+.studio-detail-nav {
+  border-bottom: 1px solid var(--studio-detail-rule);
+  padding-bottom: var(--space-2);
+}
+
+.studio-detail-body {
+  padding-top: var(--space-1);
+}
+
+.studio-detail-proof {
+  position: relative;
+}
+
+.studio-detail-summary {
+  border-color: var(--studio-detail-rule);
+}
+
+.studio-detail-panel {
+  border-top: 1px solid var(--studio-detail-rule);
+  background: transparent;
+}
+
+.studio-detail-media {
+  overflow: hidden;
+  background: var(--bg-element);
+}
+
+.studio-detail-media :is(img, video) {
+  display: block;
 }
 
 .micro-pressable {
@@ -668,6 +712,13 @@ body::after {
     transform: none !important;
   }
 
+  .related-work-link:hover,
+  .related-work-link:focus-visible,
+  .studio-lateral-link:hover,
+  .studio-lateral-link:focus-visible {
+    transform: none !important;
+  }
+
   .animated-cursor-pointer,
   .animated-cursor__arrow {
     transition: none !important;
@@ -684,6 +735,7 @@ body::after {
   .project-row-title-line--lateral,
   .project-row-meta,
   .related-work-link,
+  .studio-lateral-link,
   .micro-skeleton-line {
     transition: none !important;
     animation: none !important;

@@ -45,9 +45,9 @@ export default function ProjectCaseStudyShell({
       animate={{ opacity: 1, y: 0 }}
       exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
       transition={reduceMotion ? tweens.none : tweens.slow}
-      className={`project-readable w-full ${className}`}
+      className={`project-readable studio-detail w-full ${className}`}
     >
-      <nav className="mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
+      <nav className="studio-detail-nav mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
         <span className="flex min-w-0 items-center gap-[var(--space-1)]">
           <Link
             href={baseHref}

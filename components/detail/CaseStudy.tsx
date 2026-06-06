@@ -53,13 +53,13 @@ export interface CaseStudyData {
 
 // One reveal for every section so the whole page breathes consistently.
 const reveal = {
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 18 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-80px" },
   transition: springs.spatialDefault,
 } as const;
 
-const card = "border border-[var(--border-light)] bg-[var(--bg-surface)]";
+const card = "studio-detail-panel";
 const eyebrowCls = "text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]";
 const h2Cls = "text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]";
 const bodyCls = "text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]";
@@ -103,13 +103,13 @@ function Tags({ tags }: { tags: string[] }) {
 function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "phone" | "cover" }) {
   if (style === "phone") {
     return (
-      <div className="mx-auto w-full max-w-[260px]">
+      <div className="studio-detail-media mx-auto w-full max-w-[260px]">
         <img src={src} alt={alt} className="w-full h-auto" draggable={false} loading="lazy" decoding="async" />
       </div>
     );
   }
   return (
-    <div className="overflow-hidden">
+    <div className="studio-detail-media overflow-hidden">
       <img src={src} alt={alt} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
     </div>
   );
@@ -340,7 +340,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className="overflow-hidden bg-[var(--bg-element)]">
+          <div className="studio-detail-media overflow-hidden bg-[var(--bg-element)]">
             <video controls poster={section.poster ?? makeVideoPosterDataUrl(section.heading ?? "project demo")} className="block w-full h-auto">
               <source src={section.src} type="video/mp4" />
             </video>
@@ -358,7 +358,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="intro-contact-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
+                className="studio-lateral-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
               >
                 {l.label}
               </a>

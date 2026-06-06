@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
 import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug, getProjectMetadataDescription } from "@/data/projects";
@@ -63,10 +62,9 @@ function RelatedWriting({ posts }: { posts: WritingPostMeta[] }) {
           <Link
             key={post.slug}
             href={`/writing/${post.slug}`}
-            className="intro-contact-link micro-focus micro-pressable inline-flex w-fit items-center gap-1 text-[length:var(--type-0)] leading-[var(--leading-body)]"
+            className="related-work-link micro-focus micro-pressable inline-flex w-fit text-[length:var(--type-0)] leading-[var(--leading-body)]"
           >
             {post.title}
-            <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         ))}
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useCallback, useState, useEffect, useRef } from "react";
-import type { MouseEvent, ReactNode } from "react";
+import type { MouseEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -119,49 +119,6 @@ function showToTarget(show: string | null): Project | "profile" | "projects" | n
   return null;
 }
 
-function ProjectMedia({
-  previewLayer,
-  project,
-  tone = "light",
-  reduceMotion = false,
-}: {
-  previewLayer?: ReactNode;
-  project: Project;
-  tone?: "light" | "dark";
-  reduceMotion?: boolean;
-}) {
-  const src = project.image ?? project.icon;
-  const mediaBg =
-    tone === "dark"
-      ? "border border-[var(--dark-border)] bg-[var(--dark-bg-surface)]"
-      : "border border-[var(--dark-border)] bg-[var(--dark-bg-base)]";
-
-  if (src) {
-    return (
-      <div className="work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)]">
-        <BlurImage
-          src={src}
-          alt={project.title}
-          fill
-          sizes="(max-width: 768px) 74vw, 680px"
-          draggable={false}
-          className={`object-cover ${
-            reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
-          }`}
-        />
-        {previewLayer}
-      </div>
-    );
-  }
-
-  return (
-    <div className={`work-preview-soft-edge relative flex aspect-[1.5] w-full items-center justify-center overflow-hidden rounded-[var(--md-shape-lg)] ${mediaBg} text-4xl text-[var(--dark-text-primary)]`}>
-      {project.glyph ?? project.title.charAt(0)}
-      {previewLayer}
-    </div>
-  );
-}
-
 function IntroLink({
   href,
   children,
@@ -261,7 +218,7 @@ function ProjectTextRow({
   );
 }
 
-function WorkFixedPreview({
+function WorkPreviewContent({
   project,
   reduceMotion,
 }: {
@@ -269,30 +226,83 @@ function WorkFixedPreview({
   reduceMotion: boolean;
 }) {
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+
+  if (previewVideo && !reduceMotion) {
+    return (
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        src={previewVideo}
+        className="block h-full w-full object-cover"
+      />
+    );
+  }
+
+  const src = project.image ?? project.icon;
+
+  if (src) {
+    return (
+      <BlurImage
+        src={src}
+        alt={project.title}
+        fill
+        sizes="(max-width: 768px) 74vw, 680px"
+        draggable={false}
+        className="object-cover"
+      />
+    );
+  }
+
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-[var(--dark-bg-base)] text-4xl text-[var(--dark-text-primary)]">
+      {project.glyph ?? project.title.charAt(0)}
+    </div>
+  );
+}
+
+function WorkFixedPreview({
+  project,
+  reduceMotion,
+}: {
+  project: Project;
+  reduceMotion: boolean;
+}) {
   const previewFrameClass = [
-    "work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]",
+    "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]",
     project.slug === "sentinel" ? "work-preview-sentinel-video" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
-  if (previewVideo && !reduceMotion) {
-    return (
-      <div className={previewFrameClass}>
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          src={previewVideo}
-          className="block h-full w-full object-cover"
-        />
-      </div>
-    );
-  }
-
-  return <ProjectMedia project={project} reduceMotion={reduceMotion} />;
+  return (
+    <div className={previewFrameClass}>
+      <AnimatePresence initial={false} mode="popLayout">
+        <motion.div
+          key={project.id}
+          className="absolute inset-0 transform-gpu"
+          initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(10px)", scale: 0.986, x: 5 }}
+          animate={{ opacity: 1, filter: "blur(0px)", scale: 1, x: 0 }}
+          exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(6px)", scale: 1.006, x: -4 }}
+          transition={
+            reduceMotion
+              ? tweens.instant
+              : {
+                  opacity: { type: "tween", duration: 0.13, ease: [0.22, 1, 0.36, 1] },
+                  filter: { type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] },
+                  scale: { type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] },
+                  x: { type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] },
+                }
+          }
+          style={{ willChange: "opacity, filter, transform" }}
+        >
+          <WorkPreviewContent project={project} reduceMotion={reduceMotion} />
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
 }
 
 function EditorialIntro() {
@@ -376,19 +386,19 @@ function WorkSection({
           <AnimatePresence initial={false}>
             {previewProject && (
               <motion.div
-                key={previewProject.id}
+                key="work-preview-stage"
                 className="absolute inset-0 transform-gpu"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(12px)", scale: 0.985, y: 7 }}
+                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(8px)", scale: 0.992, y: 5 }}
                 animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(8px)", scale: 0.992, y: -4 }}
+                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(6px)", scale: 0.992, y: 4 }}
                 transition={
                   reduceMotion
                     ? tweens.instant
                     : {
-                        opacity: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                        filter: { type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] },
-                        scale: { type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] },
-                        y: { type: "tween", duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+                        opacity: { type: "tween", duration: 0.14, ease: [0.22, 1, 0.36, 1] },
+                        filter: { type: "tween", duration: 0.2, ease: [0.22, 1, 0.36, 1] },
+                        scale: { type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] },
+                        y: { type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] },
                       }
                 }
                 style={{ willChange: "opacity, filter, transform" }}

@@ -36,8 +36,8 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
   const hasDemo = Boolean(proof.demo?.video || proof.demo?.href);
 
   return (
-    <section className="mb-[var(--space-6)] space-y-[var(--space-4)]">
-      <div className="grid gap-x-[var(--space-3)] gap-y-[var(--space-2)] border-y border-[var(--border-light)] py-[var(--space-3)] sm:grid-cols-2">
+    <section className="studio-detail-proof mb-[var(--space-6)] space-y-[var(--space-4)]">
+      <div className="studio-detail-summary grid gap-x-[var(--space-3)] gap-y-[var(--space-2)] border-y border-[var(--border-light)] py-[var(--space-3)] sm:grid-cols-2">
         <SummaryItem label="role" value={proof.role} />
         {stack && <SummaryItem label="stack" value={stack} />}
         <SummaryItem
@@ -63,21 +63,23 @@ function BuilderProofIntro({ proof }: { proof: BuilderProof }) {
       {proof.demo && hasDemo && (
         <div className="space-y-[var(--space-2)]">
           {proof.demo.video ? (
-            <video
-              controls
-              playsInline
-              preload="metadata"
-              poster={makeVideoPosterDataUrl(proof.demo.label)}
-              className="block w-full bg-[var(--bg-element)]"
-            >
-              <source src={proof.demo.video} type="video/mp4" />
-            </video>
+            <div className="studio-detail-media">
+              <video
+                controls
+                playsInline
+                preload="metadata"
+                poster={makeVideoPosterDataUrl(proof.demo.label)}
+                className="block w-full bg-[var(--bg-element)]"
+              >
+                <source src={proof.demo.video} type="video/mp4" />
+              </video>
+            </div>
           ) : proof.demo.href ? (
             <a
               href={proof.demo.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="intro-contact-link micro-focus micro-pressable inline-flex items-center text-[length:var(--type-0)]"
+              className="studio-lateral-link micro-focus micro-pressable inline-flex items-center text-[length:var(--type-0)]"
             >
               {proof.demo.label}
             </a>
@@ -121,7 +123,7 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
       <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{title}</h2>
       <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
         {visibleItems.map((item) => (
-          <div key={`${title}-${item.label}`} className="border border-[var(--border-light)] bg-[var(--bg-surface)] px-[var(--space-2)] py-[var(--space-2)]">
+          <div key={`${title}-${item.label}`} className="studio-detail-panel px-[var(--space-2)] py-[var(--space-2)]">
             <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{item.label}</p>
             <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">{item.value}</p>
             {isVisibleBuilderValue(item.note) && <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-muted)]">{item.note}</p>}
@@ -174,7 +176,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={reduceMotion ? tweens.none : tweens.fast}
-      className="mb-[var(--space-6)]"
+      className="studio-detail-body mb-[var(--space-6)]"
     >
       {!hideBack && onBack && (
         <motion.button
