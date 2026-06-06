@@ -257,7 +257,7 @@ function WorkPreviewContent({
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-center bg-[var(--dark-bg-base)] text-4xl text-[var(--dark-text-primary)]">
+    <div className="flex h-full w-full items-center justify-center bg-transparent text-4xl text-[var(--text-primary)]">
       {project.glyph ?? project.title.charAt(0)}
     </div>
   );
@@ -271,7 +271,7 @@ function WorkFixedPreview({
   reduceMotion: boolean;
 }) {
   const previewFrameClass = [
-    "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-[var(--dark-bg-base)]",
+    "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent",
     project.slug === "sentinel" ? "work-preview-sentinel-video" : "",
   ]
     .filter(Boolean)
