@@ -137,8 +137,8 @@ export default function AnimatedCursor() {
       }`}
       style={{ transform: pointerTransform }}
     >
-      <svg className="animated-cursor__arrow" viewBox="0 0 16 20">
-        <path d="M1.42 1.25C0.88 0.83 0.12 1.3 0.25 1.98L3.62 18.34C3.79 19.17 4.87 19.39 5.34 18.68L8.18 14.38C8.44 13.98 8.86 13.72 9.33 13.66L14.86 12.95C15.72 12.84 16 11.72 15.3 11.22L1.42 1.25Z" />
+      <svg className="animated-cursor__arrow" viewBox="0 0 16 18">
+        <path d="M1.44 1.15C0.9 0.72 0.13 1.2 0.27 1.87L3.34 16.4C3.51 17.21 4.57 17.43 5.04 16.74L7.24 13.5C7.56 13.02 8.07 12.7 8.65 12.61L14.66 11.68C15.5 11.55 15.74 10.45 15.05 9.98L1.44 1.15Z" />
       </svg>
     </motion.div>
   );
