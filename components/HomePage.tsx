@@ -27,6 +27,7 @@ import {
   isLabProject,
   orderProjects,
 } from "@/data/projects";
+import { PERSONAL_INFO } from "@/data/personal";
 
 type HomeTab = "work" | "writing" | "lab";
 
@@ -62,17 +63,6 @@ function useCanShowWorkPreview() {
 
   return canShow;
 }
-
-// Personal Information
-const PERSONAL_INFO = {
-  name: "Minwook Shin",
-  title: "Design Engineer",
-  bio: "I design and build interfaces for AI-native products, from early idea to working software.",
-  email: "ind3432@gmail.com",
-  linkedin: "https://www.linkedin.com/in/minwookshin",
-  github: "https://github.com/YeYen1721",
-  resume: "https://drive.google.com/file/d/1DpEUz-h7ZgHIkNNdbAr6VIUho4m33v3-/view?usp=sharing",
-};
 
 // The model appends hidden directive lines at the end of each reply:
 //   <<<SHOW>>>project:Sentinel | projects | profile   (what the UI should open)
