@@ -90,13 +90,6 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         ask: ["How does the risk scoring work?"],
       },
       {
-        kind: "video",
-        eyebrow: "Demo",
-        heading: "Sentinel in action",
-        src: "/projects/sentinel/demo.mp4",
-        aspect: "1280 / 826",
-      },
-      {
         kind: "outcome",
         badge: "Winner · 1st place",
         heading: "Outcome",
