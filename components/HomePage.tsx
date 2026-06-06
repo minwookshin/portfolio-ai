@@ -166,17 +166,19 @@ function IntroLink({
   href,
   children,
   external = false,
+  uppercase = false,
 }: {
   href: string;
   children: string;
   external?: boolean;
+  uppercase?: boolean;
 }) {
   return (
     <a
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      className="intro-contact-link micro-focus micro-pressable text-[length:var(--type-0)]"
+      className={`intro-contact-link micro-focus micro-pressable text-[length:var(--type-0)] ${uppercase ? "site-uppercase-label" : ""}`}
     >
       {children}
     </a>
@@ -209,6 +211,7 @@ function ProjectTextRow({
     "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
     "font-normal leading-[var(--leading-tight)]",
+    "site-uppercase-label",
     isWorkRow ? "project-row-title-line--lateral" : "text-[var(--text-primary)]",
     project.comingSoon ? "" : isWorkRow ? "" : "project-row-title-line",
   ]
@@ -307,13 +310,13 @@ function EditorialIntro() {
         <p className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
           <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
           {", "}
-          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
+          <IntroLink href={PERSONAL_INFO.linkedin} external uppercase>LinkedIn</IntroLink>
           {", "}
-          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
+          <IntroLink href={PERSONAL_INFO.github} external uppercase>GitHub</IntroLink>
           {", "}
           <span className="text-[var(--text-primary)]">and</span>
           {" "}
-          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
+          <IntroLink href={PERSONAL_INFO.resume} external uppercase>Resume</IntroLink>
           {"."}
         </p>
       </div>
@@ -473,7 +476,7 @@ function HomeExploreSection({
               <Fragment key={link.id}>
                 <Link
                   aria-current={selected ? "page" : undefined}
-                  className="home-tab-button micro-focus micro-focus-tight"
+                  className="home-tab-button site-uppercase-label micro-focus micro-focus-tight"
                   data-active={selected ? "true" : "false"}
                   href={link.href}
                   onClick={(event) => onSectionNavigate?.(link.id, link.href, event)}

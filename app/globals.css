@@ -300,6 +300,11 @@ body::after {
   transform: translate3d(0, -1px, 0);
 }
 
+.site-lowercase .site-uppercase-label,
+.site-lowercase .site-uppercase-label :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
+  text-transform: uppercase !important;
+}
+
 .group:hover .project-row-title-line,
 .group:focus-within .project-row-title-line {
   text-decoration-color: currentColor;
