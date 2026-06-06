@@ -17,14 +17,12 @@ function StatusLink({
   children,
   href,
   external = false,
-  uppercase = true,
 }: {
   children: ReactNode;
   href: string;
   external?: boolean;
-  uppercase?: boolean;
 }) {
-  const className = `intro-contact-link micro-focus micro-focus-tight ${uppercase ? "site-uppercase-label" : ""}`;
+  const className = "intro-contact-link micro-focus micro-focus-tight";
 
   if (external) {
     return (
@@ -76,7 +74,7 @@ export default function StatusPage({ code, eyebrow, title, body, action }: Statu
             <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
               ,
             </span>
-            <StatusLink href={`mailto:${PERSONAL_INFO.email}`} uppercase={false}>{PERSONAL_INFO.email}</StatusLink>
+            <StatusLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</StatusLink>
             <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
               ,
             </span>
