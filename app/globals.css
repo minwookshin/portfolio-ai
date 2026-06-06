@@ -600,8 +600,8 @@ body::after {
 
 .animated-cursor-pointer {
   z-index: 2147483647;
-  width: 15px;
-  height: 18px;
+  width: 14px;
+  height: 16px;
 }
 
 .animated-cursor-pointer.is-visible {
@@ -615,9 +615,9 @@ body::after {
 .animated-cursor__arrow {
   position: absolute;
   left: 0;
-  top: -1px;
-  width: 15px;
-  height: 18px;
+  top: -0.5px;
+  width: 14px;
+  height: 16px;
   fill: rgb(var(--cursor-rgb));
   stroke: rgb(var(--cursor-rgb));
   stroke-width: 0.7px;
