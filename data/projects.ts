@@ -338,10 +338,15 @@ export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
 export const LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
-  Sentinel: "/projects/sentinel/demo.mp4",
-  CapExplorer: "/projects/capexplorer/demo.mp4",
-  Tomo: "/projects/tomo/demo.mp4",
-  Caret: "/projects/caret/demo.mp4",
+  Atlas: "/projects/previews/atlas.mp4",
+  Sentinel: "/projects/previews/sentinel.mp4",
+  "Portfolio AI": "/projects/previews/portfolio-ai.mp4",
+  Mindline: "/projects/previews/mindline.mp4",
+  "FLUX Website": "/projects/previews/flux.mp4",
+  Tomo: "/projects/previews/tomo.mp4",
+  NameMe: "/projects/previews/nameme.mp4",
+  CapExplorer: "/projects/previews/capexplorer.mp4",
+  Caret: "/projects/previews/caret.mp4",
 };
 
 export const LIVE_DEMO_TILE_TITLES = new Set(["CapExplorer", "Caret"]);
