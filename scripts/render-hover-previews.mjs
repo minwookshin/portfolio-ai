@@ -77,6 +77,94 @@ function signed(value) {
   return value >= 0 ? `+${value}` : `${value}`;
 }
 
+function progress(duration) {
+  return `min(t/${seconds(duration)},1)`;
+}
+
+function midpointExpression(start = 0, end = start, duration) {
+  return `${start}+(${end - start})*${progress(duration)}`;
+}
+
+function layerScaleFilter(layer, duration) {
+  if (layer.heightStart || layer.heightEnd || layer.height) {
+    const start = layer.heightStart ?? layer.height ?? layer.heightEnd;
+    const end = layer.heightEnd ?? layer.height ?? layer.heightStart;
+    return `scale=w=-2:h='trunc((${midpointExpression(start, end, duration)})/2)*2':eval=frame`;
+  }
+
+  const start = layer.widthStart ?? layer.width ?? layer.widthEnd;
+  const end = layer.widthEnd ?? layer.width ?? layer.widthStart;
+
+  if (start) {
+    return `scale=w='trunc((${midpointExpression(start, end, duration)})/2)*2':h=-2:eval=frame`;
+  }
+
+  return scaleFilter(layer);
+}
+
+function layerFilter(layer, inputIndex, duration) {
+  const steps = [`[${inputIndex}:v]format=rgba`, layerScaleFilter(layer, duration)];
+  const fadeIn = layer.fadeIn ?? 0.28;
+  const fadeOut = layer.fadeOut ?? 0;
+
+  if (layer.opacity && layer.opacity < 1) {
+    steps.push(`colorchannelmixer=aa=${layer.opacity}`);
+  }
+
+  if (fadeIn > 0) {
+    steps.push(`fade=t=in:st=${seconds(layer.start ?? 0)}:d=${seconds(fadeIn)}:alpha=1`);
+  }
+
+  if (fadeOut > 0) {
+    steps.push(`fade=t=out:st=${seconds(Math.max(duration - fadeOut, 0))}:d=${seconds(fadeOut)}:alpha=1`);
+  }
+
+  return `${steps.join(",")}[layer${inputIndex}]`;
+}
+
+function renderCompositionSegment(project, scene, index) {
+  const { width, height, fps } = hoverPreviewDefaults;
+  const duration = scene.duration;
+  const frames = Math.round(duration * fps);
+  const output = path.join(tempDir, `${project.slug}-${index}.mp4`);
+  const inputs = scene.layers.flatMap((layer) => ["-loop", "1", "-i", abs(layer.src)]);
+  const filters = [];
+  let previous = "[0:v]";
+
+  for (const [layerIndex, layer] of scene.layers.entries()) {
+    const inputIndex = layerIndex + 1;
+    const layerName = `[layer${inputIndex}]`;
+    const out = `[comp${layerIndex}]`;
+    const x = `(W-w)/2+${midpointExpression(layer.xStart ?? layer.x ?? 0, layer.xEnd ?? layer.x ?? layer.xStart ?? 0, duration)}`;
+    const y = `(H-h)/2+${midpointExpression(layer.yStart ?? layer.y ?? 0, layer.yEnd ?? layer.y ?? layer.yStart ?? 0, duration)}`;
+
+    filters.push(layerFilter(layer, inputIndex, duration));
+    filters.push(`${previous}${layerName}overlay=x='${x}':y='${y}':format=auto:shortest=1${out}`);
+    previous = out;
+  }
+
+  filters.push(`${previous}setsar=1,format=yuv420p[v]`);
+
+  ffmpeg([
+    "-y",
+    "-f",
+    "lavfi",
+    "-i",
+    `color=c=${scene.background ?? "white"}:s=${width}x${height}:r=${fps}:d=${seconds(duration)}`,
+    ...inputs,
+    "-filter_complex",
+    filters.join(";"),
+    "-map",
+    "[v]",
+    "-frames:v",
+    String(frames),
+    ...encodeArgs(project.crf),
+    output,
+  ]);
+
+  return { output, duration };
+}
+
 function stillSegmentFilter(scene, frames) {
   const { width, height, fps } = hoverPreviewDefaults;
   const zoomStart = scene.zoomStart ?? 1;
@@ -124,10 +212,7 @@ function renderStillSegment(project, scene, index) {
   return { output, duration: scene.duration };
 }
 
-function renderStillProject(project) {
-  const segments = project.scenes.map((scene, index) => renderStillSegment(project, scene, index));
-  const output = path.join(outDir, `${project.slug}.mp4`);
-
+function combineSegments(project, segments, output) {
   if (segments.length === 1) {
     const duration = segments[0].duration;
     ffmpeg([
@@ -172,19 +257,28 @@ function renderStillProject(project) {
   return output;
 }
 
+function renderStillProject(project) {
+  const segments = project.scenes.map((scene, index) => renderStillSegment(project, scene, index));
+  return combineSegments(project, segments, path.join(outDir, `${project.slug}.mp4`));
+}
+
+function renderCompositionProject(project) {
+  const segments = project.scenes.map((scene, index) => renderCompositionSegment(project, scene, index));
+  return combineSegments(project, segments, path.join(outDir, `${project.slug}.mp4`));
+}
+
 function renderVideoProject(project) {
   const { width, height, fps } = hoverPreviewDefaults;
   const duration = project.duration;
   const output = path.join(outDir, `${project.slug}.mp4`);
-  const filter = [
-    `fps=${fps}`,
-    `scale=${width}:${height}:force_original_aspect_ratio=decrease`,
-    `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=white`,
-    "setsar=1",
-    `fade=t=in:st=0:d=0.18:color=white`,
-    `fade=t=out:st=${seconds(Math.max(duration - 0.38, 0))}:d=0.38:color=white`,
-    "format=yuv420p",
-  ].join(",");
+  const scaleAndFrame =
+    project.fit === "cover"
+      ? [
+          `scale=${width}:${height}:force_original_aspect_ratio=increase`,
+          `crop=${width}:${height}:x='(iw-ow)/2+${midpointExpression(project.xStart ?? 0, project.xEnd ?? project.xStart ?? 0, duration)}':y='(ih-oh)/2+${midpointExpression(project.yStart ?? 0, project.yEnd ?? project.yStart ?? 0, duration)}'`,
+        ]
+      : [`scale=${width}:${height}:force_original_aspect_ratio=decrease`, `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=white`];
+  const filter = [`fps=${fps}`, ...scaleAndFrame, "setsar=1", `fade=t=in:st=0:d=0.18:color=white`, `fade=t=out:st=${seconds(Math.max(duration - 0.38, 0))}:d=0.38:color=white`, "format=yuv420p"].join(",");
 
   ffmpeg([
     "-y",
@@ -208,6 +302,7 @@ function renderVideoProject(project) {
 function renderProject(project) {
   if (project.mode === "video") return renderVideoProject(project);
   if (project.mode === "stills") return renderStillProject(project);
+  if (project.mode === "composition") return renderCompositionProject(project);
   throw new Error(`Unknown preview mode for ${project.slug}: ${project.mode}`);
 }
 
