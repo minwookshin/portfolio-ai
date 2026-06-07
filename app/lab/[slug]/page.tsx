@@ -71,6 +71,7 @@ export default async function LabProjectPage({ params }: LabProjectPageProps) {
           actionLabel="all lab"
           actionHref="/lab"
           baseHref="/lab"
+          variant="lab"
         />
       </div>
       <BuildMeta className="mx-auto mt-auto w-full max-w-[760px] pt-[var(--space-6)] text-[length:var(--type-0)]" />

@@ -476,6 +476,25 @@ body::after {
   display: block;
 }
 
+.studio-lab-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.studio-lab-detail-media {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: var(--md-shape-lg);
+  background: var(--bg-surface);
+  contain: paint;
+  transform: translateZ(0);
+}
+
+.studio-lab-detail-media :is(img, video) {
+  display: block;
+}
+
 .micro-pressable {
   transition:
     color var(--motion-duration-base) var(--motion-ease-standard),

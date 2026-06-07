@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import LabProjectDetailView from "@/components/LabProjectDetailView";
 import ProjectDetailView from "@/components/ProjectDetailView";
 import type { PortfolioProject } from "@/data/projects";
 import { tweens } from "@/lib/material/motion";
@@ -12,6 +13,7 @@ export default function ProjectCaseStudyShell({
   actionHref,
   onAction,
   baseHref = "/work",
+  variant = "work",
   className = "",
 }: {
   project: PortfolioProject;
@@ -19,6 +21,7 @@ export default function ProjectCaseStudyShell({
   actionHref?: string;
   onAction?: () => void;
   baseHref?: string;
+  variant?: "work" | "lab";
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
@@ -60,7 +63,11 @@ export default function ProjectCaseStudyShell({
         </span>
         {action}
       </nav>
-      <ProjectDetailView project={project} hideBack onAsk={undefined} />
+      {variant === "lab" ? (
+        <LabProjectDetailView project={project} />
+      ) : (
+        <ProjectDetailView project={project} hideBack onAsk={undefined} />
+      )}
     </motion.div>
   );
 }

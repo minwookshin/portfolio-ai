@@ -145,15 +145,29 @@ function ProjectDetailHero({
   );
 }
 
-function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
+function BuilderProofSummary({ project, proof }: { project: Project | PortfolioProject; proof: BuilderProof }) {
   const demoNote = isVisibleBuilderValue(proof.demo?.note) ? proof.demo?.note : undefined;
   const hasDemo = Boolean(proof.demo?.video || proof.demo?.href);
+  const stack = proof.stack.filter(isVisibleBuilderValue);
+  const prototypeValue = proof.demo?.href
+    ? "live product surface"
+    : proof.demo?.video
+      ? "video prototype available"
+      : proof.status.label;
+  const reliabilityValue = stack.length > 0 ? stack.join(", ") : proof.pipeline;
+  const signalItems = [
+    { label: "craft", value: project.studioLabel ?? project.tags.slice(0, 2).join(", ") },
+    { label: "prototype", value: prototypeValue },
+    { label: "thinking", value: proof.oneLiner },
+    { label: "reliability", value: reliabilityValue },
+  ].filter((item) => isVisibleBuilderValue(item.value));
 
   return (
     <section className="studio-detail-proof space-y-[var(--space-3)] border-t border-[var(--border-light)] pt-[var(--space-3)]">
       <div className="grid gap-x-[var(--space-3)] gap-y-[var(--space-2)] sm:grid-cols-2">
-        <SummaryItem label="what it does" value={proof.oneLiner} />
-        {isVisibleBuilderValue(proof.pipeline) && <SummaryItem label="pipeline" value={proof.pipeline} />}
+        {signalItems.map((item) => (
+          <SummaryItem key={item.label} label={item.label} value={item.value} />
+        ))}
       </div>
 
       {proof.demo && hasDemo && (
@@ -269,7 +283,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
         </motion.button>
       )}
       <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
-      {proof && <BuilderProofSummary proof={proof} />}
+      {proof && <BuilderProofSummary project={project} proof={proof} />}
       <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
     </motion.div>
   );
