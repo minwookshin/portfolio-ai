@@ -27,14 +27,11 @@ type LabChatMessage = {
 };
 
 const LAB_CHAT_EMPTY_HEIGHT = "h-[420px] sm:h-[460px]";
-const LAB_TILE_HEIGHTS = [
-  "h-[300px] sm:h-[340px]",
-  "h-[380px] sm:h-[460px]",
-  "h-[300px] sm:h-[340px]",
-  "h-[420px] sm:h-[500px]",
-  "h-[300px] sm:h-[360px]",
+const LAB_SECONDARY_TILE_HEIGHTS = [
+  "h-[340px] sm:h-[380px] lg:h-[420px]",
+  "h-[360px] sm:h-[420px] lg:h-[420px]",
+  "h-[340px] sm:h-[380px] lg:h-[420px]",
 ] as const;
-const LAB_TILE_HEIGHT_VALUES = [340, 460, 340, 500, 360] as const;
 
 function parseAssistantBody(content: string) {
   let cut = content.length;
@@ -55,7 +52,13 @@ function LabMessageSkeleton() {
   );
 }
 
-function LabChatTile() {
+function LabChatTile({
+  activeHeightClassName = "h-[520px]",
+  emptyHeightClassName = LAB_CHAT_EMPTY_HEIGHT,
+}: {
+  activeHeightClassName?: string;
+  emptyHeightClassName?: string;
+}) {
   const reduceMotion = useReducedMotion();
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<LabChatMessage[]>([]);
@@ -143,7 +146,7 @@ function LabChatTile() {
   return (
     <div
       className={`w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] p-0 text-[var(--text-primary)] ${
-        hasMessages ? "h-[520px]" : LAB_CHAT_EMPTY_HEIGHT
+        hasMessages ? activeHeightClassName : emptyHeightClassName
       }`}
     >
       <form
@@ -221,10 +224,12 @@ function LabProjectMark({ project }: { project: Project }) {
 
 function LabProjectTile({
   className = "",
+  featured = false,
   index,
   project,
 }: {
   className?: string;
+  featured?: boolean;
   index: number;
   project: Project;
 }) {
@@ -234,6 +239,11 @@ function LabProjectTile({
   const previewState = useHoverVideoPreview({ alwaysOn: showsLiveDemo, videoSrc: previewVideo });
   const src = project.image ?? project.icon;
   const poster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
+  const imageSizes = featured
+    ? "(max-width: 768px) 92vw, (max-width: 1280px) 62vw, 620px"
+    : "(max-width: 768px) 92vw, (max-width: 1280px) 44vw, 320px";
+  const overlayPaddingClassName = featured ? "p-5 sm:p-6" : "p-4";
+  const titleSizeClassName = featured ? "text-[length:var(--type-3)] sm:text-[length:var(--type-4)]" : "";
 
   return (
     <motion.li
@@ -257,7 +267,7 @@ function LabProjectTile({
               src={src}
               alt=""
               fill
-              sizes="(max-width: 768px) 92vw, (max-width: 1280px) 44vw, 260px"
+              sizes={imageSizes}
               draggable={false}
               className={`object-cover grayscale ${
                 reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
@@ -282,12 +292,14 @@ function LabProjectTile({
             videoRef={previewState.videoRef}
           />
         </span>
-        <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/24 to-transparent p-4 opacity-90 group-hover:opacity-100 group-focus-within:opacity-100 ${
+        <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/24 to-transparent opacity-90 group-hover:opacity-100 group-focus-within:opacity-100 ${
+          overlayPaddingClassName
+        } ${
           reduceMotion ? "" : "translate-y-1 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-within:translate-y-0"
         }`}>
           <span className="flex items-end">
             <span className="min-w-0">
-              <span className="block font-normal leading-[var(--leading-heading)] text-white">
+              <span className={`block font-normal leading-[var(--leading-heading)] text-white ${titleSizeClassName}`}>
                 {project.title}
               </span>
               <span className="mt-1 block leading-[var(--leading-body)] text-white/70">
@@ -303,37 +315,51 @@ function LabProjectTile({
 
 export default function LabArchiveGrid({ className = "" }: { className?: string }) {
   const projects = orderProjects(MAIN_PROJECTS, LAB_PROJECT_IDS);
-  const labColumns: Array<Array<{ project: Project; index: number }>> = [[], [], []];
-  const labColumnHeights = [LAB_TILE_HEIGHT_VALUES[0], 0, 0];
+  const [featuredProject, sideProject, ...secondaryProjects] = projects;
 
-  projects.forEach((project, index) => {
-    const preferredColumns = [1, 2, 0];
-    const columnIndex = preferredColumns.reduce((shortest, candidate) =>
-      labColumnHeights[candidate] < labColumnHeights[shortest] ? candidate : shortest
-    );
-    labColumns[columnIndex].push({ project, index });
-    labColumnHeights[columnIndex] += LAB_TILE_HEIGHT_VALUES[index % LAB_TILE_HEIGHT_VALUES.length] + 12;
-  });
+  if (!featuredProject) return null;
 
   return (
-    <div className={`grid gap-[var(--space-2)] sm:grid-cols-2 lg:grid-cols-3 ${className}`}>
-      {labColumns.map((column, columnIndex) => (
-        <ul key={columnIndex} className="flex min-w-0 flex-col gap-[var(--space-2)]">
-          {columnIndex === 0 && (
-            <li className="list-none">
-              <LabChatTile />
-            </li>
+    <div className={`grid gap-[var(--space-2)] ${className}`}>
+      <div className="grid gap-[var(--space-2)] lg:grid-cols-[minmax(0,1.22fr)_minmax(280px,0.78fr)]">
+        <ul className="min-w-0">
+          <LabProjectTile
+            project={featuredProject}
+            index={0}
+            featured
+            className="h-[420px] sm:h-[520px] lg:h-[656px]"
+          />
+        </ul>
+
+        <ul className="grid min-w-0 gap-[var(--space-2)] sm:grid-cols-2 lg:grid-cols-1">
+          <li className="list-none">
+            <LabChatTile
+              activeHeightClassName="h-[420px] sm:h-[520px] lg:h-[320px]"
+              emptyHeightClassName="h-[300px] sm:h-[320px]"
+            />
+          </li>
+          {sideProject && (
+            <LabProjectTile
+              project={sideProject}
+              index={1}
+              className="h-[300px] sm:h-[320px]"
+            />
           )}
-          {column.map(({ project, index }) => (
+        </ul>
+      </div>
+
+      {secondaryProjects.length > 0 && (
+        <ul className="grid gap-[var(--space-2)] sm:grid-cols-2 lg:grid-cols-3">
+          {secondaryProjects.map((project, index) => (
             <LabProjectTile
               key={project.id}
               project={project}
-              index={index}
-              className={LAB_TILE_HEIGHTS[index % LAB_TILE_HEIGHTS.length]}
+              index={index + 2}
+              className={LAB_SECONDARY_TILE_HEIGHTS[index % LAB_SECONDARY_TILE_HEIGHTS.length]}
             />
           ))}
         </ul>
-      ))}
+      )}
     </div>
   );
 }
