@@ -251,11 +251,11 @@ function WorkPreviewContent({
           <BlurImage
             src={src}
             alt={project.title}
-            width={214}
-            height={187}
-            sizes="180px"
+            width={342}
+            height={299}
+            sizes="320px"
             draggable={false}
-            className="h-auto w-[150px] max-w-[34%] object-contain"
+            className="h-auto w-[260px] max-w-[58%] object-contain"
           />
         </div>
       );
