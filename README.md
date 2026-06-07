@@ -1,73 +1,59 @@
-# minwook
+# minwook shin
 
-An AI-native portfolio site for Minwook Shin. The interface combines selected work, conversational project intake, and case-study routing in one Next.js experience.
+AI-native portfolio and studio site for Minwook Shin. The site combines selected work, writing, Lab prototypes, hover/demo motion, project case studies, and a Gemini-powered assistant that can route visitors to relevant proof.
 
-## Design Philosophy
+## Stack
 
-Inspired by Silicon Valley product studios and AI-native agency sites: minimal positioning, strong interface craft, live product proof, and a conversational surface that helps visitors move from curiosity to a project brief.
+- Next.js App Router
+- React and TypeScript
+- Tailwind CSS with CSS variable design tokens
+- Framer Motion
+- Gemini API for the assistant
+- ffmpeg-driven local hover preview rendering
 
-## Features
+## Main Surfaces
 
-### 1. AI Project Intake
-- Conversational input powered by Gemini
-- Quick-start prompts for AI websites, prototypes, UX audits, and selected work
-- Hidden routing directives open the right project or profile view
+- `/work` — selected work with hover preview motion
+- `/writing` — notes and essays
+- `/lab` — prototype archive with autoplay demo tiles
+- `/work/[slug]` and `/lab/[slug]` — project detail pages
+- `/api/chat` — streaming Gemini assistant endpoint
 
-### 2. Selected Work Field
-- App-icon style project grid
-- Category filters for Engineering, AI, and Design
-- Hover labels that describe each project as studio proof
-
-### 3. Data-Driven Case Studies
-- Structured case-study renderer
-- Project-specific sections for challenge, build, features, and outcome
-- Inline follow-up questions wired back into the chat
-
-### 4. Motion + Material Language
-- Framer Motion transitions
-- Monochrome light theme
-- Dotted outlines, app-icon tiles, and floating composer UI
-
-## 🛠️ Tech Stack
-
-- **Next.js 16** (App Router)
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Framer Motion** - Physics & animations
-- **Lucide React** - Icons
-
-## 🏗️ Project Structure
-
-```
-components/
-  ├── MagicInput.tsx       # Glassmorphism text editor
-  └── StickerCard.tsx      # Draggable sticker with shapes
-
-app/
-  ├── page.tsx             # Main canvas with spawn logic
-  ├── layout.tsx           # Root layout
-  └── globals.css          # Global styles
-```
-
-## 🎮 How to Use
-
-1. **Type a command** in the magic input (top)
-2. **Press execute** button or hit `⌘ + Enter`
-3. **Watch stickers spawn** with animations
-4. **Drag them anywhere** on the canvas
-5. **Arrange your story** however you want
-
-## 🚀 Getting Started
+## Local Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
 npm run dev
+```
 
-# Build for production
+Visit `http://localhost:3000`.
+
+## Verification
+
+```bash
+npm run lint
+npm run typecheck
+npm test
 npm run build
 ```
 
-Visit [http://localhost:3000](http://localhost:3000)
+## Preview Video Pipeline
+
+Hover and Lab preview clips are generated locally and committed as static assets.
+
+```bash
+npm run render:hover-previews
+```
+
+The render manifest lives in `scripts/hover-preview-manifest.mjs`; generated MP4s live in `public/projects/previews/`.
+
+## Environment
+
+The AI assistant needs a Gemini key in local or deployment env:
+
+```bash
+GEMINI_API_KEY=...
+GEMINI_MODEL=gemini-2.5-flash-lite
+```
+
+`GEMINI_MODEL` is optional; the API route falls back to the configured low-cost Gemini models.

@@ -11,7 +11,7 @@ const config = [
       "node_modules/**",
       "screenshots/**",
       "store/**",
-      "tsconfig.tsbuildinfo",
+      "*.tsbuildinfo",
     ],
   },
   {

@@ -9,6 +9,7 @@ export interface ProjectContentSection {
 
 export interface Project {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   fullDescription: string;
