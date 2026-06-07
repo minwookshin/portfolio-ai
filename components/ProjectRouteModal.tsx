@@ -30,6 +30,8 @@ export default function ProjectRouteModal({
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const isFeatured = isFeaturedProject(project);
+  const variant = baseHref === "/lab" ? "lab" : "work";
+  const goHome = () => router.push(baseHref);
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -106,6 +108,8 @@ export default function ProjectRouteModal({
               actionLabel="back"
               onAction={() => router.back()}
               baseHref={baseHref}
+              onHome={goHome}
+              variant={variant}
             />
           </div>
         </div>
@@ -141,6 +145,8 @@ export default function ProjectRouteModal({
           actionLabel="back"
           onAction={() => router.back()}
           baseHref={baseHref}
+          onHome={goHome}
+          variant={variant}
         />
       </motion.div>
     </motion.div>

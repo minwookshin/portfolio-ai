@@ -13,6 +13,7 @@ export default function ProjectCaseStudyShell({
   actionHref,
   onAction,
   baseHref = "/work",
+  onHome,
   variant = "work",
   className = "",
 }: {
@@ -21,6 +22,7 @@ export default function ProjectCaseStudyShell({
   actionHref?: string;
   onAction?: () => void;
   baseHref?: string;
+  onHome?: () => void;
   variant?: "work" | "lab";
   className?: string;
 }) {
@@ -41,6 +43,22 @@ export default function ProjectCaseStudyShell({
       {actionLabel ?? "back"}
     </Link>
   ) : null;
+  const homeControl = onHome ? (
+    <button
+      type="button"
+      onClick={onHome}
+      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
+    >
+      minwook shin
+    </button>
+  ) : (
+    <Link
+      href={baseHref}
+      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
+    >
+      minwook shin
+    </Link>
+  );
 
   return (
     <motion.div
@@ -52,12 +70,7 @@ export default function ProjectCaseStudyShell({
     >
       <nav className="studio-detail-nav mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
         <span className="flex min-w-0 items-center gap-[var(--space-1)]">
-          <Link
-            href={baseHref}
-            className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
-          >
-            minwook shin
-          </Link>
+          {homeControl}
           <span className="text-[var(--text-muted)]">/</span>
           <span className="truncate text-[var(--text-primary)]">{project.title}</span>
         </span>
