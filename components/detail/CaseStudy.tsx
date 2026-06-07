@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { springs, tweens } from "@/lib/material/motion";
+import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 
@@ -51,12 +51,13 @@ export interface CaseStudyData {
   ask?: string[]; // outro follow-up prompts, wired to chat
 }
 
-// One reveal for every section so the whole page breathes consistently.
+// Detail pages should feel closer to the homepage: quiet, fast, and mostly
+// editorial. Section reveals are intentionally small so reading stays calm.
 const reveal = {
-  initial: { opacity: 0, y: 18 },
+  initial: { opacity: 0, y: 8 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-80px" },
-  transition: springs.spatialDefault,
+  transition: tweens.base,
 } as const;
 
 const card = "studio-detail-panel";
@@ -68,11 +69,11 @@ const bodyCls = "text-[length:var(--type-0)] leading-[var(--leading-body)] text-
 // cadence while still feeling responsive.
 const heroContainer = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.06, delayChildren: 0.12 } },
+  show: { transition: { staggerChildren: 0.035, delayChildren: 0.04 } },
 };
 const heroItem = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: springs.spatialFast },
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: tweens.base },
 };
 
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
@@ -263,10 +264,10 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                 {...(reduceMotion
                   ? { initial: false, animate: { opacity: 1, y: 0 }, transition: tweens.none }
                   : {
-                      initial: { opacity: 0, y: 20 },
+                      initial: { opacity: 0, y: 8 },
                       whileInView: { opacity: 1, y: 0 },
                       viewport: { once: true, margin: "-60px" },
-                      transition: springs.spatialDefault,
+                      transition: tweens.base,
                     })}
                 className="grid items-center gap-[var(--space-3)] sm:grid-cols-2"
               >

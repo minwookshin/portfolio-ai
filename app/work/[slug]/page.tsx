@@ -85,7 +85,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
       style={LIGHT_PROJECT_TOKENS}
       className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
     >
-      <div className="mx-auto w-full max-w-[620px]">
+      <div className="mx-auto w-full max-w-[760px]">
         <ProjectCaseStudyShell
           project={project}
           actionLabel="all work"
@@ -93,7 +93,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
         />
         <RelatedWriting posts={relatedWriting} />
       </div>
-      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
+      <BuildMeta className="mx-auto mt-auto w-full max-w-[760px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

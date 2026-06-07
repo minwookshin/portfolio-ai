@@ -437,6 +437,21 @@ body::after {
 
 .studio-detail-body {
   padding-top: var(--space-1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.studio-detail-hero {
+  position: relative;
+}
+
+.studio-detail-hero-media {
+  overflow: hidden;
+  border-radius: var(--md-shape-lg);
+  background: var(--bg-element);
+  contain: paint;
+  transform: translateZ(0);
 }
 
 .studio-detail-proof {

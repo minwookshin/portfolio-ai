@@ -41,10 +41,10 @@ export default function ProjectCaseStudyShell({
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
-      transition={reduceMotion ? tweens.none : tweens.slow}
+      exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -4 }}
+      transition={reduceMotion ? tweens.none : tweens.base}
       className={`project-readable studio-detail w-full ${className}`}
     >
       <nav className="studio-detail-nav mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
