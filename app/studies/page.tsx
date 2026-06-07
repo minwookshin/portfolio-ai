@@ -1,29 +1,46 @@
 import type { Metadata } from "next";
 import HomePage from "@/components/HomePage";
+import StructuredData from "@/components/StructuredData";
+import { absoluteUrl, collectionPageJsonLd, studiesCollectionItems } from "@/lib/seo";
 import { getWritingPosts } from "@/lib/writing";
+
+const description = "Interaction studies, notes, and small prototypes by Minwook Shin.";
+const url = absoluteUrl("/studies");
 
 export const metadata: Metadata = {
   title: "studies",
-  description: "Interaction studies, notes, and small prototypes by Minwook Shin.",
+  description,
   alternates: {
-    canonical: "https://www.minwookshin.com/studies",
+    canonical: url,
   },
   openGraph: {
     type: "website",
-    url: "https://www.minwookshin.com/studies",
+    url,
     title: "studies · minwook shin",
-    description: "Interaction studies, notes, and small prototypes by Minwook Shin.",
+    description,
     siteName: "minwook shin",
   },
   twitter: {
     card: "summary_large_image",
     title: "studies · minwook shin",
-    description: "Interaction studies, notes, and small prototypes by Minwook Shin.",
+    description,
   },
 };
 
 export default function StudiesPage() {
   const writingPosts = getWritingPosts();
 
-  return <HomePage activeSection="studies" writingPosts={writingPosts} />;
+  return (
+    <>
+      <StructuredData
+        data={collectionPageJsonLd({
+          description,
+          items: studiesCollectionItems(writingPosts),
+          name: "Studies by Minwook Shin",
+          url,
+        })}
+      />
+      <HomePage activeSection="studies" writingPosts={writingPosts} />
+    </>
+  );
 }

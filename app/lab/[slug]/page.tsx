@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
+import StructuredData from "@/components/StructuredData";
 import {
   LIGHT_PROJECT_TOKENS,
   getLabProjects,
@@ -9,6 +10,7 @@ import {
   getProjectMetadataDescription,
   isLabProject,
 } from "@/data/projects";
+import { absoluteUrl, projectJsonLd } from "@/lib/seo";
 
 type LabProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -29,7 +31,7 @@ export async function generateMetadata({ params }: LabProjectPageProps): Promise
   }
 
   const description = getProjectMetadataDescription(project);
-  const url = `https://www.minwookshin.com/lab/${project.slug}`;
+  const url = absoluteUrl(`/lab/${project.slug}`);
 
   return {
     title: project.title,
@@ -65,6 +67,7 @@ export default async function LabProjectPage({ params }: LabProjectPageProps) {
       style={LIGHT_PROJECT_TOKENS}
       className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
     >
+      <StructuredData data={projectJsonLd(project, `/lab/${project.slug}`)} />
       <div className="mx-auto w-full max-w-[760px]">
         <ProjectCaseStudyShell
           project={project}

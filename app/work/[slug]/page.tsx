@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
+import StructuredData from "@/components/StructuredData";
 import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug, getProjectMetadataDescription } from "@/data/projects";
+import { absoluteUrl, projectJsonLd } from "@/lib/seo";
 import { getWritingPostsForWork } from "@/lib/writing";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 
@@ -26,7 +28,7 @@ export async function generateMetadata({ params }: WorkPageProps): Promise<Metad
   }
 
   const description = getProjectMetadataDescription(project);
-  const url = `https://www.minwookshin.com/work/${project.slug}`;
+  const url = absoluteUrl(`/work/${project.slug}`);
 
   return {
     title: project.title,
@@ -85,6 +87,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
       style={LIGHT_PROJECT_TOKENS}
       className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
     >
+      <StructuredData data={projectJsonLd(project, `/work/${project.slug}`)} />
       <div className="mx-auto w-full max-w-[760px]">
         <ProjectCaseStudyShell
           project={project}
