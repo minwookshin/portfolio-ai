@@ -472,6 +472,10 @@ body::after {
   background: var(--bg-element);
 }
 
+.studio-detail-phone-media {
+  background: var(--bg-base);
+}
+
 .studio-detail-media :is(img, video) {
   display: block;
 }

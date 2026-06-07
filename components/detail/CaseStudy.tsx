@@ -104,7 +104,7 @@ function Tags({ tags }: { tags: string[] }) {
 function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "phone" | "cover" }) {
   if (style === "phone") {
     return (
-      <div className="studio-detail-media mx-auto w-full max-w-[260px]">
+      <div className="studio-detail-media studio-detail-phone-media mx-auto w-full max-w-[260px]">
         <img src={src} alt={alt} className="w-full h-auto" draggable={false} loading="lazy" decoding="async" />
       </div>
     );
