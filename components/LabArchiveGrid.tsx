@@ -29,10 +29,10 @@ type LabChatMessage = {
 };
 
 const LAB_CHAT_EMPTY_HEIGHT = "h-[420px] sm:h-[460px]";
-const LAB_SECONDARY_TILE_HEIGHTS = [
-  "h-[340px] sm:h-[380px] lg:h-[420px]",
-  "h-[360px] sm:h-[420px] lg:h-[420px]",
-  "h-[340px] sm:h-[380px] lg:h-[420px]",
+const LAB_ARCHIVE_TILE_HEIGHTS = [
+  "h-[320px] sm:h-[360px] lg:h-[380px]",
+  "h-[320px] sm:h-[360px] lg:h-[380px]",
+  "h-[320px] sm:h-[360px] lg:h-[380px]",
 ] as const;
 const FULL_FRAME_LAB_PREVIEWS = new Set(["capexplorer", "caret"]);
 
@@ -325,51 +325,54 @@ function LabProjectTile({
 
 export default function LabArchiveGrid({ className = "" }: { className?: string }) {
   const projects = orderProjects(MAIN_PROJECTS, LAB_PROJECT_IDS);
-  const [featuredProject, sideProject, ...secondaryProjects] = projects;
+  const studyProjects = projects.filter(isLabStudyProject);
+  const archiveProjects = projects.filter((project) => !isLabStudyProject(project));
 
-  if (!featuredProject) return null;
+  if (projects.length === 0) return null;
 
   return (
-    <div className={`grid gap-[var(--space-2)] ${className}`}>
-      <div className="grid gap-[var(--space-2)] lg:grid-cols-[minmax(0,1.22fr)_minmax(280px,0.78fr)]">
-        <ul className="min-w-0">
-          <LabProjectTile
-            project={featuredProject}
-            index={0}
-            featured
-            className="h-[420px] sm:h-[520px] lg:h-[656px]"
-          />
-        </ul>
-
-        <ul className="grid min-w-0 gap-[var(--space-2)] sm:grid-cols-2 lg:grid-cols-1">
-          <li className="list-none">
-            <LabChatTile
-              activeHeightClassName="h-[420px] sm:h-[520px] lg:h-[320px]"
-              emptyHeightClassName="h-[300px] sm:h-[320px]"
-            />
-          </li>
-          {sideProject && (
-            <LabProjectTile
-              project={sideProject}
-              index={1}
-              className="h-[300px] sm:h-[320px]"
-            />
-          )}
-        </ul>
-      </div>
-
-      {secondaryProjects.length > 0 && (
-        <ul className="grid gap-[var(--space-2)] sm:grid-cols-2 lg:grid-cols-3">
-          {secondaryProjects.map((project, index) => (
+    <div className={`grid gap-[var(--space-3)] ${className}`}>
+      {studyProjects.length > 0 && (
+        <ul className="grid gap-[var(--space-2)] lg:auto-rows-[220px] lg:grid-cols-4">
+          {studyProjects.map((project, index) => (
             <LabProjectTile
               key={project.id}
               project={project}
-              index={index + 2}
-              className={LAB_SECONDARY_TILE_HEIGHTS[index % LAB_SECONDARY_TILE_HEIGHTS.length]}
+              index={index}
+              featured={index === 0}
+              className={
+                index === 0
+                  ? "h-[360px] sm:h-[420px] lg:col-span-2 lg:row-span-2 lg:h-full"
+                  : "h-[260px] sm:h-[300px] lg:h-full"
+              }
             />
           ))}
         </ul>
       )}
+
+      <div className="grid gap-[var(--space-2)] lg:grid-cols-[minmax(240px,0.42fr)_minmax(0,1fr)]">
+        <ul className="min-w-0">
+          <li className="list-none">
+            <LabChatTile
+              activeHeightClassName="h-[360px] sm:h-[380px] lg:h-[380px]"
+              emptyHeightClassName="h-[300px] sm:h-[320px] lg:h-[380px]"
+            />
+          </li>
+        </ul>
+
+        {archiveProjects.length > 0 && (
+          <ul className="grid min-w-0 gap-[var(--space-2)] sm:grid-cols-2 xl:grid-cols-3">
+            {archiveProjects.map((project, index) => (
+              <LabProjectTile
+                key={project.id}
+                project={project}
+                index={studyProjects.length + index}
+                className={LAB_ARCHIVE_TILE_HEIGHTS[index % LAB_ARCHIVE_TILE_HEIGHTS.length]}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
