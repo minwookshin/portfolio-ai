@@ -226,6 +226,7 @@ function WorkPreviewContent({
   reduceMotion: boolean;
 }) {
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+  const isStaticLogoPreview = project.slug === "atlas";
 
   if (previewVideo && !reduceMotion) {
     return (
@@ -244,6 +245,22 @@ function WorkPreviewContent({
   const src = project.image ?? project.icon;
 
   if (src) {
+    if (isStaticLogoPreview) {
+      return (
+        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
+          <BlurImage
+            src={src}
+            alt={project.title}
+            width={214}
+            height={187}
+            sizes="180px"
+            draggable={false}
+            className="h-auto w-[150px] max-w-[34%] object-contain"
+          />
+        </div>
+      );
+    }
+
     return (
       <BlurImage
         src={src}
@@ -283,17 +300,17 @@ function WorkFixedPreview({
         <motion.div
           key={project.id}
           className="absolute inset-0 transform-gpu"
-          initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(10px)", scale: 0.986, x: 5 }}
+          initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(6px)", scale: 0.992, x: 3 }}
           animate={{ opacity: 1, filter: "blur(0px)", scale: 1, x: 0 }}
-          exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(6px)", scale: 1.006, x: -4 }}
+          exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(4px)", scale: 1.002, x: -3 }}
           transition={
             reduceMotion
               ? tweens.instant
               : {
-                  opacity: { type: "tween", duration: 0.13, ease: [0.22, 1, 0.36, 1] },
-                  filter: { type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] },
-                  scale: { type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] },
-                  x: { type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] },
+                  opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
+                  filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
+                  scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                  x: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
                 }
           }
           style={{ willChange: "opacity, filter, transform" }}
@@ -356,7 +373,7 @@ function WorkSection({
     clearHideTimer();
     hidePreviewTimer.current = window.setTimeout(() => {
       setPreviewIndex(null);
-    }, 120);
+    }, 70);
   }, [clearHideTimer]);
 
   useEffect(() => {
@@ -388,17 +405,17 @@ function WorkSection({
               <motion.div
                 key="work-preview-stage"
                 className="absolute inset-0 transform-gpu"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(8px)", scale: 0.992, y: 5 }}
+                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(5px)", scale: 0.996, y: 3 }}
                 animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(6px)", scale: 0.992, y: 4 }}
+                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.996, y: 3 }}
                 transition={
                   reduceMotion
                     ? tweens.instant
                     : {
-                        opacity: { type: "tween", duration: 0.14, ease: [0.22, 1, 0.36, 1] },
-                        filter: { type: "tween", duration: 0.2, ease: [0.22, 1, 0.36, 1] },
-                        scale: { type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] },
-                        y: { type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] },
+                        opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
+                        filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
+                        scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                        y: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
                       }
                 }
                 style={{ willChange: "opacity, filter, transform" }}

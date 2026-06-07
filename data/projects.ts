@@ -338,7 +338,6 @@ export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
 export const LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
-  Atlas: "/projects/previews/atlas.mp4",
   Sentinel: "/projects/previews/sentinel.mp4",
   "Portfolio AI": "/projects/previews/portfolio-ai.mp4",
   Mindline: "/projects/previews/mindline.mp4",

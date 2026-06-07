@@ -8,49 +8,6 @@ export const hoverPreviewDefaults = {
 
 export const hoverPreviewManifest = [
   {
-    slug: "atlas",
-    mode: "composition",
-    scenes: [
-      {
-        duration: 4.8,
-        layers: [
-          {
-            src: "public/projects/atlas/logo.png",
-            widthStart: 720,
-            widthEnd: 760,
-            xStart: 24,
-            xEnd: -18,
-            yStart: -18,
-            yEnd: 12,
-            opacity: 0.1,
-            fadeIn: 0.4,
-          },
-          {
-            src: "public/projects/atlas/logo.png",
-            widthStart: 250,
-            widthEnd: 306,
-            xStart: -10,
-            xEnd: 8,
-            yStart: 6,
-            yEnd: -6,
-            fadeIn: 0.32,
-          },
-          {
-            src: "public/projects/atlas/logo.png",
-            widthStart: 92,
-            widthEnd: 108,
-            xStart: -360,
-            xEnd: -318,
-            yStart: 210,
-            yEnd: 176,
-            opacity: 0.18,
-            fadeIn: 0.55,
-          },
-        ],
-      },
-    ],
-  },
-  {
     slug: "sentinel",
     mode: "composition",
     scenes: [

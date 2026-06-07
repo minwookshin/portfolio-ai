@@ -134,7 +134,7 @@ export default function HoverVideoPreview({
           ? "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
           : "opacity-0"
       } ${
-        reduceMotion ? "" : "transition-opacity duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)]"
+        reduceMotion ? "" : "transition-opacity duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)]"
       }`}
     >
       <source src={videoSrc} type="video/mp4" />

@@ -308,8 +308,8 @@ body::after {
 .project-row-copy {
   transform: translateX(0);
   transition:
-    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-    color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 220ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 
@@ -317,13 +317,13 @@ body::after {
 [data-project-row="work"]:focus-within .project-row-copy,
 [data-project-row="writing"]:hover .project-row-copy,
 [data-project-row="writing"]:focus-within .project-row-copy {
-  transform: translateX(12px);
+  transform: translateX(6px);
 }
 
 .project-row-title-line--lateral {
   color: #404040;
   text-decoration-line: none;
-  transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 [data-project-row="work"]:hover .project-row-title-line--lateral,
@@ -334,7 +334,7 @@ body::after {
 }
 
 .project-row-meta {
-  transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 [data-project-row="work"]:hover .project-row-meta,

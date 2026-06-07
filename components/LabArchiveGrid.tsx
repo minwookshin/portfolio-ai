@@ -272,15 +272,11 @@ function LabProjectTile({
               fill
               sizes={imageSizes}
               draggable={false}
-              className={`${mediaFitClassName} grayscale ${
-                reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
-              }`}
+              className={`${mediaFitClassName} grayscale`}
             />
           ) : (
             <span
-              className={`absolute inset-0 flex items-center justify-center bg-[var(--bg-element)] ${
-                reduceMotion ? "" : "transition-[opacity,transform] duration-[var(--motion-duration-slower)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
-              }`}
+              className="absolute inset-0 flex items-center justify-center bg-[var(--bg-element)]"
             >
               <LabProjectMark project={project} />
             </span>
