@@ -13,7 +13,6 @@ import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import {
   LAB_PROJECT_IDS,
-  LIVE_DEMO_TILE_TITLES,
   MAIN_PROJECTS,
   PROJECT_PREVIEW_VIDEOS,
   getLabProjectPath,
@@ -231,7 +230,7 @@ function LabProjectTile({
 }) {
   const reduceMotion = useReducedMotion();
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
-  const showsLiveDemo = Boolean(previewVideo && LIVE_DEMO_TILE_TITLES.has(project.title));
+  const showsLiveDemo = Boolean(previewVideo);
   const previewState = useHoverVideoPreview({ alwaysOn: showsLiveDemo, videoSrc: previewVideo });
   const src = project.image ?? project.icon;
   const poster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
@@ -283,8 +282,8 @@ function LabProjectTile({
             videoRef={previewState.videoRef}
           />
         </span>
-        <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/28 to-transparent p-4 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 ${
-          reduceMotion ? "" : "translate-y-2 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-within:translate-y-0"
+        <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/24 to-transparent p-4 opacity-90 group-hover:opacity-100 group-focus-within:opacity-100 ${
+          reduceMotion ? "" : "translate-y-1 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-within:translate-y-0"
         }`}>
           <span className="flex items-end">
             <span className="min-w-0">

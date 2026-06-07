@@ -349,8 +349,6 @@ export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Caret: "/projects/previews/caret.mp4",
 };
 
-export const LIVE_DEMO_TILE_TITLES = new Set(["CapExplorer", "Caret"]);
-
 export const LIGHT_PROJECT_TOKENS = {
   "--md-surface": "var(--bg-base)",
   "--md-surface-container": "var(--bg-surface)",
