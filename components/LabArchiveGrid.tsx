@@ -7,6 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import BlurImage from "@/components/BlurImage";
 import HoverVideoPreview, { useHoverVideoPreview } from "@/components/HoverVideoPreview";
+import { LabStudyTileVisual } from "@/components/LabStudyDetailView";
 import type { Project } from "@/components/ProjectCard";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -16,6 +17,7 @@ import {
   MAIN_PROJECTS,
   PROJECT_PREVIEW_VIDEOS,
   getLabProjectPath,
+  isLabStudyProject,
   orderProjects,
 } from "@/data/projects";
 
@@ -235,8 +237,9 @@ function LabProjectTile({
   project: Project;
 }) {
   const reduceMotion = useReducedMotion();
+  const isStudy = isLabStudyProject(project);
   const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
-  const showsLiveDemo = Boolean(previewVideo);
+  const showsLiveDemo = Boolean(previewVideo) && !isStudy;
   const previewState = useHoverVideoPreview({ alwaysOn: showsLiveDemo, videoSrc: previewVideo });
   const src = project.image ?? project.icon;
   const poster = project.image ?? project.icon ?? makeVideoPosterDataUrl(project.title);
@@ -247,6 +250,11 @@ function LabProjectTile({
   const titleSizeClassName = featured ? "text-[length:var(--type-3)] sm:text-[length:var(--type-4)]" : "";
   const shouldContainPreview = project.slug ? FULL_FRAME_LAB_PREVIEWS.has(project.slug) : false;
   const mediaFitClassName = shouldContainPreview ? "object-contain bg-white" : "object-cover";
+  const overlayClassName = isStudy
+    ? "border-t border-[var(--border-light)] bg-[var(--bg-surface)]"
+    : "bg-gradient-to-t from-black/70 via-black/24 to-transparent opacity-90 group-hover:opacity-100 group-focus-within:opacity-100";
+  const titleColorClassName = isStudy ? "text-[var(--text-primary)]" : "text-white";
+  const metaColorClassName = isStudy ? "text-[var(--text-muted)]" : "text-white/70";
 
   return (
     <motion.li
@@ -264,8 +272,10 @@ function LabProjectTile({
         onClick={saveProjectOpenScroll}
         className="micro-focus micro-pressable group relative block h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left"
       >
-        <span className={`absolute inset-0 overflow-hidden ${shouldContainPreview ? "bg-white" : ""}`}>
-          {src ? (
+        <span className={`absolute inset-0 overflow-hidden ${shouldContainPreview || isStudy ? "bg-white" : ""}`}>
+          {isStudy ? (
+            <LabStudyTileVisual kind={project.labStudy.kind} />
+          ) : src ? (
             <BlurImage
               src={src}
               alt=""
@@ -292,17 +302,17 @@ function LabProjectTile({
             className={mediaFitClassName}
           />
         </span>
-        <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/24 to-transparent opacity-90 group-hover:opacity-100 group-focus-within:opacity-100 ${
+        <span className={`pointer-events-none absolute inset-x-0 bottom-0 ${overlayClassName} ${
           overlayPaddingClassName
         } ${
           reduceMotion ? "" : "translate-y-1 transition duration-[var(--motion-duration-base)] ease-[var(--motion-ease-standard)] group-hover:translate-y-0 group-focus-within:translate-y-0"
         }`}>
           <span className="flex items-end">
             <span className="min-w-0">
-              <span className={`block font-normal leading-[var(--leading-heading)] text-white ${titleSizeClassName}`}>
+              <span className={`block font-normal leading-[var(--leading-heading)] ${titleColorClassName} ${titleSizeClassName}`}>
                 {project.title}
               </span>
-              <span className="mt-1 block leading-[var(--leading-body)] text-white/70">
+              <span className={`mt-1 block leading-[var(--leading-body)] ${metaColorClassName}`}>
                 {project.studioLabel ?? project.description}
               </span>
             </span>

@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import LabStudyDetailView from "@/components/LabStudyDetailView";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
-import { PROJECT_PREVIEW_VIDEOS, isVisibleBuilderValue } from "@/data/projects";
+import { PROJECT_PREVIEW_VIDEOS, isLabStudyProject, isVisibleBuilderValue } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
 import { tweens } from "@/lib/material/motion";
 
@@ -60,6 +61,10 @@ export default function LabProjectDetailView({ project }: { project: PortfolioPr
   const videoSrc = proof.demo?.video ?? PROJECT_PREVIEW_VIDEOS[project.title];
   const links = getLabLinks(project);
   const oneLine = [proof.oneLiner, project.description, project.fullDescription].find(isVisibleBuilderValue);
+
+  if (isLabStudyProject(project)) {
+    return <LabStudyDetailView project={project} />;
+  }
 
   return (
     <motion.div

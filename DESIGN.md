@@ -2,9 +2,9 @@
 
 ## Source of truth
 - Status: Active
-- Last refreshed: 2026-06-04
-- Primary product surfaces: portfolio homepage, selected-work browsing, project detail sheets, main-page profile/contact block, AI assistant input.
-- Evidence reviewed: `app/page.tsx`, `app/globals.css`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/detail/CaseStudy.tsx`, `public/projects/**`, Marvin Schwaibold reference site.
+- Last refreshed: 2026-06-07
+- Primary product surfaces: portfolio homepage, selected-work browsing, lab interaction studies, project detail sheets, main-page profile/contact block, AI assistant input.
+- Evidence reviewed: `app/page.tsx`, `app/globals.css`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabArchiveGrid.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Marvin Schwaibold reference site.
 
 ## Brand
 - Personality: quiet, editorial, precise, technical, image-led, confident without marketing noise.
@@ -12,7 +12,7 @@
 - Avoid: busy badges, loud gradients, oversized marketing heroes, icon-only project browsing as the primary experience, decorative UI that competes with work.
 
 ## Product goals
-- Goals: show Minwook as both design engineer and compact AI/product studio; make selected work immediately understandable; keep the AI assistant as a signature interaction.
+- Goals: show Minwook as both design engineer and compact AI/product studio; make selected work immediately understandable; make Lab feel like a design engineering notebook with interactive proof; keep the AI assistant as a signature interaction.
 - Non-goals: copying the reference site one-to-one; turning the page into a generic agency landing page; hiding projects behind chat only.
 - Success signals: visitors understand the offer within one screen, can browse selected work visually, can open detailed proof, and can ask the assistant without losing context.
 
@@ -23,12 +23,13 @@
 
 ## Information architecture
 - Primary navigation: minimal header identity plus a single inline `work, writing, lab` tab row on the homepage; fixed assistant controls at the bottom.
-- Core routes/screens: home, project sheet, main-page profile/contact block, chat overlay.
+- Core routes/screens: home, project sheet, lab study detail, main-page profile/contact block, chat overlay.
 - Content hierarchy: identity statement, inline homepage section switcher, selected content panel, fixed assistant entry.
 
 ## Design principles
 - Principle 1: Let project media carry the page before labels explain it.
 - Principle 2: Use motion for spatial continuity, not spectacle.
+- Principle 3: Lab entries should make thinking tangible through small working interactions, not long prose.
 - Tradeoffs: preserve the existing assistant and case-study system while replacing the icon-field homepage with an editorial browsing model.
 
 ## Visual language
@@ -40,8 +41,8 @@
 - Imagery/iconography: large project screenshots/videos first; icons are supporting identity marks.
 
 ## Components
-- Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `app/page.tsx`.
-- New/changed components: editorial project cards, selected-work carousel/grid, lab/archive section, sheet-style overlays.
+- Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
+- New/changed components: editorial project rows, selected-work preview system, lab/archive section, lab study detail view, sheet-style overlays.
 - Variants and states: selected work, archived/lab work, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 

@@ -28,10 +28,26 @@ export type BuilderProof = {
   results: BuilderMetric[];
 };
 
+export type LabStudyKind =
+  | "motion-taste"
+  | "hover-row"
+  | "route-transition"
+  | "cursor-study"
+  | "motion-curve";
+
+export type LabStudy = {
+  kind: LabStudyKind;
+  thesis: string;
+  points: string[];
+  rules: BuilderMetric[];
+  code: string;
+};
+
 export type PortfolioProject = Project & {
   slug: string;
   metadataDescription?: string;
   builder: BuilderProof;
+  labStudy?: LabStudy;
 };
 
 export function hasFillPlaceholder(value: string) {
@@ -237,6 +253,233 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     ],
   },
   {
+    id: "12",
+    slug: "motion-taste-system",
+    title: "Motion Taste System",
+    description: "A small rulebook for quiet interface motion.",
+    fullDescription:
+      "A lab study that turns motion taste into reusable rules, durations, easing, and code.",
+    tags: ["Motion", "Interaction", "Design Engineering"],
+    categories: ["Lab", "Motion"],
+    date: "2026",
+    glyph: "mt",
+    studioLabel: "motion rules and code",
+    metadataDescription:
+      "A small motion taste system with interactive examples, timing rules, and implementation notes.",
+    builder: {
+      role: "Interaction study",
+      stack: ["Framer Motion", "CSS", "React"],
+      status: { label: "Study" },
+      oneLiner: "A small rulebook for quiet interface motion.",
+      pipeline: "Taste decision -> interactive proof -> reusable code rule.",
+      scope: [],
+      results: [],
+    },
+    labStudy: {
+      kind: "motion-taste",
+      thesis: "Good motion should explain state change without making the interface feel busy.",
+      points: [
+        "Start visible, not from nothing, so elements feel physically present.",
+        "Keep micro-interactions short enough to disappear into the workflow.",
+        "Use blur only as a bridge into clarity, not as a permanent visual effect.",
+      ],
+      rules: [
+        { label: "micro", value: "120-180ms", note: "hover, press, small text movement" },
+        { label: "standard", value: "180-260ms", note: "tooltips, previews, small panels" },
+        { label: "layout", value: "240-320ms", note: "route content, larger spatial changes" },
+      ],
+      code: `const quietMotion = {
+  initial: { opacity: 0, y: 8, scale: 0.96, filter: "blur(8px)" },
+  animate: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+  transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] },
+};`,
+    },
+  },
+  {
+    id: "13",
+    slug: "hover-row-study",
+    title: "Hover Row Study",
+    description: "A study for moving project rows without making them loud.",
+    fullDescription:
+      "A lab study comparing underline, lateral text shift, and preview handoff for project rows.",
+    tags: ["Hover", "Interaction", "Portfolio UI"],
+    categories: ["Lab", "Interaction"],
+    date: "2026",
+    glyph: "hr",
+    studioLabel: "project-row interaction",
+    metadataDescription:
+      "A compact hover row interaction study for quiet project browsing.",
+    builder: {
+      role: "Interaction study",
+      stack: ["React", "CSS", "Framer Motion"],
+      status: { label: "Study" },
+      oneLiner: "A study for moving project rows without making them loud.",
+      pipeline: "Compare underline -> lateral copy -> preview handoff.",
+      scope: [],
+      results: [],
+    },
+    labStudy: {
+      kind: "hover-row",
+      thesis: "The row should respond quickly, but the work should remain the hero.",
+      points: [
+        "Move copy only a few pixels so the row feels awake, not restless.",
+        "Let the preview change faster than the text so the image feels connected.",
+        "Use muted metadata until hover to keep scanning calm.",
+      ],
+      rules: [
+        { label: "copy move", value: "4-6px", note: "enough to feel intentional" },
+        { label: "hover fade", value: "120-180ms", note: "fast handoff between projects" },
+        { label: "meta color", value: "muted -> mid gray", note: "secondary copy stays secondary" },
+      ],
+      code: `.project-row-copy {
+  transform: translateX(0);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-project-row]:hover .project-row-copy {
+  transform: translateX(6px);
+}`,
+    },
+  },
+  {
+    id: "14",
+    slug: "route-transition-study",
+    title: "Route Transition Study",
+    description: "Changing pages without losing the reader's place.",
+    fullDescription:
+      "A lab study for routing between work, writing, and lab while preserving spatial context.",
+    tags: ["Routing", "Motion", "UX"],
+    categories: ["Lab", "Interaction"],
+    date: "2026",
+    glyph: "rt",
+    studioLabel: "spatial page transition",
+    metadataDescription:
+      "A route transition study for changing content below stable identity and navigation.",
+    builder: {
+      role: "Interaction study",
+      stack: ["Next.js", "Framer Motion", "React"],
+      status: { label: "Study" },
+      oneLiner: "Changing pages without losing the reader's place.",
+      pipeline: "Stable identity -> URL change -> content-only transition.",
+      scope: [],
+      results: [],
+    },
+    labStudy: {
+      kind: "route-transition",
+      thesis: "Navigation feels calmer when identity stays still and only the lower content changes.",
+      points: [
+        "Keep the intro and contact surface stable so the user does not re-orient.",
+        "Update the URL for shareability without making the whole page feel replaced.",
+        "Use a short vertical reveal for content, not a full page animation.",
+      ],
+      rules: [
+        { label: "stable zone", value: "identity + nav", note: "does not animate between sections" },
+        { label: "moving zone", value: "content panel", note: "small opacity and y movement" },
+        { label: "duration", value: "220-280ms", note: "noticeable, but not theatrical" },
+      ],
+      code: `<AnimatePresence mode="wait">
+  <motion.section
+    key={pathname}
+    initial={{ opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -4 }}
+    transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+  />
+</AnimatePresence>`,
+    },
+  },
+  {
+    id: "15",
+    slug: "cursor-study",
+    title: "Cursor Study",
+    description: "A quiet custom cursor that stays behind the work.",
+    fullDescription:
+      "A lab study for cursor shape, shadow, scale, and when the system cursor should win.",
+    tags: ["Cursor", "Interaction", "Micro-detail"],
+    categories: ["Lab", "Interaction"],
+    date: "2026",
+    glyph: "cs",
+    studioLabel: "pointer shape study",
+    metadataDescription:
+      "A cursor interaction study about shape, scale, shadow, and restraint.",
+    builder: {
+      role: "Interaction study",
+      stack: ["SVG", "CSS", "React"],
+      status: { label: "Study" },
+      oneLiner: "A quiet custom cursor that stays behind the work.",
+      pipeline: "Codex-like pointer reference -> reduced shape -> site-specific cursor.",
+      scope: [],
+      results: [],
+    },
+    labStudy: {
+      kind: "cursor-study",
+      thesis: "A custom cursor should add authorship without stealing attention from the interface.",
+      points: [
+        "Make the shape slightly rounded so it feels designed, not novelty.",
+        "Keep the shadow subtle enough to separate on white without becoming a sticker.",
+        "Disable special cursor behavior where precision or native affordance matters.",
+      ],
+      rules: [
+        { label: "size", value: "13x15px", note: "smaller than a decorative badge" },
+        { label: "rotation", value: "-8deg", note: "lying down slightly, still readable" },
+        { label: "shadow", value: "two soft drops", note: "separation without glow" },
+      ],
+      code: `.animated-cursor__arrow {
+  width: 13px;
+  height: 15px;
+  transform: rotate(-8deg);
+  filter:
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28))
+    drop-shadow(0 3px 5px rgba(0, 0, 0, 0.12));
+}`,
+    },
+  },
+  {
+    id: "16",
+    slug: "motion-curve-tester",
+    title: "Motion Curve Tester",
+    description: "A tiny tool for checking distance, duration, and easing.",
+    fullDescription:
+      "A lab tool that previews how timing and distance change the perceived weight of an interface.",
+    tags: ["Tool", "Motion", "Design System"],
+    categories: ["Lab", "Tool"],
+    date: "2026",
+    glyph: "mc",
+    studioLabel: "interactive motion tool",
+    metadataDescription:
+      "A tiny motion curve tester for duration, distance, easing, and perceived weight.",
+    builder: {
+      role: "Tiny tool",
+      stack: ["React", "Framer Motion"],
+      status: { label: "Prototype" },
+      oneLiner: "A tiny tool for checking distance, duration, and easing.",
+      pipeline: "Adjust motion values -> replay UI movement -> keep the best rule.",
+      scope: [],
+      results: [],
+    },
+    labStudy: {
+      kind: "motion-curve",
+      thesis: "Motion values should be judged in context, not copied from a token list blindly.",
+      points: [
+        "The same duration feels different when distance changes.",
+        "Ease-out works for entering; ease-in-out works better for movement already on screen.",
+        "A tester makes motion critique concrete instead of taste theater.",
+      ],
+      rules: [
+        { label: "distance", value: "4-32px", note: "small UI movement range" },
+        { label: "duration", value: "120-320ms", note: "micro to layout transition range" },
+        { label: "easing", value: "standard / in-out", note: "picked by interaction type" },
+      ],
+      code: `<motion.div
+  animate={{ x: distance }}
+  transition={{
+    duration: duration / 1000,
+    ease: easing === "standard" ? [0.22, 1, 0.36, 1] : [0.45, 0, 0.55, 1],
+  }}
+/>`,
+    },
+  },
+  {
     id: "7",
     slug: "nameme",
     title: "NameMe",
@@ -335,7 +578,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
 ];
 
 export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
-export const LAB_PROJECT_IDS = ["4", "9", "7", "8", "10"] as const;
+export const LAB_PROJECT_IDS = ["12", "13", "14", "15", "16", "4", "9", "7", "8", "10"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Sentinel: "/projects/previews/sentinel.mp4",
@@ -375,6 +618,10 @@ export function isFeaturedProject(project: Project) {
 
 export function isLabProject(project: Project) {
   return LAB_PROJECT_IDS.includes(project.id as typeof LAB_PROJECT_IDS[number]);
+}
+
+export function isLabStudyProject(project: Project | PortfolioProject): project is PortfolioProject & { labStudy: LabStudy } {
+  return "labStudy" in project && Boolean(project.labStudy);
 }
 
 export function getLabProjects() {
