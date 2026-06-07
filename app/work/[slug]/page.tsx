@@ -56,7 +56,7 @@ function RelatedWriting({ posts }: { posts: WritingPostMeta[] }) {
 
   return (
     <aside className="border-t border-[var(--border-light)] pt-[var(--space-3)]">
-      <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">related writing</p>
+      <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">related studies</p>
       <div className="mt-[var(--space-1)] flex flex-col gap-[var(--space-1)]">
         {posts.map((post) => (
           <Link

@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: WritingPostPageProps): Promis
 
   if (!post) {
     return {
-      title: "writing",
+      title: "studies",
     };
   }
 
@@ -75,8 +75,8 @@ export default async function WritingPostPage({ params }: WritingPostPageProps) 
               minwook shin
             </Link>
             <span className="text-[var(--text-muted)]">/</span>
-            <Link href="/writing" className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]">
-              writing
+            <Link href="/studies" className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]">
+              studies
             </Link>
           </span>
           <time dateTime={post.date} className="shrink-0 text-[var(--text-muted)]">

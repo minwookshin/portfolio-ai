@@ -12,5 +12,5 @@ export default async function InterceptedLabPage({ params }: InterceptedLabPageP
 
   if (!project || project.comingSoon || !isLabProject(project)) notFound();
 
-  return <ProjectRouteModal project={project} baseHref="/lab" />;
+  return <ProjectRouteModal project={project} baseHref="/studies" />;
 }

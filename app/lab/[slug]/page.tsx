@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: LabProjectPageProps): Promise
 
   if (!project || project.comingSoon || !isLabProject(project)) {
     return {
-      title: "lab",
+      title: "studies",
     };
   }
 
@@ -68,9 +68,9 @@ export default async function LabProjectPage({ params }: LabProjectPageProps) {
       <div className="mx-auto w-full max-w-[760px]">
         <ProjectCaseStudyShell
           project={project}
-          actionLabel="all lab"
-          actionHref="/lab"
-          baseHref="/lab"
+          actionLabel="all studies"
+          actionHref="/studies"
+          baseHref="/studies"
           variant="lab"
         />
       </div>

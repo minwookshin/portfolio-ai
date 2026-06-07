@@ -15,7 +15,7 @@ export default function NotFound() {
       code="404"
       eyebrow="page not found"
       title="this page is not part of the archive."
-      body="the work, writing, and lab pages are still here."
+      body="the work and studies pages are still here."
     />
   );
 }

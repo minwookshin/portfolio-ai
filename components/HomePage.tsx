@@ -11,7 +11,7 @@ import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
 import HoverVideoPreview from "@/components/HoverVideoPreview";
-import LabArchiveGrid from "@/components/LabArchiveGrid";
+import { LabStudyTileVisual } from "@/components/LabStudyDetailView";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -20,16 +20,18 @@ import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 import {
   FEATURED_PROJECT_IDS,
+  LAB_PROJECT_IDS,
   MAIN_PROJECTS,
   PROJECT_PREVIEW_VIDEOS,
   getLabProjectPath,
   getProjectPath,
   isLabProject,
+  isLabStudyProject,
   orderProjects,
 } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
 
-type HomeTab = "work" | "writing" | "lab";
+type HomeTab = "work" | "studies";
 
 type HomePageProps = {
   activeSection?: HomeTab;
@@ -38,14 +40,32 @@ type HomePageProps = {
 
 const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = [
   { href: "/work", id: "work", label: "work" },
-  { href: "/writing", id: "writing", label: "writing" },
-  { href: "/lab", id: "lab", label: "lab" },
+  { href: "/studies", id: "studies", label: "studies" },
 ];
+
+type StudyItem =
+  | {
+      date: string;
+      description: string;
+      href: string;
+      id: string;
+      kind: "writing";
+      meta: string;
+      title: string;
+    }
+  | {
+      href: string;
+      id: string;
+      kind: "lab";
+      meta: string;
+      project: Project;
+      title: string;
+    };
 
 function getHomeSectionFromPath(pathname: string): HomeTab | null {
   const segment = pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
   if (!segment || segment === "work") return "work";
-  if (segment === "writing" || segment === "lab") return segment;
+  if (segment === "studies" || segment === "writing" || segment === "lab") return "studies";
   return null;
 }
 
@@ -157,11 +177,11 @@ function ProjectTextRow({
   onDeactivate?: () => void;
   project: Project;
   index: number;
-  list: "work" | "lab";
+  list: "work";
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
-  const isWorkRow = list === "work" && !project.comingSoon;
+  const isWorkRow = !project.comingSoon;
   const rowClass =
     "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
@@ -430,46 +450,247 @@ function WorkSection({
   );
 }
 
-function WritingSection({ posts }: { posts: WritingPostMeta[] }) {
+function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
+  const labProjects = orderProjects(MAIN_PROJECTS, LAB_PROJECT_IDS);
+  const labStudyProjects = labProjects.filter(isLabStudyProject);
+  const archivedLabProjects = labProjects.filter((project) => !isLabStudyProject(project));
+  const writingItems: StudyItem[] = posts.map((post) => ({
+    date: post.date,
+    description: post.description,
+    href: `/writing/${post.slug}`,
+    id: `writing-${post.slug}`,
+    kind: "writing",
+    meta: formatWritingDate(post.date),
+    title: post.title,
+  }));
+
+  return [
+    ...labStudyProjects.map((project): StudyItem => ({
+      href: getLabProjectPath(project),
+      id: `lab-${project.id}`,
+      kind: "lab",
+      meta: project.studioLabel ?? project.builder.oneLiner,
+      project,
+      title: project.title,
+    })),
+    ...writingItems,
+    ...archivedLabProjects.map((project): StudyItem => ({
+      href: getLabProjectPath(project),
+      id: `lab-${project.id}`,
+      kind: "lab",
+      meta: project.studioLabel ?? getProjectDescriptor(project),
+      project,
+      title: project.title,
+    })),
+  ];
+}
+
+function StudyPreviewContent({
+  item,
+  reduceMotion,
+}: {
+  item: StudyItem;
+  reduceMotion: boolean;
+}) {
+  if (item.kind === "lab") {
+    if (isLabStudyProject(item.project)) {
+      return (
+        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
+          <div className="h-[74%] w-[74%] max-w-[280px]">
+            <LabStudyTileVisual kind={item.project.labStudy.kind} />
+          </div>
+        </div>
+      );
+    }
+
+    return <WorkPreviewContent project={item.project} reduceMotion={reduceMotion} />;
+  }
+
+  return (
+    <div className="flex h-full w-full flex-col justify-between bg-[var(--bg-base)] p-[var(--space-3)]">
+      <div className="space-y-2" aria-hidden="true">
+        <span className="block h-px w-full bg-[var(--border-light)]" />
+        <span className="block h-px w-2/3 bg-[var(--border-light)]" />
+      </div>
+      <div>
+        <p className="max-w-[18rem] text-[length:var(--type-0)] leading-[var(--leading-tight)] text-[var(--text-primary)]">
+          {item.title}
+        </p>
+        <p className="mt-[var(--space-1)] max-w-[18rem] text-[length:calc(var(--type-0)_-_2px)] leading-[1.35] text-[var(--text-muted)]">
+          {item.description}
+        </p>
+        <p className="mt-[var(--space-2)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+          {item.meta}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function StudyFixedPreview({
+  item,
+  reduceMotion,
+}: {
+  item: StudyItem;
+  reduceMotion: boolean;
+}) {
+  return (
+    <div className="work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent">
+      <AnimatePresence initial={false} mode="popLayout">
+        <motion.div
+          key={item.id}
+          className="absolute inset-0 transform-gpu"
+          initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(6px)", scale: 0.992, x: 3 }}
+          animate={{ opacity: 1, filter: "blur(0px)", scale: 1, x: 0 }}
+          exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(4px)", scale: 1.002, x: -3 }}
+          transition={
+            reduceMotion
+              ? tweens.instant
+              : {
+                  opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
+                  filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
+                  scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                  x: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                }
+          }
+          style={{ willChange: "opacity, filter, transform" }}
+        >
+          <StudyPreviewContent item={item} reduceMotion={reduceMotion} />
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function StudyTextRow({
+  item,
+  index,
+  onActivate,
+  onDeactivate,
+}: {
+  item: StudyItem;
+  index: number;
+  onActivate?: () => void;
+  onDeactivate?: () => void;
+}) {
   const reduceMotion = useReducedMotion();
 
-  if (posts.length === 0) {
+  return (
+    <motion.li
+      key={item.id}
+      onBlur={onDeactivate}
+      onFocus={onActivate}
+      onMouseEnter={onActivate}
+      onMouseLeave={onDeactivate}
+      onPointerEnter={onActivate}
+      onPointerLeave={onDeactivate}
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
+      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
+      transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
+      data-project-row="studies"
+      className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
+    >
+      <Link
+        href={item.href}
+        scroll={false}
+        onClick={item.kind === "lab" ? saveProjectOpenScroll : undefined}
+        className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
+      >
+        <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
+          <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
+            {item.title}
+          </span>
+          <span className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+            {item.meta}
+          </span>
+        </span>
+      </Link>
+    </motion.li>
+  );
+}
+
+function StudiesSection({ items }: { items: StudyItem[] }) {
+  const reduceMotion = Boolean(useReducedMotion());
+  const canShowFixedPreview = useCanShowWorkPreview();
+  const hidePreviewTimer = useRef<number | null>(null);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+
+  const clearHideTimer = useCallback(() => {
+    if (!hidePreviewTimer.current) return;
+    window.clearTimeout(hidePreviewTimer.current);
+    hidePreviewTimer.current = null;
+  }, []);
+
+  const activateRow = useCallback((index: number) => {
+    clearHideTimer();
+    setPreviewIndex(index);
+  }, [clearHideTimer]);
+
+  const deactivateRow = useCallback(() => {
+    clearHideTimer();
+    hidePreviewTimer.current = window.setTimeout(() => {
+      setPreviewIndex(null);
+    }, 70);
+  }, [clearHideTimer]);
+
+  useEffect(() => {
+    return () => clearHideTimer();
+  }, [clearHideTimer]);
+
+  if (items.length === 0) {
     return (
       <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-        writing is coming soon.
+        studies are coming soon.
       </p>
     );
   }
 
+  const previewItem = previewIndex === null ? null : items[previewIndex];
+
   return (
-    <ul className="space-y-[var(--space-2)]">
-      {posts.map((post, index) => (
-        <motion.li
-          key={post.slug}
-          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-          animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
-          viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-          transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
-          data-project-row="writing"
-          className="-mx-2 group list-none text-[length:var(--type-0)]"
-        >
-          <Link
-            href={`/writing/${post.slug}`}
-            className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
-          >
-            <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
-              <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
-                {post.title}
-              </span>
-              <span className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-                {formatWritingDate(post.date)}
-              </span>
-            </span>
-          </Link>
-        </motion.li>
-      ))}
-    </ul>
+    <div className="relative">
+      <ul className="space-y-[var(--space-2)]">
+        {items.map((item, index) => (
+          <StudyTextRow
+            key={item.id}
+            item={item}
+            index={index}
+            onActivate={() => activateRow(index)}
+            onDeactivate={deactivateRow}
+          />
+        ))}
+      </ul>
+      {canShowFixedPreview && (
+        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block">
+          <AnimatePresence initial={false}>
+            {previewItem && (
+              <motion.div
+                key="studies-preview-stage"
+                className="absolute inset-0 transform-gpu"
+                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(5px)", scale: 0.996, y: 3 }}
+                animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.996, y: 3 }}
+                transition={
+                  reduceMotion
+                    ? tweens.instant
+                    : {
+                        opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
+                        filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
+                        scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                        y: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                      }
+                }
+                style={{ willChange: "opacity, filter, transform" }}
+              >
+                <StudyFixedPreview item={previewItem} reduceMotion={reduceMotion} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -477,15 +698,13 @@ function HomeExploreSection({
   activeSection,
   onSectionNavigate,
   projects,
-  writingPosts,
+  studyItems,
 }: {
   activeSection: HomeTab;
   onSectionNavigate?: (section: HomeTab, href: string, event: MouseEvent<HTMLAnchorElement>) => void;
   projects: Project[];
-  writingPosts: WritingPostMeta[];
+  studyItems: StudyItem[];
 }) {
-  const isLab = activeSection === "lab";
-
   return (
     <section id={activeSection} className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
       <div className="mx-auto w-full max-w-[620px] text-left">
@@ -518,10 +737,9 @@ function HomeExploreSection({
         </nav>
       </div>
 
-      <div className={`mx-auto mt-[var(--space-2)] w-full ${isLab ? "max-w-[980px]" : "max-w-[620px] text-left"}`}>
+      <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
         {activeSection === "work" && <WorkSection projects={projects} />}
-        {activeSection === "writing" && <WritingSection posts={writingPosts} />}
-        {activeSection === "lab" && <LabArchiveGrid className="w-full" />}
+        {activeSection === "studies" && <StudiesSection items={studyItems} />}
       </div>
     </section>
   );
@@ -673,6 +891,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   };
 
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
+  const studyItems = buildStudyItems(writingPosts);
 
   const openProfile = () => {
     setChatOnTop(false);
@@ -694,7 +913,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     setChatOnTop(false);
     saveProjectOpenScroll();
     const projectPath =
-      activeSection === "lab" && isLabProject(project)
+      currentSection === "studies" && isLabProject(project)
         ? getLabProjectPath(project)
         : getProjectPath(project);
     router.push(projectPath, { scroll: false });
@@ -731,11 +950,11 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
       <section className="sr-only">
         <h2>{PERSONAL_INFO.name}, {PERSONAL_INFO.title}</h2>
         <p>{PERSONAL_INFO.bio}</p>
-        <h3>Writing</h3>
+        <h3>Studies</h3>
         <ul>
-          {writingPosts.map((post) => (
-            <li key={post.slug}>
-              <strong>{post.title}</strong>, {post.date}, {post.description}
+          {studyItems.map((item) => (
+            <li key={item.id}>
+              <strong>{item.title}</strong>, {item.meta}
             </li>
           ))}
         </ul>
@@ -767,7 +986,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
             activeSection={currentSection}
             onSectionNavigate={handleSectionNavigate}
             projects={featuredProjects}
-            writingPosts={writingPosts}
+            studyItems={studyItems}
           />
         </div>
       </motion.div>
@@ -858,9 +1077,15 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                               if (target === "profile") {
                                 openProfile();
                               } else if (target === "projects") {
-                                document.getElementById("work")?.scrollIntoView({
-                                  behavior: reduceMotion ? "auto" : "smooth",
-                                  block: "center",
+                                setLocalSection("work");
+                                if (window.location.pathname !== "/work") {
+                                  window.history.pushState(null, "", "/work");
+                                }
+                                requestAnimationFrame(() => {
+                                  document.getElementById("work")?.scrollIntoView({
+                                    behavior: reduceMotion ? "auto" : "smooth",
+                                    block: "center",
+                                  });
                                 });
                               } else if (target.comingSoon) {
                                 setProjectNotice(target.unavailableMessage ?? `${target.title} is not ready yet.`);

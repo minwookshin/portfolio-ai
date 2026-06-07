@@ -30,7 +30,7 @@ export default function ProjectRouteModal({
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const isFeatured = isFeaturedProject(project);
-  const variant = baseHref === "/lab" ? "lab" : "work";
+  const variant = baseHref === "/lab" || baseHref === "/studies" ? "lab" : "work";
   const goHome = () => router.push(baseHref);
 
   useEffect(() => {

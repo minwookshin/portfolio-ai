@@ -347,7 +347,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     title: "Route Transition Study",
     description: "Changing pages without losing the reader's place.",
     fullDescription:
-      "A lab study for routing between work, writing, and lab while preserving spatial context.",
+      "A study for routing between work and studies while preserving spatial context.",
     tags: ["Routing", "Motion", "UX"],
     categories: ["Lab", "Interaction"],
     date: "2026",

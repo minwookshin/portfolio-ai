@@ -3,8 +3,8 @@
 ## Source of truth
 - Status: Active
 - Last refreshed: 2026-06-07
-- Primary product surfaces: portfolio homepage, selected-work browsing, lab interaction studies, project detail sheets, main-page profile/contact block, AI assistant input.
-- Evidence reviewed: `app/page.tsx`, `app/globals.css`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabArchiveGrid.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Marvin Schwaibold reference site.
+- Primary product surfaces: portfolio homepage, selected-work browsing, studies browsing, project detail sheets, main-page profile/contact block, AI assistant input.
+- Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
 ## Brand
 - Personality: quiet, editorial, precise, technical, image-led, confident without marketing noise.
@@ -12,7 +12,7 @@
 - Avoid: busy badges, loud gradients, oversized marketing heroes, icon-only project browsing as the primary experience, decorative UI that competes with work.
 
 ## Product goals
-- Goals: show Minwook as both design engineer and compact AI/product studio; make selected work immediately understandable; make Lab feel like a design engineering notebook with interactive proof; keep the AI assistant as a signature interaction.
+- Goals: show Minwook as both design engineer and compact AI/product studio; make selected work immediately understandable; make Studies feel like a design engineering notebook with interactive proof; keep the AI assistant as a signature interaction.
 - Non-goals: copying the reference site one-to-one; turning the page into a generic agency landing page; hiding projects behind chat only.
 - Success signals: visitors understand the offer within one screen, can browse selected work visually, can open detailed proof, and can ask the assistant without losing context.
 
@@ -22,14 +22,14 @@
 - Key contexts of use: desktop portfolio review, mobile link click, recruiter/client scan, live conversation during outreach.
 
 ## Information architecture
-- Primary navigation: minimal header identity plus a single inline `work, writing, lab` tab row on the homepage; fixed assistant controls at the bottom.
-- Core routes/screens: home, project sheet, lab study detail, main-page profile/contact block, chat overlay.
+- Primary navigation: minimal header identity plus a single inline `work, studies` tab row on the homepage; fixed assistant controls at the bottom. Contact stays in the intro link group, not as a primary tab.
+- Core routes/screens: home, studies, project sheet, lab study detail, writing detail, main-page profile/contact block, chat overlay.
 - Content hierarchy: identity statement, inline homepage section switcher, selected content panel, fixed assistant entry.
 
 ## Design principles
 - Principle 1: Let project media carry the page before labels explain it.
 - Principle 2: Use motion for spatial continuity, not spectacle.
-- Principle 3: Lab entries should make thinking tangible through small working interactions, not long prose.
+- Principle 3: Studies entries should make thinking tangible through small working interactions, short writing, and prototype proof, not long prose.
 - Tradeoffs: preserve the existing assistant and case-study system while replacing the icon-field homepage with an editorial browsing model.
 
 ## Visual language
@@ -42,8 +42,8 @@
 
 ## Components
 - Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
-- New/changed components: editorial project rows, selected-work preview system, lab/archive section, lab study detail view, sheet-style overlays.
-- Variants and states: selected work, archived/lab work, coming-soon project notice, profile/contact anchor state, chat-on-top state.
+- New/changed components: editorial project rows, selected-work preview system, studies text index, lab study detail view, sheet-style overlays.
+- Variants and states: selected work, studies entries, archived lab prototypes, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 
 ## Accessibility
@@ -55,7 +55,7 @@
 
 ## Responsive behavior
 - Supported breakpoints/devices: mobile, tablet, desktop.
-- Layout adaptations: selected work stacks on mobile, carousel/large cards on desktop, lab archive becomes denser on wide screens.
+- Layout adaptations: selected work and studies stack on mobile with additive hover previews on fine pointers only.
 - Touch/hover differences: hover polish is additive; tap/click remains direct.
 
 ## Interaction states

@@ -66,11 +66,7 @@ export default function StatusPage({ code, eyebrow, title, body, action }: Statu
             <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
               ,
             </span>
-            <StatusLink href="/writing">writing</StatusLink>
-            <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
-              ,
-            </span>
-            <StatusLink href="/lab">lab</StatusLink>
+            <StatusLink href="/studies">studies</StatusLink>
             <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
               ,
             </span>

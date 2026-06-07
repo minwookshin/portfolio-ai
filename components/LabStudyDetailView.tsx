@@ -125,12 +125,11 @@ function HoverRowDemo({ reduceMotion }: DemoProps) {
 }
 
 function RouteTransitionDemo({ reduceMotion }: DemoProps) {
-  const tabs = ["work", "writing", "lab"] as const;
+  const tabs = ["work", "studies"] as const;
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("work");
   const content = {
     work: ["selected work", "atlas, sentinel, portfolio ai"],
-    writing: ["notes", "code, design, motion"],
-    lab: ["studies", "motion, cursor, tiny tools"],
+    studies: ["thinking in motion", "notes, demos, tiny tools"],
   }[activeTab];
 
   return (
