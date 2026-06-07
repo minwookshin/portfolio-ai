@@ -32,6 +32,7 @@ const LAB_SECONDARY_TILE_HEIGHTS = [
   "h-[360px] sm:h-[420px] lg:h-[420px]",
   "h-[340px] sm:h-[380px] lg:h-[420px]",
 ] as const;
+const FULL_FRAME_LAB_PREVIEWS = new Set(["capexplorer", "caret"]);
 
 function parseAssistantBody(content: string) {
   let cut = content.length;
@@ -244,6 +245,8 @@ function LabProjectTile({
     : "(max-width: 768px) 92vw, (max-width: 1280px) 44vw, 320px";
   const overlayPaddingClassName = featured ? "p-5 sm:p-6" : "p-4";
   const titleSizeClassName = featured ? "text-[length:var(--type-3)] sm:text-[length:var(--type-4)]" : "";
+  const shouldContainPreview = project.slug ? FULL_FRAME_LAB_PREVIEWS.has(project.slug) : false;
+  const mediaFitClassName = shouldContainPreview ? "object-contain bg-white" : "object-cover";
 
   return (
     <motion.li
@@ -261,7 +264,7 @@ function LabProjectTile({
         onClick={saveProjectOpenScroll}
         className="micro-focus micro-pressable group relative block h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left"
       >
-        <span className="absolute inset-0 overflow-hidden">
+        <span className={`absolute inset-0 overflow-hidden ${shouldContainPreview ? "bg-white" : ""}`}>
           {src ? (
             <BlurImage
               src={src}
@@ -269,7 +272,7 @@ function LabProjectTile({
               fill
               sizes={imageSizes}
               draggable={false}
-              className={`object-cover grayscale ${
+              className={`${mediaFitClassName} grayscale ${
                 reduceMotion ? "" : "transition duration-[var(--motion-duration-extended)] ease-[var(--motion-ease-standard)] group-hover:scale-[1.035]"
               }`}
             />
@@ -290,6 +293,7 @@ function LabProjectTile({
             preload="none"
             reduceMotion={previewState.reduceMotion}
             videoRef={previewState.videoRef}
+            className={mediaFitClassName}
           />
         </span>
         <span className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/24 to-transparent opacity-90 group-hover:opacity-100 group-focus-within:opacity-100 ${
