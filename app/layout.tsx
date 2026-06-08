@@ -60,6 +60,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable portfolio guide" />
+        <link rel="alternate" type="text/markdown" href="/portfolio.md" title="AI-readable portfolio summary" />
+      </head>
       <body>
         <StructuredData data={rootJsonLd()} />
         {children}
