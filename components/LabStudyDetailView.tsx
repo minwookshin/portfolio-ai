@@ -31,6 +31,7 @@ function StudyButton({
     <button
       type="button"
       data-active={active}
+      aria-pressed={active}
       onClick={onClick}
       className="lab-study-control micro-focus micro-pressable"
     >
@@ -91,8 +92,11 @@ function HoverRowDemo({ reduceMotion }: DemoProps) {
           <button
             key={title}
             type="button"
+            data-active={activeIndex === index}
             onMouseEnter={() => setActiveIndex(index)}
+            onPointerEnter={() => setActiveIndex(index)}
             onFocus={() => setActiveIndex(index)}
+            onClick={() => setActiveIndex(index)}
             className="lab-hover-row micro-focus"
           >
             <motion.span
@@ -174,6 +178,8 @@ function CursorGlyph() {
 
 function CursorStudyDemo({ reduceMotion }: DemoProps) {
   const [pointer, setPointer] = useState({ x: 118, y: 72, visible: false });
+  const [activeTarget, setActiveTarget] = useState<number | null>(null);
+  const targets = ["default surface", "interactive text", "precision zone"];
 
   const updatePointer = (event: PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -188,19 +194,33 @@ function CursorStudyDemo({ reduceMotion }: DemoProps) {
     <div
       className="lab-study-stage lab-cursor-stage"
       onPointerMove={updatePointer}
-      onPointerLeave={() => setPointer((current) => ({ ...current, visible: false }))}
+      onPointerDown={updatePointer}
+      onPointerLeave={() => {
+        setPointer((current) => ({ ...current, visible: false }));
+        setActiveTarget(null);
+      }}
     >
       <div className="lab-cursor-targets">
-        <span>default surface</span>
-        <span>interactive text</span>
-        <span>precision zone</span>
+        {targets.map((target, index) => (
+          <button
+            key={target}
+            type="button"
+            data-active={activeTarget === index}
+            onPointerEnter={() => setActiveTarget(index)}
+            onFocus={() => setActiveTarget(index)}
+            onClick={() => setActiveTarget(index)}
+            className="lab-cursor-target micro-focus"
+          >
+            {target}
+          </button>
+        ))}
       </div>
       <motion.div
         animate={{
           x: pointer.x,
           y: pointer.y,
           opacity: pointer.visible ? 1 : 0.42,
-          scale: pointer.visible ? 1 : 0.96,
+          scale: pointer.visible ? (activeTarget === null ? 1 : 1.06) : 0.96,
         }}
         transition={reduceMotion ? tweens.none : { type: "spring", stiffness: 420, damping: 34, mass: 0.8 }}
         className="lab-cursor-proxy"

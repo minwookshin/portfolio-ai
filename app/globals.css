@@ -831,7 +831,8 @@ body::after {
 }
 
 .lab-hover-row:hover .lab-hover-row__copy,
-.lab-hover-row:focus-visible .lab-hover-row__copy {
+.lab-hover-row:focus-visible .lab-hover-row__copy,
+.lab-hover-row[data-active="true"] .lab-hover-row__copy {
   color: var(--text-primary);
 }
 
@@ -904,10 +905,24 @@ body::after {
   gap: var(--space-2);
 }
 
-.lab-cursor-targets span {
+.lab-cursor-target {
+  width: 100%;
+  border: 0;
   border-top: 1px solid var(--border-light);
+  background: transparent;
   padding-top: var(--space-2);
+  text-align: left;
   color: var(--text-muted);
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.lab-cursor-target:hover,
+.lab-cursor-target:focus-visible,
+.lab-cursor-target[data-active="true"] {
+  color: var(--text-primary);
+  transform: translateX(4px);
 }
 
 .lab-cursor-proxy {
@@ -1481,7 +1496,9 @@ body::after {
   .studio-lateral-link:hover,
   .studio-lateral-link:focus-visible,
   .lab-study-control:hover,
-  .lab-study-control:focus-visible {
+  .lab-study-control:focus-visible,
+  .lab-cursor-target:hover,
+  .lab-cursor-target:focus-visible {
     transform: none !important;
   }
 
@@ -1506,6 +1523,7 @@ body::after {
   .related-work-link,
   .studio-lateral-link,
   .lab-study-control,
+  .lab-cursor-target,
   .lab-study-tile-visual *,
   .micro-skeleton-line {
     transition: none !important;
