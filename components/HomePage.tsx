@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useCallback, useState, useEffect, useRef } from "react";
-import type { MouseEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -78,13 +77,6 @@ function StudyMetaLine({
       <span className="study-meta-detail">{meta}</span>
     </span>
   );
-}
-
-function getHomeSectionFromPath(pathname: string): HomeTab | null {
-  const segment = pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
-  if (!segment || segment === "work") return "work";
-  if (segment === "studies" || segment === "writing" || segment === "lab") return "studies";
-  return null;
 }
 
 function useCanShowWorkPreview() {
@@ -726,12 +718,10 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
 
 function HomeExploreSection({
   activeSection,
-  onSectionNavigate,
   projects,
   studyItems,
 }: {
   activeSection: HomeTab;
-  onSectionNavigate?: (section: HomeTab, href: string, event: MouseEvent<HTMLAnchorElement>) => void;
   projects: Project[];
   studyItems: StudyItem[];
 }) {
@@ -752,7 +742,6 @@ function HomeExploreSection({
                   className="home-tab-button micro-focus micro-focus-tight"
                   data-active={selected ? "true" : "false"}
                   href={link.href}
-                  onClick={(event) => onSectionNavigate?.(link.id, link.href, event)}
                 >
                   {link.label}
                 </Link>
@@ -779,8 +768,7 @@ function HomeExploreSection({
 export default function HomePage({ activeSection = "work", writingPosts }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
-  const [localSection, setLocalSection] = useState<HomeTab | null>(null);
-  const currentSection = localSection ?? activeSection;
+  const currentSection = activeSection;
   const [hasStarted, setHasStarted] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (for example, a page section) instead of snapping back home. The
@@ -798,15 +786,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const handlePopState = () => {
-      const nextSection = getHomeSectionFromPath(window.location.pathname);
-      if (nextSection) setLocalSection(nextSection);
-    };
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Chat state. The /api/chat route streams plain text, so we manage messages
@@ -949,27 +928,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     router.push(projectPath, { scroll: false });
   };
 
-  const handleSectionNavigate = useCallback((section: HomeTab, href: string, event: MouseEvent<HTMLAnchorElement>) => {
-    if (
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.shiftKey
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-    setLocalSection(section);
-    setChatOnTop(false);
-
-    if (window.location.pathname !== href) {
-      window.history.pushState(null, "", href);
-    }
-  }, []);
-
   return (
     <main
       className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]"
@@ -1014,7 +972,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           <EditorialIntro />
           <HomeExploreSection
             activeSection={currentSection}
-            onSectionNavigate={handleSectionNavigate}
             projects={featuredProjects}
             studyItems={studyItems}
           />
@@ -1107,10 +1064,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                               if (target === "profile") {
                                 openProfile();
                               } else if (target === "projects") {
-                                setLocalSection("work");
-                                if (window.location.pathname !== "/work") {
-                                  window.history.pushState(null, "", "/work");
-                                }
+                                router.push("/work", { scroll: false });
                                 requestAnimationFrame(() => {
                                   document.getElementById("work")?.scrollIntoView({
                                     behavior: reduceMotion ? "auto" : "smooth",

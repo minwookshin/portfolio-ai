@@ -11,7 +11,24 @@ function getStudyProject(slug: string) {
   return project;
 }
 
+function getWorkProject(slug: string) {
+  const project = getProjectBySlug(slug);
+  if (!project || isLabStudyProject(project)) {
+    throw new Error(`Missing work project fixture: ${slug}`);
+  }
+  return project;
+}
+
 describe("ProjectCaseStudyShell", () => {
+  it("renders work detail breadcrumbs as direct links", () => {
+    render(<ProjectCaseStudyShell project={getWorkProject("sentinel")} />);
+
+    const nav = screen.getByRole("navigation");
+    expect(within(nav).getByRole("link", { name: "minwook shin" })).toHaveAttribute("href", "/work");
+    expect(within(nav).getByRole("link", { name: "work" })).toHaveAttribute("href", "/work");
+    expect(within(nav).getByText("Sentinel")).toBeInTheDocument();
+  });
+
   it("renders study detail breadcrumbs in page order", () => {
     render(
       <ProjectCaseStudyShell

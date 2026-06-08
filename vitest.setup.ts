@@ -18,3 +18,24 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: vi.fn(),
   })),
 });
+
+class TestIntersectionObserver implements IntersectionObserver {
+  readonly root = null;
+  readonly rootMargin = "";
+  readonly thresholds = [];
+
+  disconnect = vi.fn();
+  observe = vi.fn();
+  takeRecords = vi.fn(() => []);
+  unobserve = vi.fn();
+}
+
+Object.defineProperty(window, "IntersectionObserver", {
+  writable: true,
+  value: TestIntersectionObserver,
+});
+
+Object.defineProperty(globalThis, "IntersectionObserver", {
+  writable: true,
+  value: TestIntersectionObserver,
+});
