@@ -27,20 +27,22 @@ export default function ProjectCaseStudyShell({
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
+  const sectionLabel = variant === "lab" ? "studies" : "work";
+  const resolvedActionLabel = actionLabel ?? sectionLabel;
   const action = onAction ? (
     <button
       type="button"
       onClick={onAction}
       className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
     >
-      {actionLabel ?? "back"}
+      {resolvedActionLabel}
     </button>
   ) : actionHref ? (
     <Link
       href={actionHref}
       className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
     >
-      {actionLabel ?? "back"}
+      {resolvedActionLabel}
     </Link>
   ) : null;
   const homeControl = onHome ? (

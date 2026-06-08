@@ -71,7 +71,7 @@ export default async function LabProjectPage({ params }: LabProjectPageProps) {
       <div className="mx-auto w-full max-w-[760px]">
         <ProjectCaseStudyShell
           project={project}
-          actionLabel="all studies"
+          actionLabel="studies"
           actionHref="/studies"
           baseHref="/studies"
           variant="lab"
