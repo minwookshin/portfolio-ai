@@ -24,6 +24,10 @@ describe("LabStudyDetailView interactions", () => {
     await user.click(screen.getByRole("button", { name: "press" }));
     await waitFor(() => expect(screen.getByText("button responds")).toBeInTheDocument());
     expect(screen.getByRole("button", { name: "press" })).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(screen.getByRole("button", { name: /press motion sample/i }));
+    await waitFor(() => expect(screen.getByText("preview enters")).toBeInTheDocument());
+    expect(screen.getByRole("button", { name: "preview" })).toHaveAttribute("aria-pressed", "true");
   });
 
   it("switches the hover row preview by hover and click", async () => {
