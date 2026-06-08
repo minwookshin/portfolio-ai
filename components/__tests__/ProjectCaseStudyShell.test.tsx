@@ -23,10 +23,10 @@ describe("ProjectCaseStudyShell", () => {
   it("renders work detail breadcrumbs as direct links", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("sentinel")} />);
 
-    const nav = screen.getByRole("navigation");
+    const nav = screen.getByRole("navigation", { name: "breadcrumb" });
     expect(within(nav).getByRole("link", { name: "minwook shin" })).toHaveAttribute("href", "/work");
     expect(within(nav).getByRole("link", { name: "work" })).toHaveAttribute("href", "/work");
-    expect(within(nav).getByText("Sentinel")).toBeInTheDocument();
+    expect(within(nav).getByText("Sentinel")).toHaveAttribute("aria-current", "page");
   });
 
   it("renders study detail breadcrumbs in page order", () => {
@@ -38,10 +38,10 @@ describe("ProjectCaseStudyShell", () => {
       />,
     );
 
-    const nav = screen.getByRole("navigation");
+    const nav = screen.getByRole("navigation", { name: "breadcrumb" });
     expect(within(nav).getByRole("link", { name: "minwook shin" })).toHaveAttribute("href", "/work");
     expect(within(nav).getByRole("link", { name: "studies" })).toHaveAttribute("href", "/studies");
-    expect(within(nav).getByText("Motion Taste System")).toBeInTheDocument();
+    expect(within(nav).getByText("Motion Taste System")).toHaveAttribute("aria-current", "page");
     expect(within(nav).queryAllByText("studies")).toHaveLength(1);
   });
 });

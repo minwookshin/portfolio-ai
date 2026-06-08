@@ -72,7 +72,7 @@ export function generateLlmsTxt() {
     ...labProjects.map((project) => linkLine(project.title, absoluteUrl(getLabProjectPath(project)), studyType(project))),
     "",
     "## Writing",
-    ...writingPosts.map((post) => linkLine(post.title, absoluteUrl(`/writing/${post.slug}`), post.description)),
+    ...writingPosts.map((post) => linkLine(post.title, absoluteUrl(`/studies/${post.slug}`), post.description)),
     "",
     "## Contact",
     `- Email: ${PERSONAL_INFO.email}`,
@@ -158,7 +158,7 @@ function projectSection(project: PortfolioProject, path: string) {
 function writingSection(post: WritingPostMeta) {
   return [
     `### ${post.title}`,
-    `- URL: ${absoluteUrl(`/writing/${post.slug}`)}`,
+    `- URL: ${absoluteUrl(`/studies/${post.slug}`)}`,
     `- Date: ${post.date}`,
     `- Summary: ${post.description}`,
     post.relatedWork.length > 0 ? `- Related work: ${post.relatedWork.join(", ")}` : null,

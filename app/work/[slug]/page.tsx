@@ -63,7 +63,7 @@ function RelatedWriting({ posts }: { posts: WritingPostMeta[] }) {
         {posts.map((post) => (
           <Link
             key={post.slug}
-            href={`/writing/${post.slug}`}
+            href={`/studies/${post.slug}`}
             className="related-work-link micro-focus micro-pressable inline-flex w-fit text-[length:var(--type-0)] leading-[var(--leading-body)]"
           >
             {post.title}

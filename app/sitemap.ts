@@ -48,7 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: project.labStudy ? 0.75 : 0.65,
     })),
     ...writingPosts.map((post) => ({
-      url: absoluteUrl(`/writing/${post.slug}`),
+      url: absoluteUrl(`/studies/${post.slug}`),
       lastModified: parsedDate(post.date) ?? now,
       changeFrequency: "monthly" as const,
       priority: 0.7,

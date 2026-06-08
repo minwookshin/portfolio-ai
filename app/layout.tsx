@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import AnimatedCursor from "@/components/AnimatedCursor";
-import ModalSlot from "@/components/ModalSlot";
 import StructuredData from "@/components/StructuredData";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, rootJsonLd } from "@/lib/seo";
 import "@carrot-kpi/switzer-font/latin.css";
@@ -53,10 +52,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -67,7 +64,6 @@ export default function RootLayout({
       <body>
         <StructuredData data={rootJsonLd()} />
         {children}
-        <ModalSlot>{modal}</ModalSlot>
         <AnimatedCursor />
       </body>
     </html>
