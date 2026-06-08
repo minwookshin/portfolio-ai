@@ -8,7 +8,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 
-type CursorMode = "idle" | "interactive" | "close";
+type CursorMode = "idle" | "interactive";
 type CursorTone = "dark" | "light";
 type CursorState = { mode: CursorMode; tone: CursorTone };
 
@@ -28,7 +28,6 @@ const interactiveSelector = [
 const explicitCursorModes: Record<string, CursorMode> = {
   interactive: "interactive",
   view: "interactive",
-  close: "close",
 };
 
 const finePointerQuery = "(hover: hover) and (pointer: fine)";
@@ -52,15 +51,6 @@ function getCursorTone(target: Element): CursorTone {
 
 function getCursorState(target: EventTarget | null): CursorState {
   if (!(target instanceof Element)) return { mode: "idle", tone: "dark" };
-
-  const closeZone = target.closest(".project-lightbox-close-zone");
-  const closeContent = target.closest(".project-lightbox-content");
-  if (closeZone && !closeContent) {
-    return {
-      mode: "close",
-      tone: closeZone.classList.contains("bg-surface") ? "dark" : "light",
-    };
-  }
 
   const tone = getCursorTone(target);
   const explicitTarget = target.closest<HTMLElement>("[data-cursor]");
