@@ -341,6 +341,15 @@ body::after {
   transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.study-meta-label {
+  color: #71717a;
+  transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.study-meta-separator {
+  color: var(--text-muted);
+}
+
 [data-project-row="work"]:hover .project-row-meta,
 [data-project-row="work"]:focus-within .project-row-meta,
 [data-project-row="writing"]:hover .project-row-meta,
@@ -348,6 +357,11 @@ body::after {
 [data-project-row="studies"]:hover .project-row-meta,
 [data-project-row="studies"]:focus-within .project-row-meta {
   color: #71717a;
+}
+
+[data-project-row="studies"]:hover .study-meta-label,
+[data-project-row="studies"]:focus-within .study-meta-label {
+  color: var(--text-primary);
 }
 
 .related-work-link,

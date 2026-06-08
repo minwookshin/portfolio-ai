@@ -50,6 +50,7 @@ type StudyItem =
       href: string;
       id: string;
       kind: "writing";
+      label: string;
       meta: string;
       title: string;
     }
@@ -57,6 +58,7 @@ type StudyItem =
       href: string;
       id: string;
       kind: "lab";
+      label: string;
       meta: string;
       project: Project;
       title: string;
@@ -460,6 +462,7 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
     href: `/writing/${post.slug}`,
     id: `writing-${post.slug}`,
     kind: "writing",
+    label: "writing",
     meta: formatWritingDate(post.date),
     title: post.title,
   }));
@@ -469,6 +472,7 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
       href: getLabProjectPath(project),
       id: `lab-${project.id}`,
       kind: "lab",
+      label: "study",
       meta: project.studioLabel ?? project.builder.oneLiner,
       project,
       title: project.title,
@@ -478,6 +482,7 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
       href: getLabProjectPath(project),
       id: `lab-${project.id}`,
       kind: "lab",
+      label: "prototype",
       meta: project.studioLabel ?? getProjectDescriptor(project),
       project,
       title: project.title,
@@ -516,11 +521,13 @@ function StudyPreviewContent({
         <p className="max-w-[18rem] text-[length:var(--type-0)] leading-[var(--leading-tight)] text-[var(--text-primary)]">
           {item.title}
         </p>
+        <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2]">
+          <span className="study-meta-label">{item.label}</span>
+          <span className="study-meta-separator" aria-hidden="true"> / </span>
+          <span className="text-[var(--text-muted)]">{item.meta}</span>
+        </p>
         <p className="mt-[var(--space-1)] max-w-[18rem] text-[length:calc(var(--type-0)_-_2px)] leading-[1.35] text-[var(--text-muted)]">
           {item.description}
-        </p>
-        <p className="mt-[var(--space-2)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-          {item.meta}
         </p>
       </div>
     </div>
@@ -603,7 +610,9 @@ function StudyTextRow({
             {item.title}
           </span>
           <span className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-            {item.meta}
+            <span className="study-meta-label">{item.label}</span>
+            <span className="study-meta-separator" aria-hidden="true"> / </span>
+            <span>{item.meta}</span>
           </span>
         </span>
       </Link>
