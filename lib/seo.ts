@@ -1,7 +1,9 @@
 import { PERSONAL_INFO } from "@/data/personal";
 import {
   MAIN_PROJECTS,
+  getLabProjectPath,
   getLabProjects,
+  getProjectPath,
   getProjectMetadataDescription,
   isLabProject,
   orderProjects,
@@ -60,11 +62,11 @@ export function profilePageJsonLd() {
 export function workCollectionItems() {
   return orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS)
     .filter((project) => !project.comingSoon && !isLabProject(project))
-    .map((project) => projectCollectionItem(project, `/work/${project.slug}`));
+    .map((project) => projectCollectionItem(project, getProjectPath(project)));
 }
 
 export function studiesCollectionItems(posts: WritingPostMeta[]) {
-  const labItems = getLabProjects().map((project) => projectCollectionItem(project, `/studies/${project.slug}`));
+  const labItems = getLabProjects().map((project) => projectCollectionItem(project, getLabProjectPath(project)));
   const writingItems = posts.map((post) => ({
     description: post.description,
     name: post.title,

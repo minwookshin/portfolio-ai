@@ -637,6 +637,7 @@ export function getProjectPath(project: Project) {
 }
 
 export function getLabProjectPath(project: Project) {
+  if (getProjectSlug(project) === "caret") return getProjectPath(project);
   return `/studies/${getProjectSlug(project)}`;
 }
 

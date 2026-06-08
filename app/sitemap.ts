@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { MAIN_PROJECTS, getLabProjects, isLabProject } from "@/data/projects";
+import { MAIN_PROJECTS, getLabProjectPath, getLabProjects, getProjectPath, isLabProject } from "@/data/projects";
 import { absoluteUrl } from "@/lib/seo";
 import { getWritingPosts } from "@/lib/writing";
 
@@ -36,13 +36,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     ...workProjects.map((project) => ({
-      url: absoluteUrl(`/work/${project.slug}`),
+      url: absoluteUrl(getProjectPath(project)),
       lastModified: parsedDate(project.date) ?? now,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     ...labProjects.map((project) => ({
-      url: absoluteUrl(`/studies/${project.slug}`),
+      url: absoluteUrl(getLabProjectPath(project)),
       lastModified: parsedDate(project.date) ?? now,
       changeFrequency: "monthly" as const,
       priority: project.labStudy ? 0.75 : 0.65,
