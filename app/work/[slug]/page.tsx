@@ -91,8 +91,6 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
       <div className="mx-auto w-full max-w-[620px]">
         <ProjectCaseStudyShell
           project={project}
-          actionLabel="work"
-          actionHref="/work"
         />
         <RelatedWriting posts={relatedWriting} />
       </div>

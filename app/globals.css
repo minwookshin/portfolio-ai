@@ -709,6 +709,78 @@ body::after {
   gap: var(--space-2);
 }
 
+.lab-study-insight {
+  display: grid;
+  gap: var(--space-4);
+  border-top: 1px solid var(--border-light);
+  padding-top: var(--space-3);
+}
+
+.lab-study-insight-block {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.lab-study-section-heading {
+  color: var(--text-primary);
+  font-size: var(--type-0);
+  font-weight: 400;
+  line-height: var(--leading-body);
+}
+
+.lab-study-point-list,
+.lab-study-rule-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lab-study-point-list {
+  gap: 0;
+}
+
+.lab-study-point-list li {
+  border-top: 1px solid var(--border-light);
+  padding-block: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
+}
+
+.lab-study-rule-item {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 0.38fr) minmax(0, 1fr);
+  gap: var(--space-2);
+  border-top: 1px solid var(--border-light);
+  padding-block: var(--space-2);
+}
+
+.lab-study-rule-item dt {
+  color: var(--text-muted);
+  font-size: calc(var(--type-0) - 2px);
+  line-height: 1.2;
+}
+
+.lab-study-rule-item dd {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  min-width: 0;
+}
+
+.lab-study-rule-item dd span:first-child {
+  color: var(--text-primary);
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
+}
+
+.lab-study-rule-item dd span:last-child:not(:first-child) {
+  color: var(--text-muted);
+  font-size: calc(var(--type-0) - 2px);
+  line-height: var(--leading-body);
+}
+
 .lab-study-stage {
   min-height: 320px;
   overflow: hidden;
@@ -1057,16 +1129,20 @@ body::after {
 }
 
 .lab-study-code {
+  position: relative;
   overflow-x: auto;
   border: 1px solid var(--border-light);
-  border-radius: var(--md-shape-lg);
-  background: var(--bg-element);
-  padding: var(--space-2);
+  border-radius: var(--md-shape-sm);
+  background:
+    linear-gradient(var(--bg-base), var(--bg-base)) padding-box,
+    linear-gradient(180deg, color-mix(in srgb, var(--text-primary) 5%, transparent), transparent 38%) border-box;
+  padding: var(--space-3);
   color: var(--text-primary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-size: var(--type--1);
-  line-height: 1.6;
+  line-height: 1.65;
   text-transform: none !important;
+  tab-size: 2;
   white-space: pre;
 }
 
@@ -1624,6 +1700,11 @@ body::after {
 }
 
 @media (max-width: 640px) {
+  .lab-study-rule-item {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+
   .lab-study-stage--split {
     grid-template-columns: 1fr;
   }

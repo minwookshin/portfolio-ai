@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import LabProjectDetailView from "@/components/LabProjectDetailView";
 import ProjectDetailView from "@/components/ProjectDetailView";
@@ -8,57 +9,34 @@ import { tweens } from "@/lib/material/motion";
 
 export default function ProjectCaseStudyShell({
   project,
-  actionLabel,
-  actionHref,
   onAction,
   baseHref = "/work",
-  onHome,
   variant = "work",
   className = "",
 }: {
   project: PortfolioProject;
-  actionLabel?: string;
-  actionHref?: string;
   onAction?: () => void;
   baseHref?: string;
-  onHome?: () => void;
   variant?: "work" | "lab";
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
   const sectionLabel = variant === "lab" ? "studies" : "work";
-  const resolvedActionLabel = actionLabel ?? sectionLabel;
-  const action = onAction ? (
+  const sectionControl = onAction ? (
     <button
       type="button"
       onClick={onAction}
-      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
+      className="intro-contact-link micro-focus micro-pressable min-w-0 shrink-0 text-[length:var(--type-0)]"
     >
-      {resolvedActionLabel}
-    </button>
-  ) : actionHref ? (
-    <a
-      href={actionHref}
-      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
-    >
-      {resolvedActionLabel}
-    </a>
-  ) : null;
-  const homeControl = onHome ? (
-    <button
-      type="button"
-      onClick={onHome}
-      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
-    >
-      minwook shin
+      {sectionLabel}
     </button>
   ) : (
-    <a
+    <Link
       href={baseHref}
-      className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
+      className="intro-contact-link micro-focus micro-pressable min-w-0 shrink-0 text-[length:var(--type-0)]"
     >
-      minwook shin
-    </a>
+      {sectionLabel}
+    </Link>
   );
 
   return (
@@ -69,13 +47,19 @@ export default function ProjectCaseStudyShell({
       transition={reduceMotion ? tweens.none : tweens.base}
       className={`project-readable studio-detail w-full ${className}`}
     >
-      <nav className="studio-detail-nav mb-[var(--space-5)] flex w-full items-center justify-between gap-[var(--space-2)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
-        <span className="flex min-w-0 items-center gap-[var(--space-1)]">
-          {homeControl}
+      <nav className="studio-detail-nav mb-[var(--space-5)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
+        <span className="flex min-w-0 flex-wrap items-center gap-x-[var(--space-1)] gap-y-1">
+          <Link
+            href="/work"
+            className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
+          >
+            minwook shin
+          </Link>
           <span className="text-[var(--text-muted)]">/</span>
-          <span className="truncate text-[var(--text-primary)]">{project.title}</span>
+          {sectionControl}
+          <span className="text-[var(--text-muted)]">/</span>
+          <span className="min-w-0 text-[var(--text-primary)]">{project.title}</span>
         </span>
-        {action}
       </nav>
       {variant === "lab" ? (
         <LabProjectDetailView project={project} />

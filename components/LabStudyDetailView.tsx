@@ -393,31 +393,31 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
 
       <LabStudyDemo kind={study.kind} reduceMotion={reduceMotion} />
 
-      <section className="grid gap-[var(--space-3)] border-t border-[var(--border-light)] pt-[var(--space-3)] sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div>
-          <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+      <section className="lab-study-insight">
+        <div className="lab-study-insight-block">
+          <h2 className="lab-study-section-heading">
             why it works
           </h2>
-          <ul className="mt-[var(--space-2)] space-y-[var(--space-2)]">
+          <ul className="lab-study-point-list">
             {study.points.map((point) => (
-              <li key={point} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+              <li key={point}>
                 {point}
               </li>
             ))}
           </ul>
         </div>
-        <div>
-          <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+        <div className="lab-study-insight-block">
+          <h2 className="lab-study-section-heading">
             rules
           </h2>
-          <dl className="mt-[var(--space-2)] grid gap-[var(--space-2)]">
+          <dl className="lab-study-rule-list">
             {study.rules.map((rule) => (
-              <div key={rule.label} className="border-t border-[var(--border-light)] pt-[var(--space-2)]">
-                <dt className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{rule.label}</dt>
-                <dd className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">{rule.value}</dd>
-                {rule.note && (
-                  <dd className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-muted)]">{rule.note}</dd>
-                )}
+              <div key={rule.label} className="lab-study-rule-item">
+                <dt>{rule.label}</dt>
+                <dd>
+                  <span>{rule.value}</span>
+                  {rule.note && <span>{rule.note}</span>}
+                </dd>
               </div>
             ))}
           </dl>

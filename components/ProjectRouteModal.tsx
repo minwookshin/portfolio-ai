@@ -30,7 +30,6 @@ export default function ProjectRouteModal({
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const variant = baseHref === "/lab" || baseHref === "/studies" ? "lab" : "work";
-  const sectionLabel = variant === "lab" ? "studies" : "work";
   const goToSection = useCallback(() => {
     router.push(baseHref);
   }, [baseHref, router]);
@@ -105,8 +104,7 @@ export default function ProjectRouteModal({
         >
           <ProjectCaseStudyShell
             project={project}
-            actionLabel={sectionLabel}
-            actionHref={baseHref}
+            onAction={goToSection}
             baseHref={baseHref}
             variant={variant}
           />
