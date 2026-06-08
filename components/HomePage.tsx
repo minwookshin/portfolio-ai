@@ -541,7 +541,7 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
   const writingItems: StudyItem[] = posts.map((post) => ({
     date: post.date,
     description: post.description,
-    href: `/writing/${post.slug}`,
+    href: `/studies/${post.slug}`,
     id: `writing-${post.slug}`,
     kind: "writing",
     label: "writing",

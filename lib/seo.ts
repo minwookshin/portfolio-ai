@@ -70,7 +70,7 @@ export function studiesCollectionItems(posts: WritingPostMeta[]) {
   const writingItems = posts.map((post) => ({
     description: post.description,
     name: post.title,
-    url: absoluteUrl(`/writing/${post.slug}`),
+    url: absoluteUrl(`/studies/${post.slug}`),
   }));
 
   return [...labItems, ...writingItems];
@@ -133,7 +133,7 @@ export function projectJsonLd(project: PortfolioProject, path: string) {
 }
 
 export function writingPostJsonLd(post: WritingPostMeta) {
-  const url = absoluteUrl(`/writing/${post.slug}`);
+  const url = absoluteUrl(`/studies/${post.slug}`);
 
   return {
     "@context": "https://schema.org",
