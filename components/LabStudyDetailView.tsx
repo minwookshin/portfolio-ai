@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import type { PointerEvent } from "react";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
-import { motionDurations, motionEasings, tweens } from "@/lib/material/motion";
+import { motionEasings, tweens } from "@/lib/material/motion";
 
 type DemoProps = {
   reduceMotion: boolean;
@@ -40,50 +40,36 @@ function StudyButton({
   );
 }
 
-function MotionTasteDemo({ reduceMotion }: DemoProps) {
-  const modes = ["preview", "panel", "press"] as const;
-  const [mode, setMode] = useState<"preview" | "panel" | "press">("preview");
-  const copy = {
-    preview: ["preview enters", "opacity, blur, scale"],
-    panel: ["content changes", "small y movement"],
-    press: ["button responds", "scale stays subtle"],
-  }[mode];
-  const cycleMode = () => {
-    const currentIndex = modes.indexOf(mode);
-    setMode(modes[(currentIndex + 1) % modes.length]);
-  };
+function MotionTasteDemo() {
+  const [active, setActive] = useState(false);
 
   return (
-    <div className="lab-study-demo">
-      <div className="lab-study-controls" aria-label="motion mode">
-        <StudyButton active={mode === "preview"} onClick={() => setMode("preview")}>preview</StudyButton>
-        <StudyButton active={mode === "panel"} onClick={() => setMode("panel")}>panel</StudyButton>
-        <StudyButton active={mode === "press"} onClick={() => setMode("press")}>press</StudyButton>
-      </div>
-      <div className="lab-study-stage lab-study-stage--motion">
-        <motion.button
-          type="button"
-          aria-label={`${mode} motion sample`}
-          data-mode={mode}
-          onClick={cycleMode}
-          initial={reduceMotion ? false : { opacity: 0, y: 6, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, scale: mode === "press" ? 0.985 : 1, filter: "blur(0px)" }}
-          whileHover={reduceMotion ? undefined : { y: -1 }}
-          whileTap={reduceMotion ? undefined : { scale: 0.975 }}
-          transition={reduceMotion ? tweens.none : { ...tweens.base, duration: motionDurations.fast }}
-          className="lab-motion-card micro-focus"
-        >
-          <span className="lab-motion-card__media">
-            <span />
-            <span />
-            <span />
+    <div className="lab-study-stage lab-study-stage--motion">
+      <button
+        type="button"
+        aria-label="motion taste hover sample"
+        data-active={active}
+        onMouseEnter={() => setActive(true)}
+        onMouseLeave={() => setActive(false)}
+        onPointerEnter={() => setActive(true)}
+        onPointerLeave={() => setActive(false)}
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
+        data-project-row="studies"
+        className="lab-motion-row micro-focus"
+      >
+        <span className="project-row-copy lab-motion-row__copy flex max-w-full flex-col items-start gap-2">
+          <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">hover row</span>
+          <span className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+            {active ? "copy shifts, preview wakes" : "resting state stays quiet"}
           </span>
-          <span className="lab-motion-card__copy">
-            <span>{copy[0]}</span>
-            <span>{copy[1]}</span>
-          </span>
-        </motion.button>
-      </div>
+        </span>
+        <span className="lab-motion-row__preview" aria-hidden="true">
+          <span className="lab-motion-row__mark">{active ? "on" : "off"}</span>
+          <span />
+          <span />
+        </span>
+      </button>
     </div>
   );
 }
@@ -294,7 +280,7 @@ function MotionCurveTesterDemo({ reduceMotion }: DemoProps) {
 }
 
 function LabStudyDemo({ kind, reduceMotion }: { kind: LabStudy["kind"]; reduceMotion: boolean }) {
-  if (kind === "motion-taste") return <MotionTasteDemo reduceMotion={reduceMotion} />;
+  if (kind === "motion-taste") return <MotionTasteDemo />;
   if (kind === "hover-row") return <HoverRowDemo reduceMotion={reduceMotion} />;
   if (kind === "route-transition") return <RouteTransitionDemo reduceMotion={reduceMotion} />;
   if (kind === "cursor-study") return <CursorStudyDemo reduceMotion={reduceMotion} />;

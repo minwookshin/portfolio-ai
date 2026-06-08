@@ -13,22 +13,23 @@ function getStudyProject(slug: string) {
 }
 
 describe("LabStudyDetailView interactions", () => {
-  it("switches the motion taste demo modes", async () => {
+  it("shows the motion taste change on hover and focus", async () => {
     const user = userEvent.setup();
     render(<LabStudyDetailView project={getStudyProject("motion-taste-system")} />);
 
-    await user.click(screen.getByRole("button", { name: "panel" }));
-    await waitFor(() => expect(screen.getByText("content changes")).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: "panel" })).toHaveAttribute("aria-pressed", "true");
+    const sample = screen.getByRole("button", { name: "motion taste hover sample" });
+    expect(sample).toHaveAttribute("data-active", "false");
+    expect(screen.getByText("resting state stays quiet")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "press" }));
-    await waitFor(() => expect(screen.getByText("button responds")).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: "press" })).toHaveAttribute("aria-pressed", "true");
+    await user.hover(sample);
+    await waitFor(() => expect(sample).toHaveAttribute("data-active", "true"));
+    expect(screen.getByText("copy shifts, preview wakes")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /press motion sample/i }));
-    await waitFor(() => expect(screen.getByText("preview enters")).toBeInTheDocument());
-    expect(screen.getByRole("button", { name: "preview" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getAllByRole("button", { name: /motion sample/i })).toHaveLength(1);
+    await user.unhover(sample);
+    await waitFor(() => expect(sample).toHaveAttribute("data-active", "false"));
+
+    fireEvent.focus(sample);
+    await waitFor(() => expect(sample).toHaveAttribute("data-active", "true"));
   });
 
   it("switches the hover row preview by hover and click", async () => {
