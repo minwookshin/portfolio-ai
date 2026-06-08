@@ -198,13 +198,11 @@ function ProjectTextRow({
 }) {
   const reduceMotion = useReducedMotion();
   const descriptor = getProjectDescriptor(project);
-  const isWorkRow = !project.comingSoon;
   const rowClass =
     "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
   const titleClass = [
     "font-normal leading-[var(--leading-tight)]",
-    isWorkRow ? "project-row-title-line--lateral" : "text-[var(--text-primary)]",
-    project.comingSoon ? "" : isWorkRow ? "" : "project-row-title-line",
+    "project-row-title-line--lateral",
   ]
     .filter(Boolean)
     .join(" ");
