@@ -1624,10 +1624,6 @@ body::after {
   transform: translate(1px, 1px) rotate(-8deg) scale(0.92);
 }
 
-.animated-cursor-pointer--close .animated-cursor__arrow {
-  transform: rotate(-12deg) scale(0.94);
-}
-
 @media (prefers-reduced-motion: reduce) {
   body {
     transition: none !important;

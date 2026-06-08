@@ -14,7 +14,6 @@ import { LabStudyTileVisual } from "@/components/LabStudyDetailView";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
-import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 import {
@@ -310,8 +309,6 @@ function ProjectTextRow({
       ) : (
         <Link
           href={getProjectPath(project)}
-          scroll={false}
-          onClick={saveProjectOpenScroll}
           className={rowClass}
         >
           {rowText}
@@ -689,8 +686,6 @@ function StudyTextRow({
     >
       <Link
         href={item.href}
-        scroll={false}
-        onClick={item.kind === "lab" ? saveProjectOpenScroll : undefined}
         className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
       >
         <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
@@ -1000,12 +995,11 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     }
     setHasStarted(false);
     setChatOnTop(false);
-    saveProjectOpenScroll();
     const projectPath =
       currentSection === "studies" && isLabProject(project)
         ? getLabProjectPath(project)
         : getProjectPath(project);
-    router.push(projectPath, { scroll: false });
+    router.push(projectPath);
   };
 
   return (

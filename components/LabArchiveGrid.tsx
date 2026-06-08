@@ -11,7 +11,6 @@ import { LabStudyTileVisual } from "@/components/LabStudyDetailView";
 import type { Project } from "@/components/ProjectCard";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
-import { saveProjectOpenScroll } from "@/lib/projectScrollRestoration";
 import {
   LAB_PROJECT_IDS,
   MAIN_PROJECTS,
@@ -268,8 +267,6 @@ function LabProjectTile({
       <Link
         {...previewState.previewHandlers}
         href={getLabProjectPath(project)}
-        scroll={false}
-        onClick={saveProjectOpenScroll}
         className="micro-focus micro-pressable group relative block h-full w-full overflow-hidden rounded-[var(--md-shape-lg)] border border-[var(--border-light)] bg-[var(--bg-surface)] text-left"
       >
         <span className={`absolute inset-0 overflow-hidden ${shouldContainPreview || isStudy ? "bg-white" : ""}`}>
