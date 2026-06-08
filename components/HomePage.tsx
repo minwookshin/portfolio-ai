@@ -4,6 +4,7 @@ import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
@@ -39,6 +40,78 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
   { href: "/work", id: "work", label: "work" },
   { href: "/studies", id: "studies", label: "studies" },
 ];
+
+const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
+
+const landingPageVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.02,
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const landingIntroVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.02,
+      staggerChildren: 0.055,
+    },
+  },
+};
+
+const landingExploreVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.18,
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const landingRevealItem: Variants = {
+  hidden: {
+    opacity: 0,
+    filter: "blur(3px)",
+    y: 8,
+  },
+  visible: {
+    opacity: 1,
+    filter: "blur(0px)",
+    y: 0,
+    transition: {
+      opacity: { type: "tween", duration: 0.42, ease: LANDING_EASE },
+      filter: { type: "tween", duration: 0.42, ease: LANDING_EASE },
+      y: { type: "spring", stiffness: 260, damping: 32, mass: 1.2 },
+    },
+  },
+};
+
+const landingFooterItem: Variants = {
+  hidden: landingRevealItem.hidden,
+  visible: {
+    ...landingRevealItem.visible,
+    transition: {
+      opacity: { type: "tween", duration: 0.42, ease: LANDING_EASE, delay: 0.34 },
+      filter: { type: "tween", duration: 0.42, ease: LANDING_EASE, delay: 0.34 },
+      y: { type: "spring", stiffness: 260, damping: 32, mass: 1.2, delay: 0.34 },
+    },
+  },
+};
+
+function landingRowTransition(index: number): Transition {
+  const delay = Math.min(index * 0.045, 0.22);
+
+  return {
+    opacity: { type: "tween", duration: 0.34, ease: LANDING_EASE, delay },
+    filter: { type: "tween", duration: 0.38, ease: LANDING_EASE, delay },
+    y: { ...springs.spatialDefault, delay },
+  };
+}
 
 type StudyItem =
   | {
@@ -220,11 +293,11 @@ function ProjectTextRow({
       onMouseLeave={onDeactivate}
       onPointerEnter={onActivate}
       onPointerLeave={onDeactivate}
-      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
+      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 10 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
+      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
       viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
+      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row={list}
       className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
     >
@@ -354,13 +427,13 @@ function WorkFixedPreview({
 function EditorialIntro() {
   return (
     <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
-      <div id="profile" className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</p>
-        <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</p>
-        <h1 className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+      <motion.div id="profile" variants={landingIntroVariants} className="w-full max-w-[620px] scroll-mt-28 text-left">
+        <motion.p variants={landingRevealItem} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</motion.p>
+        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</motion.p>
+        <motion.h1 variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
           I design and build interfaces for AI-native products, from early idea to working software.
-        </h1>
-        <p className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+        </motion.h1>
+        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
           <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
           {", "}
           <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
@@ -371,8 +444,8 @@ function EditorialIntro() {
           {" "}
           <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
           {"."}
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
     </section>
   );
 }
@@ -604,11 +677,11 @@ function StudyTextRow({
       onMouseLeave={onDeactivate}
       onPointerEnter={onActivate}
       onPointerLeave={onDeactivate}
-      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      animate={reduceMotion ? { opacity: 1, y: 0 } : undefined}
+      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 10 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
+      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
       viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? tweens.none : { ...springs.spatialDefault, delay: Math.min(index * 0.035, motionDurations.fast) }}
+      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row="studies"
       className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
     >
@@ -726,10 +799,15 @@ function HomeExploreSection({
   studyItems: StudyItem[];
 }) {
   return (
-    <section id={activeSection} className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
+    <motion.section
+      id={activeSection}
+      variants={landingExploreVariants}
+      className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]"
+    >
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <nav
+        <motion.nav
           aria-label="sections"
+          variants={landingRevealItem}
           className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
         >
           {HOME_SECTION_LINKS.map((link, index) => {
@@ -753,14 +831,14 @@ function HomeExploreSection({
               </Fragment>
             );
           })}
-        </nav>
+        </motion.nav>
       </div>
 
       <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
         {activeSection === "work" && <WorkSection projects={projects} />}
         {activeSection === "studies" && <StudiesSection items={studyItems} />}
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -963,9 +1041,9 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
       </section>
 
       <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-        animate={{ opacity: introReady ? 1 : 0, y: reduceMotion ? 0 : introReady ? 0 : 8 }}
-        transition={reduceMotion ? tweens.none : tweens.slower}
+        initial={reduceMotion ? false : "hidden"}
+        animate={introReady || reduceMotion ? "visible" : "hidden"}
+        variants={reduceMotion ? undefined : landingPageVariants}
         className="flex-1"
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
@@ -977,7 +1055,14 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           />
         </div>
       </motion.div>
-      <BuildMeta className="mx-auto mt-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[620px] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:w-[calc(100%_-_(var(--space-5)*2))]" />
+      <motion.div
+        initial={reduceMotion ? false : "hidden"}
+        animate={introReady || reduceMotion ? "visible" : "hidden"}
+        variants={reduceMotion ? undefined : landingFooterItem}
+        className="mx-auto mt-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[620px] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:w-[calc(100%_-_(var(--space-5)*2))]"
+      >
+        <BuildMeta />
+      </motion.div>
 
       <AnimatePresence>
         {projectNotice && (
