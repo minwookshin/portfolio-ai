@@ -9,35 +9,17 @@ import { tweens } from "@/lib/material/motion";
 
 export default function ProjectCaseStudyShell({
   project,
-  onAction,
   baseHref = "/work",
   variant = "work",
   className = "",
 }: {
   project: PortfolioProject;
-  onAction?: () => void;
   baseHref?: string;
   variant?: "work" | "lab";
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
   const sectionLabel = variant === "lab" ? "studies" : "work";
-  const sectionControl = onAction ? (
-    <button
-      type="button"
-      onClick={onAction}
-      className="intro-contact-link micro-focus micro-pressable min-w-0 shrink-0 text-[length:var(--type-0)]"
-    >
-      {sectionLabel}
-    </button>
-  ) : (
-    <Link
-      href={baseHref}
-      className="intro-contact-link micro-focus micro-pressable min-w-0 shrink-0 text-[length:var(--type-0)]"
-    >
-      {sectionLabel}
-    </Link>
-  );
 
   return (
     <motion.div
@@ -56,7 +38,12 @@ export default function ProjectCaseStudyShell({
             minwook shin
           </Link>
           <span className="text-[var(--text-muted)]">/</span>
-          {sectionControl}
+          <Link
+            href={baseHref}
+            className="intro-contact-link micro-focus micro-pressable min-w-0 shrink-0 text-[length:var(--type-0)]"
+          >
+            {sectionLabel}
+          </Link>
           <span className="text-[var(--text-muted)]">/</span>
           <span className="min-w-0 text-[var(--text-primary)]">{project.title}</span>
         </span>

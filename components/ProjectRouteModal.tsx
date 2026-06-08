@@ -104,7 +104,6 @@ export default function ProjectRouteModal({
         >
           <ProjectCaseStudyShell
             project={project}
-            onAction={goToSection}
             baseHref={baseHref}
             variant={variant}
           />
