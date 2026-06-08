@@ -33,7 +33,8 @@ export type LabStudyKind =
   | "hover-row"
   | "route-transition"
   | "cursor-study"
-  | "motion-curve";
+  | "motion-curve"
+  | "ai-loop";
 
 export type LabStudy = {
   kind: LabStudyKind;
@@ -249,6 +250,56 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       { type: "text", content: "The Logic" },
       { type: "text", content: "Outcome" },
     ],
+  },
+  {
+    id: "17",
+    slug: "interface-is-the-loop",
+    title: "The Interface Is the Loop",
+    description: "A small study on loop engineering for AI interfaces.",
+    fullDescription:
+      "A lab study for making agent loops visible, steerable, and testable through interface design.",
+    tags: ["AI UX", "Agentic Interfaces", "Design Engineering"],
+    categories: ["Lab", "AI"],
+    date: "2026",
+    glyph: "il",
+    studioLabel: "ai loop interface",
+    metadataDescription:
+      "A small AI interface study about loop engineering, traces, evals, and human checkpoints.",
+    builder: {
+      role: "AI interface study",
+      stack: ["React", "Framer Motion", "AI UX"],
+      status: { label: "Study" },
+      oneLiner: "A small study on loop engineering for AI interfaces.",
+      pipeline: "Intent -> trace -> eval -> human checkpoint.",
+      scope: [],
+      results: [],
+    },
+    labStudy: {
+      kind: "ai-loop",
+      thesis: "AI products get better when the loop is visible enough for people to steer it.",
+      points: [
+        "Show the system's current belief before it turns intent into action.",
+        "Make the trace readable so the human can catch wrong assumptions early.",
+        "Turn repeated failures into evals instead of treating them as one-off mistakes.",
+      ],
+      rules: [
+        { label: "visible state", value: "intent, plan, action", note: "the user should know what the system thinks it is doing" },
+        { label: "checkpoint", value: "before risk", note: "pause before irreversible actions, not after them" },
+        { label: "eval loop", value: "failure -> test", note: "good loops remember what went wrong" },
+      ],
+      code: `const loop = [
+  "intent",
+  "plan",
+  "action",
+  "observation",
+  "eval",
+  "checkpoint",
+];
+
+const nextStep = loop.find((step) => needsHumanJudgment(step))
+  ?? loop.find((step) => needsMoreEvidence(step))
+  ?? "finish";`,
+    },
   },
   {
     id: "12",
@@ -582,7 +633,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
 ];
 
 export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
-export const LAB_PROJECT_IDS = ["12", "13", "14", "15", "16", "10", "4", "9", "7", "8"] as const;
+export const LAB_PROJECT_IDS = ["17", "12", "13", "14", "15", "16", "10", "4", "9", "7", "8"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Sentinel: "/projects/previews/sentinel.mp4",

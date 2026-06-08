@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { PointerEvent } from "react";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
 import { motionEasings, tweens } from "@/lib/material/motion";
@@ -16,6 +16,7 @@ const detailLabels: Record<LabStudy["kind"], string> = {
   "route-transition": "route study",
   "cursor-study": "cursor study",
   "motion-curve": "tiny tool",
+  "ai-loop": "ai interface study",
 };
 
 const cursorGlyphPath =
@@ -283,7 +284,111 @@ function MotionCurveTesterDemo({ reduceMotion }: DemoProps) {
   );
 }
 
+const aiLoopSteps = [
+  {
+    label: "intent",
+    meta: "what should change",
+    detail: "Capture the user's goal before the model plans around the wrong target.",
+  },
+  {
+    label: "plan",
+    meta: "what happens next",
+    detail: "Show the steps the system wants to take, especially when tools or external state are involved.",
+  },
+  {
+    label: "action",
+    meta: "model or tool call",
+    detail: "Make the action concrete enough that a person can tell whether it belongs in the workflow.",
+  },
+  {
+    label: "observation",
+    meta: "what came back",
+    detail: "Bring returned evidence into view instead of hiding it behind a confident final answer.",
+  },
+  {
+    label: "eval",
+    meta: "did it work",
+    detail: "Check the output against the goal, then keep recurring failures as future regression tests.",
+  },
+  {
+    label: "checkpoint",
+    meta: "human judgment",
+    detail: "Pause before irreversible or high-context actions so the user can steer, not rubber-stamp.",
+  },
+] as const;
+
+function AiLoopDemo({ reduceMotion }: DemoProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [manual, setManual] = useState(false);
+  const activeStep = aiLoopSteps[activeIndex];
+
+  useEffect(() => {
+    if (reduceMotion || manual) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((index) => (index + 1) % aiLoopSteps.length);
+    }, 1450);
+
+    return () => window.clearInterval(timer);
+  }, [manual, reduceMotion]);
+
+  const activateStep = (index: number) => {
+    setManual(true);
+    setActiveIndex(index);
+  };
+
+  return (
+    <div className="lab-study-stage lab-loop-stage">
+      <div className="lab-loop-list" aria-label="ai loop steps">
+        {aiLoopSteps.map((step, index) => (
+          <button
+            key={step.label}
+            type="button"
+            data-active={activeIndex === index}
+            onMouseEnter={() => activateStep(index)}
+            onPointerEnter={() => activateStep(index)}
+            onFocus={() => activateStep(index)}
+            onClick={() => activateStep(index)}
+            className="lab-loop-row micro-focus"
+          >
+            <span className="lab-loop-row__index">{String(index + 1).padStart(2, "0")}</span>
+            <span className="lab-loop-row__copy">
+              <span>{step.label}</span>
+              <span>{step.meta}</span>
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <div className="lab-loop-panel" aria-live="polite">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeStep.label}
+            initial={reduceMotion ? false : { opacity: 0, y: 6, filter: "blur(5px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -3, filter: "blur(3px)" }}
+            transition={reduceMotion ? tweens.none : { ...tweens.fast, duration: 0.18 }}
+            className="lab-loop-panel__content"
+          >
+            <span className="lab-loop-panel__eyebrow">{manual ? "selected step" : "looping trace"}</span>
+            <strong>{activeStep.label}</strong>
+            <p>{activeStep.detail}</p>
+          </motion.div>
+        </AnimatePresence>
+        <button
+          type="button"
+          onClick={() => setManual(false)}
+          className="lab-loop-panel__control micro-focus micro-pressable"
+        >
+          resume loop
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function LabStudyDemo({ kind, reduceMotion }: { kind: LabStudy["kind"]; reduceMotion: boolean }) {
+  if (kind === "ai-loop") return <AiLoopDemo reduceMotion={reduceMotion} />;
   if (kind === "motion-taste") return <MotionTasteDemo />;
   if (kind === "hover-row") return <HoverRowDemo reduceMotion={reduceMotion} />;
   if (kind === "route-transition") return <RouteTransitionDemo reduceMotion={reduceMotion} />;
@@ -332,6 +437,18 @@ function LabStudyGlyph({ kind }: { kind: LabStudy["kind"] }) {
           <circle cx="104" cy="26" r="2.5" />
           <circle className="lab-study-glyph__curve-dot" cx="16" cy="58" r="4" />
         </svg>
+      </span>
+    );
+  }
+
+  if (kind === "ai-loop") {
+    return (
+      <span className="lab-study-glyph lab-study-glyph--loop">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span className="lab-study-glyph__loop-dot" />
       </span>
     );
   }

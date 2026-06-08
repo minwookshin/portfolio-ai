@@ -80,4 +80,17 @@ describe("LabStudyDetailView interactions", () => {
     await user.click(screen.getByRole("button", { name: "in-out" }));
     expect(screen.getByRole("button", { name: "in-out" })).toHaveAttribute("aria-pressed", "true");
   });
+
+  it("lets the AI loop study move between trace steps", async () => {
+    const user = userEvent.setup();
+    render(<LabStudyDetailView project={getStudyProject("interface-is-the-loop")} />);
+
+    expect(screen.getByText("Capture the user's goal before the model plans around the wrong target.")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /checkpoint/i }));
+    await waitFor(() => {
+      expect(screen.getByText("Pause before irreversible or high-context actions so the user can steer, not rubber-stamp.")).toBeInTheDocument();
+    });
+    expect(screen.getByRole("button", { name: "resume loop" })).toBeInTheDocument();
+  });
 });
