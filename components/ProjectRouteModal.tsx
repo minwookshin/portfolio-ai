@@ -101,7 +101,7 @@ export default function ProjectRouteModal({
           aria-modal="true"
           aria-label={`${project.title} project detail`}
           tabIndex={-1}
-          className="project-lightbox-content w-full max-w-[760px] outline-none"
+          className="project-lightbox-content w-full max-w-[620px] outline-none"
         >
           <ProjectCaseStudyShell
             project={project}

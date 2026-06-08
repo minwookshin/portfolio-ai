@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import LabProjectDetailView from "@/components/LabProjectDetailView";
 import ProjectDetailView from "@/components/ProjectDetailView";
@@ -38,12 +37,12 @@ export default function ProjectCaseStudyShell({
       {resolvedActionLabel}
     </button>
   ) : actionHref ? (
-    <Link
+    <a
       href={actionHref}
       className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
     >
       {resolvedActionLabel}
-    </Link>
+    </a>
   ) : null;
   const homeControl = onHome ? (
     <button
@@ -54,12 +53,12 @@ export default function ProjectCaseStudyShell({
       minwook shin
     </button>
   ) : (
-    <Link
+    <a
       href={baseHref}
       className="intro-contact-link micro-focus micro-pressable shrink-0 text-[length:var(--type-0)]"
     >
       minwook shin
-    </Link>
+    </a>
   );
 
   return (

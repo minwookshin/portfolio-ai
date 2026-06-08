@@ -633,7 +633,7 @@ export function getProjectPath(project: Project) {
 }
 
 export function getLabProjectPath(project: Project) {
-  return `/lab/${getProjectSlug(project)}`;
+  return `/studies/${getProjectSlug(project)}`;
 }
 
 export function getProjectBySlug(slug: string) {

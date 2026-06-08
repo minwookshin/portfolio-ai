@@ -64,7 +64,7 @@ export function workCollectionItems() {
 }
 
 export function studiesCollectionItems(posts: WritingPostMeta[]) {
-  const labItems = getLabProjects().map((project) => projectCollectionItem(project, `/lab/${project.slug}`));
+  const labItems = getLabProjects().map((project) => projectCollectionItem(project, `/studies/${project.slug}`));
   const writingItems = posts.map((post) => ({
     description: post.description,
     name: post.title,

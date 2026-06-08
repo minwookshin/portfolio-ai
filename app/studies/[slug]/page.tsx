@@ -1,34 +1,37 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import StructuredData from "@/components/StructuredData";
-import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug, getProjectMetadataDescription } from "@/data/projects";
+import {
+  LIGHT_PROJECT_TOKENS,
+  getLabProjects,
+  getProjectBySlug,
+  getProjectMetadataDescription,
+  isLabProject,
+} from "@/data/projects";
 import { absoluteUrl, projectJsonLd } from "@/lib/seo";
-import { getWritingPostsForWork } from "@/lib/writing";
-import type { WritingPostMeta } from "@/lib/writingTypes";
 
-type WorkPageProps = {
+type StudyProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
-  return getOpenableProjects().map((project) => ({ slug: project.slug }));
+  return getLabProjects().map((project) => ({ slug: project.slug }));
 }
 
-export async function generateMetadata({ params }: WorkPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: StudyProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
 
-  if (!project || project.comingSoon) {
+  if (!project || project.comingSoon || !isLabProject(project)) {
     return {
-      title: "work",
+      title: "studies",
     };
   }
 
   const description = getProjectMetadataDescription(project);
-  const url = absoluteUrl(`/work/${project.slug}`);
+  const url = absoluteUrl(`/studies/${project.slug}`);
 
   return {
     title: project.title,
@@ -53,48 +56,26 @@ export async function generateMetadata({ params }: WorkPageProps): Promise<Metad
   };
 }
 
-function RelatedWriting({ posts }: { posts: WritingPostMeta[] }) {
-  if (posts.length === 0) return null;
-
-  return (
-    <aside className="border-t border-[var(--border-light)] pt-[var(--space-3)]">
-      <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">related studies</p>
-      <div className="mt-[var(--space-1)] flex flex-col gap-[var(--space-1)]">
-        {posts.map((post) => (
-          <Link
-            key={post.slug}
-            href={`/writing/${post.slug}`}
-            className="related-work-link micro-focus micro-pressable inline-flex w-fit text-[length:var(--type-0)] leading-[var(--leading-body)]"
-          >
-            {post.title}
-          </Link>
-        ))}
-      </div>
-    </aside>
-  );
-}
-
-export default async function WorkProjectPage({ params }: WorkPageProps) {
+export default async function StudyProjectPage({ params }: StudyProjectPageProps) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
 
-  if (!project || project.comingSoon) notFound();
-
-  const relatedWriting = getWritingPostsForWork(project.slug);
+  if (!project || project.comingSoon || !isLabProject(project)) notFound();
 
   return (
     <main
       style={LIGHT_PROJECT_TOKENS}
       className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
     >
-      <StructuredData data={projectJsonLd(project, `/work/${project.slug}`)} />
+      <StructuredData data={projectJsonLd(project, `/studies/${project.slug}`)} />
       <div className="mx-auto w-full max-w-[620px]">
         <ProjectCaseStudyShell
           project={project}
-          actionLabel="work"
-          actionHref="/work"
+          actionLabel="studies"
+          actionHref="/studies"
+          baseHref="/studies"
+          variant="lab"
         />
-        <RelatedWriting posts={relatedWriting} />
       </div>
       <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
