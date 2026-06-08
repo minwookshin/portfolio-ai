@@ -270,20 +270,21 @@ function LabStudyDemo({ kind, reduceMotion }: { kind: LabStudy["kind"]; reduceMo
   return <MotionCurveTesterDemo reduceMotion={reduceMotion} />;
 }
 
-export function LabStudyTileVisual({ kind }: { kind: LabStudy["kind"] }) {
+function LabStudyGlyph({ kind }: { kind: LabStudy["kind"] }) {
   if (kind === "hover-row") {
     return (
-      <span className="lab-study-tile-visual lab-study-tile-visual--rows">
+      <span className="lab-study-glyph lab-study-glyph--rows">
         <span />
         <span />
         <span />
+        <span className="lab-study-glyph__row-indicator" />
       </span>
     );
   }
 
   if (kind === "route-transition") {
     return (
-      <span className="lab-study-tile-visual lab-study-tile-visual--route">
+      <span className="lab-study-glyph lab-study-glyph--route">
         <span />
         <span />
         <span />
@@ -293,7 +294,8 @@ export function LabStudyTileVisual({ kind }: { kind: LabStudy["kind"] }) {
 
   if (kind === "cursor-study") {
     return (
-      <span className="lab-study-tile-visual lab-study-tile-visual--cursor">
+      <span className="lab-study-glyph lab-study-glyph--cursor">
+        <span className="lab-study-glyph__cursor-target" />
         <CursorGlyph />
       </span>
     );
@@ -301,17 +303,46 @@ export function LabStudyTileVisual({ kind }: { kind: LabStudy["kind"] }) {
 
   if (kind === "motion-curve") {
     return (
-      <span className="lab-study-tile-visual lab-study-tile-visual--curve">
-        <span />
-        <span />
+      <span className="lab-study-glyph lab-study-glyph--curve">
+        <svg viewBox="0 0 120 84" aria-hidden="true">
+          <path className="lab-study-glyph__curve-guide" d="M16 58 C38 16 72 70 104 26" />
+          <path className="lab-study-glyph__curve-line" d="M16 58 C38 16 72 70 104 26" />
+          <circle cx="16" cy="58" r="2.5" />
+          <circle cx="104" cy="26" r="2.5" />
+          <circle className="lab-study-glyph__curve-dot" cx="16" cy="58" r="4" />
+        </svg>
       </span>
     );
   }
 
   return (
-    <span className="lab-study-tile-visual lab-study-tile-visual--motion">
-      <span />
-      <span />
+    <span className="lab-study-glyph lab-study-glyph--motion">
+      <span className="lab-study-glyph__motion-frame" />
+      <span className="lab-study-glyph__motion-card" />
+      <span className="lab-study-glyph__motion-dot" />
+    </span>
+  );
+}
+
+export function LabStudyTileVisual({
+  animated = true,
+  className = "",
+  kind,
+}: {
+  animated?: boolean;
+  className?: string;
+  kind: LabStudy["kind"];
+}) {
+  const classes = [
+    "lab-study-tile-visual",
+    `lab-study-tile-visual--${kind}`,
+    animated ? "lab-study-tile-visual--animated" : "",
+    className,
+  ].filter(Boolean).join(" ");
+
+  return (
+    <span className={classes}>
+      <LabStudyGlyph kind={kind} />
     </span>
   );
 }

@@ -64,6 +64,23 @@ type StudyItem =
       title: string;
     };
 
+function StudyMetaLine({
+  className = "",
+  label,
+  meta,
+}: {
+  className?: string;
+  label: string;
+  meta: string;
+}) {
+  return (
+    <span className={`study-meta-row ${className}`.trim()}>
+      <span className="study-meta-label">{label}</span>
+      <span className="study-meta-detail">{meta}</span>
+    </span>
+  );
+}
+
 function getHomeSectionFromPath(pathname: string): HomeTab | null {
   const segment = pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
   if (!segment || segment === "work") return "work";
@@ -500,9 +517,17 @@ function StudyPreviewContent({
   if (item.kind === "lab") {
     if (isLabStudyProject(item.project)) {
       return (
-        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
-          <div className="h-[74%] w-[74%] max-w-[280px]">
+        <div className="study-preview-glyph-card">
+          <div className="study-preview-glyph-stage">
             <LabStudyTileVisual kind={item.project.labStudy.kind} />
+          </div>
+          <div className="study-preview-glyph-copy">
+            <p className="study-preview-glyph-title">{item.title}</p>
+            <StudyMetaLine
+              label={item.label}
+              meta={item.meta}
+              className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2]"
+            />
           </div>
         </div>
       );
@@ -521,11 +546,11 @@ function StudyPreviewContent({
         <p className="max-w-[18rem] text-[length:var(--type-0)] leading-[var(--leading-tight)] text-[var(--text-primary)]">
           {item.title}
         </p>
-        <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2]">
-          <span className="study-meta-label">{item.label}</span>
-          <span className="study-meta-separator" aria-hidden="true"> / </span>
-          <span className="text-[var(--text-muted)]">{item.meta}</span>
-        </p>
+        <StudyMetaLine
+          label={item.label}
+          meta={item.meta}
+          className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2]"
+        />
         <p className="mt-[var(--space-1)] max-w-[18rem] text-[length:calc(var(--type-0)_-_2px)] leading-[1.35] text-[var(--text-muted)]">
           {item.description}
         </p>
@@ -609,11 +634,11 @@ function StudyTextRow({
           <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
             {item.title}
           </span>
-          <span className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-            <span className="study-meta-label">{item.label}</span>
-            <span className="study-meta-separator" aria-hidden="true"> / </span>
-            <span>{item.meta}</span>
-          </span>
+          <StudyMetaLine
+            label={item.label}
+            meta={item.meta}
+            className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]"
+          />
         </span>
       </Link>
     </motion.li>
