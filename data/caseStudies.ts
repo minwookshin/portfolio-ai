@@ -292,7 +292,6 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "links",
         items: [
           { label: "View live site", href: "https://www.scadflux.com/fluxathon" },
-          { label: "GitHub", href: "https://github.com/YeYen1721/portfolio-" },
         ],
       },
       {
@@ -354,7 +353,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "links",
         items: [
-          { label: "GitHub", href: "https://github.com/YeYen1721/Caret" },
+          { label: "GitHub", href: "https://github.com/YeYen1721/caret" },
           { label: "LinkedIn", href: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/" },
         ],
       },
