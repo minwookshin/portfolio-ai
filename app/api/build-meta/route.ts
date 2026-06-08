@@ -1,77 +1,70 @@
 import { execFile } from "node:child_process";
-import { readdir, stat } from "node:fs/promises";
-import path from "node:path";
 import { promisify } from "node:util";
 import { NextResponse } from "next/server";
-import { BUILD_VERSION } from "@/lib/buildMeta";
+import { BUILD_UPDATED_AT, BUILD_VERSION } from "@/lib/buildMeta";
 
 const execFileAsync = promisify(execFile);
 
 const ROOT = process.cwd();
-const WATCH_PATHS = [
-  "app",
-  "components",
-  "data",
-  "lib",
-  "public",
-  "next.config.js",
-  "next.config.mjs",
-  "tailwind.config.ts",
-  "package.json",
-] as const;
 
-const TRACKED_EXTENSIONS = new Set([
-  ".css",
-  ".jpeg",
-  ".jpg",
-  ".js",
-  ".json",
-  ".md",
-  ".mdx",
-  ".mjs",
-  ".mp4",
-  ".pdf",
-  ".png",
-  ".svg",
-  ".ts",
-  ".tsx",
-  ".webp",
-  ".woff",
-  ".woff2",
-]);
+type GitHubCommitResponse = {
+  commit?: {
+    author?: {
+      date?: string;
+    };
+    committer?: {
+      date?: string;
+    };
+  };
+};
 
-const IGNORED_NAMES = new Set([".DS_Store", "__tests__"]);
+function validIsoDate(value?: string | null) {
+  if (!value) return null;
+  const timestamp = new Date(value).getTime();
+  return Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null;
+}
 
-async function newestMtime(targetPath: string): Promise<number> {
-  const fileStat = await stat(targetPath);
-
-  if (!fileStat.isDirectory()) {
-    return TRACKED_EXTENSIONS.has(path.extname(targetPath)) ? fileStat.mtimeMs : 0;
+async function getLocalCommitUpdatedAt() {
+  try {
+    const { stdout } = await execFileAsync("git", ["show", "-s", "--format=%cI", "HEAD"], { cwd: ROOT });
+    return validIsoDate(stdout.trim());
+  } catch {
+    return null;
   }
+}
 
-  const entries = await readdir(targetPath, { withFileTypes: true });
-  const mtimes = await Promise.all(
-    entries
-      .filter((entry) => !IGNORED_NAMES.has(entry.name))
-      .map((entry) => newestMtime(path.join(targetPath, entry.name)))
-  );
+async function getGitHubCommitUpdatedAt() {
+  const sha = process.env.VERCEL_GIT_COMMIT_SHA;
+  const owner = process.env.VERCEL_GIT_REPO_OWNER;
+  const repo = process.env.VERCEL_GIT_REPO_SLUG;
 
-  return Math.max(fileStat.mtimeMs, ...mtimes, 0);
+  if (!sha || !owner || !repo) return null;
+
+  try {
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${sha}`, {
+      cache: "no-store",
+      headers: {
+        Accept: "application/vnd.github+json",
+        "User-Agent": "minwook-portfolio-build-meta",
+      },
+    });
+
+    if (!response.ok) return null;
+    const payload = (await response.json()) as GitHubCommitResponse;
+    return validIsoDate(payload.commit?.committer?.date ?? payload.commit?.author?.date);
+  } catch {
+    return null;
+  }
 }
 
 async function getUpdatedAt() {
-  const mtimes = await Promise.all(
-    WATCH_PATHS.map(async (watchPath) => {
-      try {
-        return await newestMtime(path.join(/* turbopackIgnore: true */ process.cwd(), watchPath));
-      } catch {
-        return 0;
-      }
-    })
+  const configuredUpdatedAt = validIsoDate(process.env.NEXT_PUBLIC_BUILD_UPDATED_AT ?? process.env.BUILD_UPDATED_AT);
+  return (
+    (await getLocalCommitUpdatedAt()) ??
+    (await getGitHubCommitUpdatedAt()) ??
+    configuredUpdatedAt ??
+    BUILD_UPDATED_AT
   );
-
-  const latest = Math.max(...mtimes, 0);
-  return new Date(latest || Date.now()).toISOString();
 }
 
 async function getVersion() {

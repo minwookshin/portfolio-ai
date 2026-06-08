@@ -26,7 +26,7 @@ export default function BuildMeta({ className = "" }: BuildMetaProps) {
     updatedAt: BUILD_UPDATED_AT,
     version: BUILD_VERSION,
   });
-  const [now, setNow] = useState(() => new Date(BUILD_UPDATED_AT).getTime());
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     let cancelled = false;
