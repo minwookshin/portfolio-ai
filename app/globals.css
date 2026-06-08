@@ -1010,7 +1010,7 @@ body::after {
 .lab-cursor-glyph__outline {
   fill: none;
   stroke: var(--bg-base);
-  stroke-width: 0.9px;
+  stroke-width: 1.6px;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -1536,7 +1536,7 @@ body::after {
   fill: none;
   stroke: rgb(var(--cursor-outline-rgb));
   stroke-opacity: var(--cursor-outline-opacity);
-  stroke-width: 0.9px;
+  stroke-width: 1.6px;
   stroke-linejoin: round;
   stroke-linecap: round;
   transition:

@@ -141,8 +141,8 @@ export default function AnimatedCursor() {
       style={{ transform: pointerTransform }}
     >
       <svg className="animated-cursor__arrow" viewBox="0 0 14 15">
-        <path className="animated-cursor__fill" d={cursorGlyphPath} />
         <path className="animated-cursor__outline" d={cursorGlyphPath} />
+        <path className="animated-cursor__fill" d={cursorGlyphPath} />
       </svg>
     </motion.div>
   );

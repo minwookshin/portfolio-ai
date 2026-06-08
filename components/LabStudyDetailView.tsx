@@ -171,8 +171,8 @@ function RouteTransitionDemo({ reduceMotion }: DemoProps) {
 function CursorGlyph() {
   return (
     <svg viewBox="0 0 14 15" aria-hidden="true" className="lab-cursor-glyph">
-      <path className="lab-cursor-glyph__fill" d={cursorGlyphPath} />
       <path className="lab-cursor-glyph__outline" d={cursorGlyphPath} />
+      <path className="lab-cursor-glyph__fill" d={cursorGlyphPath} />
     </svg>
   );
 }

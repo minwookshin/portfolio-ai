@@ -422,7 +422,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       rules: [
         { label: "size", value: "13x15px", note: "smaller than a decorative badge" },
         { label: "rotation", value: "-8deg", note: "lying down slightly, still readable" },
-        { label: "outline", value: "0.9px white", note: "keeps the black shape crisp on mixed backgrounds" },
+        { label: "outline", value: "outside white", note: "drawn behind the fill so it stays outside the black shape" },
         { label: "shadow", value: "two soft drops", note: "separation without glow" },
       ],
       code: `.animated-cursor__arrow {
@@ -436,7 +436,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
 
 .animated-cursor__outline {
   stroke: rgb(255 255 255);
-  stroke-width: 0.9px;
+  stroke-width: 1.6px;
 }`,
     },
   },
