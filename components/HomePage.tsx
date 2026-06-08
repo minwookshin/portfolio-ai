@@ -42,8 +42,8 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
 ];
 
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
-const LANDING_EXPLORE_DELAY = 0.46;
-const LANDING_ROW_BASE_DELAY = 0.58;
+const LANDING_EXPLORE_DELAY = 0.3;
+const LANDING_ROW_BASE_DELAY = 0.4;
 
 const landingPageVariants: Variants = {
   hidden: {},
@@ -70,7 +70,7 @@ const landingExploreVariants: Variants = {
   visible: {
     transition: {
       delayChildren: LANDING_EXPLORE_DELAY,
-      staggerChildren: 0.06,
+      staggerChildren: 0.045,
     },
   },
 };
@@ -106,7 +106,7 @@ const landingFooterItem: Variants = {
 };
 
 function landingRowTransition(index: number): Transition {
-  const delay = LANDING_ROW_BASE_DELAY + Math.min(index * 0.045, 0.22);
+  const delay = LANDING_ROW_BASE_DELAY + Math.min(index * 0.035, 0.18);
 
   return {
     opacity: { type: "tween", duration: 0.34, ease: LANDING_EASE, delay },
