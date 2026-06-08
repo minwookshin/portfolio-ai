@@ -61,32 +61,28 @@ function MotionTasteDemo({ reduceMotion }: DemoProps) {
         <StudyButton active={mode === "press"} onClick={() => setMode("press")}>press</StudyButton>
       </div>
       <div className="lab-study-stage lab-study-stage--motion">
-        <AnimatePresence initial={false}>
-          <motion.button
-            key={mode}
-            type="button"
-            aria-label={`${mode} motion sample`}
-            data-mode={mode}
-            onClick={cycleMode}
-            initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.96, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, scale: mode === "press" ? 0.98 : 1, filter: "blur(0px)" }}
-            exit={reduceMotion ? undefined : { opacity: 0, y: -4, scale: 0.985, filter: "blur(4px)" }}
-            whileHover={reduceMotion ? undefined : { y: mode === "press" ? 0 : -2 }}
-            whileTap={reduceMotion ? undefined : { scale: 0.96 }}
-            transition={reduceMotion ? tweens.none : { ...tweens.base, duration: mode === "press" ? motionDurations.fast : 0.22 }}
-            className="lab-motion-card micro-focus"
-          >
-            <span className="lab-motion-card__media">
-              <span />
-              <span />
-              <span />
-            </span>
-            <span className="lab-motion-card__copy">
-              <span>{copy[0]}</span>
-              <span>{copy[1]}</span>
-            </span>
-          </motion.button>
-        </AnimatePresence>
+        <motion.button
+          type="button"
+          aria-label={`${mode} motion sample`}
+          data-mode={mode}
+          onClick={cycleMode}
+          initial={reduceMotion ? false : { opacity: 0, y: 6, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, scale: mode === "press" ? 0.985 : 1, filter: "blur(0px)" }}
+          whileHover={reduceMotion ? undefined : { y: -1 }}
+          whileTap={reduceMotion ? undefined : { scale: 0.975 }}
+          transition={reduceMotion ? tweens.none : { ...tweens.base, duration: motionDurations.fast }}
+          className="lab-motion-card micro-focus"
+        >
+          <span className="lab-motion-card__media">
+            <span />
+            <span />
+            <span />
+          </span>
+          <span className="lab-motion-card__copy">
+            <span>{copy[0]}</span>
+            <span>{copy[1]}</span>
+          </span>
+        </motion.button>
       </div>
     </div>
   );
