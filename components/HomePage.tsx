@@ -10,7 +10,6 @@ import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
-import HoverVideoPreview from "@/components/HoverVideoPreview";
 import { LabStudyTileVisual } from "@/components/LabStudyDetailView";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
@@ -22,7 +21,6 @@ import {
   FEATURED_PROJECT_IDS,
   LAB_PROJECT_IDS,
   MAIN_PROJECTS,
-  PROJECT_PREVIEW_VIDEOS,
   getLabProjectPath,
   getProjectPath,
   isLabProject,
@@ -259,27 +257,10 @@ function ProjectTextRow({
 
 function WorkPreviewContent({
   project,
-  reduceMotion,
 }: {
   project: Project;
-  reduceMotion: boolean;
 }) {
-  const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
   const isStaticLogoPreview = project.slug === "atlas";
-
-  if (previewVideo && !reduceMotion) {
-    return (
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        src={previewVideo}
-        className="block h-full w-full object-cover"
-      />
-    );
-  }
 
   const src = project.image ?? project.icon;
 
@@ -354,7 +335,7 @@ function WorkFixedPreview({
           }
           style={{ willChange: "opacity, filter, transform" }}
         >
-          <WorkPreviewContent project={project} reduceMotion={reduceMotion} />
+          <WorkPreviewContent project={project} />
         </motion.div>
       </AnimatePresence>
     </div>
@@ -509,10 +490,8 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
 
 function StudyPreviewContent({
   item,
-  reduceMotion,
 }: {
   item: StudyItem;
-  reduceMotion: boolean;
 }) {
   if (item.kind === "lab") {
     if (isLabStudyProject(item.project)) {
@@ -533,7 +512,7 @@ function StudyPreviewContent({
       );
     }
 
-    return <WorkPreviewContent project={item.project} reduceMotion={reduceMotion} />;
+    return <WorkPreviewContent project={item.project} />;
   }
 
   return (
@@ -587,7 +566,7 @@ function StudyFixedPreview({
           }
           style={{ willChange: "opacity, filter, transform" }}
         >
-          <StudyPreviewContent item={item} reduceMotion={reduceMotion} />
+          <StudyPreviewContent item={item} />
         </motion.div>
       </AnimatePresence>
     </div>
