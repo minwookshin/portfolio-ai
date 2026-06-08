@@ -82,7 +82,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     team: "Hyunsoo, Madelyn",
     tags: ["Swift", "SwiftUI", "Figma", "Predictive Data"],
     categories: ["Engineering", "Design"],
-    github: "https://github.com/YeYen1721/sentinel",
+    github: "https://github.com/minwookshin/sentinel",
     linkedin: "https://www.linkedin.com/posts/minwookshin_hackathon-scadflux-vibecoding-ugcPost-7389656630055018498-BOpk/",
     date: "2025",
     image: "/projects/sentinel/hero.png",
@@ -125,7 +125,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     team: "Solo Project",
     tags: ["Next.js", "React", "Gemini API", "TypeScript", "Framer Motion"],
     categories: ["Engineering", "AI"],
-    github: "https://github.com/YeYen1721/portfolio-ai",
+    github: "https://github.com/minwookshin/portfolio-ai",
     link: "https://www.minwookshin.com",
     date: "2025",
     image: "/projects/2.png",
@@ -566,7 +566,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     icon: "/projects/caret/Caret_icon.png",
     image: "/projects/caret/icon.png",
     studioLabel: "iOS UX prototype",
-    github: "https://github.com/YeYen1721/caret",
+    github: "https://github.com/minwookshin/caret",
     linkedin: "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
     builder: {
       role: "Design Engineer",
@@ -637,6 +637,7 @@ export function getProjectPath(project: Project) {
 }
 
 export function getLabProjectPath(project: Project) {
+  if (getProjectSlug(project) === "caret") return getProjectPath(project);
   return `/studies/${getProjectSlug(project)}`;
 }
 

@@ -5,6 +5,7 @@ import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import StructuredData from "@/components/StructuredData";
 import {
   LIGHT_PROJECT_TOKENS,
+  getLabProjectPath,
   getLabProjects,
   getProjectBySlug,
   getProjectMetadataDescription,
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: StudyProjectPageProps): Promi
   }
 
   const description = getProjectMetadataDescription(project);
-  const url = absoluteUrl(`/studies/${project.slug}`);
+  const url = absoluteUrl(getLabProjectPath(project));
 
   return {
     title: project.title,
@@ -67,7 +68,7 @@ export default async function StudyProjectPage({ params }: StudyProjectPageProps
       style={LIGHT_PROJECT_TOKENS}
       className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
     >
-      <StructuredData data={projectJsonLd(project, `/studies/${project.slug}`)} />
+      <StructuredData data={projectJsonLd(project, getLabProjectPath(project))} />
       <div className="mx-auto w-full max-w-[620px]">
         <ProjectCaseStudyShell
           project={project}
