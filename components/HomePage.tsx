@@ -74,6 +74,7 @@ function StudyMetaLine({
   return (
     <span className={`study-meta-row ${className}`.trim()}>
       <span className="study-meta-label">{label}</span>
+      <span aria-hidden="true" className="study-meta-separator">/</span>
       <span className="study-meta-detail">{meta}</span>
     </span>
   );
