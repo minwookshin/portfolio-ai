@@ -578,7 +578,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
 ];
 
 export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
-export const LAB_PROJECT_IDS = ["12", "13", "14", "15", "16", "4", "9", "7", "8", "10"] as const;
+export const LAB_PROJECT_IDS = ["12", "13", "14", "15", "16", "10", "4", "9", "7", "8"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Sentinel: "/projects/previews/sentinel.mp4",
