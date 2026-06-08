@@ -12,6 +12,9 @@ type CursorMode = "idle" | "interactive" | "close";
 type CursorTone = "dark" | "light";
 type CursorState = { mode: CursorMode; tone: CursorTone };
 
+const cursorGlyphPath =
+  "M1.18 0.95C0.7 0.68 0.14 1.1 0.28 1.66L3.1 13.42C3.29 14.22 4.35 14.38 4.77 13.68L6.28 11.04C6.54 10.59 6.96 10.29 7.46 10.18L12.74 9.08C13.52 8.92 13.7 7.93 13.02 7.55L1.18 0.95Z";
+
 const interactiveSelector = [
   "a[href]",
   "button:not([disabled])",
@@ -138,7 +141,8 @@ export default function AnimatedCursor() {
       style={{ transform: pointerTransform }}
     >
       <svg className="animated-cursor__arrow" viewBox="0 0 14 15">
-        <path d="M1.24 0.92C0.73 0.56 0.09 1 0.24 1.6L2.96 13.35C3.15 14.14 4.18 14.31 4.62 13.64L6.24 11.18C6.56 10.69 7.06 10.36 7.64 10.24L12.78 9.2C13.54 9.05 13.72 8.05 13.08 7.64L1.24 0.92Z" />
+        <path className="animated-cursor__fill" d={cursorGlyphPath} />
+        <path className="animated-cursor__outline" d={cursorGlyphPath} />
       </svg>
     </motion.div>
   );

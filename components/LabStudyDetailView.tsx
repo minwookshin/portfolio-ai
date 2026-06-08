@@ -18,6 +18,9 @@ const detailLabels: Record<LabStudy["kind"], string> = {
   "motion-curve": "tiny tool",
 };
 
+const cursorGlyphPath =
+  "M1.18 0.95C0.7 0.68 0.14 1.1 0.28 1.66L3.1 13.42C3.29 14.22 4.35 14.38 4.77 13.68L6.28 11.04C6.54 10.59 6.96 10.29 7.46 10.18L12.74 9.08C13.52 8.92 13.7 7.93 13.02 7.55L1.18 0.95Z";
+
 function StudyButton({
   active = false,
   children,
@@ -167,8 +170,9 @@ function RouteTransitionDemo({ reduceMotion }: DemoProps) {
 
 function CursorGlyph() {
   return (
-    <svg viewBox="0 0 13 15" aria-hidden="true" className="lab-cursor-glyph">
-      <path d="M1.35 1.15 11.6 7.08 7.2 8.4 5.48 13.36 1.35 1.15Z" />
+    <svg viewBox="0 0 14 15" aria-hidden="true" className="lab-cursor-glyph">
+      <path className="lab-cursor-glyph__fill" d={cursorGlyphPath} />
+      <path className="lab-cursor-glyph__outline" d={cursorGlyphPath} />
     </svg>
   );
 }
