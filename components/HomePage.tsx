@@ -259,10 +259,28 @@ function WorkPreviewContent({
   project: Project;
 }) {
   const isStaticLogoPreview = project.slug === "atlas";
+  const isSentinelPreview = project.slug === "sentinel";
 
   const src = project.image ?? project.icon;
 
   if (src) {
+    if (isSentinelPreview) {
+      return (
+        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
+          <div className="relative h-[88%] w-[88%]">
+            <BlurImage
+              src={src}
+              alt={project.title}
+              fill
+              sizes="(max-width: 768px) 64vw, 560px"
+              draggable={false}
+              className="object-contain"
+            />
+          </div>
+        </div>
+      );
+    }
+
     if (isStaticLogoPreview) {
       return (
         <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
