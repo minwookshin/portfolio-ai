@@ -558,9 +558,25 @@ body::after {
   position: relative;
 }
 
+.studio-video-player--caret {
+  overflow: hidden;
+  border-radius: calc(var(--md-shape-lg) + 8px);
+  background: var(--bg-base);
+  clip-path: inset(0 round calc(var(--md-shape-lg) + 8px));
+  contain: paint;
+}
+
 .studio-video-player > video {
   display: block;
   cursor: pointer;
+}
+
+.studio-video-player--caret > video {
+  border-radius: inherit;
+  background: var(--bg-base);
+  clip-path: inset(1px round calc(var(--md-shape-lg) + 7px));
+  transform: scale(1.006);
+  transform-origin: center;
 }
 
 .studio-video-controls {

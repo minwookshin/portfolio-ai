@@ -56,6 +56,7 @@ function ProjectHeroMedia({
   const video = proof?.demo?.video;
   const image = hero?.image ?? project.image ?? project.icon;
   const imageStyle = hero?.imageStyle;
+  const isCaret = "slug" in project && project.slug === "caret";
 
   if (video) {
     return (
@@ -67,8 +68,8 @@ function ProjectHeroMedia({
         label={`${project.title} demo`}
         preload="metadata"
         poster={makeVideoPosterDataUrl(proof.demo?.label ?? project.title)}
-        className="studio-detail-hero-media"
-        videoClassName="block w-full bg-[var(--bg-element)]"
+        className={`studio-detail-hero-media ${isCaret ? "studio-video-player--caret" : ""}`}
+        videoClassName={`block w-full bg-[var(--bg-element)] ${isCaret ? "studio-video-player__video--caret" : ""}`}
       />
     );
   }
