@@ -40,6 +40,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Minwook Shin" }],
   creator: "Minwook Shin",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "896x896" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
   alternates: {
     canonical: SITE_URL,
   },
