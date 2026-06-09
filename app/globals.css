@@ -434,14 +434,14 @@ body::after {
   background:
     radial-gradient(circle at 50% 48%, rgba(255, 59, 48, 0.13), transparent 54%),
     linear-gradient(135deg, rgba(255, 59, 48, 0.055), rgba(255, 59, 48, 0.018));
-  opacity: 0.56;
+  opacity: 0;
   mix-blend-mode: multiply;
   transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 .work-preview-unavailable:hover .work-preview-unavailable-tint,
 .work-preview-unavailable:focus-visible .work-preview-unavailable-tint {
-  opacity: 0.72;
+  opacity: 0;
 }
 
 .work-preview-unavailable-flash {
