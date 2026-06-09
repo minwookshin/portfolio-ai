@@ -32,6 +32,20 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByRole("button", { name: "Unmute video" })).toBeInTheDocument();
   });
 
+  it("does not duplicate video-only demos in proof links", () => {
+    render(<ProjectCaseStudyShell project={getWorkProject("caret")} />);
+
+    expect(screen.queryByRole("link", { name: /watch demo/i })).not.toBeInTheDocument();
+    expect(screen.getByText("links")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/minwookshin/caret");
+    expect(screen.getByText("/ source")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
+    );
+    expect(screen.getByText("/ post")).toBeInTheDocument();
+  });
+
   it("renders study detail breadcrumbs in page order", () => {
     render(
       <ProjectCaseStudyShell

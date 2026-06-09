@@ -160,18 +160,18 @@ function ProjectDetailHero({
 
 function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
   const demoNote = isVisibleBuilderValue(proof.demo?.note) ? proof.demo?.note : undefined;
-  const hasDemo = Boolean(proof.demo?.video || proof.demo?.href);
+  const demoHref = proof.demo?.href;
 
   return (
     <section className="studio-detail-proof space-y-[var(--space-5)]">
       <DetailNote eyebrow="the build" body={proof.oneLiner} />
 
-      {proof.demo && hasDemo && (
+      {proof.demo && demoHref && (
         <section>
           <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">proof</p>
           <div className="mt-[var(--space-1)] flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
             <a
-              href={proof.demo.href ?? proof.demo.video}
+              href={demoHref}
               target="_blank"
               rel="noopener noreferrer"
               className="studio-lateral-link studio-proof-link micro-focus micro-pressable inline-flex items-center text-[length:var(--type-0)]"

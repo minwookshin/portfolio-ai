@@ -94,6 +94,18 @@ function isExternalHref(href: string) {
   return /^https?:\/\//.test(href) || href.startsWith("mailto:");
 }
 
+function getLinkMeta(label: string, href: string) {
+  const value = `${label} ${href}`.toLowerCase();
+
+  if (value.includes("github")) return "source";
+  if (value.includes("linkedin")) return "post";
+  if (value.includes("figma")) return "design";
+  if (value.includes("demo")) return "demo";
+  if (value.includes("http")) return "site";
+
+  return isExternalHref(href) ? "external" : "internal";
+}
+
 function Tags({ tags }: { tags: string[] }) {
   return (
     <div className="flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] font-normal leading-[1.2] text-[var(--text-muted)]">
@@ -357,9 +369,11 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
     case "links":
       return (
         <motion.section key={i} {...sectionMotion}>
-          <div className="flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
+          <p className={`${eyebrowCls} mb-[var(--space-1)]`}>links</p>
+          <div className="studio-detail-link-list">
             {section.items.map((l) => {
               const external = isExternalHref(l.href);
+              const meta = getLinkMeta(l.label, l.href);
 
               return (
                 <a
@@ -367,9 +381,10 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                   href={l.href}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
-                  className="studio-lateral-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
+                  className="studio-lateral-link studio-detail-link-row micro-focus micro-pressable text-[length:var(--type-0)]"
                 >
-                  {l.label}
+                  <span>{l.label}</span>
+                  <span className="studio-detail-link-meta" aria-hidden="true">/ {meta}</span>
                 </a>
               );
             })}
