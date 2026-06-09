@@ -58,17 +58,18 @@ async function getGitHubCommitUpdatedAt() {
 }
 
 async function getUpdatedAt() {
-  const configuredUpdatedAt = validIsoDate(process.env.NEXT_PUBLIC_BUILD_UPDATED_AT ?? process.env.BUILD_UPDATED_AT);
+  const configuredUpdatedAt = validIsoDate(process.env.BUILD_UPDATED_AT);
   return (
     configuredUpdatedAt ??
     (await getGitHubCommitUpdatedAt()) ??
     (await getLocalCommitUpdatedAt()) ??
+    validIsoDate(process.env.NEXT_PUBLIC_BUILD_UPDATED_AT) ??
     BUILD_UPDATED_AT
   );
 }
 
 async function getVersion() {
-  const configuredVersion = process.env.NEXT_PUBLIC_BUILD_VERSION ?? process.env.BUILD_VERSION;
+  const configuredVersion = process.env.BUILD_VERSION;
   if (configuredVersion) return configuredVersion;
 
   const vercelHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 5);
@@ -78,7 +79,7 @@ async function getVersion() {
     const { stdout } = await execFileAsync("git", ["rev-parse", "--short=5", "HEAD"], { cwd: ROOT });
     return `3.1.${stdout.trim()}`;
   } catch {
-    return BUILD_VERSION;
+    return process.env.NEXT_PUBLIC_BUILD_VERSION ?? BUILD_VERSION;
   }
 }
 

@@ -26,7 +26,12 @@ function readBuildUpdatedAt() {
   const timestamp = configuredUpdatedAt ? new Date(configuredUpdatedAt).getTime() : NaN;
 
   if (Number.isFinite(timestamp)) return new Date(timestamp).toISOString();
-  return new Date().toISOString();
+
+  const sha = process.env.VERCEL_GIT_COMMIT_SHA || "HEAD";
+  const commitDate = readCommand("git", ["show", "-s", "--format=%cI", sha]);
+  const commitTimestamp = commitDate ? new Date(commitDate).getTime() : NaN;
+
+  return Number.isFinite(commitTimestamp) ? new Date(commitTimestamp).toISOString() : new Date().toISOString();
 }
 
 const buildVersion = readBuildVersion();
