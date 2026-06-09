@@ -401,6 +401,13 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
             "A small `press scale` gives immediate feedback, so the slower confirmation still feels responsive.",
           ],
         },
+        {
+          heading: "video controls as proof surface",
+          body: [
+            "The player chrome should appear only when it helps someone inspect the demo. The video stays the proof; the controls sit as a thin translucent layer over moving media.",
+            "Glass works here because it improves legibility over changing frames. If it becomes a permanent visual effect, it starts competing with the work.",
+          ],
+        },
       ],
       technicalArtifact: {
         title: "Easing Decision Flowchart",
@@ -428,6 +435,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         { label: "press", value: "160ms", note: "instant tactile feedback" },
         { label: "hold", value: "1200ms", note: "sustained intent, linear progress" },
         { label: "release", value: "120-180ms", note: "fast cancellation so it never feels stuck" },
+        { label: "video chrome", value: "hover/focus only", note: "mobile stays visible because hover does not exist" },
       ],
       code: `.hold-action {
   transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);

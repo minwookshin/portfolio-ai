@@ -574,12 +574,13 @@ body::after {
   width: min(calc(100% - var(--space-3) * 2), 390px);
   min-height: 32px;
   gap: 0.48rem;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.62);
   border-radius: var(--md-shape-full);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.76);
   box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+    0 10px 28px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.035);
   color: var(--text-primary);
   opacity: 0;
   padding: 0.26rem 0.38rem;
@@ -588,8 +589,8 @@ body::after {
   transition:
     opacity var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-fast) var(--motion-ease-standard);
-  -webkit-backdrop-filter: blur(10px) saturate(1.08);
-  backdrop-filter: blur(10px) saturate(1.08);
+  -webkit-backdrop-filter: blur(16px) saturate(1.18);
+  backdrop-filter: blur(16px) saturate(1.18);
 }
 
 .studio-video-player:hover .studio-video-controls,
