@@ -687,9 +687,11 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
 }
 
 function StudyTextRow({
+  index,
   isLast = false,
   item,
 }: {
+  index: number;
   isLast?: boolean;
   item: StudyItem;
 }) {
@@ -713,35 +715,41 @@ function StudyTextRow({
     <motion.li
       ref={rowRef}
       key={item.id}
-      initial={false}
-      style={
-        reduceMotion
-          ? undefined
-          : {
-              opacity: scrollOpacity,
-              filter: scrollBlur,
-              y: scrollY,
-              willChange: "opacity, filter, transform",
-            }
-      }
+      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 8 }}
+      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 1, filter: "blur(0px)", y: 0 }}
+      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row="studies"
       className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
     >
-      <Link
-        href={item.href}
-        className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
+      <motion.div
+        className="inline-flex max-w-full transform-gpu"
+        style={
+          reduceMotion
+            ? undefined
+            : {
+                opacity: scrollOpacity,
+                filter: scrollBlur,
+                y: scrollY,
+                willChange: "opacity, filter, transform",
+              }
+        }
       >
-        <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
-          <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
-            {item.title}
+        <Link
+          href={item.href}
+          className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
+        >
+          <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
+            <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
+              {item.title}
+            </span>
+            <StudyMetaLine
+              label={item.label}
+              meta={item.meta}
+              className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]"
+            />
           </span>
-          <StudyMetaLine
-            label={item.label}
-            meta={item.meta}
-            className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]"
-          />
-        </span>
-      </Link>
+        </Link>
+      </motion.div>
     </motion.li>
   );
 }
@@ -761,6 +769,7 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
         {items.map((item, index) => (
           <StudyTextRow
             key={item.id}
+            index={index}
             isLast={index === items.length - 1}
             item={item}
           />
