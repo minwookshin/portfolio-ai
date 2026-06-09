@@ -1076,15 +1076,22 @@ body::after {
   display: grid;
   width: 100%;
   gap: var(--space-1);
+  align-content: center;
 }
 
 .lab-hover-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
   width: 100%;
   border: 0;
   border-top: 1px solid var(--border-light);
   background: transparent;
   padding: var(--space-2) 0;
   text-align: left;
+  cursor: pointer;
 }
 
 .lab-hover-row__copy {
@@ -1096,39 +1103,124 @@ body::after {
   color: #404040;
 }
 
-.lab-hover-row:hover .lab-hover-row__copy,
-.lab-hover-row:focus-visible .lab-hover-row__copy,
-.lab-hover-row[data-active="true"] .lab-hover-row__copy {
+.lab-hover-row[data-active="true"] .project-row-copy {
+  transform: translateX(6px);
+}
+
+.lab-hover-row[data-active="true"] .project-row-title-line--lateral,
+.lab-hover-row:hover .project-row-title-line--lateral,
+.lab-hover-row:focus-visible .project-row-title-line--lateral {
   color: var(--text-primary);
 }
 
-.lab-hover-row__copy span:last-child {
+.lab-hover-row[data-active="true"] .project-row-meta,
+.lab-hover-row:hover .project-row-meta,
+.lab-hover-row:focus-visible .project-row-meta {
+  color: #71717a;
+}
+
+.lab-hover-row__meta {
   color: var(--text-muted);
   font-size: calc(var(--type-0) - 2px);
+  line-height: 1.2;
+}
+
+.lab-hover-row__index {
+  color: var(--text-muted);
+  font-size: calc(var(--type-0) - 4px);
+  line-height: 1;
+  opacity: 0.48;
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.lab-hover-row:hover .lab-hover-row__index,
+.lab-hover-row:focus-visible .lab-hover-row__index,
+.lab-hover-row[data-active="true"] .lab-hover-row__index {
+  color: var(--text-primary);
+  opacity: 1;
+  transform: translateX(-2px);
 }
 
 .lab-hover-preview {
+  position: relative;
   display: grid;
   width: 100%;
+  align-self: stretch;
   aspect-ratio: 3 / 2;
   place-items: center;
+  overflow: hidden;
   border: 1px solid var(--border-light);
   border-radius: var(--md-shape-lg);
-  background: var(--bg-element);
+  background: var(--bg-base);
+  padding: var(--space-3);
 }
 
 .lab-hover-preview__frame {
+  position: relative;
   display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  align-content: end;
+  gap: var(--space-1);
+}
+
+.lab-hover-preview__eyebrow {
+  color: var(--text-muted);
+  font-size: calc(var(--type-0) - 4px);
+  line-height: 1.2;
+}
+
+.lab-hover-preview__title {
+  color: var(--text-primary);
+  font-size: var(--type-0);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+}
+
+.lab-hover-preview__meta {
+  max-width: 18rem;
+  color: var(--text-muted);
+  font-size: calc(var(--type-0) - 2px);
+  line-height: var(--leading-body);
+}
+
+.lab-hover-preview__lines {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: var(--space-2);
+}
+
+.lab-hover-preview__lines span {
+  display: block;
+  height: 1px;
+  background: var(--border-light);
+}
+
+.lab-hover-preview__lines span:nth-child(1) {
+  width: 84%;
+}
+
+.lab-hover-preview__lines span:nth-child(2) {
+  width: 58%;
+}
+
+.lab-hover-preview__lines span:nth-child(3) {
   width: 72%;
-  aspect-ratio: 3 / 2;
-  place-items: center;
-  border-radius: var(--md-shape-md);
-  background: var(--bg-surface);
 }
 
 .lab-hover-preview__mark {
-  color: var(--text-primary);
-  font-size: var(--type-3);
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: color-mix(in srgb, var(--text-primary) 9%, transparent);
+  font-size: clamp(3.25rem, 9vw, 5.25rem);
+  line-height: 0.82;
+  pointer-events: none;
+  text-transform: lowercase;
 }
 
 .lab-loop-list {
@@ -1964,7 +2056,8 @@ body::after {
   [data-project-row="writing"]:hover .project-row-copy,
   [data-project-row="writing"]:focus-within .project-row-copy,
   [data-project-row="studies"]:hover .project-row-copy,
-  [data-project-row="studies"]:focus-within .project-row-copy {
+  [data-project-row="studies"]:focus-within .project-row-copy,
+  .lab-hover-row[data-active="true"] .project-row-copy {
     transform: none !important;
   }
 
@@ -1986,7 +2079,10 @@ body::after {
   .lab-loop-panel__control:hover,
   .lab-loop-panel__control:focus-visible,
   .lab-cursor-target:hover,
-  .lab-cursor-target:focus-visible {
+  .lab-cursor-target:focus-visible,
+  .lab-hover-row:hover .lab-hover-row__index,
+  .lab-hover-row:focus-visible .lab-hover-row__index,
+  .lab-hover-row[data-active="true"] .lab-hover-row__index {
     transform: none !important;
   }
 

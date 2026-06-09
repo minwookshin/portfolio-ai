@@ -80,48 +80,74 @@ function MotionTasteDemo() {
 
 function HoverRowDemo({ reduceMotion }: DemoProps) {
   const rows = [
-    ["atlas", "capstone in progress"],
-    ["sentinel", "48-hour native ios mvp"],
-    ["portfolio ai", "ai intake website"],
+    {
+      title: "atlas",
+      meta: "capstone in progress",
+      detail: "quiet row feedback while the project stays unavailable",
+      mark: "at",
+    },
+    {
+      title: "sentinel",
+      meta: "48-hour native ios mvp",
+      detail: "preview handoff leads the hover so the row feels connected",
+      mark: "se",
+    },
+    {
+      title: "portfolio ai",
+      meta: "ai intake website",
+      detail: "copy moves just enough to feel awake without stealing focus",
+      mark: "pa",
+    },
   ] as const;
   const [activeIndex, setActiveIndex] = useState(1);
+  const activeRow = rows[activeIndex];
 
   return (
     <div className="lab-study-stage lab-study-stage--split">
-      <div className="lab-hover-list">
-        {rows.map(([title, meta], index) => (
+      <div className="lab-hover-list" aria-label="hover row samples">
+        {rows.map((row, index) => (
           <button
-            key={title}
+            key={row.title}
             type="button"
             data-active={activeIndex === index}
+            data-project-row="studies"
+            aria-pressed={activeIndex === index}
+            aria-label={`${row.title}: ${row.meta}`}
             onMouseEnter={() => setActiveIndex(index)}
             onPointerEnter={() => setActiveIndex(index)}
             onFocus={() => setActiveIndex(index)}
             onClick={() => setActiveIndex(index)}
             className="lab-hover-row micro-focus"
           >
-            <motion.span
-              animate={reduceMotion ? undefined : { x: activeIndex === index ? 6 : 0 }}
-              transition={reduceMotion ? tweens.none : tweens.fast}
-              className="lab-hover-row__copy"
-            >
-              <span>{title}</span>
-              <span>{meta}</span>
-            </motion.span>
+            <span className="project-row-copy lab-hover-row__copy">
+              <span className="project-row-title-line--lateral lab-hover-row__title">{row.title}</span>
+              <span className="project-row-meta lab-hover-row__meta">{row.meta}</span>
+            </span>
+            <span className="lab-hover-row__index" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
           </button>
         ))}
       </div>
-      <div className="lab-hover-preview" aria-hidden="true">
+      <div className="lab-hover-preview" role="status" aria-label="active hover preview">
         <AnimatePresence initial={false}>
           <motion.div
             key={activeIndex}
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.98, filter: "blur(7px)" }}
+            initial={reduceMotion ? false : { opacity: 0, x: 6, scale: 0.985, filter: "blur(7px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            exit={reduceMotion ? undefined : { opacity: 0, scale: 0.99, filter: "blur(4px)" }}
-            transition={reduceMotion ? tweens.none : { ...tweens.fast, duration: 0.16 }}
+            exit={reduceMotion ? undefined : { opacity: 0, x: -4, scale: 0.995, filter: "blur(4px)" }}
+            transition={reduceMotion ? tweens.none : { ...tweens.fast, duration: 0.14 }}
             className="lab-hover-preview__frame"
           >
-            <span className="lab-hover-preview__mark">{rows[activeIndex][0].slice(0, 2)}</span>
+            <span className="lab-hover-preview__eyebrow">active preview</span>
+            <strong className="lab-hover-preview__title">{activeRow.title}</strong>
+            <span className="lab-hover-preview__meta">{activeRow.detail}</span>
+            <span className="lab-hover-preview__lines" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+            <span className="lab-hover-preview__mark" aria-hidden="true">{activeRow.mark}</span>
           </motion.div>
         </AnimatePresence>
       </div>
