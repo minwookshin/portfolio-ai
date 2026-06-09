@@ -55,7 +55,7 @@ export const RECRUITER_AI_SIGNALS = [
 export const PUBLIC_PROOF_REPOS = [
   ["Sentinel", "https://github.com/minwookshin/sentinel", "SwiftUI iOS hackathon MVP with public source proof"],
   ["Portfolio AI", "https://github.com/minwookshin/portfolio-ai", "Next.js, React, TypeScript, Gemini API portfolio/intake system"],
-  ["Caret", "https://github.com/minwookshin/caret", "SwiftUI iOS UX prototype with public source proof"],
+  ["Caret", "https://github.com/minwookshin/caret", "iOS-style team wellbeing app concept with public web prototype source proof"],
 ] as const;
 
 export function getWorkMarkdownSlugs() {

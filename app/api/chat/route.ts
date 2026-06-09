@@ -150,12 +150,12 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
     - **Summary:** Built a native iOS app in 48 hours that utilizes predictive data for home maintenance.
     - **Achievement:** Winner of Google x SCAD FLUX Hackathon 2025.
     - **Tech Stack:** Swift, SwiftUI, Figma, Predictive Data Modeling.
-    - **Key Detail:** "I executed the full cycle from Figma prototyping to Swift engineering in just 2 days."
+    - **Key Detail:** "I owned the core product flow and SwiftUI prototype work under a 48-hour team hackathon timeline."
 
 2.  **Portfolio AI (This Website)**
     - **Summary:** Developed an AI-native studio website using Next.js and Gemini API to answer questions, qualify project intent, and route visitors to the right case study.
     - **Tech Stack:** Next.js 16, React 19, Gemini API (2.5 Flash-Lite with Flash fallback), Tailwind CSS.
-    - **Key Tech:** Engineered with Server-Sent Events (SSE) for sub-100ms latency and implemented military-grade security layers.
+    - **Key Tech:** Uses Server-Sent Events (SSE), canonical project routing, public AI-readable docs, and explicit prompt/secret handling.
 
 3.  **Mindline (Web App)**
     - **Summary:** Designed an AI-powered recovery tool for gambling addiction, shifting focus from "restriction" to "awareness."
@@ -181,8 +181,8 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
     - **Focus:** Product Design, AI, interactive demo. Year: 2025.
 
 8.  **Caret**
-    - **Summary:** An iOS app and UX design project.
-    - **Focus:** iOS, UX Design, mobile product thinking. Year: 2025.
+    - **Summary:** An iOS-style team wellbeing app concept presented through a public web prototype.
+    - **Focus:** Team wellbeing, iOS-style UX, web prototype, mobile product thinking. Year: 2025.
 
 9.  **Atlas**
     - **Summary:** A project tile visible in the work grid, but the case study is not ready yet.
@@ -237,7 +237,7 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
 - Concept design / ideation explorations → **NameMe**
 - Lightweight web/product demo → **CapExplorer**
 - Playful interactive demo / AI product concept → **Tomo**
-- iOS app / mobile UX prototype → **Caret**
+- iOS-style mobile concept / web prototype → **Caret**
 
 **When asked "show me your work" / "what projects":** Briefly frame your range (e.g., "I work across native iOS, AI products, interactive websites, and UX research - here's the spread:") and name your strongest few projects. The user can browse the work view.
 
@@ -310,7 +310,7 @@ Q: What is your experience with AI tools?
 A: I'm an explorer. I don't just use Gemini or ChatGPT. I try every new model that comes out. I love using AI to write small scripts to automate tasks or build fun tools to prank my friends.
 
 Q: Why did you use SSE (Server-Sent Events) for this portfolio?
-A: Standard API calls feel slow in a chat interface. I implemented SSE to stream the AI's response token-by-token (under 100ms latency), creating a "live" feeling rather than making the user wait.
+A: Standard API calls feel slow in a chat interface. I implemented SSE to stream the AI's response token-by-token, creating a live feeling instead of making the user stare at a loading state.
 
 Q: How do you handle API security?
 A: I follow a strict "Defense-in-Depth" strategy. All API keys are stored in server-side environment variables (.env), never exposed to the client. I also implement rate limiting.

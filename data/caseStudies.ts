@@ -46,19 +46,19 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "split",
         eyebrow: "The build",
-        heading: "From design to code, by one person",
+        heading: "From product flow to native prototype",
         columns: [
           {
             label: "Designed in Figma",
             title: "Rapid visual prototyping",
             body:
-              "Risk-visualization interfaces designed under extreme time constraints, clarity and emotional weight for high-stakes decisions.",
+              "Risk-visualization interfaces designed under extreme time constraints, with clarity and emotional weight for high-stakes homeowner decisions.",
           },
           {
             label: "Engineered in Swift",
             title: "Native iOS implementation",
             body:
-              "A vulnerability-scoring engine in Swift + SwiftUI, fed by historical weather data to compute predictive risk scores in real time.",
+              "A SwiftUI prototype structured around dashboard, risk history, action planning, and insurance-readiness flows.",
           },
         ],
         ask: ["Why native Swift over React Native?", "How do you go from Figma to code?"],
@@ -94,7 +94,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Winner · 1st place",
         heading: "Outcome",
         body: [
-          "Shipped a fully functional iOS MVP in a 48-hour sprint, validating predictive maintenance through real climate-data integration and user testing.",
+          "Shipped a native iOS MVP in a 48-hour team sprint, validating predictive maintenance through risk-signal integration and prototype testing.",
           "Won 1st place at the Google × SCAD FLUX Hackathon 2025, proof that climate-risk analytics can be turned into a usable, native homeowner tool, fast.",
         ],
       },
@@ -149,10 +149,31 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "stats",
-        eyebrow: "Studio proof",
-        heading: "What this demonstrates",
+        eyebrow: "Verification proof",
+        heading: "Public repo proof that the site builds",
         items: [
-          { value: "8", label: "Work examples" },
+          { value: "20", label: "Tests passing" },
+          { value: "59", label: "Static pages generated" },
+          { value: "7", label: "AI-readable proof routes" },
+        ],
+      },
+      {
+        kind: "split",
+        eyebrow: "Technical architecture",
+        heading: "A portfolio that exposes proof in human and machine-readable forms",
+        columns: [
+          {
+            label: "Route system",
+            title: "Visible pages and structured docs share the same source",
+            body:
+              "Project data feeds case studies, markdown routes, resume JSON, llms.txt, and the design-system proof so recruiters, engineers, and AI readers see consistent evidence.",
+          },
+          {
+            label: "AI layer",
+            title: "Streaming chat stays tied to deterministic project proof",
+            body:
+              "The Gemini route can answer questions, stream responses, and point visitors to canonical project pages without inventing outcomes or private repository links.",
+          },
         ],
       },
       {
@@ -318,7 +339,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "links",
         items: [
-          { label: "View live site", href: "https://www.scadflux.com/fluxathon" },
+          { label: "View live site", href: "https://www.scadflux.com" },
         ],
       },
       {
@@ -374,8 +395,8 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "Caret",
-        subtitle: "An iOS app and UX design project.",
-        tags: ["iOS", "UX Design"],
+        subtitle: "An iOS-style team wellbeing app concept presented through a public web prototype.",
+        tags: ["Team Wellbeing", "iOS-style UX", "Web Prototype"],
       },
       {
         kind: "links",
