@@ -598,53 +598,54 @@ body::after {
 
 .studio-video-player > video {
   display: block;
+  cursor: pointer;
 }
 
 .studio-video-controls {
   position: absolute;
   z-index: 2;
   left: 50%;
-  bottom: var(--space-2);
+  bottom: 0.75rem;
   display: grid;
-  grid-template-columns: auto auto minmax(88px, 1fr) auto auto;
+  grid-template-columns: auto minmax(96px, 1fr) auto auto;
   align-items: center;
-  width: min(calc(100% - var(--space-3) * 2), 430px);
-  min-height: 38px;
-  gap: 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: min(calc(100% - var(--space-3) * 2), 390px);
+  min-height: 32px;
+  gap: 0.48rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--md-shape-full);
-  background: rgba(18, 18, 20, 0.72);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow:
-    0 12px 34px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  color: #fff;
+    0 8px 18px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  color: var(--text-primary);
   opacity: 0;
-  padding: 0.42rem 0.55rem;
+  padding: 0.26rem 0.38rem;
   pointer-events: none;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(4px);
   transition:
-    opacity var(--motion-duration-base) var(--motion-ease-standard),
-    transform var(--motion-duration-base) var(--motion-ease-standard);
-  -webkit-backdrop-filter: blur(18px) saturate(1.45);
-  backdrop-filter: blur(18px) saturate(1.45);
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+  backdrop-filter: blur(10px) saturate(1.08);
 }
 
 .studio-video-player:hover .studio-video-controls,
 .studio-video-player:focus-within .studio-video-controls {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateX(-50%) translateY(0);
 }
 
 .studio-video-control-button {
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   flex: 0 0 auto;
   place-items: center;
   border: 0;
   border-radius: var(--md-shape-full);
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.035);
   color: currentColor;
   transition:
     background-color var(--motion-duration-fast) var(--motion-ease-standard),
@@ -653,7 +654,7 @@ body::after {
 
 .studio-video-control-button:hover,
 .studio-video-control-button:focus-visible {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.075);
 }
 
 .studio-video-control-button:active {
@@ -661,8 +662,8 @@ body::after {
 }
 
 .studio-video-control-button svg {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 }
 
 .studio-video-control-button svg[data-lucide="play"] {
@@ -672,17 +673,17 @@ body::after {
 .studio-video-pause-glyph {
   display: inline-grid;
   grid-template-columns: repeat(2, 1px);
-  gap: 4px;
+  gap: 3px;
   align-items: center;
   justify-content: center;
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
 }
 
 .studio-video-pause-glyph span {
   display: block;
   width: 1px;
-  height: 11px;
+  height: 10px;
   border-radius: var(--md-shape-full);
   background: currentColor;
 }
@@ -691,16 +692,17 @@ body::after {
   .studio-video-controls {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
 .studio-video-time {
-  min-width: 2.2rem;
-  color: rgba(255, 255, 255, 0.78);
+  min-width: 4.7rem;
+  color: rgba(0, 0, 0, 0.54);
   font-size: calc(var(--type-0) - 4px);
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  text-align: right;
   white-space: nowrap;
 }
 
@@ -708,7 +710,7 @@ body::after {
   --video-progress: 0%;
   min-width: 0;
   width: 100%;
-  height: 18px;
+  height: 16px;
   appearance: none;
   background: transparent;
   cursor: pointer;
@@ -720,48 +722,48 @@ body::after {
 }
 
 .studio-video-timeline::-webkit-slider-runnable-track {
-  height: 3px;
+  height: 2px;
   border-radius: var(--md-shape-full);
   background:
     linear-gradient(
       to right,
-      #fff 0%,
-      #fff var(--video-progress),
-      rgba(255, 255, 255, 0.28) var(--video-progress),
-      rgba(255, 255, 255, 0.28) 100%
+      var(--text-primary) 0%,
+      var(--text-primary) var(--video-progress),
+      var(--bg-element) var(--video-progress),
+      var(--bg-element) 100%
     );
 }
 
 .studio-video-timeline::-webkit-slider-thumb {
-  width: 11px;
-  height: 11px;
-  margin-top: -4px;
+  width: 8px;
+  height: 8px;
+  margin-top: -3px;
   appearance: none;
-  border: 0;
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: var(--md-shape-full);
-  background: #fff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
+  background: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
 }
 
 .studio-video-timeline::-moz-range-track {
-  height: 3px;
+  height: 2px;
   border-radius: var(--md-shape-full);
-  background: rgba(255, 255, 255, 0.28);
+  background: var(--bg-element);
 }
 
 .studio-video-timeline::-moz-range-progress {
-  height: 3px;
+  height: 2px;
   border-radius: var(--md-shape-full);
-  background: #fff;
+  background: var(--text-primary);
 }
 
 .studio-video-timeline::-moz-range-thumb {
-  width: 11px;
-  height: 11px;
-  border: 0;
+  width: 8px;
+  height: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: var(--md-shape-full);
-  background: #fff;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
+  background: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
 }
 
 .micro-pressable {
@@ -2465,11 +2467,7 @@ body::after {
     gap: 0.45rem;
   }
 
-  .studio-video-controls .studio-video-time:first-of-type {
-    display: none;
-  }
-
   .studio-video-time {
-    min-width: 2rem;
+    min-width: 4.4rem;
   }
 }

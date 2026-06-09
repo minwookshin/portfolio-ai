@@ -137,6 +137,7 @@ export default function StudioVideoPlayer({
         preload={preload}
         poster={poster}
         className={videoClassName}
+        onClick={togglePlayback}
         onEnded={syncVideoState}
         onLoadedMetadata={syncVideoState}
         onPause={syncVideoState}
@@ -157,7 +158,6 @@ export default function StudioVideoPlayer({
           {isPlaying ? <PauseGlyph /> : <Play aria-hidden="true" strokeWidth={1.7} />}
         </button>
 
-        <span className="studio-video-time">{formatVideoTime(currentTime)}</span>
         <label className="sr-only" htmlFor={timelineId}>
           {label} timeline
         </label>
@@ -173,7 +173,9 @@ export default function StudioVideoPlayer({
           className="studio-video-timeline"
           style={timelineStyle}
         />
-        <span className="studio-video-time">{formatVideoTime(duration)}</span>
+        <span className="studio-video-time">
+          {formatVideoTime(currentTime)} / {formatVideoTime(duration)}
+        </span>
 
         <button
           type="button"
