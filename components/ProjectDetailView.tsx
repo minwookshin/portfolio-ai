@@ -7,6 +7,7 @@ import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { ArrowLeft as ArrowBackIcon } from "lucide-react";
 import { Project } from "./ProjectCard";
+import StudioVideoPlayer from "./StudioVideoPlayer";
 import { CaseStudy } from "./detail/CaseStudy";
 import type { DetailSection } from "./detail/CaseStudy";
 import { getCaseStudy } from "@/data/caseStudies";
@@ -58,19 +59,17 @@ function ProjectHeroMedia({
 
   if (video) {
     return (
-      <div className="studio-detail-hero-media">
-        <video
-          autoPlay={!reduceMotion}
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          poster={makeVideoPosterDataUrl(proof.demo?.label ?? project.title)}
-          className="block w-full bg-[var(--bg-element)]"
-        >
-          <source src={video} type="video/mp4" />
-        </video>
-      </div>
+      <StudioVideoPlayer
+        autoPlay={!reduceMotion}
+        loop
+        muted
+        src={video}
+        label={`${project.title} demo`}
+        preload="metadata"
+        poster={makeVideoPosterDataUrl(proof.demo?.label ?? project.title)}
+        className="studio-detail-hero-media"
+        videoClassName="block w-full bg-[var(--bg-element)]"
+      />
     );
   }
 

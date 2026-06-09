@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import LabStudyDetailView from "@/components/LabStudyDetailView";
+import StudioVideoPlayer from "@/components/StudioVideoPlayer";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { PROJECT_PREVIEW_VIDEOS, isLabStudyProject, isVisibleBuilderValue } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
@@ -73,23 +74,23 @@ export default function LabProjectDetailView({ project }: { project: PortfolioPr
       transition={reduceMotion ? tweens.none : tweens.base}
       className="studio-lab-detail"
     >
-      <div className="studio-lab-detail-media">
-        {videoSrc && !reduceMotion ? (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster={makeVideoPosterDataUrl(project.title)}
-            className="h-full w-full object-contain"
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </video>
-        ) : (
+      {videoSrc ? (
+        <StudioVideoPlayer
+          autoPlay={!reduceMotion}
+          loop
+          muted
+          src={videoSrc}
+          label={`${project.title} demo`}
+          preload="metadata"
+          poster={makeVideoPosterDataUrl(project.title)}
+          className="studio-lab-detail-media"
+          videoClassName="h-full w-full object-contain"
+        />
+      ) : (
+        <div className="studio-lab-detail-media">
           <LabFallbackMedia project={project} />
-        )}
-      </div>
+        </div>
+      )}
 
       <section className="border-t border-[var(--border-light)] pt-[var(--space-3)]">
         <h1 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
