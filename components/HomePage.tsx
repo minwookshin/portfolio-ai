@@ -718,17 +718,9 @@ function StudyPreviewContent({
   if (item.kind === "lab") {
     if (isLabStudyProject(item.project)) {
       return (
-        <div className="study-preview-glyph-card">
+        <div className="study-preview-glyph-card" aria-hidden="true">
           <div className="study-preview-glyph-stage">
-            <LabStudyTileVisual kind={item.project.labStudy.kind} />
-          </div>
-          <div className="study-preview-glyph-copy">
-            <p className="study-preview-glyph-title">{item.title}</p>
-            <StudyMetaLine
-              label={item.label}
-              meta={item.meta}
-              className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2]"
-            />
+            <LabStudyTileVisual className="lab-study-tile-visual--preview" kind={item.project.labStudy.kind} />
           </div>
         </div>
       );
@@ -738,24 +730,12 @@ function StudyPreviewContent({
   }
 
   return (
-    <div className="flex h-full w-full flex-col justify-between bg-[var(--bg-base)] p-[var(--space-3)]">
-      <div className="space-y-2" aria-hidden="true">
-        <span className="block h-px w-full bg-[var(--border-light)]" />
-        <span className="block h-px w-2/3 bg-[var(--border-light)]" />
-      </div>
-      <div>
-        <p className="max-w-[18rem] text-[length:var(--type-0)] leading-[var(--leading-tight)] text-[var(--text-primary)]">
-          {item.title}
-        </p>
-        <StudyMetaLine
-          label={item.label}
-          meta={item.meta}
-          className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2]"
-        />
-        <p className="mt-[var(--space-1)] max-w-[18rem] text-[length:calc(var(--type-0)_-_2px)] leading-[1.35] text-[var(--text-muted)]">
-          {item.description}
-        </p>
-      </div>
+    <div className="study-preview-writing-card" aria-hidden="true">
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
     </div>
   );
 }
