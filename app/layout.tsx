@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
+import { Geist_Mono } from "next/font/google";
 import AnimatedCursor from "@/components/AnimatedCursor";
 import StructuredData from "@/components/StructuredData";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, rootJsonLd } from "@/lib/seo";
 import "@carrot-kpi/switzer-font/latin.css";
 import "./globals.css";
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -62,7 +69,7 @@ export default function RootLayout({
         <link rel="alternate" type="text/markdown" href="/portfolio.md" title="AI-readable portfolio summary" />
         <link rel="alternate" type="application/json" href="/resume.json" title="Machine-readable resume" />
       </head>
-      <body>
+      <body className={geistMono.variable}>
         <StructuredData data={rootJsonLd()} />
         {children}
         <AnimatedCursor />

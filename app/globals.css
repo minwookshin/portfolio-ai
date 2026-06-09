@@ -10,6 +10,7 @@
   --text-muted: #A1A1AA;
   --text-underline-muted: #F4F4F5;
   --font-sans: "Switzer", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Geist Mono", "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
   /* Embedded Dark Mode (For Project Cards/Code Blocks) */
   --dark-bg-base: #08090A;
@@ -910,17 +911,27 @@ body::after {
 
 .lab-inline-code {
   display: inline;
-  margin-inline: 0.06em;
-  border: 1px solid var(--border-light);
-  border-radius: var(--md-shape-sm);
-  background: var(--bg-element);
-  padding: 0.06em 0.34em 0.1em;
+  margin-inline: 0.08em;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 8%, transparent);
+  border-radius: calc(var(--md-shape-sm) + 2px);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-surface) 84%, transparent),
+      color-mix(in srgb, var(--bg-element) 72%, transparent)
+    );
+  padding: 0.08em 0.36em 0.12em;
   color: var(--text-primary);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 0.86em;
-  line-height: 1;
+  font-family: var(--font-mono);
+  font-size: 0.84em;
+  line-height: 1.12;
   text-transform: none !important;
   white-space: break-spaces;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--bg-surface) 88%, transparent),
+    0 1px 2px color-mix(in srgb, var(--text-primary) 5%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+  backdrop-filter: blur(10px) saturate(1.08);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -1704,15 +1715,24 @@ body::after {
 .lab-study-code {
   position: relative;
   overflow-x: auto;
-  border: 1px solid var(--border-light);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 8%, transparent);
   border-radius: var(--md-shape-lg);
-  background: var(--bg-element);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-surface) 82%, transparent),
+      color-mix(in srgb, var(--bg-element) 68%, transparent)
+    );
   padding: calc(var(--space-2) + 0.25rem) var(--space-3);
   color: var(--text-primary);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--font-mono);
   font-size: var(--type--1);
   line-height: 1.65;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--bg-surface) 88%, transparent),
+    0 10px 30px color-mix(in srgb, var(--text-primary) 4%, transparent);
+  -webkit-backdrop-filter: blur(12px) saturate(1.08);
+  backdrop-filter: blur(12px) saturate(1.08);
   text-transform: none !important;
   tab-size: 2;
   white-space: pre;

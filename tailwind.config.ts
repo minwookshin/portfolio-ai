@@ -44,7 +44,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
-        mono: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
       },
       fontSize: {
         "step--2": ["var(--type--2)", { lineHeight: "var(--leading-body)" }],
