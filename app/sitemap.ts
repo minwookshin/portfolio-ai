@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { MAIN_PROJECTS, getLabProjectPath, getLabProjects, getProjectPath, isLabProject } from "@/data/projects";
 import { getStudyMarkdownSlugs, getWorkMarkdownSlugs } from "@/lib/aiPortfolio";
+import { DESIGN_SYSTEM_PATHS } from "@/lib/designSystemProof";
 import { absoluteUrl } from "@/lib/seo";
 import { getWritingPosts } from "@/lib/writing";
 
@@ -59,6 +60,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.55,
+    },
+    {
+      url: absoluteUrl(DESIGN_SYSTEM_PATHS.page),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: absoluteUrl(DESIGN_SYSTEM_PATHS.markdown),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: absoluteUrl(DESIGN_SYSTEM_PATHS.tokens),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.45,
     },
     ...workProjects.map((project) => ({
       url: absoluteUrl(getProjectPath(project)),

@@ -153,6 +153,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       scope: [
         { label: "Build time", value: "2 weeks" },
         { label: "API integrations", value: "Gemini API, Vercel server routes" },
+        { label: "System proof", value: "Tokens, components, AI-readable docs", note: "/design-system" },
       ],
       results: [
         { label: "Actual", value: "Live production site" },
