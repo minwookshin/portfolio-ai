@@ -113,9 +113,8 @@ export function projectJsonLd(project: PortfolioProject, path: string) {
   const url = absoluteUrl(path);
   const image = toAbsoluteUrl(project.image ?? project.icon);
   const workExample = toAbsoluteUrl(project.builder.demo?.href ?? project.builder.demo?.video);
-
-  return {
-    "@context": "https://schema.org",
+  const sameAs = [project.github, project.linkedin, project.link].filter((value): value is string => Boolean(value));
+  const creativeWork = {
     "@type": "CreativeWork",
     "@id": `${url}#creative-work`,
     url,
@@ -128,7 +127,27 @@ export function projectJsonLd(project: PortfolioProject, path: string) {
     keywords: project.tags,
     about: project.categories,
     workExample,
+    sameAs: sameAs.length > 0 ? sameAs : undefined,
     isPartOf: { "@id": WEBSITE_ID },
+  };
+  const sourceCode = project.github
+    ? {
+        "@type": "SoftwareSourceCode",
+        "@id": `${url}#source-code`,
+        url: project.github,
+        name: `${project.title} source code`,
+        description: `Public source-code proof for ${project.title}.`,
+        codeRepository: project.github,
+        programmingLanguage: project.builder.stack,
+        creator: { "@id": PERSON_ID },
+        author: { "@id": PERSON_ID },
+        isPartOf: { "@id": `${url}#creative-work` },
+      }
+    : null;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [creativeWork, sourceCode].filter(Boolean),
   };
 }
 
