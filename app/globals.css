@@ -950,18 +950,20 @@ body::after {
 }
 
 .lab-inline-code {
-  display: inline-flex;
-  align-items: center;
-  margin-inline: 0.08em;
+  display: inline;
+  margin-inline: 0.06em;
+  border: 1px solid var(--border-light);
   border-radius: var(--md-shape-sm);
   background: var(--bg-element);
-  padding: 0.04rem 0.32rem 0.08rem;
+  padding: 0.06em 0.34em 0.1em;
   color: var(--text-primary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-size: 0.86em;
-  line-height: 1.2;
+  line-height: 1;
   text-transform: none !important;
-  white-space: nowrap;
+  white-space: break-spaces;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 .lab-study-point-list,
@@ -1743,13 +1745,15 @@ body::after {
 .lab-study-code {
   position: relative;
   overflow-x: auto;
-  border-radius: var(--md-shape-sm);
-  background: var(--bg-surface);
-  padding: var(--space-3);
+  border: 1px solid var(--border-light);
+  border-radius: var(--md-shape-lg);
+  background: var(--bg-element);
+  padding: calc(var(--space-2) + 0.25rem) var(--space-3);
   color: var(--text-primary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-size: var(--type--1);
   line-height: 1.65;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
   text-transform: none !important;
   tab-size: 2;
   white-space: pre;
