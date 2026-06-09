@@ -21,6 +21,10 @@ describe("LabStudyDetailView interactions", () => {
     vi.useFakeTimers();
     render(<LabStudyDetailView project={getStudyProject("motion-taste-system")} />);
 
+    expect(screen.getByText("160ms")).toBeInTheDocument();
+    expect(screen.getByText("1200ms")).toBeInTheDocument();
+    expect(screen.getByText("120-180ms")).toBeInTheDocument();
+
     const sample = screen.getByRole("button", { name: "hold to commit motion sample" });
     expect(sample).toHaveAttribute("data-state", "idle");
     expect(screen.getByRole("status")).toHaveTextContent("waiting for sustained input");
@@ -47,6 +51,9 @@ describe("LabStudyDetailView interactions", () => {
     const user = userEvent.setup();
     render(<LabStudyDetailView project={getStudyProject("hover-row-study")} />);
     const preview = screen.getByRole("status", { name: "active hover preview" });
+
+    expect(screen.getByText("6px")).toBeInTheDocument();
+    expect(screen.getByText("140ms")).toBeInTheDocument();
 
     expect(preview).toHaveTextContent("sentinel");
     expect(preview).toHaveTextContent("preview handoff leads the hover");
@@ -78,6 +85,7 @@ describe("LabStudyDetailView interactions", () => {
     expect(screen.getByText("hover row study")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "studies" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText("minwook shin")).toBeInTheDocument();
+    expect(screen.getByText("180ms")).toBeInTheDocument();
   });
 
   it("activates cursor study targets with pointer, focus, and click", async () => {
