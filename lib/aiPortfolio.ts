@@ -55,7 +55,7 @@ export const RECRUITER_AI_SIGNALS = [
 export const PUBLIC_PROOF_REPOS = [
   ["Sentinel", "https://github.com/minwookshin/sentinel", "SwiftUI iOS hackathon MVP with public source proof"],
   ["Portfolio AI", "https://github.com/minwookshin/portfolio-ai", "Next.js, React, TypeScript, Gemini API portfolio/intake system"],
-  ["Caret", "https://github.com/minwookshin/caret", "SwiftUI iOS UX prototype with public source proof"],
+  ["Caret", "https://github.com/minwookshin/caret", "iOS-style team wellbeing web prototype with public source proof"],
 ] as const;
 
 export function getWorkMarkdownSlugs() {
@@ -196,7 +196,7 @@ export function generatePortfolioMarkdown() {
     ...selectedWork.flatMap((project) => projectSection(project, getProjectPath(project))),
     "",
     "## In preparation",
-    ...inPreparation.flatMap((project) => projectSection(project, getProjectPath(project))),
+    ...inPreparation.flatMap(inPreparationSection),
     "",
     "## Studies and prototypes",
     ...labProjects.flatMap((project) => projectSection(project, getLabProjectPath(project))),
@@ -250,7 +250,7 @@ export function generateResumeJson() {
       studiesMarkdown: getStudyMarkdownSlugs().map((slug) => absoluteUrl(`/studies/${slug}.md`)),
     },
     selectedWork: selectedWork.map((project) => projectJson(project, getProjectPath(project))),
-    inPreparation: inPreparation.map((project) => projectJson(project, getProjectPath(project))),
+    inPreparation: inPreparation.map((project) => projectJson(project)),
     studiesAndPrototypes: labProjects.map((project) => projectJson(project, getLabProjectPath(project))),
     writing: writingPosts.map((post) => ({
       title: post.title,
@@ -313,6 +313,20 @@ function projectSection(project: PortfolioProject, path: string) {
     project.github ? `- GitHub: ${project.github}` : null,
     project.linkedin ? `- LinkedIn: ${project.linkedin}` : null,
     project.link ? `- Live link: ${project.link}` : null,
+    "",
+  ].filter((line): line is string => Boolean(line));
+}
+
+function inPreparationSection(project: PortfolioProject) {
+  return [
+    `### ${project.title}`,
+    "- URL: not public yet",
+    `- Type: ${projectType(project)}`,
+    `- Role: ${cleanText(project.builder.role || project.role || PERSONAL_INFO.title)}`,
+    `- Summary: ${getProjectMetadataDescription(project)}`,
+    project.builder.stack.length > 0 ? `- Stack: ${project.builder.stack.map(cleanText).join(", ")}` : null,
+    project.studioLabel ? `- Label: ${cleanText(project.studioLabel)}` : null,
+    project.tags.length > 0 ? `- Tags: ${project.tags.map(cleanText).join(", ")}` : null,
     "",
   ].filter((line): line is string => Boolean(line));
 }
@@ -390,13 +404,14 @@ function writingMarkdown(post: WritingPost) {
   ].filter((line): line is string => Boolean(line)));
 }
 
-function projectJson(project: PortfolioProject, path: string) {
+function projectJson(project: PortfolioProject, path?: string) {
   const categories = project.categories ?? [];
+  const pageUrl = path ? absoluteUrl(path) : null;
 
   return {
     title: project.title,
-    url: absoluteUrl(path),
-    markdownUrl: project.comingSoon ? null : absoluteUrl(`${path}.md`),
+    url: pageUrl,
+    markdownUrl: project.comingSoon || !path ? null : absoluteUrl(`${path}.md`),
     type: projectType(project),
     role: cleanText(project.builder.role || project.role || PERSONAL_INFO.title),
     summary: getProjectMetadataDescription(project),

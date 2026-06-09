@@ -318,7 +318,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "links",
         items: [
-          { label: "View live site", href: "https://www.scadflux.com/fluxathon" },
+          { label: "View live site", href: "https://www.scadflux.com" },
         ],
       },
       {
@@ -374,8 +374,8 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "Caret",
-        subtitle: "An iOS app and UX design project.",
-        tags: ["iOS", "UX Design"],
+        subtitle: "An iOS-style team wellbeing app concept presented through a public web prototype.",
+        tags: ["Team Wellbeing", "iOS-style UX", "Web Prototype"],
       },
       {
         kind: "links",

@@ -181,8 +181,8 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
     - **Focus:** Product Design, AI, interactive demo. Year: 2025.
 
 8.  **Caret**
-    - **Summary:** An iOS app and UX design project.
-    - **Focus:** iOS, UX Design, mobile product thinking. Year: 2025.
+    - **Summary:** An iOS-style team wellbeing app concept presented through a public web prototype.
+    - **Focus:** team wellbeing, iOS-style UX, public web prototype. Year: 2025.
 
 9.  **Atlas**
     - **Summary:** A project tile visible in the work grid, but the case study is not ready yet.
@@ -237,7 +237,7 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
 - Concept design / ideation explorations → **NameMe**
 - Lightweight web/product demo → **CapExplorer**
 - Playful interactive demo / AI product concept → **Tomo**
-- iOS app / mobile UX prototype → **Caret**
+- Team wellbeing / iOS-style UX / public web prototype → **Caret**
 
 **When asked "show me your work" / "what projects":** Briefly frame your range (e.g., "I work across native iOS, AI products, interactive websites, and UX research - here's the spread:") and name your strongest few projects. The user can browse the work view.
 
