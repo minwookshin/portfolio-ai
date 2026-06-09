@@ -60,6 +60,7 @@ export default function RootLayout({
       <head>
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable portfolio guide" />
         <link rel="alternate" type="text/markdown" href="/portfolio.md" title="AI-readable portfolio summary" />
+        <link rel="alternate" type="application/json" href="/resume.json" title="Machine-readable resume" />
       </head>
       <body>
         <StructuredData data={rootJsonLd()} />
