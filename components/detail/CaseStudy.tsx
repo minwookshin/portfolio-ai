@@ -11,7 +11,7 @@ import StudioVideoPlayer from "@/components/StudioVideoPlayer";
  * Data-driven case-study renderer. A project's detail page is described as an
  * ordered array of `DetailSection`s; each kind picks the layout that suits that
  * content. The visual language follows the homepage: tight type, monochrome
- * text, quiet rules, and thin white surfaces only where structure needs them.
+ * text, quiet spacing, and thin white surfaces only where structure needs them.
  */
 
 export type DetailSection = ({
@@ -206,7 +206,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
             <div className={`${card} px-[var(--space-2)] py-[var(--space-2)] md:col-span-3`}>
               <p className={bodyCls}>{section.body}</p>
               {problemStats.length > 0 && (
-                <div className="mt-[var(--space-3)] grid grid-cols-2 gap-[var(--space-3)] border-t border-[var(--border-light)] pt-[var(--space-3)]">
+                <div className="mt-[var(--space-3)] grid grid-cols-2 gap-[var(--space-3)]">
                   {problemStats.map((s) => (
                     <div key={s.label}>
                       <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.value}</p>
@@ -221,7 +221,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                 <p className={`${eyebrowCls} mb-[var(--space-2)]`}>Target user</p>
                 <h3 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{section.persona.name}</h3>
                 <p className="mb-[var(--space-2)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{section.persona.role}</p>
-                <div className="space-y-[var(--space-2)] border-t border-[var(--border-light)] pt-[var(--space-2)]">
+                <div className="space-y-[var(--space-2)]">
                   {section.persona.points.map((p) => (
                     <div key={p} className="flex items-start gap-[var(--space-1)]">
                       <Dot />
@@ -292,22 +292,19 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
-          <div className="relative pl-8">
-            <div className="absolute left-[11px] top-2 bottom-2 w-px bg-[var(--border-light)]" />
-            <div className="space-y-[var(--space-2)]">
-              {section.steps.map((s, si) => (
-                <div key={s.title} className="relative">
-                  <span className="absolute -left-8 top-0 flex h-6 w-6 items-center justify-center border border-[var(--border-light)] bg-[var(--bg-surface)] text-[length:calc(var(--type-0)_-_2px)] font-normal leading-none text-[var(--text-muted)]">
-                    {si + 1}
-                  </span>
-                  <div className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
-                    {s.tag && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{s.tag}</p>}
-                    <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.title}</h3>
-                    <p className={bodyCls}>{s.body}</p>
-                  </div>
+          <div className="space-y-[var(--space-3)]">
+            {section.steps.map((s, si) => (
+              <div key={s.title} className="max-w-[var(--measure)]">
+                <div className="mb-[var(--space-1)] flex flex-wrap items-center gap-x-[var(--space-1)] gap-y-1">
+                  <p className={eyebrowCls}>{String(si + 1).padStart(2, "0")}</p>
+                  {s.tag && <p className={eyebrowCls}>{s.tag}</p>}
                 </div>
-              ))}
-            </div>
+                <div>
+                  <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.title}</h3>
+                  <p className={bodyCls}>{s.body}</p>
+                </div>
+              </div>
+            ))}
           </div>
           {section.note && <p className={`${bodyCls} mt-[var(--space-3)]`}>{section.note}</p>}
         </motion.section>
@@ -316,7 +313,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
     case "quote":
       return (
         <motion.section key={i} {...sectionMotion}>
-          <blockquote className="border-l border-[var(--border-light)] pl-[var(--space-2)]">
+          <blockquote className="max-w-[var(--measure)]">
             <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{section.text}</p>
             {section.attribution && <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{section.attribution}</p>}
           </blockquote>
@@ -450,7 +447,7 @@ export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: st
 
       {/* Outro: loop back into the conversation */}
       {onAsk && data.ask && data.ask.length > 0 && (
-        <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="border-t border-[var(--border-light)] pt-[var(--space-4)]" reduceMotion={reduceMotion} />
+        <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="pt-[var(--space-1)]" reduceMotion={reduceMotion} />
       )}
     </div>
   );

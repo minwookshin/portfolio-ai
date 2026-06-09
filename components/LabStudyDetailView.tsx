@@ -679,17 +679,20 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
           <h2 className="lab-study-section-heading">
             rules
           </h2>
-          <dl className="lab-study-rule-list">
+          <div className="lab-study-rule-list" aria-label="rules">
             {study.rules.map((rule) => (
-              <div key={rule.label} className="lab-study-rule-item">
-                <dt>{rule.label}</dt>
-                <dd>
-                  <span>{renderInlineStudyText(rule.value)}</span>
-                  {rule.note && <span>{renderInlineStudyText(rule.note)}</span>}
-                </dd>
-              </div>
+              <p key={rule.label} className="lab-study-rule-item">
+                <span className="lab-study-rule-label">{rule.label}</span>{" "}
+                <span className="lab-study-rule-value">{renderInlineStudyText(rule.value)}</span>
+                {rule.note && (
+                  <>
+                    {" "}
+                    <span className="lab-study-rule-note">{renderInlineStudyText(rule.note)}</span>
+                  </>
+                )}
+              </p>
             ))}
-          </dl>
+          </div>
         </div>
       </section>
 

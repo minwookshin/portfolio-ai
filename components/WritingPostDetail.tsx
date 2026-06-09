@@ -41,7 +41,7 @@ export default function WritingPostDetail({ post }: { post: WritingPost }) {
       </div>
 
       {relatedWork.length > 0 && (
-        <aside className="mt-[var(--space-5)] border-t border-[var(--border-light)] pt-[var(--space-3)]">
+        <aside className="mt-[var(--space-5)]">
           <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
             related work
           </p>

@@ -250,7 +250,7 @@ function LabProjectTile({
   const shouldContainPreview = project.slug ? FULL_FRAME_LAB_PREVIEWS.has(project.slug) : false;
   const mediaFitClassName = shouldContainPreview ? "object-contain bg-white" : "object-cover";
   const overlayClassName = isStudy
-    ? "border-t border-[var(--border-light)] bg-[var(--bg-surface)]"
+    ? "bg-[var(--bg-surface)]"
     : "bg-gradient-to-t from-black/70 via-black/24 to-transparent opacity-90 group-hover:opacity-100 group-focus-within:opacity-100";
   const titleColorClassName = isStudy ? "text-[var(--text-primary)]" : "text-white";
   const metaColorClassName = isStudy ? "text-[var(--text-muted)]" : "text-white/70";

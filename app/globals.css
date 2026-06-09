@@ -483,8 +483,7 @@ body::after {
 }
 
 .studio-detail-nav {
-  border-bottom: 1px solid var(--studio-detail-rule);
-  padding-bottom: var(--space-2);
+  padding-bottom: 0;
 }
 
 .studio-detail-body {
@@ -515,7 +514,6 @@ body::after {
 }
 
 .studio-detail-panel {
-  border-top: 1px solid var(--studio-detail-rule);
   background: transparent;
 }
 
@@ -936,34 +934,27 @@ body::after {
 }
 
 .lab-study-rule-item {
-  display: grid;
-  grid-template-columns: minmax(5.5rem, 0.38fr) minmax(0, 1fr);
+  margin: 0;
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.lab-study-rule-list {
   gap: var(--space-2);
 }
 
-.lab-study-rule-item dt {
-  color: var(--text-muted);
-  font-size: calc(var(--type-0) - 2px);
-  line-height: 1.2;
-}
-
-.lab-study-rule-item dd {
-  display: grid;
-  gap: var(--space-1);
-  margin: 0;
-  min-width: 0;
-}
-
-.lab-study-rule-item dd span:first-child {
+.lab-study-rule-label,
+.lab-study-rule-value {
   color: var(--text-primary);
-  font-size: var(--type-0);
-  line-height: var(--leading-body);
 }
 
-.lab-study-rule-item dd span:last-child:not(:first-child) {
+.lab-study-rule-label::after {
+  content: ":";
+}
+
+.lab-study-rule-note {
   color: var(--text-muted);
-  font-size: calc(var(--type-0) - 2px);
-  line-height: var(--leading-body);
 }
 
 .lab-study-stage {
@@ -2329,11 +2320,6 @@ body::after {
 }
 
 @media (max-width: 640px) {
-  .lab-study-rule-item {
-    grid-template-columns: 1fr;
-    gap: var(--space-1);
-  }
-
   .lab-study-stage--split {
     grid-template-columns: 1fr;
   }

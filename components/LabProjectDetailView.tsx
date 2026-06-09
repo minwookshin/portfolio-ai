@@ -92,7 +92,7 @@ export default function LabProjectDetailView({ project }: { project: PortfolioPr
         </div>
       )}
 
-      <section className="border-t border-[var(--border-light)] pt-[var(--space-3)]">
+      <section>
         <h1 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
           {project.title}
         </h1>
