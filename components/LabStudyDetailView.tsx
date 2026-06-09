@@ -1,8 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
-import type { PointerEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { KeyboardEvent, PointerEvent } from "react";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
 import { motionEasings, tweens } from "@/lib/material/motion";
 
@@ -21,6 +21,7 @@ const detailLabels: Record<LabStudy["kind"], string> = {
 
 const cursorGlyphPath =
   "M1.18 0.95C0.7 0.68 0.14 1.1 0.28 1.66L3.1 13.42C3.29 14.22 4.35 14.38 4.77 13.68L6.28 11.04C6.54 10.59 6.96 10.29 7.46 10.18L12.74 9.08C13.52 8.92 13.7 7.93 13.02 7.55L1.18 0.95Z";
+const HOLD_TO_COMMIT_MS = 1200;
 
 function StudyButton({
   active = false,
@@ -45,35 +46,102 @@ function StudyButton({
 }
 
 function MotionTasteDemo() {
-  const [active, setActive] = useState(false);
+  const [holdState, setHoldState] = useState<"idle" | "holding" | "complete">("idle");
+  const completionTimer = useRef<number | null>(null);
+
+  const clearCompletionTimer = useCallback(() => {
+    if (completionTimer.current === null) return;
+    window.clearTimeout(completionTimer.current);
+    completionTimer.current = null;
+  }, []);
+
+  const startHold = useCallback(() => {
+    clearCompletionTimer();
+    setHoldState("holding");
+    completionTimer.current = window.setTimeout(() => {
+      completionTimer.current = null;
+      setHoldState("complete");
+    }, HOLD_TO_COMMIT_MS);
+  }, [clearCompletionTimer]);
+
+  const cancelHold = useCallback(() => {
+    clearCompletionTimer();
+    setHoldState((current) => (current === "complete" ? current : "idle"));
+  }, [clearCompletionTimer]);
+
+  const resetHold = useCallback(() => {
+    clearCompletionTimer();
+    setHoldState("idle");
+  }, [clearCompletionTimer]);
+
+  useEffect(() => clearCompletionTimer, [clearCompletionTimer]);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    event.preventDefault();
+    if (holdState !== "holding") startHold();
+  };
+
+  const handleKeyUp = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    event.preventDefault();
+    cancelHold();
+  };
+
+  const label =
+    holdState === "complete"
+      ? "committed"
+      : holdState === "holding"
+        ? "release to cancel"
+        : "hold to commit";
+  const status =
+    holdState === "complete"
+      ? "action committed"
+      : holdState === "holding"
+        ? "holding intent"
+        : "waiting for sustained input";
 
   return (
     <div className="lab-study-stage lab-study-stage--motion">
       <button
         type="button"
-        aria-label="motion taste hover sample"
-        data-active={active}
-        onMouseEnter={() => setActive(true)}
-        onMouseLeave={() => setActive(false)}
-        onPointerEnter={() => setActive(true)}
-        onPointerLeave={() => setActive(false)}
-        onFocus={() => setActive(true)}
-        onBlur={() => setActive(false)}
-        data-project-row="studies"
-        className="lab-motion-row micro-focus"
+        aria-label="hold to commit motion sample"
+        data-state={holdState}
+        onBlur={cancelHold}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
+        onPointerCancel={cancelHold}
+        onPointerDown={startHold}
+        onPointerLeave={cancelHold}
+        onPointerUp={cancelHold}
+        className="lab-hold-action micro-focus"
       >
-        <span className="project-row-copy lab-motion-row__copy flex max-w-full flex-col items-start gap-2">
-          <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">hover row</span>
-          <span className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-            {active ? "copy shifts, preview wakes" : "resting state stays quiet"}
-          </span>
+        <span className="lab-hold-action__content">
+          <span className="lab-hold-action__glyph" aria-hidden="true" />
+          <span>{label}</span>
         </span>
-        <span className="lab-motion-row__preview" aria-hidden="true">
-          <span className="lab-motion-row__mark">{active ? "on" : "off"}</span>
-          <span />
-          <span />
+        <span className="lab-hold-action__overlay" aria-hidden="true">
+          <span className="lab-hold-action__glyph" />
+          <span>{label}</span>
         </span>
       </button>
+      <div className="lab-hold-action__timeline" data-state={holdState} aria-hidden="true">
+        <span />
+      </div>
+      <div className="lab-hold-action__meta">
+        <p role="status">{status}</p>
+        <button
+          type="button"
+          onClick={resetHold}
+          className="lab-hold-action__reset micro-focus micro-pressable"
+        >
+          reset
+        </button>
+      </div>
+      <p className="lab-hold-action__note">
+        <span>slow confirmation</span>
+        <span>fast release</span>
+      </p>
     </div>
   );
 }

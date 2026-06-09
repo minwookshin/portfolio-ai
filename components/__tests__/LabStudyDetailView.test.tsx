@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LabStudyDetailView from "@/components/LabStudyDetailView";
 import { getProjectBySlug, isLabStudyProject } from "@/data/projects";
@@ -12,24 +12,35 @@ function getStudyProject(slug: string) {
   return project;
 }
 
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 describe("LabStudyDetailView interactions", () => {
-  it("shows the motion taste change on hover and focus", async () => {
-    const user = userEvent.setup();
+  it("runs the motion taste hold interaction", () => {
+    vi.useFakeTimers();
     render(<LabStudyDetailView project={getStudyProject("motion-taste-system")} />);
 
-    const sample = screen.getByRole("button", { name: "motion taste hover sample" });
-    expect(sample).toHaveAttribute("data-active", "false");
-    expect(screen.getByText("resting state stays quiet")).toBeInTheDocument();
+    const sample = screen.getByRole("button", { name: "hold to commit motion sample" });
+    expect(sample).toHaveAttribute("data-state", "idle");
+    expect(screen.getByRole("status")).toHaveTextContent("waiting for sustained input");
 
-    await user.hover(sample);
-    await waitFor(() => expect(sample).toHaveAttribute("data-active", "true"));
-    expect(screen.getByText("copy shifts, preview wakes")).toBeInTheDocument();
+    fireEvent.pointerDown(sample);
+    expect(sample).toHaveAttribute("data-state", "holding");
+    expect(screen.getByRole("status")).toHaveTextContent("holding intent");
 
-    await user.unhover(sample);
-    await waitFor(() => expect(sample).toHaveAttribute("data-active", "false"));
+    fireEvent.pointerUp(sample);
+    expect(sample).toHaveAttribute("data-state", "idle");
 
-    fireEvent.focus(sample);
-    await waitFor(() => expect(sample).toHaveAttribute("data-active", "true"));
+    fireEvent.pointerDown(sample);
+    act(() => {
+      vi.advanceTimersByTime(1200);
+    });
+    expect(sample).toHaveAttribute("data-state", "complete");
+    expect(screen.getByRole("status")).toHaveTextContent("action committed");
+
+    fireEvent.click(screen.getByRole("button", { name: "reset" }));
+    expect(sample).toHaveAttribute("data-state", "idle");
   });
 
   it("switches the hover row preview by hover and click", async () => {
