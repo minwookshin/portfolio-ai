@@ -1696,16 +1696,16 @@ body::after {
   height: 15px;
   overflow: visible;
   filter:
-    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28))
-    drop-shadow(0 3px 5px rgba(0, 0, 0, 0.12));
-  transform: rotate(-8deg);
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.24))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.10));
+  transform: rotate(-9deg);
   transform-origin: 2px 2px;
 }
 
 .lab-cursor-glyph__fill {
   fill: var(--text-primary);
   stroke: var(--text-primary);
-  stroke-width: 0.16px;
+  stroke-width: 0.12px;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -1713,7 +1713,7 @@ body::after {
 .lab-cursor-glyph__outline {
   fill: none;
   stroke: var(--bg-base);
-  stroke-width: 1.6px;
+  stroke-width: 1.45px;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
@@ -2266,9 +2266,9 @@ body::after {
   height: 15px;
   overflow: visible;
   filter:
-    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28))
-    drop-shadow(0 3px 5px rgba(0, 0, 0, 0.12));
-  transform: rotate(-8deg);
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.24))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.10));
+  transform: rotate(-9deg);
   transform-origin: 2px 2px;
   transition:
     filter var(--motion-duration-fast) var(--motion-ease-standard),
@@ -2278,7 +2278,7 @@ body::after {
 .animated-cursor__fill {
   fill: rgb(var(--cursor-rgb));
   stroke: rgb(var(--cursor-rgb));
-  stroke-width: 0.16px;
+  stroke-width: 0.12px;
   stroke-linejoin: round;
   stroke-linecap: round;
   transition:
@@ -2290,7 +2290,7 @@ body::after {
   fill: none;
   stroke: rgb(var(--cursor-outline-rgb));
   stroke-opacity: var(--cursor-outline-opacity);
-  stroke-width: 1.6px;
+  stroke-width: 1.45px;
   stroke-linejoin: round;
   stroke-linecap: round;
   transition:
@@ -2299,7 +2299,7 @@ body::after {
 }
 
 .animated-cursor-pointer--interactive .animated-cursor__arrow {
-  transform: translate(1px, 1px) rotate(-8deg) scale(0.92);
+  transform: translate(1px, 1px) rotate(-9deg) scale(0.92);
 }
 
 @media (prefers-reduced-motion: reduce) {

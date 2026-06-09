@@ -7,13 +7,11 @@ import {
   useMotionValue,
   useReducedMotion,
 } from "framer-motion";
+import { cursorGlyphPath } from "@/lib/cursorGlyph";
 
 type CursorMode = "idle" | "interactive";
 type CursorTone = "dark" | "light";
 type CursorState = { mode: CursorMode; tone: CursorTone };
-
-const cursorGlyphPath =
-  "M1.18 0.95C0.7 0.68 0.14 1.1 0.28 1.66L3.1 13.42C3.29 14.22 4.35 14.38 4.77 13.68L6.28 11.04C6.54 10.59 6.96 10.29 7.46 10.18L12.74 9.08C13.52 8.92 13.7 7.93 13.02 7.55L1.18 0.95Z";
 
 const interactiveSelector = [
   "a[href]",
