@@ -1,6 +1,6 @@
 "use client";
 
-import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 
@@ -40,6 +40,15 @@ function safePlay(video: HTMLVideoElement, onPlaying: (playing: boolean) => void
   } catch {
     onPlaying(false);
   }
+}
+
+function PauseGlyph() {
+  return (
+    <span className="studio-video-pause-glyph" aria-hidden="true">
+      <span />
+      <span />
+    </span>
+  );
 }
 
 export default function StudioVideoPlayer({
@@ -145,7 +154,7 @@ export default function StudioVideoPlayer({
           onClick={togglePlayback}
           aria-label={isPlaying ? "Pause video" : "Play video"}
         >
-          {isPlaying ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+          {isPlaying ? <PauseGlyph /> : <Play aria-hidden="true" strokeWidth={1.7} />}
         </button>
 
         <span className="studio-video-time">{formatVideoTime(currentTime)}</span>
@@ -172,7 +181,7 @@ export default function StudioVideoPlayer({
           onClick={toggleMute}
           aria-label={isMuted ? "Unmute video" : "Mute video"}
         >
-          {isMuted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+          {isMuted ? <VolumeX aria-hidden="true" strokeWidth={1.7} /> : <Volume2 aria-hidden="true" strokeWidth={1.7} />}
         </button>
       </div>
     </div>
