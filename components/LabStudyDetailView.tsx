@@ -97,6 +97,23 @@ function LabStudyRules({ rules }: { rules: LabStudy["rules"] }) {
   );
 }
 
+function LabStudyTechnicalArtifact({ artifact }: { artifact: LabStudy["technicalArtifact"] }) {
+  if (!artifact) return null;
+
+  return (
+    <section className="lab-study-artifact-section" aria-label={artifact.title}>
+      <pre className="lab-study-artifact">
+        <code>
+          <span className="lab-study-artifact__heading">## {artifact.title}</span>
+          {"\n\n"}
+          {artifact.body}
+        </code>
+      </pre>
+      {artifact.caption && <p className="lab-study-artifact-caption">{artifact.caption}</p>}
+    </section>
+  );
+}
+
 function StudyButton({
   active = false,
   children,
@@ -721,6 +738,8 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
       <LabStudyDemo kind={study.kind} reduceMotion={reduceMotion} />
 
       <LabStudyStory study={study} />
+
+      <LabStudyTechnicalArtifact artifact={study.technicalArtifact} />
 
       <LabStudyRules rules={study.rules} />
 
