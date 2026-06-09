@@ -4,7 +4,7 @@ import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useAnimationControls, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -43,6 +43,12 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
 const LANDING_ROW_BASE_DELAY = 0.4;
+const STUDY_ROW_SCROLL_OFFSETS: Array<"start 92%" | "start 68%" | "end 32%" | "end 8%"> = [
+  "start 92%",
+  "start 68%",
+  "end 32%",
+  "end 8%",
+];
 
 function unavailableFeedbackAnimation() {
   return {
@@ -682,21 +688,40 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
 
 function StudyTextRow({
   item,
-  index,
 }: {
   item: StudyItem;
-  index: number;
 }) {
   const reduceMotion = useReducedMotion();
+  const rowRef = useRef<HTMLLIElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: rowRef,
+    offset: STUDY_ROW_SCROLL_OFFSETS,
+  });
+  const scrollOpacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [0, 1, 1, 0]);
+  const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [10, 0, 0, -8]);
+  const scrollBlur = useTransform(scrollYProgress, (value) => {
+    const entryBlur = value < 0.22 ? 1 - value / 0.22 : 0;
+    const exitBlur = value > 0.78 ? (value - 0.78) / 0.22 : 0;
+    const blur = Math.max(entryBlur, exitBlur) * 3;
+
+    return `blur(${blur.toFixed(2)}px)`;
+  });
 
   return (
     <motion.li
+      ref={rowRef}
       key={item.id}
-      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 10 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
-      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
-      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
+      initial={false}
+      style={
+        reduceMotion
+          ? undefined
+          : {
+              opacity: scrollOpacity,
+              filter: scrollBlur,
+              y: scrollY,
+              willChange: "opacity, filter, transform",
+            }
+      }
       data-project-row="studies"
       className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
     >
@@ -731,11 +756,10 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
   return (
     <div className="relative">
       <ul className="space-y-[var(--space-2)]">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <StudyTextRow
             key={item.id}
             item={item}
-            index={index}
           />
         ))}
       </ul>
