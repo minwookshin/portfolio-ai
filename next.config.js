@@ -6,6 +6,10 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: "/resume.pdf",
+        destination: "/Minwook_Shin_Resume_2026.pdf",
+      },
+      {
         source: "/work/:slug.md",
         destination: "/api/markdown/work/:slug",
       },

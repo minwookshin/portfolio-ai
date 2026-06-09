@@ -54,6 +54,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.6,
     },
+    {
+      url: absoluteUrl("/resume.pdf"),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.55,
+    },
     ...workProjects.map((project) => ({
       url: absoluteUrl(getProjectPath(project)),
       lastModified: parsedDate(project.date) ?? now,
