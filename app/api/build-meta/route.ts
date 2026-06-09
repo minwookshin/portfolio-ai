@@ -60,9 +60,9 @@ async function getGitHubCommitUpdatedAt() {
 async function getUpdatedAt() {
   const configuredUpdatedAt = validIsoDate(process.env.NEXT_PUBLIC_BUILD_UPDATED_AT ?? process.env.BUILD_UPDATED_AT);
   return (
-    (await getLocalCommitUpdatedAt()) ??
-    (await getGitHubCommitUpdatedAt()) ??
     configuredUpdatedAt ??
+    (await getGitHubCommitUpdatedAt()) ??
+    (await getLocalCommitUpdatedAt()) ??
     BUILD_UPDATED_AT
   );
 }
