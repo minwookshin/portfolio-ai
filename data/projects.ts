@@ -276,16 +276,16 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     },
     labStudy: {
       kind: "ai-loop",
-      thesis: "AI products get better when the loop is visible enough for people to steer it.",
+      thesis: "AI products get better when the `loop` is visible enough for people to steer it.",
       points: [
-        "Show the system's current belief before it turns intent into action.",
-        "Make the trace readable so the human can catch wrong assumptions early.",
-        "Turn repeated failures into evals instead of treating them as one-off mistakes.",
+        "Show the system's current `belief` before it turns `intent` into action.",
+        "Make the `trace` readable so the human can catch wrong assumptions early.",
+        "Turn repeated failures into `evals` instead of treating them as one-off mistakes.",
       ],
       rules: [
-        { label: "visible state", value: "intent, plan, action", note: "the user should know what the system thinks it is doing" },
-        { label: "checkpoint", value: "before risk", note: "pause before irreversible actions, not after them" },
-        { label: "eval loop", value: "failure -> test", note: "good loops remember what went wrong" },
+        { label: "visible state", value: "`intent`, `plan`, `action`", note: "the user should know what the system thinks it is doing" },
+        { label: "checkpoint", value: "before risk", note: "pause before `irreversible` actions, not after them" },
+        { label: "eval loop", value: "`failure` -> `test`", note: "good loops remember what went wrong" },
       ],
       code: `const loop = [
   "intent",
@@ -328,9 +328,9 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       kind: "motion-taste",
       thesis: "Good motion should explain state change without making the interface feel busy.",
       points: [
-        "Show progress inside the control when the user's input takes time.",
+        "Show progress inside the `control` when the user's input takes time.",
         "Make the commitment slow enough to feel intentional, then make release quick.",
-        "Use press scale as instant feedback so the slower confirmation still feels responsive.",
+        "Use `press scale` as instant feedback so the slower confirmation still feels responsive.",
       ],
       rules: [
         { label: "press", value: "140-180ms", note: "instant tactile feedback" },
@@ -383,8 +383,8 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       kind: "hover-row",
       thesis: "The row should respond quickly, but the work should remain the hero.",
       points: [
-        "Move copy only a few pixels so the row feels awake, not restless.",
-        "Let the preview change faster than the text so the image feels connected.",
+        "Move copy only a few pixels with `transform`, so the row feels awake, not restless.",
+        "Let the `preview` change faster than the text so the image feels connected.",
         "Use muted metadata until hover to keep scanning calm.",
       ],
       rules: [
@@ -430,7 +430,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       thesis: "Navigation feels calmer when identity stays still and only the lower content changes.",
       points: [
         "Keep the intro and contact surface stable so the user does not re-orient.",
-        "Update the URL for shareability without making the whole page feel replaced.",
+        "Update the `URL` for shareability without making the whole page feel replaced.",
         "Use a short vertical reveal for content, not a full page animation.",
       ],
       rules: [
@@ -486,7 +486,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       points: [
         "Make the shape slightly rounded so it feels designed, not novelty.",
         "Keep the shadow subtle enough to separate on white without becoming a sticker.",
-        "Disable special cursor behavior where precision or native affordance matters.",
+        "Disable special cursor behavior where `precision` or native affordance matters.",
       ],
       rules: [
         { label: "size", value: "13x15px", note: "smaller than a decorative badge" },
@@ -536,8 +536,8 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       kind: "motion-curve",
       thesis: "Motion values should be judged in context, not copied from a token list blindly.",
       points: [
-        "The same duration feels different when distance changes.",
-        "Ease-out works for entering; ease-in-out works better for movement already on screen.",
+        "The same `duration` feels different when `distance` changes.",
+        "`ease-out` works for entering; `ease-in-out` works better for movement already on screen.",
         "A tester makes motion critique concrete instead of taste theater.",
       ],
       rules: [
