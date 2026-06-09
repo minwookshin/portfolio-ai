@@ -705,8 +705,7 @@ function StudyTextRow({
   const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [10, 0, 0, 0] : [10, 0, 0, -8]);
   const scrollBlur = useTransform(scrollYProgress, (value) => {
     const entryBlur = value < 0.22 ? 1 - value / 0.22 : 0;
-    const exitBlur = !isLast && value > 0.78 ? (value - 0.78) / 0.22 : 0;
-    const blur = Math.max(entryBlur, exitBlur) * 3;
+    const blur = entryBlur * 3;
 
     return `blur(${blur.toFixed(2)}px)`;
   });
