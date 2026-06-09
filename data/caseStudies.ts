@@ -5,6 +5,118 @@ import type { Project } from "@/components/ProjectCard";
 // data-driven CaseStudy system; projects without an entry keep the legacy
 // rendering until they're migrated.
 export const CASE_STUDIES: Record<string, CaseStudyData> = {
+  // Atlas
+  "11": {
+    sections: [
+      {
+        kind: "hero",
+        badge: "Capstone · AI triage system",
+        title: "Atlas",
+        subtitle: "A multi-surface triage communication system for mass-casualty response.",
+        bullets: [
+          "Design Engineer - product system and prototype",
+          "First-responder, incident-command, and emergency-receiving surfaces",
+          "Demo video intentionally pending phone-recorded walkthrough",
+        ],
+        tags: ["Figma", "SwiftUI", "TypeScript", "WebSocket", "AI Triage"],
+        image: "/projects/atlas/ic-map.png",
+        imageStyle: "cover",
+      },
+      {
+        kind: "lead",
+        eyebrow: "The problem",
+        heading: "Emergency teams lose time when triage state is scattered",
+        body:
+          "During a mass-casualty response, patient status, location, priority, and hospital capacity can move faster than the communication layer. Atlas explores a calmer system where each team sees the slice of state they need without rebuilding context from scratch.",
+        ask: ["What is Atlas?", "Who is it for?"],
+      },
+      {
+        kind: "split",
+        eyebrow: "The system",
+        heading: "Three surfaces, one patient state",
+        columns: [
+          {
+            label: "Field response",
+            title: "Fast patient updates",
+            body:
+              "First responders can update triage status and patient details through a focused mobile flow built for speed, not documentation theater.",
+          },
+          {
+            label: "Incident command",
+            title: "Map-based coordination",
+            body:
+              "Incident command sees responders, patient markers, sector state, and hospital assignments in one spatial view.",
+          },
+          {
+            label: "Emergency receiving",
+            title: "Queue and capacity awareness",
+            body:
+              "Receiving teams can understand what is coming next before patients arrive, reducing surprise handoffs.",
+          },
+        ],
+        ask: ["How does the system work?"],
+      },
+      {
+        kind: "flow",
+        eyebrow: "How it works",
+        heading: "Triage data moves with the patient",
+        steps: [
+          {
+            tag: "First responder",
+            title: "Capture a patient update",
+            body:
+              "Responder-facing screens focus on the minimum useful state: triage priority, condition, location, and action-ready notes.",
+          },
+          {
+            tag: "Incident command",
+            title: "Coordinate from the map",
+            body:
+              "The command view turns those updates into a spatial operating picture, connecting patient markers, units, and receiving destinations.",
+          },
+          {
+            tag: "Emergency receiving",
+            title: "Prepare the intake queue",
+            body:
+              "The receiving view converts field state into an intake queue so hospital teams can prepare resources before arrival.",
+          },
+        ],
+        note:
+          "The current portfolio version shows product structure and interface proof. The polished demo walkthrough will be added after fresh phone footage is recorded.",
+      },
+      {
+        kind: "stats",
+        eyebrow: "Build proof",
+        heading: "What is visible now",
+        items: [
+          { value: "3", label: "Primary surfaces" },
+          { value: "5", label: "Published interface frames" },
+          { value: "2026", label: "Capstone system" },
+        ],
+      },
+      {
+        kind: "gallery",
+        eyebrow: "Interface system",
+        heading: "Field, command, and receiving views",
+        images: [
+          { src: "/projects/atlas/fr-patient-update.png", caption: "First-responder patient update flow" },
+          { src: "/projects/atlas/er-queue.png", caption: "Emergency receiving queue" },
+          { src: "/projects/atlas/ic-patient-detail.png", caption: "Incident-command patient detail" },
+          { src: "/projects/atlas/ic-quick-send.png", caption: "Incident-command quick send flow" },
+        ],
+      },
+      {
+        kind: "outcome",
+        badge: "Current status",
+        heading: "Prepared as a case-study draft",
+        body: [
+          "Atlas now sits in the work archive as a real product-system proof instead of a coming-soon placeholder.",
+          "The project is intentionally presented without a demo video until the next recorded walkthrough is ready.",
+        ],
+      },
+    ],
+    ask: ["What would you improve next?", "Show the system flow", "Why Atlas?"],
+  },
+
   // Sentinel
   "1": {
     sections: [

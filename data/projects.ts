@@ -175,25 +175,42 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     id: "11",
     slug: "atlas",
     title: "Atlas",
-    description: "Capstone project in progress.",
-    fullDescription: "A high-fidelity capstone project currently being prepared for publication.",
-    tags: ["AI", "Product Design", "Capstone"],
-    categories: ["AI", "Design"],
-    date: "Coming soon",
-    image: "/projects/atlas/logo.png",
+    description: "AI triage communication system for mass-casualty response.",
+    fullDescription:
+      "A capstone product system for first responders, incident command, and emergency receiving teams during mass-casualty incidents.",
+    role: "Design Engineer - product system and prototype",
+    timeline: "Capstone, 2026",
+    team: "Team Atlas",
+    tags: ["AI Triage", "SwiftUI", "Figma", "WebSocket", "Design Systems"],
+    categories: ["AI", "Engineering", "Design"],
+    date: "2026",
+    image: "/projects/atlas/ic-map.png",
     icon: "/projects/atlas/logo.png",
-    studioLabel: "Capstone project in progress",
-    comingSoon: true,
-    unavailableMessage: "Capstone project in progress.",
+    studioLabel: "AI triage command system",
+    overview:
+      "Atlas coordinates field triage, incident command, and hospital intake through a multi-surface emergency response system.",
     builder: {
-      role: "Design Engineer — in preparation",
-      stack: [],
-      status: { label: "Coming soon" },
-      oneLiner: "High-fidelity capstone project currently being prepared for publication.",
-      pipeline: "Case study and product media are being prepared.",
-      scope: [],
-      results: [],
+      role: "Design Engineer - product system and prototype",
+      stack: ["Figma", "SwiftUI", "TypeScript", "WebSocket", "Design tokens"],
+      status: { label: "Case study draft" },
+      oneLiner: "Multi-surface triage communication system for mass-casualty response.",
+      pipeline:
+        "Designed in Figma -> prototyped across first-responder mobile, incident-command iPad, emergency-receiving workflows, and a local triage server.",
+      scope: [
+        { label: "Surfaces", value: "FR mobile, IC iPad, ER intake" },
+        { label: "System proof", value: "Design tokens, UI screens, local triage server" },
+      ],
+      results: [
+        { label: "Status", value: "Capstone case study in progress" },
+      ],
     },
+    gallery: [
+      "/projects/atlas/ic-map.png",
+      "/projects/atlas/fr-patient-update.png",
+      "/projects/atlas/er-queue.png",
+      "/projects/atlas/ic-patient-detail.png",
+      "/projects/atlas/ic-quick-send.png",
+    ],
   },
   {
     id: "4",
@@ -352,6 +369,93 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
 const nextStep = loop.find((step) => needsHumanJudgment(step))
   ?? loop.find((step) => needsMoreEvidence(step))
   ?? "finish";`,
+    },
+  },
+  {
+    id: "18",
+    slug: "ugi",
+    title: "UGI",
+    description: "Generative UI framework for composing interfaces from typed primitives.",
+    fullDescription:
+      "A local framework prototype for generating predictable UI from prompts by constraining output to typed component catalogs, actions, and JSON specs.",
+    tags: ["Generative UI", "TypeScript", "React", "Zod", "JSON Patch"],
+    categories: ["Lab", "AI", "Engineering"],
+    date: "2026",
+    glyph: "ugi",
+    studioLabel: "generative ui framework",
+    metadataDescription:
+      "A generative UI framework prototype that constrains AI output to typed component catalogs, actions, and JSON specs.",
+    builder: {
+      role: "Framework prototype",
+      stack: ["TypeScript", "React", "Zod", "JSON Patch", "AI UX"],
+      status: { label: "Local prototype" },
+      oneLiner: "Generative UI framework that lets AI compose interfaces from typed primitives instead of freeform markup.",
+      pipeline: "Prompt -> catalog -> schema -> spec stream -> renderer.",
+      scope: [
+        { label: "Packages", value: "core, react, react-native, remotion, codegen" },
+        { label: "Examples", value: "chat, dashboard, stripe app, remotion" },
+      ],
+      results: [
+        { label: "Status", value: "Prototype under evaluation" },
+      ],
+    },
+    labStudy: {
+      kind: "ai-loop",
+      thesis: "Generative UI becomes more useful when the model can only compose from typed primitives.",
+      story: [
+        {
+          heading: "the starting point",
+          body: [
+            "A lot of AI interface demos let the model write arbitrary UI. That feels flexible, but it also makes consistency, accessibility, and product safety harder to trust.",
+          ],
+        },
+        {
+          heading: "setting up the contract",
+          body: [
+            "UGI treats the interface as a contract. The system defines a catalog of components, props, and actions first. The model can compose those primitives, but it does not get to invent a new design system every time.",
+            "The output is a JSON spec that can stream through patches, then render through React, React Native, or Remotion surfaces.",
+          ],
+        },
+        {
+          heading: "why it matters",
+          body: [
+            "The interesting part is not that AI can make UI. It is that AI can make UI inside product constraints: typed props, known actions, predictable rendering, and reusable components.",
+          ],
+        },
+      ],
+      technicalArtifact: {
+        title: "Generative UI Contract",
+        body: `Prompt enters system
+├── Catalog defines allowed components
+├── Schema defines valid props and actions
+├── Model emits JSON spec patches
+├── Renderer maps spec to product UI
+└── Interface stays inside the system`,
+        caption: "UGI frames AI output as structured composition, not freeform markup.",
+      },
+      points: [
+        "Constrain model output to a typed `catalog` instead of letting it invent UI freely.",
+        "Stream partial UI through `JSON Patch` so the interface can appear progressively.",
+        "Keep components reusable across web, mobile, and video-oriented surfaces.",
+      ],
+      rules: [
+        { label: "catalog", value: "typed primitives", note: "components and actions are defined before generation" },
+        { label: "output", value: "JSON spec", note: "the model returns structured UI data, not raw markup" },
+        { label: "streaming", value: "patches", note: "partial interface updates can render as the response arrives" },
+      ],
+      code: `const catalog = defineCatalog(schema, {
+  components: {
+    Card: { props: cardProps, description: "A system surface" },
+    Button: { props: buttonProps, description: "A known action" },
+  },
+  actions: {
+    submit: { description: "Submit the current flow" },
+  },
+});
+
+const spec = await generateSpec(prompt, catalog);
+
+return <Renderer spec={spec} registry={registry} />;`,
     },
   },
   {
@@ -902,7 +1006,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
 ];
 
 export const FEATURED_PROJECT_IDS = ["11", "1", "2", "3"] as const;
-export const LAB_PROJECT_IDS = ["17", "12", "13", "14", "15", "16", "10", "4", "9", "7", "8"] as const;
+export const LAB_PROJECT_IDS = ["17", "18", "12", "13", "14", "15", "16", "10", "4", "9", "7", "8"] as const;
 
 export const PROJECT_PREVIEW_VIDEOS: Record<string, string> = {
   Sentinel: "/projects/previews/sentinel.mp4",
