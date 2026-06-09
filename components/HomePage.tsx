@@ -3,7 +3,7 @@
 import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls, useReducedMotion } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -264,9 +264,10 @@ function ProjectTextRow({
   list: "work";
 }) {
   const reduceMotion = useReducedMotion();
+  const unavailableControls = useAnimationControls();
   const descriptor = getProjectDescriptor(project);
   const rowClass =
-    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] px-2 py-1 text-left";
+    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] border-0 bg-transparent px-2 py-1 text-left text-[inherit]";
   const titleClass = [
     "font-normal leading-[var(--leading-tight)]",
     "project-row-title-line--lateral",
@@ -285,6 +286,22 @@ function ProjectTextRow({
       </span>
     </>
   );
+  const playUnavailableFeedback = useCallback(() => {
+    if (reduceMotion) return;
+
+    unavailableControls.stop();
+    void unavailableControls.start({
+      rotateX: [0, -7, 3, 0],
+      rotateY: [0, 6, -2, 0],
+      scale: [1, 0.985, 1.002, 1],
+      x: [0, 1, -1, 0],
+      y: [0, -1, 0],
+      transition: {
+        duration: 0.34,
+        ease: LANDING_EASE,
+      },
+    });
+  }, [reduceMotion, unavailableControls]);
 
   return (
     <motion.li
@@ -303,9 +320,21 @@ function ProjectTextRow({
       className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
     >
       {project.comingSoon ? (
-        <div aria-disabled="true" className={rowClass}>
+        <motion.button
+          type="button"
+          aria-disabled="true"
+          aria-label={`${project.title} is not ready yet`}
+          animate={unavailableControls}
+          className={`${rowClass} cursor-pointer`}
+          onClick={playUnavailableFeedback}
+          style={{
+            transformOrigin: "50% 60%",
+            transformPerspective: 900,
+            transformStyle: "preserve-3d",
+          }}
+        >
           {rowText}
-        </div>
+        </motion.button>
       ) : (
         <Link
           href={getProjectPath(project)}
