@@ -632,7 +632,7 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
       transition={reduceMotion ? tweens.none : tweens.base}
       className="lab-study-detail"
     >
-      <header className="border-t border-[var(--border-light)] pt-[var(--space-3)]">
+      <header className="lab-study-header">
         <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
           {detailLabels[study.kind]}
         </p>
@@ -677,11 +677,11 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
         </div>
       </section>
 
-      <section className="border-t border-[var(--border-light)] pt-[var(--space-3)]">
+      <section className="lab-study-code-section">
         <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
           code
         </h2>
-        <pre className="lab-study-code mt-[var(--space-2)]"><code>{study.code}</code></pre>
+        <pre className="lab-study-code"><code>{study.code}</code></pre>
       </section>
     </motion.article>
   );

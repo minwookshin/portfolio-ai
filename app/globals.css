@@ -836,7 +836,11 @@ body::after {
 .lab-study-detail {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-5);
+}
+
+.lab-study-header {
+  display: block;
 }
 
 .lab-study-demo {
@@ -846,9 +850,7 @@ body::after {
 
 .lab-study-insight {
   display: grid;
-  gap: var(--space-4);
-  border-top: 1px solid var(--border-light);
-  padding-top: var(--space-3);
+  gap: var(--space-5);
 }
 
 .lab-study-insight-block {
@@ -872,12 +874,10 @@ body::after {
 }
 
 .lab-study-point-list {
-  gap: 0;
+  gap: var(--space-2);
 }
 
 .lab-study-point-list li {
-  border-top: 1px solid var(--border-light);
-  padding-block: var(--space-2);
   color: var(--text-muted);
   font-size: var(--type-0);
   line-height: var(--leading-body);
@@ -887,8 +887,6 @@ body::after {
   display: grid;
   grid-template-columns: minmax(5.5rem, 0.38fr) minmax(0, 1fr);
   gap: var(--space-2);
-  border-top: 1px solid var(--border-light);
-  padding-block: var(--space-2);
 }
 
 .lab-study-rule-item dt {
@@ -1158,7 +1156,7 @@ body::after {
 .lab-hover-list {
   display: grid;
   width: 100%;
-  gap: var(--space-1);
+  gap: var(--space-2);
   align-content: center;
 }
 
@@ -1170,9 +1168,8 @@ body::after {
   gap: var(--space-2);
   width: 100%;
   border: 0;
-  border-top: 1px solid var(--border-light);
   background: transparent;
-  padding: var(--space-2) 0;
+  padding: 0.35rem 0;
   text-align: left;
   cursor: pointer;
 }
@@ -1308,6 +1305,7 @@ body::after {
 
 .lab-loop-list {
   display: grid;
+  gap: var(--space-2);
   align-content: center;
 }
 
@@ -1317,9 +1315,8 @@ body::after {
   gap: var(--space-2);
   width: 100%;
   border: 0;
-  border-top: 1px solid var(--border-light);
   background: transparent;
-  padding: var(--space-2) 0;
+  padding: 0.35rem 0;
   text-align: left;
 }
 
@@ -1403,9 +1400,8 @@ body::after {
 .lab-loop-panel__control {
   width: fit-content;
   border: 0;
-  border-top: 1px solid var(--border-light);
   background: transparent;
-  padding-top: var(--space-1);
+  padding: 0;
   color: var(--text-muted);
   font-size: calc(var(--type-0) - 2px);
   line-height: var(--leading-body);
@@ -1440,8 +1436,6 @@ body::after {
 .lab-route-intro {
   display: grid;
   gap: var(--space-1);
-  border-bottom: 1px solid var(--border-light);
-  padding-bottom: var(--space-2);
 }
 
 .lab-route-intro span:first-child {
@@ -1489,8 +1483,6 @@ body::after {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-1) var(--space-2);
-  border-top: 1px solid var(--border-light);
-  padding-top: var(--space-2);
   color: var(--text-muted);
   font-size: calc(var(--type-0) - 3px);
   line-height: 1.2;
@@ -1534,15 +1526,13 @@ body::after {
 .lab-cursor-targets {
   display: grid;
   width: min(78%, 360px);
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .lab-cursor-target {
   width: 100%;
   border: 0;
-  border-top: 1px solid var(--border-light);
   background: transparent;
-  padding-top: var(--space-2);
   text-align: left;
   color: var(--text-muted);
   transition:
@@ -1607,8 +1597,6 @@ body::after {
   display: flex;
   min-height: 96px;
   align-items: center;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
 }
 
 .lab-curve-object {
@@ -1637,14 +1625,16 @@ body::after {
   accent-color: var(--text-primary);
 }
 
+.lab-study-code-section {
+  display: grid;
+  gap: var(--space-2);
+}
+
 .lab-study-code {
   position: relative;
   overflow-x: auto;
-  border: 1px solid var(--border-light);
   border-radius: var(--md-shape-sm);
-  background:
-    linear-gradient(var(--bg-base), var(--bg-base)) padding-box,
-    linear-gradient(180deg, color-mix(in srgb, var(--text-primary) 5%, transparent), transparent 38%) border-box;
+  background: var(--bg-surface);
   padding: var(--space-3);
   color: var(--text-primary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -1685,8 +1675,7 @@ body::after {
 .study-preview-glyph-copy {
   display: grid;
   gap: var(--space-1);
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--border-light);
+  padding-top: var(--space-1);
 }
 
 .study-preview-glyph-title {
