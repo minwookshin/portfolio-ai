@@ -328,20 +328,32 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       kind: "motion-taste",
       thesis: "Good motion should explain state change without making the interface feel busy.",
       points: [
-        "Start visible, not from nothing, so elements feel physically present.",
-        "Keep micro-interactions short enough to disappear into the workflow.",
-        "Use blur only as a bridge into clarity, not as a permanent visual effect.",
+        "Show progress inside the control when the user's input takes time.",
+        "Make the commitment slow enough to feel intentional, then make release quick.",
+        "Use press scale as instant feedback so the slower confirmation still feels responsive.",
       ],
       rules: [
-        { label: "micro", value: "120-180ms", note: "hover, press, small text movement" },
-        { label: "standard", value: "180-260ms", note: "tooltips, previews, small panels" },
-        { label: "layout", value: "240-320ms", note: "route content, larger spatial changes" },
+        { label: "press", value: "140-180ms", note: "instant tactile feedback" },
+        { label: "hold", value: "1000-1400ms", note: "sustained intent, linear progress" },
+        { label: "release", value: "160-220ms", note: "fast cancellation so it never feels stuck" },
       ],
-      code: `const quietMotion = {
-  initial: { opacity: 0, y: 8, scale: 0.96, filter: "blur(8px)" },
-  animate: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
-  transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] },
-};`,
+      code: `.hold-action {
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hold-action[data-state="holding"] {
+  transform: scale(0.985);
+}
+
+.hold-action__overlay {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hold-action[data-state="holding"] .hold-action__overlay {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1200ms linear;
+}`,
     },
   },
   {
