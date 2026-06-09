@@ -34,15 +34,23 @@ describe("LabStudyDetailView interactions", () => {
 
   it("switches the hover row preview by hover and click", async () => {
     const user = userEvent.setup();
-    const { container } = render(<LabStudyDetailView project={getStudyProject("hover-row-study")} />);
-    const mark = () => container.querySelector(".lab-hover-preview__mark");
+    render(<LabStudyDetailView project={getStudyProject("hover-row-study")} />);
+    const preview = screen.getByRole("status", { name: "active hover preview" });
 
-    await user.hover(screen.getByRole("button", { name: /atlas/i }));
-    await waitFor(() => expect(mark()).toHaveTextContent("at"));
+    expect(preview).toHaveTextContent("sentinel");
+    expect(preview).toHaveTextContent("preview handoff leads the hover");
 
-    await user.click(screen.getByRole("button", { name: /portfolio ai/i }));
-    await waitFor(() => expect(mark()).toHaveTextContent("po"));
-    expect(screen.getByRole("button", { name: /portfolio ai/i })).toHaveAttribute("data-active", "true");
+    const atlas = screen.getByRole("button", { name: /atlas: capstone in progress/i });
+    await user.hover(atlas);
+    await waitFor(() => expect(atlas).toHaveAttribute("data-active", "true"));
+    await waitFor(() => expect(preview).toHaveTextContent("atlas"));
+    expect(preview).toHaveTextContent("quiet row feedback");
+
+    const portfolioAi = screen.getByRole("button", { name: /portfolio ai: ai intake website/i });
+    await user.click(portfolioAi);
+    await waitFor(() => expect(portfolioAi).toHaveAttribute("aria-pressed", "true"));
+    await waitFor(() => expect(preview).toHaveTextContent("portfolio ai"));
+    expect(preview).toHaveTextContent("copy moves just enough");
   });
 
   it("switches the route transition demo tabs", async () => {
