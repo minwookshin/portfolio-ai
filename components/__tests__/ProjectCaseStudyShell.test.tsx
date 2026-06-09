@@ -27,6 +27,9 @@ describe("ProjectCaseStudyShell", () => {
     expect(within(nav).getByRole("link", { name: "minwook shin" })).toHaveAttribute("href", "/work");
     expect(within(nav).getByRole("link", { name: "work" })).toHaveAttribute("href", "/work");
     expect(within(nav).getByText("Sentinel")).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("button", { name: "Play video" })).toBeInTheDocument();
+    expect(screen.getByRole("slider", { name: "Sentinel demo timeline" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Unmute video" })).toBeInTheDocument();
   });
 
   it("renders study detail breadcrumbs in page order", () => {

@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
+import StudioVideoPlayer from "@/components/StudioVideoPlayer";
 
 /**
  * Data-driven case-study renderer. A project's detail page is described as an
@@ -341,11 +342,14 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className="studio-detail-media overflow-hidden bg-[var(--bg-element)]">
-            <video controls poster={section.poster ?? makeVideoPosterDataUrl(section.heading ?? "project demo")} className="block w-full h-auto">
-              <source src={section.src} type="video/mp4" />
-            </video>
-          </div>
+          <StudioVideoPlayer
+            src={section.src}
+            label={section.heading ?? "project demo"}
+            muted={false}
+            poster={section.poster ?? makeVideoPosterDataUrl(section.heading ?? "project demo")}
+            className="studio-detail-media bg-[var(--bg-element)]"
+            videoClassName="block h-auto w-full"
+          />
         </motion.section>
       );
 
