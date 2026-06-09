@@ -268,12 +268,14 @@ function getProjectDescriptor(project: Project) {
 function ProjectTextRow({
   onActivate,
   onDeactivate,
+  onUnavailableActivate,
   project,
   index,
   list,
 }: {
   onActivate?: () => void;
   onDeactivate?: () => void;
+  onUnavailableActivate?: () => void;
   project: Project;
   index: number;
   list: "work";
@@ -302,11 +304,12 @@ function ProjectTextRow({
     </>
   );
   const playUnavailableFeedback = useCallback(() => {
+    onUnavailableActivate?.();
     if (reduceMotion) return;
 
     unavailableControls.stop();
     void unavailableControls.start(unavailableFeedbackAnimation());
-  }, [reduceMotion, unavailableControls]);
+  }, [onUnavailableActivate, reduceMotion, unavailableControls]);
 
   return (
     <motion.li
@@ -416,13 +419,16 @@ function WorkPreviewContent({
 }
 
 function WorkFixedPreview({
+  feedbackKey = 0,
   project,
   reduceMotion,
 }: {
+  feedbackKey?: number;
   project: Project;
   reduceMotion: boolean;
 }) {
   const unavailableControls = useAnimationControls();
+  const lastFeedbackKey = useRef(0);
   const canPlayUnavailableFeedback = Boolean(project.comingSoon);
   const previewFrameClass = [
     "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent",
@@ -439,6 +445,16 @@ function WorkFixedPreview({
       void unavailableControls.start(unavailableFeedbackAnimation());
     }
   }, [canPlayUnavailableFeedback, reduceMotion, unavailableControls]);
+
+  useEffect(() => {
+    if (!canPlayUnavailableFeedback || feedbackKey <= 0 || feedbackKey === lastFeedbackKey.current) return;
+
+    lastFeedbackKey.current = feedbackKey;
+    unavailableControls.stop();
+    if (!reduceMotion) {
+      void unavailableControls.start(unavailableFeedbackAnimation());
+    }
+  }, [canPlayUnavailableFeedback, feedbackKey, reduceMotion, unavailableControls]);
   const handlePreviewKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
     if (!canPlayUnavailableFeedback) return;
     if (event.key !== " " && event.key !== "Enter") return;
@@ -532,6 +548,7 @@ function WorkSection({
   const canShowFixedPreview = useCanShowWorkPreview();
   const hidePreviewTimer = useRef<number | null>(null);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [previewFeedbackKey, setPreviewFeedbackKey] = useState(0);
 
   const clearHideTimer = useCallback(() => {
     if (!hidePreviewTimer.current) return;
@@ -542,6 +559,12 @@ function WorkSection({
   const activateRow = useCallback((index: number) => {
     clearHideTimer();
     setPreviewIndex(index);
+  }, [clearHideTimer]);
+
+  const activateUnavailablePreview = useCallback((index: number) => {
+    clearHideTimer();
+    setPreviewIndex(index);
+    setPreviewFeedbackKey((key) => key + 1);
   }, [clearHideTimer]);
 
   const deactivateRow = useCallback((delay = 70) => {
@@ -571,6 +594,7 @@ function WorkSection({
               key={project.id}
               onActivate={() => activateRow(index)}
               onDeactivate={() => deactivateRow(project.comingSoon ? 180 : 70)}
+              onUnavailableActivate={project.comingSoon ? () => activateUnavailablePreview(index) : undefined}
               project={project}
               index={index}
               list="work"
@@ -609,7 +633,7 @@ function WorkSection({
                 }
                 style={{ willChange: "opacity, filter, transform" }}
               >
-                <WorkFixedPreview project={previewProject} reduceMotion={reduceMotion} />
+                <WorkFixedPreview feedbackKey={previewFeedbackKey} project={previewProject} reduceMotion={reduceMotion} />
               </motion.div>
             )}
           </AnimatePresence>
