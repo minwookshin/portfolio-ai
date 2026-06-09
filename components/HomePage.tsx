@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useCallback, useState, useEffect, useRef } from "react";
+import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion } from "framer-motion";
@@ -43,6 +44,20 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
 const LANDING_ROW_BASE_DELAY = 0.4;
+
+function unavailableFeedbackAnimation() {
+  return {
+    rotateX: [0, -7, 3, 0],
+    rotateY: [0, 6, -2, 0],
+    scale: [1, 0.985, 1.002, 1],
+    x: [0, 1, -1, 0],
+    y: [0, -1, 0],
+    transition: {
+      duration: 0.34,
+      ease: LANDING_EASE,
+    },
+  };
+}
 
 const landingPageVariants: Variants = {
   hidden: {},
@@ -290,17 +305,7 @@ function ProjectTextRow({
     if (reduceMotion) return;
 
     unavailableControls.stop();
-    void unavailableControls.start({
-      rotateX: [0, -7, 3, 0],
-      rotateY: [0, 6, -2, 0],
-      scale: [1, 0.985, 1.002, 1],
-      x: [0, 1, -1, 0],
-      y: [0, -1, 0],
-      transition: {
-        duration: 0.34,
-        ease: LANDING_EASE,
-      },
-    });
+    void unavailableControls.start(unavailableFeedbackAnimation());
   }, [reduceMotion, unavailableControls]);
 
   return (
@@ -417,15 +422,44 @@ function WorkFixedPreview({
   project: Project;
   reduceMotion: boolean;
 }) {
+  const unavailableControls = useAnimationControls();
+  const canPlayUnavailableFeedback = Boolean(project.comingSoon);
   const previewFrameClass = [
     "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent",
+    canPlayUnavailableFeedback ? "micro-focus cursor-pointer" : "",
     project.slug === "sentinel" ? "work-preview-sentinel-video" : "",
   ]
     .filter(Boolean)
     .join(" ");
+  const playUnavailableFeedback = useCallback(() => {
+    if (reduceMotion || !canPlayUnavailableFeedback) return;
+
+    unavailableControls.stop();
+    void unavailableControls.start(unavailableFeedbackAnimation());
+  }, [canPlayUnavailableFeedback, reduceMotion, unavailableControls]);
+  const handlePreviewKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+    if (!canPlayUnavailableFeedback) return;
+    if (event.key !== " " && event.key !== "Enter") return;
+
+    event.preventDefault();
+    playUnavailableFeedback();
+  }, [canPlayUnavailableFeedback, playUnavailableFeedback]);
 
   return (
-    <div className={previewFrameClass}>
+    <motion.div
+      animate={canPlayUnavailableFeedback ? unavailableControls : undefined}
+      aria-label={canPlayUnavailableFeedback ? `${project.title} is not ready yet` : undefined}
+      className={previewFrameClass}
+      onClick={canPlayUnavailableFeedback ? playUnavailableFeedback : undefined}
+      onKeyDown={canPlayUnavailableFeedback ? handlePreviewKeyDown : undefined}
+      role={canPlayUnavailableFeedback ? "button" : undefined}
+      tabIndex={canPlayUnavailableFeedback ? 0 : undefined}
+      style={canPlayUnavailableFeedback ? {
+        transformOrigin: "50% 60%",
+        transformPerspective: 900,
+        transformStyle: "preserve-3d",
+      } : undefined}
+    >
       <AnimatePresence initial={false} mode="popLayout">
         <motion.div
           key={project.id}
@@ -448,7 +482,7 @@ function WorkFixedPreview({
           <WorkPreviewContent project={project} />
         </motion.div>
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
 
@@ -499,11 +533,11 @@ function WorkSection({
     setPreviewIndex(index);
   }, [clearHideTimer]);
 
-  const deactivateRow = useCallback(() => {
+  const deactivateRow = useCallback((delay = 70) => {
     clearHideTimer();
     hidePreviewTimer.current = window.setTimeout(() => {
       setPreviewIndex(null);
-    }, 70);
+    }, delay);
   }, [clearHideTimer]);
 
   useEffect(() => {
@@ -511,6 +545,11 @@ function WorkSection({
   }, [clearHideTimer]);
 
   const previewProject = previewIndex === null ? null : projects[previewIndex];
+  const canInteractWithPreview = Boolean(previewProject?.comingSoon);
+  const previewShellClass = [
+    "absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block",
+    canInteractWithPreview ? "pointer-events-auto" : "pointer-events-none",
+  ].join(" ");
 
   return (
     <div className="relative">
@@ -520,7 +559,7 @@ function WorkSection({
             <ProjectTextRow
               key={project.id}
               onActivate={() => activateRow(index)}
-              onDeactivate={deactivateRow}
+              onDeactivate={() => deactivateRow(project.comingSoon ? 180 : 70)}
               project={project}
               index={index}
               list="work"
@@ -529,7 +568,16 @@ function WorkSection({
         </ul>
       </div>
       {canShowFixedPreview && (
-        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block">
+        <div
+          aria-hidden={canInteractWithPreview ? undefined : "true"}
+          className={previewShellClass}
+          onBlur={canInteractWithPreview ? () => deactivateRow() : undefined}
+          onFocus={canInteractWithPreview ? clearHideTimer : undefined}
+          onMouseEnter={canInteractWithPreview ? clearHideTimer : undefined}
+          onMouseLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
+          onPointerEnter={canInteractWithPreview ? clearHideTimer : undefined}
+          onPointerLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
+        >
           <AnimatePresence initial={false}>
             {previewProject && (
               <motion.div
