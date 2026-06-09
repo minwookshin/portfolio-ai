@@ -181,8 +181,8 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
     - **Focus:** Product Design, AI, interactive demo. Year: 2025.
 
 8.  **Caret**
-    - **Summary:** An iOS-style team wellbeing app concept presented through a public web prototype.
-    - **Focus:** team wellbeing, iOS-style UX, public web prototype. Year: 2025.
+    - **Summary:** An iOS-style team wellbeing app concept exploring burnout signals, presented through a public web prototype.
+    - **Focus:** burnout signals, team wellbeing, iOS-style UX, public web prototype. Year: 2025.
 
 9.  **Atlas**
     - **Summary:** A project tile visible in the work grid, but the case study is not ready yet.

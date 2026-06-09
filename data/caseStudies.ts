@@ -374,7 +374,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "Caret",
-        subtitle: "An iOS-style team wellbeing app concept presented through a public web prototype.",
+        subtitle: "An iOS-style team wellbeing app concept exploring burnout signals, presented through a public web prototype.",
         tags: ["Team Wellbeing", "iOS-style UX", "Web Prototype"],
       },
       {
