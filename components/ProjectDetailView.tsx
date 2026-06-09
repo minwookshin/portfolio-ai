@@ -162,8 +162,8 @@ function BuilderProofSummary({ project, proof }: { project: Project | PortfolioP
   ].filter((item) => isVisibleBuilderValue(item.value));
 
   return (
-    <section className="studio-detail-proof space-y-[var(--space-3)] border-t border-[var(--border-light)] pt-[var(--space-3)]">
-      <div className="grid gap-x-[var(--space-3)] gap-y-[var(--space-2)] sm:grid-cols-2">
+    <section className="studio-detail-proof space-y-[var(--space-4)]">
+      <div className="grid gap-x-[var(--space-4)] gap-y-[var(--space-3)] sm:grid-cols-2">
         {signalItems.map((item) => (
           <SummaryItem key={item.label} label={item.label} value={item.value} />
         ))}
@@ -208,11 +208,11 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
   if (visibleItems.length === 0) return null;
 
   return (
-    <section className="space-y-[var(--space-2)]">
+    <section className="space-y-[var(--space-3)]">
       <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{title}</h2>
-      <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
+      <div className="grid gap-x-[var(--space-4)] gap-y-[var(--space-3)] sm:grid-cols-2">
         {visibleItems.map((item) => (
-          <div key={`${title}-${item.label}`} className="border-t border-[var(--border-light)] pt-[var(--space-2)]">
+          <div key={`${title}-${item.label}`}>
             <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{item.label}</p>
             <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">{item.value}</p>
             {isVisibleBuilderValue(item.note) && <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-muted)]">{item.note}</p>}

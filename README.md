@@ -1,29 +1,23 @@
-# Portfolio AI
+# minwook shin
 
-AI-native portfolio and recruiter intake system for Minwook Shin.
-
-The site combines selected work, writing, prototype studies, case studies, and a Gemini-powered assistant that can answer questions and route visitors to relevant proof.
-
-## Role
-
-Designed and built by Minwook Shin.
+AI-native portfolio and studio site for Minwook Shin. The site combines selected work, writing, Lab prototypes, hover/demo motion, project case studies, and a Gemini-powered assistant that can route visitors to relevant proof.
 
 ## Stack
 
-Next.js App Router, React, TypeScript, Tailwind CSS, Framer Motion, Gemini API, Vitest
+- Next.js App Router
+- React and TypeScript
+- Tailwind CSS with CSS variable design tokens
+- Framer Motion
+- Gemini API for the assistant
+- ffmpeg-driven local hover preview rendering
 
-## What I Built
+## Main Surfaces
 
-- Built a live portfolio system around recruiter and collaborator questions, not just static case-study browsing.
-- Implemented a streaming AI assistant endpoint with request validation, rate limiting, model fallback, and project routing behavior.
-- Designed project surfaces for selected work, lab studies, writing, modal detail views, hover previews, and LLM-readable portfolio routes.
-- Added structured SEO surfaces including `llms.txt`, `portfolio.md`, sitemap, robots, and project metadata.
-- Created local verification scripts and tests for UI behavior, project detail shells, material motion tokens, and build metadata.
-
-## Demo
-
-Live: https://www.minwookshin.com  
-Case study: https://www.minwookshin.com/work/portfolio-ai
+- `/work` — selected work with hover preview motion
+- `/writing` — notes and essays
+- `/lab` — prototype archive with autoplay demo tiles
+- `/work/[slug]` and `/lab/[slug]` — project detail pages
+- `/api/chat` — streaming Gemini assistant endpoint
 
 ## Local Development
 
@@ -43,6 +37,16 @@ npm test
 npm run build
 ```
 
+## Preview Video Pipeline
+
+Hover and Lab preview clips are generated locally and committed as static assets.
+
+```bash
+npm run render:hover-previews
+```
+
+The render manifest lives in `scripts/hover-preview-manifest.mjs`; generated MP4s live in `public/projects/previews/`.
+
 ## Environment
 
 The AI assistant needs a Gemini key in local or deployment env:
@@ -52,8 +56,4 @@ GEMINI_API_KEY=...
 GEMINI_MODEL=gemini-2.5-flash-lite
 ```
 
-`GEMINI_MODEL` is optional. The API route falls back to the configured Gemini models.
-
-## Notes
-
-This public repo is a clean snapshot without private Git history, internal planning docs, or old resume artifacts.
+`GEMINI_MODEL` is optional; the API route falls back to the configured low-cost Gemini models.
