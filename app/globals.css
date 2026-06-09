@@ -865,6 +865,21 @@ body::after {
   line-height: var(--leading-body);
 }
 
+.lab-inline-code {
+  display: inline-flex;
+  align-items: center;
+  margin-inline: 0.08em;
+  border-radius: var(--md-shape-sm);
+  background: var(--bg-element);
+  padding: 0.04rem 0.32rem 0.08rem;
+  color: var(--text-primary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.86em;
+  line-height: 1.2;
+  text-transform: none !important;
+  white-space: nowrap;
+}
+
 .lab-study-point-list,
 .lab-study-rule-list {
   display: grid;

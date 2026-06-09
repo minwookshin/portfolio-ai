@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { KeyboardEvent, PointerEvent } from "react";
+import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
 import { motionEasings, tweens } from "@/lib/material/motion";
 
@@ -22,6 +22,22 @@ const detailLabels: Record<LabStudy["kind"], string> = {
 const cursorGlyphPath =
   "M1.18 0.95C0.7 0.68 0.14 1.1 0.28 1.66L3.1 13.42C3.29 14.22 4.35 14.38 4.77 13.68L6.28 11.04C6.54 10.59 6.96 10.29 7.46 10.18L12.74 9.08C13.52 8.92 13.7 7.93 13.02 7.55L1.18 0.95Z";
 const HOLD_TO_COMMIT_MS = 1200;
+
+function renderInlineStudyText(text: string): ReactNode {
+  const parts = text.split(/(`[^`]+`)/g).filter(Boolean);
+
+  if (parts.length === 1) return text;
+
+  return parts.map((part, index) => {
+    if (!part.startsWith("`") || !part.endsWith("`")) return part;
+
+    return (
+      <code key={`${part}-${index}`} className="lab-inline-code">
+        {part.slice(1, -1)}
+      </code>
+    );
+  });
+}
 
 function StudyButton({
   active = false,
@@ -640,7 +656,7 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
           {project.title}
         </h1>
         <p className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-          {study.thesis}
+          {renderInlineStudyText(study.thesis)}
         </p>
       </header>
 
@@ -654,7 +670,7 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
           <ul className="lab-study-point-list">
             {study.points.map((point) => (
               <li key={point}>
-                {point}
+                {renderInlineStudyText(point)}
               </li>
             ))}
           </ul>
@@ -668,8 +684,8 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
               <div key={rule.label} className="lab-study-rule-item">
                 <dt>{rule.label}</dt>
                 <dd>
-                  <span>{rule.value}</span>
-                  {rule.note && <span>{rule.note}</span>}
+                  <span>{renderInlineStudyText(rule.value)}</span>
+                  {rule.note && <span>{renderInlineStudyText(rule.note)}</span>}
                 </dd>
               </div>
             ))}

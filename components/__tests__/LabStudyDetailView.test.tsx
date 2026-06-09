@@ -111,6 +111,11 @@ describe("LabStudyDetailView interactions", () => {
     const user = userEvent.setup();
     render(<LabStudyDetailView project={getStudyProject("interface-is-the-loop")} />);
 
+    const inlineLoopToken = screen
+      .getAllByText("loop")
+      .find((element) => element.classList.contains("lab-inline-code"));
+    expect(inlineLoopToken).toBeDefined();
+
     expect(screen.getByText("Capture the user's goal before the model plans around the wrong target.")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /checkpoint/i }));
