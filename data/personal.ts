@@ -5,5 +5,5 @@ export const PERSONAL_INFO = {
   email: "ind3432@gmail.com",
   linkedin: "https://www.linkedin.com/in/minwookshin/",
   github: "https://github.com/minwookshin",
-  resume: "https://drive.google.com/file/d/1DpEUz-h7ZgHIkNNdbAr6VIUho4m33v3-/view?usp=sharing",
+  resume: "/resume.pdf",
 };

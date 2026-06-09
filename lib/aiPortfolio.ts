@@ -12,7 +12,7 @@ import {
 } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
-import { absoluteUrl } from "@/lib/seo";
+import { absoluteUrl, toAbsoluteUrl } from "@/lib/seo";
 import { getWritingPost, getWritingPosts } from "@/lib/writing";
 import type { WritingPost, WritingPostMeta } from "@/lib/writingTypes";
 
@@ -71,6 +71,7 @@ export function generateLlmsTxt() {
   const selectedWork = getSelectedWork();
   const labProjects = getLabProjects();
   const writingPosts = getWritingPosts();
+  const resumeUrl = getResumeUrl();
 
   return lines([
     "# Minwook Shin",
@@ -85,7 +86,7 @@ export function generateLlmsTxt() {
     linkLine("Studies", absoluteUrl("/studies"), "interaction studies, writing, and prototypes"),
     linkLine("Full portfolio summary", absoluteUrl("/portfolio.md"), "longer AI-readable briefing"),
     linkLine("Machine-readable resume", absoluteUrl("/resume.json"), "structured JSON for recruiter tools"),
-    linkLine("Resume", PERSONAL_INFO.resume, "external resume"),
+    linkLine("Resume PDF", resumeUrl, "public PDF resume"),
     "",
     "## Hiring Signal",
     `- Name: ${PERSONAL_INFO.name}`,
@@ -132,6 +133,7 @@ export function generatePortfolioMarkdown() {
   const inPreparation = getInPreparationWork();
   const labProjects = getLabProjects();
   const writingPosts = getWritingPosts();
+  const resumeUrl = getResumeUrl();
 
   return lines([
     "# Minwook Shin - AI-readable portfolio summary",
@@ -144,6 +146,7 @@ export function generatePortfolioMarkdown() {
     `- Summary: ${PERSONAL_INFO.bio}`,
     `- Target roles: ${TARGET_ROLES.join(", ")}`,
     `- Skills: ${PRIMARY_SKILLS.join(", ")}`,
+    `- Resume PDF: ${resumeUrl}`,
     `- Machine-readable resume: ${absoluteUrl("/resume.json")}`,
     "",
     "## How to evaluate this portfolio",
@@ -181,7 +184,7 @@ export function generatePortfolioMarkdown() {
     "## External profiles",
     linkLine("LinkedIn", PERSONAL_INFO.linkedin),
     linkLine("GitHub", PERSONAL_INFO.github),
-    linkLine("Resume", PERSONAL_INFO.resume),
+    linkLine("Resume PDF", resumeUrl),
     "",
     "## Suggested short recruiter summary",
     `${PERSONAL_INFO.name} is a ${PERSONAL_INFO.title.toLowerCase()} focused on AI-native product interfaces, working prototypes, and interaction detail. The strongest proof points are Sentinel, a 48-hour SwiftUI hackathon-winning iOS app; Portfolio AI, a Next.js and Gemini API portfolio/intake system; Mindline, a research-backed behavioral AI concept; and a studies archive showing motion, cursor, hover, and route-transition thinking.`,
@@ -193,6 +196,7 @@ export function generateResumeJson() {
   const inPreparation = getInPreparationWork();
   const labProjects = getLabProjects();
   const writingPosts = getWritingPosts();
+  const resumeUrl = getResumeUrl();
 
   return {
     schemaVersion: "2026-06-09",
@@ -204,7 +208,7 @@ export function generateResumeJson() {
       website: absoluteUrl("/"),
       linkedin: PERSONAL_INFO.linkedin,
       github: PERSONAL_INFO.github,
-      resume: PERSONAL_INFO.resume,
+      resume: resumeUrl,
       summary: PERSONAL_INFO.bio,
     },
     targetRoles: TARGET_ROLES,
@@ -215,6 +219,7 @@ export function generateResumeJson() {
       llmsTxt: absoluteUrl("/llms.txt"),
       portfolioMarkdown: absoluteUrl("/portfolio.md"),
       resumeJson: absoluteUrl("/resume.json"),
+      resumePdf: resumeUrl,
       workMarkdown: getWorkMarkdownSlugs().map((slug) => absoluteUrl(`/work/${slug}.md`)),
       studiesMarkdown: getStudyMarkdownSlugs().map((slug) => absoluteUrl(`/studies/${slug}.md`)),
     },
@@ -415,6 +420,10 @@ function studyType(project: PortfolioProject) {
 
 function linkLine(label: string, href: string, note?: string) {
   return note ? `- [${label}](${href}): ${note}` : `- [${label}](${href})`;
+}
+
+function getResumeUrl() {
+  return toAbsoluteUrl(PERSONAL_INFO.resume) ?? absoluteUrl("/resume.pdf");
 }
 
 function lines(values: string[]) {

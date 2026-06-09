@@ -179,7 +179,9 @@ function personJsonLd(): JsonLdNode {
     jobTitle: PERSONAL_INFO.title,
     description: PERSONAL_INFO.bio,
     email: `mailto:${PERSONAL_INFO.email}`,
-    sameAs: [PERSONAL_INFO.linkedin, PERSONAL_INFO.github, PERSONAL_INFO.resume],
+    sameAs: [PERSONAL_INFO.linkedin, PERSONAL_INFO.github, toAbsoluteUrl(PERSONAL_INFO.resume)].filter(
+      (value): value is string => Boolean(value)
+    ),
     knowsAbout: [
       "Design engineering",
       "UX engineering",
