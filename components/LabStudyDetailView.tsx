@@ -156,39 +156,81 @@ function HoverRowDemo({ reduceMotion }: DemoProps) {
 }
 
 function RouteTransitionDemo({ reduceMotion }: DemoProps) {
-  const tabs = ["work", "studies"] as const;
+  const sections = {
+    work: [
+      ["atlas", "capstone in progress"],
+      ["sentinel", "native ios mvp"],
+      ["portfolio ai", "ai intake website"],
+    ],
+    studies: [
+      ["motion taste system", "micro-interaction rules"],
+      ["hover row study", "project-row handoff"],
+      ["route transition study", "content-only routing"],
+    ],
+  } as const;
+  const tabs = Object.keys(sections) as Array<keyof typeof sections>;
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("work");
-  const content = {
-    work: ["selected work", "atlas, sentinel, portfolio ai"],
-    studies: ["thinking in motion", "notes, demos, tiny tools"],
-  }[activeTab];
+  const content = sections[activeTab];
 
   return (
-    <div className="lab-study-demo">
-      <div className="lab-route-shell">
-        <div className="lab-route-intro">
-          <span>minwook shin</span>
-          <span>design engineer</span>
+    <div className="lab-study-stage lab-route-stage">
+      <div className="lab-route-shell" aria-label="route transition sample">
+        <div className="lab-route-stable-zone">
+          <div className="lab-route-intro">
+            <span>minwook shin</span>
+            <span>design engineer</span>
+            <span>I design and build interfaces for AI-native products.</span>
+          </div>
+          <nav className="lab-route-tabs" aria-label="route study sections">
+            {tabs.map((tab, index) => {
+              const selected = activeTab === tab;
+
+              return (
+                <span key={tab} className="lab-route-tab-item">
+                  <button
+                    type="button"
+                    aria-pressed={selected}
+                    className="home-tab-button micro-focus micro-focus-tight"
+                    data-active={selected ? "true" : "false"}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </button>
+                  {index < tabs.length - 1 && (
+                    <span aria-hidden="true" className="lab-route-tab-separator" role="presentation">
+                      ,
+                    </span>
+                  )}
+                </span>
+              );
+            })}
+          </nav>
         </div>
-        <div className="lab-study-controls" aria-label="route tab">
-          {tabs.map((tab) => (
-            <StudyButton key={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)}>
-              {tab}
-            </StudyButton>
-          ))}
+
+        <div className="lab-route-path" role="status" aria-label="route study path">
+          <span>/{activeTab}</span>
+          <span>stable intro, changing content</span>
         </div>
+
         <AnimatePresence initial={false}>
-          <motion.div
+          <motion.ul
             key={activeTab}
-            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
-            transition={reduceMotion ? tweens.none : { ...tweens.base, duration: 0.24 }}
-            className="lab-route-panel"
+            initial={reduceMotion ? false : { opacity: 0, y: 7, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -4, filter: "blur(3px)" }}
+            transition={reduceMotion ? tweens.none : { ...tweens.fast, duration: 0.18 }}
+            className="lab-route-list"
+            aria-label={`${activeTab} route content`}
           >
-            <span>{content[0]}</span>
-            <span>{content[1]}</span>
-          </motion.div>
+            {content.map(([title, meta]) => (
+              <li key={title} data-project-row={activeTab} className="lab-route-row">
+                <span className="project-row-copy lab-route-row__copy">
+                  <span className="project-row-title-line--lateral lab-route-row__title">{title}</span>
+                  <span className="project-row-meta lab-route-row__meta">{meta}</span>
+                </span>
+              </li>
+            ))}
+          </motion.ul>
         </AnimatePresence>
       </div>
     </div>
