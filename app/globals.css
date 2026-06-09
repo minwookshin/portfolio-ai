@@ -421,6 +421,49 @@ body::after {
   transform: translateZ(0);
 }
 
+.work-preview-unavailable-tint,
+.work-preview-unavailable-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.work-preview-unavailable-tint {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 59, 48, 0.13), transparent 54%),
+    linear-gradient(135deg, rgba(255, 59, 48, 0.055), rgba(255, 59, 48, 0.018));
+  opacity: 0.56;
+  mix-blend-mode: multiply;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.work-preview-unavailable:hover .work-preview-unavailable-tint,
+.work-preview-unavailable:focus-visible .work-preview-unavailable-tint {
+  opacity: 0.72;
+}
+
+.work-preview-unavailable-flash {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 59, 48, 0.34), transparent 58%),
+    linear-gradient(135deg, rgba(255, 59, 48, 0.16), rgba(255, 59, 48, 0.04));
+  opacity: 0;
+  mix-blend-mode: multiply;
+  transform-origin: 50% 60%;
+}
+
+.work-preview-unavailable-status {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 3;
+  pointer-events: none;
+  color: #ff3b30;
+  font-size: calc(var(--type-0) - 2px);
+  line-height: 1.2;
+}
+
 .work-preview-soft-edge {
   --work-preview-fade-mid: 16px;
   --work-preview-fade-full: 30px;
