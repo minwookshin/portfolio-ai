@@ -59,43 +59,6 @@ function unavailableFeedbackAnimation() {
   };
 }
 
-function unavailableTintAnimation(reduceMotion: boolean) {
-  if (reduceMotion) {
-    return {
-      opacity: [0, 0.18, 0],
-      transition: { duration: 0.28, ease: LANDING_EASE },
-    };
-  }
-
-  return {
-    opacity: [0, 0.28, 0.12, 0],
-    scale: [1, 1.01, 1],
-    transition: {
-      duration: 0.46,
-      ease: LANDING_EASE,
-    },
-  };
-}
-
-function unavailableStatusAnimation(reduceMotion: boolean) {
-  if (reduceMotion) {
-    return {
-      opacity: [0, 1, 1, 0],
-      transition: { duration: 0.8, times: [0, 0.12, 0.74, 1], ease: LANDING_EASE },
-    };
-  }
-
-  return {
-    opacity: [0, 1, 1, 0],
-    y: [4, 0, 0, -2],
-    transition: {
-      duration: 0.88,
-      times: [0, 0.14, 0.72, 1],
-      ease: LANDING_EASE,
-    },
-  };
-}
-
 const landingPageVariants: Variants = {
   hidden: {},
   visible: {
@@ -460,8 +423,6 @@ function WorkFixedPreview({
   reduceMotion: boolean;
 }) {
   const unavailableControls = useAnimationControls();
-  const unavailableTintControls = useAnimationControls();
-  const unavailableStatusControls = useAnimationControls();
   const canPlayUnavailableFeedback = Boolean(project.comingSoon);
   const previewFrameClass = [
     "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent",
@@ -474,14 +435,10 @@ function WorkFixedPreview({
     if (!canPlayUnavailableFeedback) return;
 
     unavailableControls.stop();
-    unavailableTintControls.stop();
-    unavailableStatusControls.stop();
     if (!reduceMotion) {
       void unavailableControls.start(unavailableFeedbackAnimation());
     }
-    void unavailableTintControls.start(unavailableTintAnimation(reduceMotion));
-    void unavailableStatusControls.start(unavailableStatusAnimation(reduceMotion));
-  }, [canPlayUnavailableFeedback, reduceMotion, unavailableControls, unavailableStatusControls, unavailableTintControls]);
+  }, [canPlayUnavailableFeedback, reduceMotion, unavailableControls]);
   const handlePreviewKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
     if (!canPlayUnavailableFeedback) return;
     if (event.key !== " " && event.key !== "Enter") return;
@@ -492,18 +449,12 @@ function WorkFixedPreview({
 
   return (
     <motion.div
-      animate={canPlayUnavailableFeedback ? unavailableControls : undefined}
       aria-label={canPlayUnavailableFeedback ? `${project.title} is not ready yet` : undefined}
       className={previewFrameClass}
       onClick={canPlayUnavailableFeedback ? playUnavailableFeedback : undefined}
       onKeyDown={canPlayUnavailableFeedback ? handlePreviewKeyDown : undefined}
       role={canPlayUnavailableFeedback ? "button" : undefined}
       tabIndex={canPlayUnavailableFeedback ? 0 : undefined}
-      style={canPlayUnavailableFeedback ? {
-        transformOrigin: "50% 60%",
-        transformPerspective: 900,
-        transformStyle: "preserve-3d",
-      } : undefined}
     >
       <AnimatePresence initial={false} mode="popLayout">
         <motion.div
@@ -524,28 +475,24 @@ function WorkFixedPreview({
           }
           style={{ willChange: "opacity, filter, transform" }}
         >
-          <WorkPreviewContent project={project} />
+          {canPlayUnavailableFeedback ? (
+            <motion.div
+              animate={unavailableControls}
+              className="h-full w-full transform-gpu"
+              style={{
+                transformOrigin: "50% 60%",
+                transformPerspective: 900,
+                transformStyle: "preserve-3d",
+                willChange: "transform",
+              }}
+            >
+              <WorkPreviewContent project={project} />
+            </motion.div>
+          ) : (
+            <WorkPreviewContent project={project} />
+          )}
         </motion.div>
       </AnimatePresence>
-      {canPlayUnavailableFeedback && (
-        <>
-          <span className="work-preview-unavailable-tint" aria-hidden="true" />
-          <motion.span
-            aria-hidden="true"
-            animate={unavailableTintControls}
-            className="work-preview-unavailable-flash"
-            initial={{ opacity: 0 }}
-          />
-          <motion.span
-            aria-hidden="true"
-            animate={unavailableStatusControls}
-            className="work-preview-unavailable-status"
-            initial={{ opacity: 0, y: reduceMotion ? 0 : 4 }}
-          >
-            not ready yet
-          </motion.span>
-        </>
-      )}
     </motion.div>
   );
 }
