@@ -687,8 +687,10 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
 }
 
 function StudyTextRow({
+  isLast = false,
   item,
 }: {
+  isLast?: boolean;
   item: StudyItem;
 }) {
   const reduceMotion = useReducedMotion();
@@ -697,11 +699,11 @@ function StudyTextRow({
     target: rowRef,
     offset: STUDY_ROW_SCROLL_OFFSETS,
   });
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [0, 1, 1, 0]);
-  const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [10, 0, 0, -8]);
+  const scrollOpacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [0, 1, 1, 1] : [0, 1, 1, 0]);
+  const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [10, 0, 0, 0] : [10, 0, 0, -8]);
   const scrollBlur = useTransform(scrollYProgress, (value) => {
     const entryBlur = value < 0.22 ? 1 - value / 0.22 : 0;
-    const exitBlur = value > 0.78 ? (value - 0.78) / 0.22 : 0;
+    const exitBlur = !isLast && value > 0.78 ? (value - 0.78) / 0.22 : 0;
     const blur = Math.max(entryBlur, exitBlur) * 3;
 
     return `blur(${blur.toFixed(2)}px)`;
@@ -756,9 +758,10 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
   return (
     <div className="relative">
       <ul className="space-y-[var(--space-2)]">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <StudyTextRow
             key={item.id}
+            isLast={index === items.length - 1}
             item={item}
           />
         ))}
