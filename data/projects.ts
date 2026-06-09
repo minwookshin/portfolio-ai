@@ -754,6 +754,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           heading: "setting up the tester",
           body: [
             "The tool puts `distance`, `duration`, and `easing` in the same place so the motion can be judged as a real interface movement.",
+            "The preview uses larger travel values than tiny production hovers so the difference is visible while tuning.",
             "That makes critique concrete. Instead of saying something feels off, you can replay the exact rule and adjust one variable.",
           ],
         },
@@ -768,17 +769,17 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         title: "Motion Rule Picker",
         body: `What kind of movement is this?
 ├── Micro feedback
-│   ├── Distance: 2-8px
+│   ├── Travel: 24-48px preview
 │   └── Duration: 120-180ms
 │
 ├── Small panel / preview
-│   ├── Distance: 8-18px
+│   ├── Travel: 72-108px preview
 │   └── Duration: 180-260ms
 │
 └── Layout shift
-    ├── Distance: 18-32px
+    ├── Travel: 132-168px preview
     └── Duration: 240-320ms`,
-        caption: "Duration only makes sense when it is paired with distance and interaction weight.",
+        caption: "Duration only makes sense when it is paired with travel and interaction weight.",
       },
       points: [
         "The same `duration` feels different when `distance` changes.",
@@ -786,8 +787,8 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         "A tester makes motion critique concrete instead of taste theater.",
       ],
       rules: [
-        { label: "distance", value: "4-32px", note: "small UI movement range" },
-        { label: "duration", value: "120-320ms", note: "micro to layout transition range" },
+        { label: "travel", value: "24-168px", note: "visible preview range for tuning" },
+        { label: "duration", value: "120-360ms", note: "micro to layout transition range" },
         { label: "easing", value: "standard / in-out", note: "picked by interaction type" },
       ],
       code: `<motion.div

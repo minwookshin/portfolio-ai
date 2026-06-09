@@ -108,8 +108,11 @@ describe("LabStudyDetailView interactions", () => {
     const user = userEvent.setup();
     render(<LabStudyDetailView project={getStudyProject("motion-curve-tester")} />);
 
+    expect(screen.getByText("Choose a preset. The square replays every time a value changes.")).toBeInTheDocument();
+    expect(screen.getAllByText("travel 92px")).toHaveLength(2);
+
     fireEvent.change(screen.getByRole("slider", { name: /duration/i }), { target: { value: "320" } });
-    expect(screen.getByText("duration 320ms")).toBeInTheDocument();
+    expect(screen.getAllByText("duration 320ms")).toHaveLength(2);
 
     await user.click(screen.getByRole("button", { name: "in-out" }));
     expect(screen.getByRole("button", { name: "in-out" })).toHaveAttribute("aria-pressed", "true");

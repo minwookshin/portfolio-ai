@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
+import type { CSSProperties, KeyboardEvent, PointerEvent, ReactNode } from "react";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
 import { cursorGlyphPath } from "@/lib/cursorGlyph";
 import { motionEasings, tweens } from "@/lib/material/motion";
@@ -21,6 +21,20 @@ const detailLabels: Record<LabStudy["kind"], string> = {
 };
 
 const HOLD_TO_COMMIT_MS = 1200;
+
+type CurveEasing = "standard" | "in-out";
+
+const curvePresets: Array<{
+  label: string;
+  duration: number;
+  distance: number;
+  easing: CurveEasing;
+  note: string;
+}> = [
+  { label: "micro", duration: 160, distance: 36, easing: "standard", note: "hover feedback" },
+  { label: "standard", duration: 220, distance: 92, easing: "standard", note: "small panels" },
+  { label: "layout", duration: 300, distance: 156, easing: "in-out", note: "larger shifts" },
+];
 
 function renderInlineStudyText(text: string): ReactNode {
   const parts = text.split(/(`[^`]+`)/g).filter(Boolean);
@@ -461,41 +475,80 @@ function CursorStudyDemo({ reduceMotion }: DemoProps) {
 
 function MotionCurveTesterDemo({ reduceMotion }: DemoProps) {
   const [duration, setDuration] = useState(220);
-  const [distance, setDistance] = useState(18);
-  const [easing, setEasing] = useState<"standard" | "in-out">("standard");
-  const [runKey, setRunKey] = useState(0);
+  const [distance, setDistance] = useState(92);
+  const [easing, setEasing] = useState<CurveEasing>("standard");
+  const [replayNonce, setReplayNonce] = useState(0);
   const ease = easing === "standard" ? motionEasings.standard : motionEasings.inOut;
+  const animationKey = `${duration}-${distance}-${easing}-${replayNonce}`;
+  const activePreset = curvePresets.find(
+    (preset) => preset.duration === duration && preset.distance === distance && preset.easing === easing
+  );
+  const trackStyle = { "--curve-distance": `${distance}px` } as CSSProperties;
 
   return (
     <div className="lab-study-stage lab-curve-tool">
-      <div className="lab-curve-track">
-        <motion.span
-          key={runKey}
-          initial={reduceMotion ? false : { x: 0 }}
-          animate={{ x: distance }}
-          transition={reduceMotion ? tweens.none : { type: "tween", duration: duration / 1000, ease }}
-          className="lab-curve-object"
-        />
+      <div className="lab-curve-copy">
+        <p>Choose a preset. The square replays every time a value changes.</p>
+        <p>
+          {activePreset ? `${activePreset.label}: ${activePreset.note}` : "custom motion"}
+        </p>
       </div>
+
+      <div className="lab-curve-presets" aria-label="motion presets">
+        {curvePresets.map((preset) => (
+          <StudyButton
+            key={preset.label}
+            active={activePreset?.label === preset.label}
+            onClick={() => {
+              setDuration(preset.duration);
+              setDistance(preset.distance);
+              setEasing(preset.easing);
+            }}
+          >
+            {preset.label}
+          </StudyButton>
+        ))}
+      </div>
+
+      <div className="lab-curve-track" style={trackStyle}>
+        <div className="lab-curve-lane" aria-label={`preview travels ${distance}px over ${duration}ms using ${easing} easing`}>
+          <span className="lab-curve-axis" aria-hidden="true" />
+          <span className="lab-curve-marker lab-curve-marker--start" aria-hidden="true" />
+          <span className="lab-curve-marker lab-curve-marker--target" aria-hidden="true" />
+          <motion.span
+            key={animationKey}
+            initial={reduceMotion ? false : { x: 0 }}
+            animate={{ x: distance }}
+            transition={reduceMotion ? tweens.none : { type: "tween", duration: duration / 1000, ease }}
+            className="lab-curve-object"
+          />
+        </div>
+        <div className="lab-curve-readout" aria-live="polite">
+          <span>duration {duration}ms</span>
+          <span>travel {distance}px</span>
+          <span>{easing} easing</span>
+        </div>
+      </div>
+
       <div className="lab-curve-controls">
         <label>
-          <span>duration {duration}ms</span>
+          <span className="lab-curve-range-head">duration {duration}ms</span>
           <input
             type="range"
             min="120"
-            max="320"
+            max="360"
             step="20"
             value={duration}
             onChange={(event) => setDuration(Number(event.target.value))}
           />
         </label>
         <label>
-          <span>distance {distance}px</span>
+          <span className="lab-curve-range-head">travel {distance}px</span>
           <input
             type="range"
-            min="4"
-            max="32"
-            step="2"
+            min="24"
+            max="168"
+            step="12"
             value={distance}
             onChange={(event) => setDistance(Number(event.target.value))}
           />
@@ -503,7 +556,7 @@ function MotionCurveTesterDemo({ reduceMotion }: DemoProps) {
         <div className="lab-study-controls" aria-label="easing">
           <StudyButton active={easing === "standard"} onClick={() => setEasing("standard")}>standard</StudyButton>
           <StudyButton active={easing === "in-out"} onClick={() => setEasing("in-out")}>in-out</StudyButton>
-          <StudyButton onClick={() => setRunKey((key) => key + 1)}>replay</StudyButton>
+          <StudyButton onClick={() => setReplayNonce((key) => key + 1)}>replay</StudyButton>
         </div>
       </div>
     </div>

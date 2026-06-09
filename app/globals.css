@@ -1725,24 +1725,105 @@ body::after {
 
 .lab-curve-tool {
   justify-items: stretch;
-  gap: var(--space-3);
+  gap: var(--space-2);
   padding: var(--space-3);
 }
 
-.lab-curve-track {
-  position: relative;
+.lab-curve-copy {
+  display: grid;
+  gap: var(--space-1);
+  max-width: var(--measure);
+  color: var(--text-muted);
+  font-size: calc(var(--type-0) - 2px);
+  line-height: var(--leading-body);
+}
+
+.lab-curve-copy p:last-child {
+  color: var(--text-primary);
+}
+
+.lab-curve-presets {
   display: flex;
-  min-height: 96px;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.lab-curve-track {
+  --curve-distance: 92px;
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  min-height: 132px;
   align-items: center;
+  border-radius: var(--md-shape-lg);
+  background: color-mix(in srgb, var(--bg-surface) 74%, transparent);
+  padding: var(--space-3);
+}
+
+.lab-curve-lane {
+  position: relative;
+  height: 68px;
+  width: min(100%, 240px);
+}
+
+.lab-curve-axis {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: calc(var(--curve-distance) + 44px);
+  height: 1px;
+  background: color-mix(in srgb, var(--text-muted) 36%, transparent);
+  transform: translateY(-50%);
+}
+
+.lab-curve-marker {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--text-muted);
+  border-radius: var(--md-shape-full);
+  background: var(--bg-base);
+  transform: translateY(-50%);
+}
+
+.lab-curve-marker--start {
+  left: 0;
+}
+
+.lab-curve-marker--target {
+  left: var(--curve-distance);
 }
 
 .lab-curve-object {
+  position: absolute;
+  top: calc(50% - 22px);
+  left: 0;
   display: block;
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--text-primary);
-  border-radius: var(--md-shape-md);
+  border-radius: var(--md-shape-sm);
   background: var(--bg-surface);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--text-primary) 8%, transparent);
+  will-change: transform;
+}
+
+.lab-curve-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font-size: calc(var(--type-0) - 2px);
+  line-height: 1.2;
+}
+
+.lab-curve-readout span {
+  color: var(--text-muted);
+}
+
+.lab-curve-readout span:first-child {
+  color: var(--text-primary);
 }
 
 .lab-curve-controls {
@@ -1755,6 +1836,12 @@ body::after {
   gap: var(--space-1);
   color: var(--text-muted);
   font-size: calc(var(--type-0) - 2px);
+}
+
+.lab-curve-range-head {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
 }
 
 .lab-curve-controls input[type="range"] {
