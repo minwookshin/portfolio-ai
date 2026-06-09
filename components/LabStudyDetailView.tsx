@@ -39,6 +39,64 @@ function renderInlineStudyText(text: string): ReactNode {
   });
 }
 
+function getStudyStory(study: LabStudy) {
+  if (study.story?.length) return study.story;
+
+  return [
+    {
+      heading: "the starting point",
+      body: [study.thesis],
+    },
+    {
+      heading: "what changes",
+      body: study.points,
+    },
+  ];
+}
+
+function LabStudyStory({ study }: { study: LabStudy }) {
+  const story = getStudyStory(study);
+
+  return (
+    <section className="lab-study-article" aria-label="study notes">
+      {story.map((section) => (
+        <div key={section.heading} className="lab-study-story-block">
+          <h2 className="lab-study-section-heading">{section.heading}</h2>
+          <div className="lab-study-story-body">
+            {section.body.map((paragraph) => (
+              <p key={paragraph}>{renderInlineStudyText(paragraph)}</p>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function LabStudyRules({ rules }: { rules: LabStudy["rules"] }) {
+  if (rules.length === 0) return null;
+
+  return (
+    <section className="lab-study-rule-section">
+      <h2 className="lab-study-section-heading">rules I keep</h2>
+      <div className="lab-study-rule-list" aria-label="rules">
+        {rules.map((rule) => (
+          <p key={rule.label} className="lab-study-rule-item">
+            <span className="lab-study-rule-label">{rule.label}</span>{" "}
+            <span className="lab-study-rule-value">{renderInlineStudyText(rule.value)}</span>
+            {rule.note && (
+              <>
+                {" "}
+                <span className="lab-study-rule-note">{renderInlineStudyText(rule.note)}</span>
+              </>
+            )}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function StudyButton({
   active = false,
   children,
@@ -662,43 +720,13 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
 
       <LabStudyDemo kind={study.kind} reduceMotion={reduceMotion} />
 
-      <section className="lab-study-insight">
-        <div className="lab-study-insight-block">
-          <h2 className="lab-study-section-heading">
-            why it works
-          </h2>
-          <ul className="lab-study-point-list">
-            {study.points.map((point) => (
-              <li key={point}>
-                {renderInlineStudyText(point)}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="lab-study-insight-block">
-          <h2 className="lab-study-section-heading">
-            rules
-          </h2>
-          <div className="lab-study-rule-list" aria-label="rules">
-            {study.rules.map((rule) => (
-              <p key={rule.label} className="lab-study-rule-item">
-                <span className="lab-study-rule-label">{rule.label}</span>{" "}
-                <span className="lab-study-rule-value">{renderInlineStudyText(rule.value)}</span>
-                {rule.note && (
-                  <>
-                    {" "}
-                    <span className="lab-study-rule-note">{renderInlineStudyText(rule.note)}</span>
-                  </>
-                )}
-              </p>
-            ))}
-          </div>
-        </div>
-      </section>
+      <LabStudyStory study={study} />
+
+      <LabStudyRules rules={study.rules} />
 
       <section className="lab-study-code-section">
         <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-          code
+          final code
         </h2>
         <pre className="lab-study-code"><code>{study.code}</code></pre>
       </section>

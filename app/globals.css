@@ -883,11 +883,17 @@ body::after {
   gap: var(--space-2);
 }
 
+.lab-study-article,
 .lab-study-insight {
   display: grid;
   gap: var(--space-5);
 }
 
+.lab-study-article {
+  max-width: var(--measure);
+}
+
+.lab-study-story-block,
 .lab-study-insight-block {
   display: grid;
   gap: var(--space-2);
@@ -931,6 +937,24 @@ body::after {
   color: var(--text-muted);
   font-size: var(--type-0);
   line-height: var(--leading-body);
+}
+
+.lab-study-story-body {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.lab-study-story-body p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
+}
+
+.lab-study-rule-section {
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--measure);
 }
 
 .lab-study-rule-item {
