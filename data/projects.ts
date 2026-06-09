@@ -149,7 +149,11 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       status: { label: "🟢 Live", href: "https://www.minwookshin.com" },
       oneLiner: "AI-native portfolio that answers questions, qualifies intent, and opens relevant proof.",
       pipeline: "Designed in Figma → Shipped in Next.js + React.",
-      demo: { label: "Try live site", href: "https://www.minwookshin.com" },
+      demo: {
+        label: "Try live site",
+        href: "https://www.minwookshin.com",
+        video: "/projects/portfolio-ai/demo.mp4",
+      },
       scope: [
         { label: "Build time", value: "2 weeks" },
         { label: "API integrations", value: "Gemini API, Vercel server routes" },
