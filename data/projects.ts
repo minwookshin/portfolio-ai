@@ -43,6 +43,11 @@ export type LabStudy = {
     heading: string;
     body: string[];
   }[];
+  technicalArtifact?: {
+    title: string;
+    body: string;
+    caption?: string;
+  };
   points: string[];
   rules: BuilderMetric[];
   code: string;
@@ -302,6 +307,24 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
           ],
         },
       ],
+      technicalArtifact: {
+        title: "Loop Decision Tree",
+        body: `Does the model understand the user's intent?
+├── No  -> ask one clarifying question
+└── Yes
+    ├── Is the next action reversible?
+    │   ├── Yes -> act, then observe
+    │   └── No  -> checkpoint before action
+    │
+    ├── Did the same failure repeat?
+    │   ├── Yes -> create an eval
+    │   └── No  -> retry with better evidence
+    │
+    └── Is the user still in control?
+        ├── Yes -> continue the loop
+        └── No  -> surface state + pause`,
+        caption: "The loop stays useful when the interface knows when to act, when to ask, and when to stop.",
+      },
       points: [
         "Show the system's current `belief` before it turns `intent` into action.",
         "Make the `trace` readable so the human can catch wrong assumptions early.",
@@ -374,6 +397,23 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           ],
         },
       ],
+      technicalArtifact: {
+        title: "Easing Decision Flowchart",
+        body: `Is the element entering or exiting the viewport?
+├── Yes -> ease-out
+└── No
+    ├── Is it moving or morphing on screen?
+    │   ├── Yes -> ease-in-out
+    │   └── No
+    │       ├── Is it a hover change?
+    │       │   ├── Yes -> ease
+    │       │   └── No
+    │       │
+    │       └── Is it constant motion?
+    │           ├── Yes -> linear
+    │           └── No  -> ease-out`,
+        caption: "Choosing motion from a rule keeps the interface quiet instead of leaving every easing to taste.",
+      },
       points: [
         "Show progress inside the `control` when the user's input takes time.",
         "Make the commitment slow enough to feel intentional, then make release quick.",
@@ -450,6 +490,17 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           ],
         },
       ],
+      technicalArtifact: {
+        title: "Hover Handoff Contract",
+        body: `Pointer enters a project row
+├── Preview changes first       -> 120-160ms
+├── Title shifts slightly       -> 4-6px
+├── Metadata becomes readable   -> muted to mid gray
+└── Pointer leaves the group
+    ├── Keep last preview briefly
+    └── Fade only when the user fully exits`,
+        caption: "The preview should feel connected to the row without making the row louder than the work.",
+      },
       points: [
         "Move copy only a few pixels with `transform`, so the row feels awake, not restless.",
         "Let the `preview` change faster than the text so the image feels connected.",
@@ -517,6 +568,22 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           ],
         },
       ],
+      technicalArtifact: {
+        title: "Route Change Contract",
+        body: `User changes section
+├── Identity changed?
+│   ├── Yes -> full route transition
+│   └── No  -> keep intro and nav fixed
+│
+├── URL changed?
+│   ├── Yes -> preserve shareable path
+│   └── No  -> update local state only
+│
+└── Content changed?
+    ├── Yes -> reveal lower panel
+    └── No  -> do nothing`,
+        caption: "The page feels calmer when only the part that actually changed is allowed to move.",
+      },
       points: [
         "Keep the intro and contact surface stable so the user does not re-orient.",
         "Update the `URL` for shareability without making the whole page feel replaced.",
@@ -593,6 +660,24 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           ],
         },
       ],
+      technicalArtifact: {
+        title: "Cursor Restraint Contract",
+        body: `Is the pointer adding information?
+├── No  -> use the system cursor
+└── Yes
+    ├── Is the surface dense or text-heavy?
+    │   ├── Yes -> back off
+    │   └── No
+    │
+    ├── Does contrast need help?
+    │   ├── Yes -> outside white outline
+    │   └── No  -> black fill only
+    │
+    └── Is the cursor becoming decorative?
+        ├── Yes -> reduce size / shadow
+        └── No  -> keep it`,
+        caption: "A custom cursor should earn its place; the native cursor wins whenever precision matters.",
+      },
       points: [
         "Make the shape slightly rounded so it feels designed, not novelty.",
         "Keep the shadow subtle enough to separate on white without becoming a sticker.",
@@ -666,6 +751,22 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           ],
         },
       ],
+      technicalArtifact: {
+        title: "Motion Rule Picker",
+        body: `What kind of movement is this?
+├── Micro feedback
+│   ├── Distance: 2-8px
+│   └── Duration: 120-180ms
+│
+├── Small panel / preview
+│   ├── Distance: 8-18px
+│   └── Duration: 180-260ms
+│
+└── Layout shift
+    ├── Distance: 18-32px
+    └── Duration: 240-320ms`,
+        caption: "Duration only makes sense when it is paired with distance and interaction weight.",
+      },
       points: [
         "The same `duration` feels different when `distance` changes.",
         "`ease-out` works for entering; `ease-in-out` works better for movement already on screen.",

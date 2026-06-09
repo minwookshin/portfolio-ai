@@ -116,6 +116,9 @@ describe("LabStudyDetailView interactions", () => {
       .find((element) => element.classList.contains("lab-inline-code"));
     expect(inlineLoopToken).toBeDefined();
 
+    expect(screen.getByText("## Loop Decision Tree")).toBeInTheDocument();
+    expect(screen.getByText(/checkpoint before action/)).toBeInTheDocument();
+
     expect(screen.getByText("Capture the user's goal before the model plans around the wrong target.")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /checkpoint/i }));
