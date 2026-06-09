@@ -38,8 +38,8 @@ function isHeroSection(section: DetailSection | undefined): section is HeroSecti
   return section?.kind === "hero";
 }
 
-function compactList(items: Array<string | undefined | null>) {
-  return items.filter(isVisibleBuilderValue).join(" · ");
+function joinVisible(items: Array<string | undefined | null>) {
+  return items.filter(isVisibleBuilderValue).join(", ");
 }
 
 function ProjectHeroMedia({
@@ -101,11 +101,17 @@ function ProjectDetailHero({
   proof?: BuilderProof;
   reduceMotion: boolean;
 }) {
-  const stack = proof?.stack.filter(isVisibleBuilderValue).slice(0, 3).join(", ");
+  const stack = joinVisible(proof?.stack.slice(0, 4) ?? project.tags.slice(0, 4));
+  const outcome = proof?.results.find((item) => isVisibleBuilderValue(item.value))?.value ?? proof?.status.label;
   const title = hero?.title ?? project.title;
   const subtitle = hero?.subtitle ?? project.overview ?? proof?.oneLiner ?? project.fullDescription;
-  const meta = compactList([proof?.role ?? project.role, stack, project.timeline ?? project.date, proof?.status.label]);
-  const tags = hero?.tags?.filter(isVisibleBuilderValue).slice(0, 5) ?? project.tags.slice(0, 5);
+  const eyebrow = project.studioLabel ?? hero?.badge;
+  const facts = [
+    { label: "role", value: proof?.role ?? project.role },
+    { label: "timeline", value: project.timeline ?? project.date },
+    { label: "stack", value: stack },
+    { label: "outcome", value: outcome },
+  ].filter((item) => isVisibleBuilderValue(item.value));
 
   return (
     <motion.section
@@ -114,9 +120,11 @@ function ProjectDetailHero({
       transition={reduceMotion ? tweens.none : tweens.base}
       className="studio-detail-hero"
     >
-      <p className="mb-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-        {meta}
-      </p>
+      {eyebrow && (
+        <p className="mb-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+          {eyebrow}
+        </p>
+      )}
       <h1 className="max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
         {title}
       </h1>
@@ -125,12 +133,17 @@ function ProjectDetailHero({
           {subtitle}
         </p>
       )}
-      {tags.length > 0 && (
-        <div className="mt-[var(--space-2)] flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-          {tags.map((tag) => (
-            <span key={tag}>{tag}</span>
+      {facts.length > 0 && (
+        <dl className="mt-[var(--space-3)] grid gap-x-[var(--space-4)] gap-y-[var(--space-2)] sm:grid-cols-2">
+          {facts.map((fact) => (
+            <div key={fact.label}>
+              <dt className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{fact.label}</dt>
+              <dd className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
+                {fact.value}
+              </dd>
+            </div>
           ))}
-        </div>
+        </dl>
       )}
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 6 }}
@@ -144,47 +157,33 @@ function ProjectDetailHero({
   );
 }
 
-function BuilderProofSummary({ project, proof }: { project: Project | PortfolioProject; proof: BuilderProof }) {
+function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
   const demoNote = isVisibleBuilderValue(proof.demo?.note) ? proof.demo?.note : undefined;
   const hasDemo = Boolean(proof.demo?.video || proof.demo?.href);
-  const stack = proof.stack.filter(isVisibleBuilderValue);
-  const prototypeValue = proof.demo?.href
-    ? "live product surface"
-    : proof.demo?.video
-      ? "video prototype available"
-      : proof.status.label;
-  const reliabilityValue = stack.length > 0 ? stack.join(", ") : proof.pipeline;
-  const signalItems = [
-    { label: "craft", value: project.studioLabel ?? project.tags.slice(0, 2).join(", ") },
-    { label: "prototype", value: prototypeValue },
-    { label: "thinking", value: proof.oneLiner },
-    { label: "reliability", value: reliabilityValue },
-  ].filter((item) => isVisibleBuilderValue(item.value));
 
   return (
-    <section className="studio-detail-proof space-y-[var(--space-4)]">
-      <div className="grid gap-x-[var(--space-4)] gap-y-[var(--space-3)] sm:grid-cols-2">
-        {signalItems.map((item) => (
-          <SummaryItem key={item.label} label={item.label} value={item.value} />
-        ))}
-      </div>
+    <section className="studio-detail-proof space-y-[var(--space-5)]">
+      <DetailNote eyebrow="the build" body={proof.oneLiner} />
 
       {proof.demo && hasDemo && (
-        <div className="flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
-          <a
-            href={proof.demo.href ?? proof.demo.video}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="studio-lateral-link micro-focus micro-pressable inline-flex items-center text-[length:var(--type-0)]"
-          >
-            {proof.demo.label}
-          </a>
-          {isVisibleBuilderValue(demoNote) && (
-            <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-              {demoNote}
-            </p>
-          )}
-        </div>
+        <section>
+          <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">proof</p>
+          <div className="mt-[var(--space-1)] flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
+            <a
+              href={proof.demo.href ?? proof.demo.video}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="studio-lateral-link studio-proof-link micro-focus micro-pressable inline-flex items-center text-[length:var(--type-0)]"
+            >
+              {proof.demo.label}
+            </a>
+            {isVisibleBuilderValue(demoNote) && (
+              <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+                {demoNote}
+              </p>
+            )}
+          </div>
+        </section>
       )}
 
       <MetricGrid title="engineering scope" items={proof.scope} />
@@ -193,12 +192,12 @@ function BuilderProofSummary({ project, proof }: { project: Project | PortfolioP
   );
 }
 
-function SummaryItem({ label, value }: { label: string; value: ReactNode }) {
+function DetailNote({ eyebrow, body }: { eyebrow: string; body: ReactNode }) {
   return (
-    <div>
-      <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{label}</p>
-      <p className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">{value}</p>
-    </div>
+    <section>
+      <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{eyebrow}</p>
+      <p className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">{body}</p>
+    </section>
   );
 }
 
@@ -208,9 +207,9 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
   if (visibleItems.length === 0) return null;
 
   return (
-    <section className="space-y-[var(--space-3)]">
+    <section className="space-y-[var(--space-2)]">
       <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{title}</h2>
-      <div className="grid gap-x-[var(--space-4)] gap-y-[var(--space-3)] sm:grid-cols-2">
+      <div className="grid gap-x-[var(--space-4)] gap-y-[var(--space-2)] sm:grid-cols-2">
         {visibleItems.map((item) => (
           <div key={`${title}-${item.label}`}>
             <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{item.label}</p>
@@ -282,7 +281,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
         </motion.button>
       )}
       <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
-      {proof && <BuilderProofSummary project={project} proof={proof} />}
+      {proof && <BuilderProofSummary proof={proof} />}
       <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
     </motion.div>
   );

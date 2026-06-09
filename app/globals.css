@@ -416,6 +416,10 @@ body::after {
   transform: translate3d(8px, 0, 0);
 }
 
+.studio-proof-link {
+  color: var(--text-primary);
+}
+
 .work-preview-stage {
   contain: paint;
   isolation: isolate;
