@@ -577,10 +577,22 @@ body::after {
     0 12px 34px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   color: #fff;
+  opacity: 0;
   padding: 0.42rem 0.55rem;
+  pointer-events: none;
   transform: translateX(-50%);
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
   -webkit-backdrop-filter: blur(18px) saturate(1.45);
   backdrop-filter: blur(18px) saturate(1.45);
+}
+
+.studio-video-player:hover .studio-video-controls,
+.studio-video-player:focus-within .studio-video-controls {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(-2px);
 }
 
 .studio-video-control-button {
@@ -610,11 +622,36 @@ body::after {
 .studio-video-control-button svg {
   width: 14px;
   height: 14px;
-  stroke-width: 2;
 }
 
 .studio-video-control-button svg[data-lucide="play"] {
   margin-left: 1px;
+}
+
+.studio-video-pause-glyph {
+  display: inline-grid;
+  grid-template-columns: repeat(2, 1px);
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+.studio-video-pause-glyph span {
+  display: block;
+  width: 1px;
+  height: 11px;
+  border-radius: var(--md-shape-full);
+  background: currentColor;
+}
+
+@media (hover: none) {
+  .studio-video-controls {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%);
+  }
 }
 
 .studio-video-time {
@@ -2273,6 +2310,7 @@ body::after {
   .study-meta-detail,
   .related-work-link,
   .studio-lateral-link,
+  .studio-video-controls,
   .studio-video-control-button,
   .lab-study-control,
   .lab-cursor-target,
