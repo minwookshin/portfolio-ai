@@ -701,9 +701,11 @@ function StudyTextRow({
     target: rowRef,
     offset: STUDY_ROW_SCROLL_OFFSETS,
   });
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [0, 1, 1, 1] : [0, 1, 1, 0]);
-  const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [10, 0, 0, 0] : [10, 0, 0, -8]);
+  const scrollOpacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [1, 1, 1, 1] : [0, 1, 1, 0]);
+  const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [0, 0, 0, 0] : [10, 0, 0, -8]);
   const scrollBlur = useTransform(scrollYProgress, (value) => {
+    if (isLast) return "blur(0px)";
+
     const entryBlur = value < 0.22 ? 1 - value / 0.22 : 0;
     const blur = entryBlur * 3;
 
