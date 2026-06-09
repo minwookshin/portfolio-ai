@@ -997,7 +997,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
 
   return (
     <main
-      className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]"
+      className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
@@ -1048,7 +1048,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         initial={reduceMotion ? false : "hidden"}
         animate={introReady || reduceMotion ? "visible" : "hidden"}
         variants={reduceMotion ? undefined : landingFooterItem}
-        className="mx-auto mt-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[620px] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:w-[calc(100%_-_(var(--space-5)*2))]"
+        className="pointer-events-none fixed inset-x-0 bottom-[var(--space-4)] z-[60] mx-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[620px] text-[length:var(--type-0)] sm:bottom-[var(--space-5)] sm:w-[calc(100%_-_(var(--space-5)*2))]"
       >
         <BuildMeta />
       </motion.div>
