@@ -39,6 +39,10 @@ export type LabStudyKind =
 export type LabStudy = {
   kind: LabStudyKind;
   thesis: string;
+  story?: {
+    heading: string;
+    body: string[];
+  }[];
   points: string[];
   rules: BuilderMetric[];
   code: string;
@@ -277,6 +281,27 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     labStudy: {
       kind: "ai-loop",
       thesis: "AI products get better when the `loop` is visible enough for people to steer it.",
+      story: [
+        {
+          heading: "the starting point",
+          body: [
+            "Most AI demos hide the loop. The interface jumps from prompt to answer, so the user cannot see the `intent`, the plan, or the moment where the system should slow down.",
+          ],
+        },
+        {
+          heading: "setting up the structure",
+          body: [
+            "I split the loop into readable states: `intent`, `plan`, `action`, `observation`, `eval`, and `checkpoint`. The UI does not need to expose everything, but it should expose enough for the human to steer.",
+            "The important part is sequence. A checkpoint should appear before risk, not after the system has already done the work.",
+          ],
+        },
+        {
+          heading: "polishing the loop",
+          body: [
+            "The loop should remember failure. When the same mistake repeats, the interface should turn it into an `eval` instead of another vague retry.",
+          ],
+        },
+      ],
       points: [
         "Show the system's current `belief` before it turns `intent` into action.",
         "Make the `trace` readable so the human can catch wrong assumptions early.",
@@ -327,6 +352,28 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     labStudy: {
       kind: "motion-taste",
       thesis: "Good motion should explain state change without making the interface feel busy.",
+      story: [
+        {
+          heading: "the starting point",
+          body: [
+            "The starting point is a control that needs confirmation. If the action happens instantly, it feels risky. If it opens a modal, it feels heavier than the task.",
+          ],
+        },
+        {
+          heading: "setting up the structure",
+          body: [
+            "The button carries two states at once: the normal surface and the confirming surface. The confirming layer is revealed inside the control, so progress stays attached to the user's finger.",
+            "That keeps the component small. No dialog, no extra screen, just a visible hold state where the action already lives.",
+          ],
+        },
+        {
+          heading: "polishing it up",
+          body: [
+            "The hold can be slow because it represents intent. The release should be quick because cancellation should feel effortless.",
+            "A small `press scale` gives immediate feedback, so the slower confirmation still feels responsive.",
+          ],
+        },
+      ],
       points: [
         "Show progress inside the `control` when the user's input takes time.",
         "Make the commitment slow enough to feel intentional, then make release quick.",
@@ -382,6 +429,27 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     labStudy: {
       kind: "hover-row",
       thesis: "The row should respond quickly, but the work should remain the hero.",
+      story: [
+        {
+          heading: "the starting point",
+          body: [
+            "A project row needs to feel alive without becoming the whole interaction. A heavy underline or big shift makes the list feel louder than the work.",
+          ],
+        },
+        {
+          heading: "setting up the handoff",
+          body: [
+            "The row and the preview should move as one system. The copy shifts a few pixels, while the preview changes quickly enough that the user feels the connection.",
+            "The metadata stays quiet until hover. That keeps scanning calm and leaves the title as the primary thing to read.",
+          ],
+        },
+        {
+          heading: "polishing the response",
+          body: [
+            "The movement is intentionally tiny. The goal is not to announce hover; it is to make moving between projects feel continuous.",
+          ],
+        },
+      ],
       points: [
         "Move copy only a few pixels with `transform`, so the row feels awake, not restless.",
         "Let the `preview` change faster than the text so the image feels connected.",
@@ -428,6 +496,27 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     labStudy: {
       kind: "route-transition",
       thesis: "Navigation feels calmer when identity stays still and only the lower content changes.",
+      story: [
+        {
+          heading: "the starting point",
+          body: [
+            "The usual page change makes the whole screen feel replaced. On a small portfolio, that is too much motion for switching between `work` and `studies`.",
+          ],
+        },
+        {
+          heading: "setting up the structure",
+          body: [
+            "The identity and navigation stay in place. The `URL` still changes for sharing, but the lower content is the only moving zone.",
+            "This makes the route feel like a section change instead of a full restart.",
+          ],
+        },
+        {
+          heading: "polishing the transition",
+          body: [
+            "The content reveal uses a short opacity and y movement. Blur can help bridge the first frame, but it should disappear quickly.",
+          ],
+        },
+      ],
       points: [
         "Keep the intro and contact surface stable so the user does not re-orient.",
         "Update the `URL` for shareability without making the whole page feel replaced.",
@@ -483,6 +572,27 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     labStudy: {
       kind: "cursor-study",
       thesis: "A custom cursor should add authorship without stealing attention from the interface.",
+      story: [
+        {
+          heading: "the starting point",
+          body: [
+            "Custom cursors get annoying fast. The shape has to feel authored, but it should still behave like a normal pointer.",
+          ],
+        },
+        {
+          heading: "setting up the shape",
+          body: [
+            "The cursor keeps the familiar arrow silhouette, then softens it with a smaller size, rounded geometry, and a slight rotation.",
+            "The white outline sits outside the black fill, so it separates from dark or busy surfaces without becoming a halo.",
+          ],
+        },
+        {
+          heading: "polishing the restraint",
+          body: [
+            "The custom cursor should back off when precision matters. Text inputs, native controls, and dense UI should keep the system cursor.",
+          ],
+        },
+      ],
       points: [
         "Make the shape slightly rounded so it feels designed, not novelty.",
         "Keep the shadow subtle enough to separate on white without becoming a sticker.",
@@ -535,6 +645,27 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     labStudy: {
       kind: "motion-curve",
       thesis: "Motion values should be judged in context, not copied from a token list blindly.",
+      story: [
+        {
+          heading: "the starting point",
+          body: [
+            "A motion token by itself does not tell you much. `220ms` can feel crisp over four pixels and sluggish over a larger layout shift.",
+          ],
+        },
+        {
+          heading: "setting up the tester",
+          body: [
+            "The tool puts `distance`, `duration`, and `easing` in the same place so the motion can be judged as a real interface movement.",
+            "That makes critique concrete. Instead of saying something feels off, you can replay the exact rule and adjust one variable.",
+          ],
+        },
+        {
+          heading: "polishing the rule",
+          body: [
+            "The output should be a reusable decision, not just a fun playground. The best values become small rules for the rest of the site.",
+          ],
+        },
+      ],
       points: [
         "The same `duration` feels different when `distance` changes.",
         "`ease-out` works for entering; `ease-in-out` works better for movement already on screen.",
