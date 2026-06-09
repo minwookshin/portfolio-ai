@@ -90,6 +90,10 @@ function Dot() {
   return <span className="mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-[var(--text-muted)]" />;
 }
 
+function isExternalHref(href: string) {
+  return /^https?:\/\//.test(href) || href.startsWith("mailto:");
+}
+
 function Tags({ tags }: { tags: string[] }) {
   return (
     <div className="flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] font-normal leading-[1.2] text-[var(--text-muted)]">
@@ -354,17 +358,21 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           <div className="flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
-            {section.items.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="studio-lateral-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
-              >
-                {l.label}
-              </a>
-            ))}
+            {section.items.map((l) => {
+              const external = isExternalHref(l.href);
+
+              return (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  className="studio-lateral-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
+                >
+                  {l.label}
+                </a>
+              );
+            })}
           </div>
         </motion.section>
       );

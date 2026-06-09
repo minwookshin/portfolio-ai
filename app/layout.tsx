@@ -68,6 +68,8 @@ export default function RootLayout({
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable portfolio guide" />
         <link rel="alternate" type="text/markdown" href="/portfolio.md" title="AI-readable portfolio summary" />
         <link rel="alternate" type="application/json" href="/resume.json" title="Machine-readable resume" />
+        <link rel="alternate" type="text/markdown" href="/design-system.md" title="AI-readable design system proof" />
+        <link rel="alternate" type="application/json" href="/design-system/tokens.json" title="Design system tokens" />
       </head>
       <body className={geistMono.variable}>
         <StructuredData data={rootJsonLd()} />

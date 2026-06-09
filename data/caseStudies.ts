@@ -162,6 +162,33 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         images: [{ src: "/projects/portfolio-ai/architecture.png", caption: "Client → Next.js API route → Gemini, streamed back over SSE" }],
       },
       {
+        kind: "split",
+        eyebrow: "System proof",
+        heading: "AI-readable interface primitives",
+        columns: [
+          {
+            label: "Design tokens",
+            title: "Roles instead of decoration",
+            body:
+              "Color, type, spacing, radius, and motion roles are documented so new UI can be generated from the same quiet system.",
+          },
+          {
+            label: "Interaction contract",
+            title: "Rules an LLM can follow",
+            body:
+              "Component primitives, accessibility rules, reduced-motion behavior, and AI usage limits are exposed as public docs.",
+          },
+        ],
+      },
+      {
+        kind: "links",
+        items: [
+          { label: "design system proof", href: "/design-system" },
+          { label: "design-system.md", href: "/design-system.md" },
+          { label: "tokens.json", href: "/design-system/tokens.json" },
+        ],
+      },
+      {
         kind: "outcome",
         badge: "Impact",
         heading: "Turning a portfolio into an agency-style lead flow",
