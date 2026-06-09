@@ -11,7 +11,6 @@ import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
-import { LabStudyTileVisual } from "@/components/LabStudyDetailView";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -681,93 +680,18 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
   ];
 }
 
-function StudyPreviewContent({
-  item,
-}: {
-  item: StudyItem;
-}) {
-  if (item.kind === "lab") {
-    if (isLabStudyProject(item.project)) {
-      return (
-        <div className="study-preview-glyph-card" aria-hidden="true">
-          <div className="study-preview-glyph-stage">
-            <LabStudyTileVisual className="lab-study-tile-visual--preview" kind={item.project.labStudy.kind} />
-          </div>
-        </div>
-      );
-    }
-
-    return <WorkPreviewContent project={item.project} />;
-  }
-
-  return (
-    <div className="study-preview-writing-card" aria-hidden="true">
-      <span />
-      <span />
-      <span />
-      <span />
-      <span />
-    </div>
-  );
-}
-
-function StudyFixedPreview({
-  item,
-  reduceMotion,
-}: {
-  item: StudyItem;
-  reduceMotion: boolean;
-}) {
-  return (
-    <div className="work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent">
-      <AnimatePresence initial={false} mode="popLayout">
-        <motion.div
-          key={item.id}
-          className="absolute inset-0 transform-gpu"
-          initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(6px)", scale: 0.992, x: 3 }}
-          animate={{ opacity: 1, filter: "blur(0px)", scale: 1, x: 0 }}
-          exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(4px)", scale: 1.002, x: -3 }}
-          transition={
-            reduceMotion
-              ? tweens.instant
-              : {
-                  opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
-                  filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                  scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                  x: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                }
-          }
-          style={{ willChange: "opacity, filter, transform" }}
-        >
-          <StudyPreviewContent item={item} />
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-}
-
 function StudyTextRow({
   item,
   index,
-  onActivate,
-  onDeactivate,
 }: {
   item: StudyItem;
   index: number;
-  onActivate?: () => void;
-  onDeactivate?: () => void;
 }) {
   const reduceMotion = useReducedMotion();
 
   return (
     <motion.li
       key={item.id}
-      onBlur={onDeactivate}
-      onFocus={onActivate}
-      onMouseEnter={onActivate}
-      onMouseLeave={onDeactivate}
-      onPointerEnter={onActivate}
-      onPointerLeave={onDeactivate}
       initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 10 }}
       whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
       animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
@@ -796,33 +720,6 @@ function StudyTextRow({
 }
 
 function StudiesSection({ items }: { items: StudyItem[] }) {
-  const reduceMotion = Boolean(useReducedMotion());
-  const canShowFixedPreview = useCanShowWorkPreview();
-  const hidePreviewTimer = useRef<number | null>(null);
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-
-  const clearHideTimer = useCallback(() => {
-    if (!hidePreviewTimer.current) return;
-    window.clearTimeout(hidePreviewTimer.current);
-    hidePreviewTimer.current = null;
-  }, []);
-
-  const activateRow = useCallback((index: number) => {
-    clearHideTimer();
-    setPreviewIndex(index);
-  }, [clearHideTimer]);
-
-  const deactivateRow = useCallback(() => {
-    clearHideTimer();
-    hidePreviewTimer.current = window.setTimeout(() => {
-      setPreviewIndex(null);
-    }, 70);
-  }, [clearHideTimer]);
-
-  useEffect(() => {
-    return () => clearHideTimer();
-  }, [clearHideTimer]);
-
   if (items.length === 0) {
     return (
       <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
@@ -830,8 +727,6 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
       </p>
     );
   }
-
-  const previewItem = previewIndex === null ? null : items[previewIndex];
 
   return (
     <div className="relative">
@@ -841,39 +736,9 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
             key={item.id}
             item={item}
             index={index}
-            onActivate={() => activateRow(index)}
-            onDeactivate={deactivateRow}
           />
         ))}
       </ul>
-      {canShowFixedPreview && (
-        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block">
-          <AnimatePresence initial={false}>
-            {previewItem && (
-              <motion.div
-                key="studies-preview-stage"
-                className="absolute inset-0 transform-gpu"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(5px)", scale: 0.996, y: 3 }}
-                animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.996, y: 3 }}
-                transition={
-                  reduceMotion
-                    ? tweens.instant
-                    : {
-                        opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
-                        filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                        scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                        y: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                      }
-                }
-                style={{ willChange: "opacity, filter, transform" }}
-              >
-                <StudyFixedPreview item={previewItem} reduceMotion={reduceMotion} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
     </div>
   );
 }
