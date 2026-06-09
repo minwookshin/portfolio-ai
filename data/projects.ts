@@ -426,13 +426,21 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         { label: "moving zone", value: "content panel", note: "small opacity and y movement" },
         { label: "duration", value: "220-280ms", note: "noticeable, but not theatrical" },
       ],
-      code: `<AnimatePresence mode="wait">
-  <motion.section
-    key={pathname}
-    initial={{ opacity: 0, y: 8 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -4 }}
-    transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+      code: `<header>
+  <a href="/work">minwook shin</a>
+  <nav aria-label="sections">
+    <a data-active={section === "work"} href="/work">work</a>
+    <a data-active={section === "studies"} href="/studies">studies</a>
+  </nav>
+</header>
+
+<AnimatePresence initial={false}>
+  <motion.ul
+    key={section}
+    initial={{ opacity: 0, y: 7, filter: "blur(4px)" }}
+    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+    exit={{ opacity: 0, y: -4, filter: "blur(3px)" }}
+    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
   />
 </AnimatePresence>`,
     },

@@ -57,9 +57,16 @@ describe("LabStudyDetailView interactions", () => {
     const user = userEvent.setup();
     render(<LabStudyDetailView project={getStudyProject("route-transition-study")} />);
 
+    expect(screen.getByText("minwook shin")).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: "route study path" })).toHaveTextContent("/work");
+    expect(screen.getByText("atlas")).toBeInTheDocument();
+
     await user.click(screen.getByRole("button", { name: "studies" }));
-    await waitFor(() => expect(screen.getByText("thinking in motion")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("status", { name: "route study path" })).toHaveTextContent("/studies"));
+    expect(screen.getByText("motion taste system")).toBeInTheDocument();
+    expect(screen.getByText("hover row study")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "studies" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("minwook shin")).toBeInTheDocument();
   });
 
   it("activates cursor study targets with pointer, focus, and click", async () => {
