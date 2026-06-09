@@ -420,9 +420,9 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         "Use `press scale` as instant feedback so the slower confirmation still feels responsive.",
       ],
       rules: [
-        { label: "press", value: "140-180ms", note: "instant tactile feedback" },
-        { label: "hold", value: "1000-1400ms", note: "sustained intent, linear progress" },
-        { label: "release", value: "160-220ms", note: "fast cancellation so it never feels stuck" },
+        { label: "press", value: "160ms", note: "instant tactile feedback" },
+        { label: "hold", value: "1200ms", note: "sustained intent, linear progress" },
+        { label: "release", value: "120-180ms", note: "fast cancellation so it never feels stuck" },
       ],
       code: `.hold-action {
   transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -493,9 +493,9 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       technicalArtifact: {
         title: "Hover Handoff Contract",
         body: `Pointer enters a project row
-├── Preview changes first       -> 120-160ms
-├── Title shifts slightly       -> 4-6px
-├── Metadata becomes readable   -> muted to mid gray
+├── Preview changes first       -> 140ms
+├── Title shifts slightly       -> 6px / 220ms
+├── Metadata becomes readable   -> 220ms color shift
 └── Pointer leaves the group
     ├── Keep last preview briefly
     └── Fade only when the user fully exits`,
@@ -507,9 +507,9 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         "Use muted metadata until hover to keep scanning calm.",
       ],
       rules: [
-        { label: "copy move", value: "4-6px", note: "enough to feel intentional" },
-        { label: "hover fade", value: "120-180ms", note: "fast handoff between projects" },
-        { label: "meta color", value: "muted -> mid gray", note: "secondary copy stays secondary" },
+        { label: "copy move", value: "6px", note: "enough to feel intentional" },
+        { label: "preview swap", value: "140ms", note: "fast handoff between projects" },
+        { label: "meta color", value: "220ms", note: "secondary copy stays secondary" },
       ],
       code: `.project-row-copy {
   transform: translateX(0);
@@ -592,7 +592,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       rules: [
         { label: "stable zone", value: "identity + nav", note: "does not animate between sections" },
         { label: "moving zone", value: "content panel", note: "small opacity and y movement" },
-        { label: "duration", value: "220-280ms", note: "noticeable, but not theatrical" },
+        { label: "duration", value: "180ms", note: "uses the fast motion token for content swaps" },
       ],
       code: `<header>
   <a href="/work">minwook shin</a>
