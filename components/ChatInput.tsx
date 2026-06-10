@@ -158,7 +158,7 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={reduceMotion ? { opacity: 0, scale: 1, x: 0 } : { opacity: 0, scale: 0.96, x: 14 }}
               transition={activeMotion}
-              className="micro-focus micro-focus-tight micro-pressable group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase tracking-wide text-on-surface hover:bg-outline-variant"
+              className="micro-focus micro-focus-tight micro-pressable group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase text-on-surface hover:bg-outline-variant"
             >
               <span className="relative">esc</span>
             </motion.button>

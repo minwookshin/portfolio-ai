@@ -13,7 +13,7 @@ export function makeVideoPosterDataUrl(label: string) {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
       <rect width="1200" height="900" fill="#F7F8F8"/>
       <rect x="1" y="1" width="1198" height="898" fill="none" stroke="#E2E4E9" stroke-width="2"/>
-      <text x="600" y="454" text-anchor="middle" dominant-baseline="middle" fill="#62666D" font-family="Arial, sans-serif" font-size="42" letter-spacing="-1">${safeLabel}</text>
+      <text x="600" y="454" text-anchor="middle" dominant-baseline="middle" fill="#62666D" font-family="Arial, sans-serif" font-size="42" letter-spacing="0">${safeLabel}</text>
     </svg>
   `;
 
