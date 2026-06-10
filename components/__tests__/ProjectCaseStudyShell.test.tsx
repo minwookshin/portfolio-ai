@@ -46,6 +46,18 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("/ post")).toBeInTheDocument();
   });
 
+  it("renders Portfolio AI proof links as working public routes", () => {
+    render(<ProjectCaseStudyShell project={getWorkProject("portfolio-ai")} />);
+
+    expect(screen.queryByRole("link", { name: /try live site/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Design system proof" })).toHaveAttribute("href", "/design-system");
+    expect(screen.getByRole("link", { name: "Design system markdown" })).toHaveAttribute("href", "/design-system.md");
+    expect(screen.getByRole("link", { name: "Design tokens JSON" })).toHaveAttribute("href", "/design-system/tokens.json");
+    expect(screen.getByText("/ page")).toBeInTheDocument();
+    expect(screen.getByText("/ markdown")).toBeInTheDocument();
+    expect(screen.getByText("/ json")).toBeInTheDocument();
+  });
+
   it("renders study detail breadcrumbs in page order", () => {
     render(
       <ProjectCaseStudyShell

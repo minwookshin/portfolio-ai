@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -94,16 +95,56 @@ function isExternalHref(href: string) {
   return /^https?:\/\//.test(href) || href.startsWith("mailto:");
 }
 
+function isDocumentHref(href: string) {
+  return /\.(json|md|txt)$/.test(href);
+}
+
 function getLinkMeta(label: string, href: string) {
   const value = `${label} ${href}`.toLowerCase();
 
+  if (value.endsWith(".md") || value.includes(".md ")) return "markdown";
+  if (value.endsWith(".json") || value.includes(".json ")) return "json";
+  if (value.endsWith(".txt") || value.includes(".txt ")) return "text";
   if (value.includes("github")) return "source";
   if (value.includes("linkedin")) return "post";
   if (value.includes("figma")) return "design";
   if (value.includes("demo")) return "demo";
   if (value.includes("http")) return "site";
+  if (href.startsWith("/")) return "page";
 
   return isExternalHref(href) ? "external" : "internal";
+}
+
+function DetailLink({ label, href }: { label: string; href: string }) {
+  const external = isExternalHref(href);
+  const document = isDocumentHref(href);
+  const meta = getLinkMeta(label, href);
+  const className = "studio-lateral-link studio-detail-link-row micro-focus micro-pressable text-[length:var(--type-0)]";
+  const children = (
+    <>
+      <span>{label}</span>
+      <span className="studio-detail-link-meta" aria-hidden="true">/ {meta}</span>
+    </>
+  );
+
+  if (external || document) {
+    return (
+      <a
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        className={className}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
+  );
 }
 
 function Tags({ tags }: { tags: string[] }) {
@@ -340,7 +381,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       return (
         <motion.section key={i} {...sectionMotion}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className="grid items-start gap-[var(--space-2)] sm:grid-cols-2">
+          <div className={`grid items-start gap-[var(--space-2)] ${section.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
             {section.images.map((img, gi) => (
               <figure key={gi} className="overflow-hidden">
                 <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
@@ -371,23 +412,9 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
         <motion.section key={i} {...sectionMotion}>
           <p className={`${eyebrowCls} mb-[var(--space-1)]`}>links</p>
           <div className="studio-detail-link-list">
-            {section.items.map((l) => {
-              const external = isExternalHref(l.href);
-              const meta = getLinkMeta(l.label, l.href);
-
-              return (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                  className="studio-lateral-link studio-detail-link-row micro-focus micro-pressable text-[length:var(--type-0)]"
-                >
-                  <span>{l.label}</span>
-                  <span className="studio-detail-link-meta" aria-hidden="true">/ {meta}</span>
-                </a>
-              );
-            })}
+            {section.items.map((l) => (
+              <DetailLink key={l.href} label={l.label} href={l.href} />
+            ))}
           </div>
         </motion.section>
       );

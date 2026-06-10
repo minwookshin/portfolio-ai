@@ -241,30 +241,41 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "split",
-        eyebrow: "How it's built",
-        heading: "Built like a product, not a chatbot wrapper",
+        eyebrow: "Product proof",
+        heading: "The site behaves like a small product system",
         columns: [
           {
-            label: "Conversational intake",
-            title: "A website that can qualify a project",
+            label: "Intake",
+            title: "Conversation qualifies the visitor's intent",
             body:
-              "Visitors can ask for an AI website, UX audit, product prototype, or case study. The system responds with a clear path and routes them to relevant proof.",
+              "Visitors can ask for an AI website, UX audit, product prototype, or case study. The response stays conversational, but it is backed by a clear intake path.",
           },
           {
-            label: "Proof system",
-            title: "Case studies wired into the chat",
+            label: "Routing",
+            title: "Project evidence opens deterministically",
             body:
-              "Hidden directives let the AI open the right project screen without exposing routing logic. The experience stays conversational, but the navigation is deterministic.",
+              "The chat can route people to the right case study without exposing implementation details. It feels like a dialogue, while navigation remains predictable.",
           },
         ],
         ask: ["How does the intake flow work?", "How do you keep the API key safe?"],
       },
       {
-        kind: "stats",
-        eyebrow: "Studio proof",
-        heading: "What this demonstrates",
-        items: [
-          { value: "8", label: "Work examples" },
+        kind: "flow",
+        eyebrow: "What it demonstrates",
+        heading: "Taste, system thinking, and applied AI in one surface",
+        steps: [
+          {
+            title: "Live AI interface",
+            body: "Streaming responses, scoped system prompts, and guarded project routing are part of the actual portfolio experience.",
+          },
+          {
+            title: "Evidence-first navigation",
+            body: "The interface points recruiters and collaborators to concrete work instead of making the AI the whole product.",
+          },
+          {
+            title: "Machine-readable system",
+            body: "Portfolio content, resume data, LLM instructions, design tokens, and interaction rules are exposed as public routes.",
+          },
         ],
       },
       {
@@ -276,7 +287,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "split",
         eyebrow: "System proof",
-        heading: "AI-readable interface primitives",
+        heading: "AI-readable interface primitives, not just a page",
         columns: [
           {
             label: "Design tokens",
@@ -295,9 +306,9 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "links",
         items: [
-          { label: "design system proof", href: "/design-system" },
-          { label: "design-system.md", href: "/design-system.md" },
-          { label: "tokens.json", href: "/design-system/tokens.json" },
+          { label: "Design system proof", href: "/design-system" },
+          { label: "Design system markdown", href: "/design-system.md" },
+          { label: "Design tokens JSON", href: "/design-system/tokens.json" },
         ],
       },
       {
