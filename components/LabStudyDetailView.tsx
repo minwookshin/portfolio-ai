@@ -18,6 +18,7 @@ const detailLabels: Record<LabStudy["kind"], string> = {
   "cursor-study": "cursor study",
   "motion-curve": "tiny tool",
   "ai-loop": "ai interface study",
+  "generative-ui": "generative ui study",
 };
 
 const HOLD_TO_COMMIT_MS = 1200;
@@ -666,8 +667,103 @@ function AiLoopDemo({ reduceMotion }: DemoProps) {
   );
 }
 
+const generativeUiSteps = [
+  {
+    label: "catalog",
+    meta: "allowed primitives",
+    detail: "The system starts with named components and actions instead of an empty canvas.",
+    preview: "Card / Button / Field",
+  },
+  {
+    label: "schema",
+    meta: "valid props",
+    detail: "Each primitive gets a typed contract, so the model knows what it can and cannot change.",
+    preview: "title:string / action:id",
+  },
+  {
+    label: "spec",
+    meta: "streamed patches",
+    detail: "The model emits structured JSON updates that can arrive progressively.",
+    preview: "replace /content/0",
+  },
+  {
+    label: "renderer",
+    meta: "system output",
+    detail: "The UI renders through the existing registry, so it still feels like the product.",
+    preview: "product surface",
+  },
+] as const;
+
+function GenerativeUiDemo({ reduceMotion }: DemoProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [manual, setManual] = useState(false);
+  const activeStep = generativeUiSteps[activeIndex];
+
+  useEffect(() => {
+    if (reduceMotion || manual) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((index) => (index + 1) % generativeUiSteps.length);
+    }, 1500);
+
+    return () => window.clearInterval(timer);
+  }, [manual, reduceMotion]);
+
+  const activateStep = (index: number) => {
+    setManual(true);
+    setActiveIndex(index);
+  };
+
+  return (
+    <div className="lab-study-stage lab-ugi-stage">
+      <div className="lab-ugi-pipeline" aria-label="generative ui pipeline">
+        {generativeUiSteps.map((step, index) => (
+          <button
+            key={step.label}
+            type="button"
+            aria-label={`${step.label}: ${step.meta}`}
+            aria-pressed={activeIndex === index}
+            data-active={activeIndex === index}
+            onMouseEnter={() => activateStep(index)}
+            onPointerEnter={() => activateStep(index)}
+            onFocus={() => activateStep(index)}
+            onClick={() => activateStep(index)}
+            className="lab-ugi-step micro-focus"
+          >
+            <span>{step.label}</span>
+            <span>{step.meta}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="lab-ugi-render" role="status" aria-label="generative ui preview">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeStep.label}
+            initial={reduceMotion ? false : { opacity: 0, y: 5, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -3, filter: "blur(3px)" }}
+            transition={reduceMotion ? tweens.none : { ...tweens.fast, duration: 0.18 }}
+            className="lab-ugi-render__content"
+          >
+            <span className="lab-ugi-render__eyebrow">{manual ? "selected contract" : "streaming contract"}</span>
+            <strong>{activeStep.preview}</strong>
+            <p>{activeStep.detail}</p>
+            <div className="lab-ugi-surface" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
 function LabStudyDemo({ kind, reduceMotion }: { kind: LabStudy["kind"]; reduceMotion: boolean }) {
   if (kind === "ai-loop") return <AiLoopDemo reduceMotion={reduceMotion} />;
+  if (kind === "generative-ui") return <GenerativeUiDemo reduceMotion={reduceMotion} />;
   if (kind === "motion-taste") return <MotionTasteDemo />;
   if (kind === "hover-row") return <HoverRowDemo reduceMotion={reduceMotion} />;
   if (kind === "route-transition") return <RouteTransitionDemo reduceMotion={reduceMotion} />;
@@ -728,6 +824,18 @@ function LabStudyGlyph({ kind }: { kind: LabStudy["kind"] }) {
         <span />
         <span />
         <span className="lab-study-glyph__loop-dot" />
+      </span>
+    );
+  }
+
+  if (kind === "generative-ui") {
+    return (
+      <span className="lab-study-glyph lab-study-glyph--generative">
+        <span className="lab-study-glyph__generative-source" />
+        <span className="lab-study-glyph__generative-arrow" />
+        <span className="lab-study-glyph__generative-surface" />
+        <span className="lab-study-glyph__generative-line" />
+        <span className="lab-study-glyph__generative-dot" />
       </span>
     );
   }

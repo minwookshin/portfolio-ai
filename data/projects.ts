@@ -34,7 +34,8 @@ export type LabStudyKind =
   | "route-transition"
   | "cursor-study"
   | "motion-curve"
-  | "ai-loop";
+  | "ai-loop"
+  | "generative-ui";
 
 export type LabStudy = {
   kind: LabStudyKind;
@@ -402,7 +403,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       ],
     },
     labStudy: {
-      kind: "ai-loop",
+      kind: "generative-ui",
       thesis: "Generative UI becomes more useful when the model can only compose from typed primitives.",
       story: [
         {
