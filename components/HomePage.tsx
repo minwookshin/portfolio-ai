@@ -368,7 +368,7 @@ function WorkPreviewContent({
   const isStaticLogoPreview = project.slug === "atlas";
   const isSentinelPreview = project.slug === "sentinel";
 
-  const src = project.image ?? project.icon;
+  const src = isStaticLogoPreview ? project.icon ?? project.image : project.image ?? project.icon;
 
   if (src) {
     if (isSentinelPreview) {
