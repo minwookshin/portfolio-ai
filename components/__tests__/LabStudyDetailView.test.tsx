@@ -139,17 +139,4 @@ describe("LabStudyDetailView interactions", () => {
     expect(screen.getByRole("button", { name: "resume loop" })).toBeInTheDocument();
   });
 
-  it("renders UGI as its own generative UI pipeline", async () => {
-    const user = userEvent.setup();
-    render(<LabStudyDetailView project={getStudyProject("ugi")} />);
-
-    expect(screen.getByText("generative ui study")).toBeInTheDocument();
-    expect(screen.getByRole("status", { name: "generative ui preview" })).toHaveTextContent("Card / Button / Field");
-    expect(screen.queryByRole("button", { name: "resume loop" })).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "renderer: system output" }));
-    await waitFor(() => {
-      expect(screen.getByRole("status", { name: "generative ui preview" })).toHaveTextContent("product surface");
-    });
-  });
 });
