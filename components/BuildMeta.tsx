@@ -21,12 +21,17 @@ function formatElapsedBefore(from: string, now: number) {
   return `${days}d ${hours}h ${minutes}m ${seconds}s before`;
 }
 
+function getInitialNow(updatedAt: string) {
+  const timestamp = new Date(updatedAt).getTime();
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
 export default function BuildMeta({ className = "" }: BuildMetaProps) {
   const [meta, setMeta] = useState<BuildMetaState>({
     updatedAt: BUILD_UPDATED_AT,
     version: BUILD_VERSION,
   });
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState(() => getInitialNow(BUILD_UPDATED_AT));
 
   useEffect(() => {
     let cancelled = false;
@@ -41,11 +46,15 @@ export default function BuildMeta({ className = "" }: BuildMetaProps) {
         .catch(() => {});
     };
 
+    const syncNow = () => setNow(Date.now());
+
     loadMeta();
-    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    const initialTimer = window.setTimeout(syncNow, 0);
+    const timer = window.setInterval(syncNow, 1000);
     const metaTimer = window.setInterval(loadMeta, 15000);
     return () => {
       cancelled = true;
+      window.clearTimeout(initialTimer);
       window.clearInterval(timer);
       window.clearInterval(metaTimer);
     };
