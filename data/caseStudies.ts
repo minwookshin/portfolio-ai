@@ -109,7 +109,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Current status",
         heading: "Prepared as a case-study draft",
         body: [
-          "Atlas now sits in the work archive as a real product-system proof instead of a coming-soon placeholder.",
+          "Atlas stays in the work archive as an in-progress capstone proof until the full case study is ready.",
           "The project is intentionally presented without a demo video until the next recorded walkthrough is ready.",
         ],
       },

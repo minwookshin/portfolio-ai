@@ -186,6 +186,8 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     date: "2026",
     image: "/projects/atlas/ic-map.png",
     icon: "/projects/atlas/logo.png",
+    comingSoon: true,
+    unavailableMessage: "Capstone case study in progress.",
     studioLabel: "AI triage command system",
     overview:
       "Atlas coordinates field triage, incident command, and hospital intake through a multi-surface emergency response system.",
