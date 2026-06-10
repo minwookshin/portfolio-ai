@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { CSSProperties, KeyboardEvent, PointerEvent, ReactNode } from "react";
+import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
 import { cursorGlyphPath } from "@/lib/cursorGlyph";
 import { motionEasings, tweens } from "@/lib/material/motion";
@@ -418,57 +418,38 @@ function CursorGlyph() {
   );
 }
 
-function CursorStudyDemo({ reduceMotion }: DemoProps) {
-  const [pointer, setPointer] = useState({ x: 118, y: 72, visible: false });
-  const [activeTarget, setActiveTarget] = useState<number | null>(null);
-  const targets = ["default surface", "interactive text", "precision zone"];
+const cursorStudyTargets: Array<{ label: string; note: string; cursor: "idle" | "interactive" | "native" }> = [
+  { label: "default surface", note: "quiet arrow", cursor: "idle" },
+  { label: "interactive text", note: "subtle press state", cursor: "interactive" },
+  { label: "precision zone", note: "native cursor wins", cursor: "native" },
+];
 
-  const updatePointer = (event: PointerEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setPointer({
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
-      visible: true,
-    });
-  };
+function CursorStudyDemo() {
+  const [activeTarget, setActiveTarget] = useState<number | null>(null);
 
   return (
     <div
       className="lab-study-stage lab-cursor-stage"
-      onPointerMove={updatePointer}
-      onPointerDown={updatePointer}
-      onPointerLeave={() => {
-        setPointer((current) => ({ ...current, visible: false }));
-        setActiveTarget(null);
-      }}
+      onPointerLeave={() => setActiveTarget(null)}
     >
       <div className="lab-cursor-targets">
-        {targets.map((target, index) => (
+        {cursorStudyTargets.map((target, index) => (
           <button
-            key={target}
+            key={target.label}
             type="button"
+            aria-pressed={activeTarget === index}
             data-active={activeTarget === index}
+            data-cursor={target.cursor}
             onPointerEnter={() => setActiveTarget(index)}
             onFocus={() => setActiveTarget(index)}
             onClick={() => setActiveTarget(index)}
             className="lab-cursor-target micro-focus"
           >
-            {target}
+            <span className="lab-cursor-target__label">{target.label}</span>
+            <span className="lab-cursor-target__note" aria-hidden="true">{target.note}</span>
           </button>
         ))}
       </div>
-      <motion.div
-        animate={{
-          x: pointer.x,
-          y: pointer.y,
-          opacity: pointer.visible ? 1 : 0.42,
-          scale: pointer.visible ? (activeTarget === null ? 1 : 1.06) : 0.96,
-        }}
-        transition={reduceMotion ? tweens.none : { type: "spring", stiffness: 420, damping: 34, mass: 0.8 }}
-        className="lab-cursor-proxy"
-      >
-        <CursorGlyph />
-      </motion.div>
     </div>
   );
 }
@@ -671,7 +652,7 @@ function LabStudyDemo({ kind, reduceMotion }: { kind: LabStudy["kind"]; reduceMo
   if (kind === "motion-taste") return <MotionTasteDemo />;
   if (kind === "hover-row") return <HoverRowDemo reduceMotion={reduceMotion} />;
   if (kind === "route-transition") return <RouteTransitionDemo reduceMotion={reduceMotion} />;
-  if (kind === "cursor-study") return <CursorStudyDemo reduceMotion={reduceMotion} />;
+  if (kind === "cursor-study") return <CursorStudyDemo />;
   return <MotionCurveTesterDemo reduceMotion={reduceMotion} />;
 }
 

@@ -93,15 +93,19 @@ describe("LabStudyDetailView interactions", () => {
     render(<LabStudyDetailView project={getStudyProject("cursor-study")} />);
 
     const precision = screen.getByRole("button", { name: "precision zone" });
+    expect(precision).toHaveAttribute("data-cursor", "native");
     fireEvent.pointerEnter(precision);
     await waitFor(() => expect(precision).toHaveAttribute("data-active", "true"));
 
     const interactive = screen.getByRole("button", { name: "interactive text" });
+    expect(interactive).toHaveAttribute("data-cursor", "interactive");
     fireEvent.focus(interactive);
     await waitFor(() => expect(interactive).toHaveAttribute("data-active", "true"));
 
-    await user.click(screen.getByRole("button", { name: "default surface" }));
-    await waitFor(() => expect(screen.getByRole("button", { name: "default surface" })).toHaveAttribute("data-active", "true"));
+    const defaultSurface = screen.getByRole("button", { name: "default surface" });
+    expect(defaultSurface).toHaveAttribute("data-cursor", "idle");
+    await user.click(defaultSurface);
+    await waitFor(() => expect(defaultSurface).toHaveAttribute("data-active", "true"));
   });
 
   it("updates motion curve controls", async () => {

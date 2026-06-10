@@ -9,7 +9,7 @@ import {
 } from "framer-motion";
 import { cursorGlyphPath } from "@/lib/cursorGlyph";
 
-type CursorMode = "idle" | "interactive";
+type CursorMode = "idle" | "interactive" | "native";
 type CursorTone = "dark" | "light";
 type CursorState = { mode: CursorMode; tone: CursorTone };
 
@@ -24,7 +24,9 @@ const interactiveSelector = [
 ].join(",");
 
 const explicitCursorModes: Record<string, CursorMode> = {
+  idle: "idle",
   interactive: "interactive",
+  native: "native",
   view: "interactive",
 };
 
