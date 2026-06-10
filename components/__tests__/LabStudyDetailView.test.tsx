@@ -108,18 +108,19 @@ describe("LabStudyDetailView interactions", () => {
     await waitFor(() => expect(defaultSurface).toHaveAttribute("data-active", "true"));
   });
 
-  it("updates motion curve controls", async () => {
+  it("switches between predefined motion rules", async () => {
     const user = userEvent.setup();
     render(<LabStudyDetailView project={getStudyProject("motion-curve-tester")} />);
 
-    expect(screen.getByText("Choose a preset. The square replays every time a value changes.")).toBeInTheDocument();
-    expect(screen.getAllByText("travel 92px")).toHaveLength(2);
+    expect(screen.getByText("Motion should come from a small set of decisions, not a slider hunt.")).toBeInTheDocument();
+    expect(screen.getByText("tweens.base")).toBeInTheDocument();
+    expect(screen.getAllByText("250ms").length).toBeGreaterThan(0);
 
-    fireEvent.change(screen.getByRole("slider", { name: /duration/i }), { target: { value: "320" } });
-    expect(screen.getAllByText("duration 320ms")).toHaveLength(2);
-
-    await user.click(screen.getByRole("button", { name: "in-out" }));
-    expect(screen.getByRole("button", { name: "in-out" })).toHaveAttribute("aria-pressed", "true");
+    await user.click(screen.getByRole("button", { name: "route" }));
+    expect(screen.getByRole("button", { name: "route" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("tweens.slowInOut")).toBeInTheDocument();
+    expect(screen.getByText("Move 72px over 350ms with in-out easing.")).toBeInTheDocument();
+    expect(screen.queryByRole("slider")).not.toBeInTheDocument();
   });
 
   it("lets the AI loop study move between trace steps", async () => {

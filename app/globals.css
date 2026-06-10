@@ -1792,7 +1792,7 @@ body::after {
 
 .lab-curve-tool {
   justify-items: stretch;
-  gap: var(--space-2);
+  gap: var(--space-3);
   padding: var(--space-3);
 }
 
@@ -1820,11 +1820,11 @@ body::after {
   position: relative;
   display: grid;
   gap: var(--space-2);
-  min-height: 132px;
+  min-height: 128px;
   align-items: center;
   border-radius: var(--md-shape-lg);
-  background: color-mix(in srgb, var(--bg-surface) 74%, transparent);
-  padding: var(--space-3);
+  background: color-mix(in srgb, var(--bg-surface) 88%, transparent);
+  padding: var(--space-2) var(--space-3);
 }
 
 .lab-curve-lane {
@@ -1893,27 +1893,30 @@ body::after {
   color: var(--text-primary);
 }
 
-.lab-curve-controls {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.lab-curve-controls label {
+.lab-curve-rule-card {
   display: grid;
   gap: var(--space-1);
-  color: var(--text-muted);
+  max-width: var(--measure);
+  color: var(--text-primary);
   font-size: calc(var(--type-0) - 2px);
+  line-height: var(--leading-body);
 }
 
-.lab-curve-range-head {
-  display: flex;
-  justify-content: space-between;
+.lab-curve-rule-card span {
   color: var(--text-muted);
 }
 
-.lab-curve-controls input[type="range"] {
-  width: 100%;
-  accent-color: var(--text-primary);
+.lab-curve-rule-card strong {
+  font-weight: 400;
+}
+
+.lab-curve-rule-card p {
+  color: var(--text-muted);
+}
+
+.lab-curve-rule-card .lab-study-control {
+  width: fit-content;
+  margin-top: var(--space-1);
 }
 
 .lab-study-code-section {

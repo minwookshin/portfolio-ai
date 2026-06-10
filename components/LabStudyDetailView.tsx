@@ -16,7 +16,7 @@ const detailLabels: Record<LabStudy["kind"], string> = {
   "hover-row": "interaction study",
   "route-transition": "route study",
   "cursor-study": "cursor study",
-  "motion-curve": "tiny tool",
+  "motion-curve": "motion rule system",
   "ai-loop": "ai interface study",
 };
 
@@ -24,16 +24,42 @@ const HOLD_TO_COMMIT_MS = 1200;
 
 type CurveEasing = "standard" | "in-out";
 
-const curvePresets: Array<{
+const motionRulePresets: Array<{
   label: string;
+  useCase: string;
   duration: number;
   distance: number;
   easing: CurveEasing;
+  token: string;
   note: string;
 }> = [
-  { label: "micro", duration: 160, distance: 36, easing: "standard", note: "hover feedback" },
-  { label: "standard", duration: 220, distance: 92, easing: "standard", note: "small panels" },
-  { label: "layout", duration: 300, distance: 156, easing: "in-out", note: "larger shifts" },
+  {
+    label: "hover",
+    useCase: "rows and links",
+    duration: 180,
+    distance: 18,
+    easing: "standard",
+    token: "tweens.fast",
+    note: "short enough to disappear into the interaction",
+  },
+  {
+    label: "preview",
+    useCase: "media handoff",
+    duration: 250,
+    distance: 48,
+    easing: "standard",
+    token: "tweens.base",
+    note: "lets the image arrive before the copy feels heavy",
+  },
+  {
+    label: "route",
+    useCase: "detail entry",
+    duration: 350,
+    distance: 72,
+    easing: "in-out",
+    token: "tweens.slowInOut",
+    note: "reserved for larger spatial changes",
+  },
 ];
 
 function renderInlineStudyText(text: string): ReactNode {
@@ -455,35 +481,28 @@ function CursorStudyDemo() {
 }
 
 function MotionCurveTesterDemo({ reduceMotion }: DemoProps) {
-  const [duration, setDuration] = useState(220);
-  const [distance, setDistance] = useState(92);
-  const [easing, setEasing] = useState<CurveEasing>("standard");
+  const [activeIndex, setActiveIndex] = useState(1);
   const [replayNonce, setReplayNonce] = useState(0);
-  const ease = easing === "standard" ? motionEasings.standard : motionEasings.inOut;
-  const animationKey = `${duration}-${distance}-${easing}-${replayNonce}`;
-  const activePreset = curvePresets.find(
-    (preset) => preset.duration === duration && preset.distance === distance && preset.easing === easing
-  );
-  const trackStyle = { "--curve-distance": `${distance}px` } as CSSProperties;
+  const activePreset = motionRulePresets[activeIndex];
+  const ease = activePreset.easing === "standard" ? motionEasings.standard : motionEasings.inOut;
+  const animationKey = `${activePreset.label}-${replayNonce}`;
+  const trackStyle = { "--curve-distance": `${activePreset.distance}px` } as CSSProperties;
 
   return (
     <div className="lab-study-stage lab-curve-tool">
       <div className="lab-curve-copy">
-        <p>Choose a preset. The square replays every time a value changes.</p>
-        <p>
-          {activePreset ? `${activePreset.label}: ${activePreset.note}` : "custom motion"}
-        </p>
+        <p>Motion should come from a small set of decisions, not a slider hunt.</p>
+        <p>{activePreset.label}: {activePreset.note}</p>
       </div>
 
       <div className="lab-curve-presets" aria-label="motion presets">
-        {curvePresets.map((preset) => (
+        {motionRulePresets.map((preset, index) => (
           <StudyButton
             key={preset.label}
-            active={activePreset?.label === preset.label}
+            active={activeIndex === index}
             onClick={() => {
-              setDuration(preset.duration);
-              setDistance(preset.distance);
-              setEasing(preset.easing);
+              setActiveIndex(index);
+              setReplayNonce((key) => key + 1);
             }}
           >
             {preset.label}
@@ -492,53 +511,36 @@ function MotionCurveTesterDemo({ reduceMotion }: DemoProps) {
       </div>
 
       <div className="lab-curve-track" style={trackStyle}>
-        <div className="lab-curve-lane" aria-label={`preview travels ${distance}px over ${duration}ms using ${easing} easing`}>
+        <div className="lab-curve-lane" aria-label={`${activePreset.label} motion preview`}>
           <span className="lab-curve-axis" aria-hidden="true" />
           <span className="lab-curve-marker lab-curve-marker--start" aria-hidden="true" />
           <span className="lab-curve-marker lab-curve-marker--target" aria-hidden="true" />
           <motion.span
             key={animationKey}
             initial={reduceMotion ? false : { x: 0 }}
-            animate={{ x: distance }}
-            transition={reduceMotion ? tweens.none : { type: "tween", duration: duration / 1000, ease }}
+            animate={{ x: activePreset.distance }}
+            transition={reduceMotion ? tweens.none : { type: "tween", duration: activePreset.duration / 1000, ease }}
             className="lab-curve-object"
           />
         </div>
         <div className="lab-curve-readout" aria-live="polite">
-          <span>duration {duration}ms</span>
-          <span>travel {distance}px</span>
-          <span>{easing} easing</span>
+          <span>{activePreset.token}</span>
+          <span>{activePreset.duration}ms</span>
+          <span>{activePreset.easing} easing</span>
         </div>
       </div>
 
-      <div className="lab-curve-controls">
-        <label>
-          <span className="lab-curve-range-head">duration {duration}ms</span>
-          <input
-            type="range"
-            min="120"
-            max="360"
-            step="20"
-            value={duration}
-            onChange={(event) => setDuration(Number(event.target.value))}
-          />
-        </label>
-        <label>
-          <span className="lab-curve-range-head">travel {distance}px</span>
-          <input
-            type="range"
-            min="24"
-            max="168"
-            step="12"
-            value={distance}
-            onChange={(event) => setDistance(Number(event.target.value))}
-          />
-        </label>
-        <div className="lab-study-controls" aria-label="easing">
-          <StudyButton active={easing === "standard"} onClick={() => setEasing("standard")}>standard</StudyButton>
-          <StudyButton active={easing === "in-out"} onClick={() => setEasing("in-out")}>in-out</StudyButton>
-          <StudyButton onClick={() => setReplayNonce((key) => key + 1)}>replay</StudyButton>
-        </div>
+      <div className="lab-curve-rule-card" aria-live="polite">
+        <span>use when</span>
+        <strong>{activePreset.useCase}</strong>
+        <p>Move {activePreset.distance}px over {activePreset.duration}ms with {activePreset.easing} easing.</p>
+        <button
+          type="button"
+          onClick={() => setReplayNonce((key) => key + 1)}
+          className="lab-study-control micro-focus micro-pressable"
+        >
+          replay
+        </button>
       </div>
     </div>
   );

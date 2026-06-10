@@ -738,83 +738,83 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
   {
     id: "16",
     slug: "motion-curve-tester",
-    title: "Motion Curve Tester",
-    description: "A tiny tool for checking distance, duration, and easing.",
+    title: "Motion Rule Picker",
+    description: "A small study for choosing motion rules already used across the site.",
     fullDescription:
-      "A lab tool that previews how timing and distance change the perceived weight of an interface.",
-    tags: ["Tool", "Motion", "Design System"],
-    categories: ["Lab", "Tool"],
+      "A lab study that shows how hover, preview, and route motion rules are chosen for this portfolio.",
+    tags: ["Motion", "Design System", "Interaction"],
+    categories: ["Lab", "Interaction"],
     date: "2026",
     glyph: "mc",
-    studioLabel: "interactive motion tool",
+    studioLabel: "motion rule system",
     metadataDescription:
-      "A tiny motion curve tester for duration, distance, easing, and perceived weight.",
+      "A small motion rule picker for duration, distance, easing, and interaction weight.",
     builder: {
-      role: "Tiny tool",
+      role: "Interaction study",
       stack: ["React", "Framer Motion"],
       status: { label: "Prototype" },
-      oneLiner: "A tiny tool for checking distance, duration, and easing.",
-      pipeline: "Adjust motion values -> replay UI movement -> keep the best rule.",
+      oneLiner: "A small rule picker for the motion decisions already used across the site.",
+      pipeline: "Define motion rules -> preview the interaction -> apply consistently.",
       scope: [],
       results: [],
     },
     labStudy: {
       kind: "motion-curve",
-      thesis: "Motion values should be judged in context, not copied from a token list blindly.",
+      thesis: "Motion should come from a few reusable decisions, not from tweaking sliders until it feels okay.",
       story: [
         {
           heading: "the starting point",
           body: [
-            "A motion token by itself does not tell you much. `220ms` can feel crisp over four pixels and sluggish over a larger layout shift.",
+            "A motion token by itself does not tell you much. `180ms` can feel crisp for hover feedback and invisible for a larger route change.",
           ],
         },
         {
-          heading: "setting up the tester",
+          heading: "setting up the rules",
           body: [
-            "The tool puts `distance`, `duration`, and `easing` in the same place so the motion can be judged as a real interface movement.",
-            "The preview uses larger travel values than tiny production hovers so the difference is visible while tuning.",
-            "That makes critique concrete. Instead of saying something feels off, you can replay the exact rule and adjust one variable.",
+            "The study shows three production-facing rules: hover, preview handoff, and route entry.",
+            "Each rule pairs distance, duration, and easing with the kind of interaction it belongs to.",
+            "That makes critique concrete. Instead of inventing a new curve each time, the interface chooses from a small vocabulary.",
           ],
         },
         {
           heading: "polishing the rule",
           body: [
-            "The output should be a reusable decision, not just a fun playground. The best values become small rules for the rest of the site.",
+            "The output should be a reusable decision, not just a playground. The best values become small rules for the rest of the site.",
           ],
         },
       ],
       technicalArtifact: {
-        title: "Motion Rule Picker",
-        body: `What kind of movement is this?
-├── Micro feedback
-│   ├── Travel: 24-48px preview
-│   └── Duration: 120-180ms
+        title: "Motion Decision Tree",
+        body: `What is moving?
+├── Hover feedback
+│   ├── Token: tweens.fast
+│   ├── Duration: 180ms
+│   └── Easing: standard
 │
-├── Small panel / preview
-│   ├── Travel: 72-108px preview
-│   └── Duration: 180-260ms
+├── Preview handoff
+│   ├── Token: tweens.base
+│   ├── Duration: 250ms
+│   └── Easing: standard
 │
-└── Layout shift
-    ├── Travel: 132-168px preview
-    └── Duration: 240-320ms`,
-        caption: "Duration only makes sense when it is paired with travel and interaction weight.",
+└── Route or layout entry
+    ├── Token: tweens.slowInOut
+    ├── Duration: 350ms
+    └── Easing: in-out`,
+        caption: "Duration only makes sense when it is paired with distance, easing, and interaction weight.",
       },
       points: [
-        "The same `duration` feels different when `distance` changes.",
-        "`ease-out` works for entering; `ease-in-out` works better for movement already on screen.",
-        "A tester makes motion critique concrete instead of taste theater.",
+        "Hover feedback should be short enough to disappear into the action.",
+        "`standard` easing works for small UI feedback; `in-out` is reserved for larger spatial changes.",
+        "A small rule set makes motion critique concrete instead of taste theater.",
       ],
       rules: [
-        { label: "travel", value: "24-168px", note: "visible preview range for tuning" },
-        { label: "duration", value: "120-360ms", note: "micro to layout transition range" },
-        { label: "easing", value: "standard / in-out", note: "picked by interaction type" },
+        { label: "hover", value: "180ms", note: "small text and row feedback" },
+        { label: "preview", value: "250ms", note: "media and proof handoff" },
+        { label: "route", value: "350ms", note: "larger spatial changes" },
       ],
       code: `<motion.div
-  animate={{ x: distance }}
-  transition={{
-    duration: duration / 1000,
-    ease: easing === "standard" ? [0.22, 1, 0.36, 1] : [0.45, 0, 0.55, 1],
-  }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={tweens.base}
 />`,
     },
   },
