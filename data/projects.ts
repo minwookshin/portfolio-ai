@@ -150,8 +150,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       oneLiner: "AI-native portfolio that answers questions, qualifies intent, and opens relevant proof.",
       pipeline: "Designed in Figma → Shipped in Next.js + React.",
       demo: {
-        label: "Try live site",
-        href: "https://www.minwookshin.com",
+        label: "Watch demo",
         video: "/projects/portfolio-ai/demo.mp4",
       },
       scope: [
