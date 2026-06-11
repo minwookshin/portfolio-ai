@@ -105,10 +105,12 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       stack: ["Figma", "Swift", "SwiftUI", "weather data"],
       status: { label: "Shipped in 48h" },
       oneLiner: "Predictive iOS maintenance app that turns weather risk into prioritized homeowner actions.",
-      pipeline: "Designed in Figma → Shipped in Swift + SwiftUI.",
+      pipeline: "Designed in Figma → built a native SwiftUI MVP → presented as a working hackathon prototype.",
       demo: { label: "Watch demo", video: "/projects/sentinel/demo.mp4" },
       scope: [
         { label: "Build time", value: "48h" },
+        { label: "Prototype proof", value: "Native iOS demo video" },
+        { label: "Source proof", value: "Public SwiftUI repository", note: "github.com/minwookshin/sentinel" },
       ],
       results: [
         { label: "Actual", value: "Winner · Google × SCAD FLUX Hackathon 2025" },
@@ -148,7 +150,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       stack: ["Next.js", "React", "TypeScript", "Gemini API", "Framer Motion"],
       status: { label: "🟢 Live", href: "https://www.minwookshin.com" },
       oneLiner: "AI-native portfolio that answers questions, qualifies intent, and opens relevant proof.",
-      pipeline: "Designed in Figma → Shipped in Next.js + React.",
+      pipeline: "Designed in Figma → shipped in Next.js + React → exposed AI-readable docs and design-system routes.",
       demo: {
         label: "Watch demo",
         video: "/projects/portfolio-ai/demo.mp4",
@@ -157,9 +159,11 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
         { label: "Build time", value: "2 weeks" },
         { label: "API integrations", value: "Gemini API, Vercel server routes" },
         { label: "System proof", value: "Tokens, components, AI-readable docs", note: "/design-system" },
+        { label: "Machine routes", value: "portfolio.md, llms.txt, resume.json" },
       ],
       results: [
         { label: "Actual", value: "Live production site" },
+        { label: "Source proof", value: "Public Next.js repository", note: "github.com/minwookshin/portfolio-ai" },
       ],
     },
     features: [
@@ -911,10 +915,15 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       stack: ["Figma", "iOS-style UX", "Web Prototype"],
       status: { label: "Public web prototype" },
       oneLiner: "iOS-style team wellbeing app concept exploring burnout signals, presented through a public web prototype.",
-      pipeline: "Designed in Figma for a public web prototype.",
+      pipeline: "Designed as an iOS-style wellbeing concept → presented through a public web prototype.",
       demo: { label: "Watch demo", video: "/projects/caret/demo.mp4" },
-      scope: [],
-      results: [],
+      scope: [
+        { label: "Prototype format", value: "Public web prototype" },
+        { label: "Concept focus", value: "Burnout signals and team wellbeing cues" },
+      ],
+      results: [
+        { label: "Source proof", value: "Public prototype repository", note: "github.com/minwookshin/caret" },
+      ],
     },
   },
 ];

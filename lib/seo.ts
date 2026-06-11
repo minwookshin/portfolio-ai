@@ -6,6 +6,7 @@ import {
   getProjectPath,
   getProjectMetadataDescription,
   isLabProject,
+  isVisibleBuilderValue,
   orderProjects,
   FEATURED_PROJECT_IDS,
 } from "@/data/projects";
@@ -114,6 +115,16 @@ export function projectJsonLd(project: PortfolioProject, path: string) {
   const image = toAbsoluteUrl(project.image ?? project.icon);
   const workExample = toAbsoluteUrl(project.builder.demo?.href ?? project.builder.demo?.video);
   const sameAs = [project.github, project.linkedin, project.link].filter((value): value is string => Boolean(value));
+  const outcome = project.builder.results.find((item) => isVisibleBuilderValue(item.value))?.value;
+  const award = outcome && /winner|award|place/i.test(outcome) ? outcome : undefined;
+  const proofProperties = [
+    { name: "Role", value: project.builder.role || project.role },
+    { name: "Status", value: project.builder.status.label },
+    { name: "Build path", value: project.builder.pipeline },
+    project.builder.stack.length > 0 ? { name: "Stack", value: project.builder.stack.join(", ") } : null,
+    outcome ? { name: "Outcome", value: outcome } : null,
+    project.github ? { name: "Public source repository", value: project.github } : null,
+  ].filter((item): item is { name: string; value: string } => Boolean(item && isVisibleBuilderValue(item.value)));
   const creativeWork = {
     "@type": "CreativeWork",
     "@id": `${url}#creative-work`,
@@ -124,10 +135,17 @@ export function projectJsonLd(project: PortfolioProject, path: string) {
     creator: { "@id": PERSON_ID },
     author: { "@id": PERSON_ID },
     dateCreated: project.date,
-    keywords: project.tags,
+    keywords: [...new Set([...project.tags, ...project.builder.stack])],
     about: project.categories,
+    abstract: project.builder.oneLiner,
+    award,
     workExample,
     sameAs: sameAs.length > 0 ? sameAs : undefined,
+    additionalProperty: proofProperties.map((item) => ({
+      "@type": "PropertyValue",
+      name: item.name,
+      value: item.value,
+    })),
     isPartOf: { "@id": WEBSITE_ID },
   };
   const sourceCode = project.github

@@ -27,6 +27,9 @@ describe("ProjectCaseStudyShell", () => {
     expect(within(nav).getByRole("link", { name: "minwook shin" })).toHaveAttribute("href", "/work");
     expect(within(nav).getByRole("link", { name: "work" })).toHaveAttribute("href", "/work");
     expect(within(nav).getByText("Sentinel")).toHaveAttribute("aria-current", "page");
+    expect(screen.getByText("ownership")).toBeInTheDocument();
+    expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
+    expect(screen.getByText("build path")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Play video" })).toBeInTheDocument();
     expect(screen.getByRole("slider", { name: "Sentinel demo timeline" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Unmute video" })).toBeInTheDocument();
@@ -50,6 +53,7 @@ describe("ProjectCaseStudyShell", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("portfolio-ai")} />);
 
     expect(screen.queryByRole("link", { name: /try live site/i })).not.toBeInTheDocument();
+    expect(screen.getByText("public repo / live site / demo video")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Design system proof" })).toHaveAttribute("href", "/design-system");
     expect(screen.getByRole("link", { name: "Design system markdown" })).toHaveAttribute("href", "/design-system.md");
     expect(screen.getByRole("link", { name: "Design tokens JSON" })).toHaveAttribute("href", "/design-system/tokens.json");

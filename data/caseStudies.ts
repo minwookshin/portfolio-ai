@@ -135,6 +135,16 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         imageStyle: "phone",
       },
       {
+        kind: "stats",
+        eyebrow: "Recruiter proof",
+        heading: "Built fast, shipped native, publicly verifiable",
+        items: [
+          { value: "48h", label: "Hackathon build" },
+          { value: "SwiftUI", label: "Native iOS MVP" },
+          { value: "Public repo", label: "Source-code proof" },
+        ],
+      },
+      {
         kind: "problem",
         eyebrow: "The problem",
         heading: "Homeowners manage their biggest asset on gut feeling",
@@ -230,6 +240,16 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
           "Project-intake flow wired to real case studies",
         ],
         tags: ["Next.js", "React", "Gemini API", "TypeScript", "AI UX"],
+      },
+      {
+        kind: "stats",
+        eyebrow: "Recruiter proof",
+        heading: "A live portfolio, source repo, and AI-readable system",
+        items: [
+          { value: "Live", label: "Production site" },
+          { value: "Public repo", label: "Source-code proof" },
+          { value: "3", label: "AI-readable routes" },
+        ],
       },
       {
         kind: "lead",

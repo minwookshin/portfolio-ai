@@ -42,6 +42,19 @@ function joinVisible(items: Array<string | undefined | null>) {
   return items.filter(isVisibleBuilderValue).join(", ");
 }
 
+function getPublicProof(project: Project | PortfolioProject, proof?: BuilderProof) {
+  const proofTypes = [
+    "github" in project && project.github ? "public repo" : null,
+    "link" in project && project.link ? "live site" : null,
+    proof?.demo?.video ? "demo video" : null,
+    proof?.demo?.href ? "live demo" : null,
+    "linkedin" in project && project.linkedin ? "public post" : null,
+  ].filter(isVisibleBuilderValue);
+
+  if (proofTypes.length > 0) return proofTypes.join(" / ");
+  return proof?.status.label;
+}
+
 function ProjectHeroMedia({
   hero,
   project,
@@ -107,10 +120,11 @@ function ProjectDetailHero({
   const title = hero?.title ?? project.title;
   const subtitle = hero?.subtitle ?? project.overview ?? proof?.oneLiner ?? project.fullDescription;
   const eyebrow = project.studioLabel ?? hero?.badge;
-  const facts = [
-    { label: "role", value: proof?.role ?? project.role },
-    { label: "timeline", value: project.timeline ?? project.date },
+  const recruiterSignals = [
+    { label: "ownership", value: proof?.role ?? project.role },
+    { label: "timeframe", value: project.timeline ?? project.date },
     { label: "stack", value: stack },
+    { label: "proof", value: getPublicProof(project, proof) },
     { label: "outcome", value: outcome },
   ].filter((item) => isVisibleBuilderValue(item.value));
 
@@ -134,13 +148,13 @@ function ProjectDetailHero({
           {subtitle}
         </p>
       )}
-      {facts.length > 0 && (
-        <dl className="mt-[var(--space-3)] grid gap-x-[var(--space-4)] gap-y-[var(--space-2)] sm:grid-cols-2">
-          {facts.map((fact) => (
-            <div key={fact.label}>
-              <dt className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{fact.label}</dt>
-              <dd className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
-                {fact.value}
+      {recruiterSignals.length > 0 && (
+        <dl className="studio-detail-proof-strip" aria-label="recruiter proof">
+          {recruiterSignals.map((signal) => (
+            <div key={signal.label}>
+              <dt>{signal.label}</dt>
+              <dd>
+                {signal.value}
               </dd>
             </div>
           ))}
@@ -164,7 +178,8 @@ function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
 
   return (
     <section className="studio-detail-proof space-y-[var(--space-5)]">
-      <DetailNote eyebrow="the build" body={proof.oneLiner} />
+      <DetailNote eyebrow="decision" body={proof.oneLiner} />
+      {isVisibleBuilderValue(proof.pipeline) && <DetailNote eyebrow="build path" body={proof.pipeline} />}
 
       {proof.demo && demoHref && (
         <section>
@@ -187,8 +202,8 @@ function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
         </section>
       )}
 
-      <MetricGrid title="engineering scope" items={proof.scope} />
-      <MetricGrid title="results" items={proof.results} />
+      <MetricGrid title="scope" items={proof.scope} />
+      <MetricGrid title="outcome proof" items={proof.results} />
     </section>
   );
 }

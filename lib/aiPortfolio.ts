@@ -8,6 +8,7 @@ import {
   getProjectPath,
   getProjectMetadataDescription,
   isLabProject,
+  isVisibleBuilderValue,
   orderProjects,
 } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
@@ -193,6 +194,11 @@ export function generatePortfolioMarkdown() {
     ...getStudyMarkdownSlugs().map((slug) => `- Study Markdown: ${absoluteUrl(`/studies/${slug}.md`)}`),
     "",
     "## Selected work",
+    "### Project proof matrix",
+    ...selectedWork.flatMap((project) => [
+      `- ${project.title}: ${projectProofSignals(project).map((signal) => `${signal.label}=${signal.value}`).join("; ")}`,
+    ]),
+    "",
     ...selectedWork.flatMap((project) => projectSection(project, getProjectPath(project))),
     "",
     "## In preparation",
@@ -307,6 +313,7 @@ function projectSection(project: PortfolioProject, path: string) {
     `- Type: ${projectType(project)}`,
     `- Role: ${cleanText(project.builder.role || project.role || PERSONAL_INFO.title)}`,
     `- Summary: ${getProjectMetadataDescription(project)}`,
+    ...projectProofSignals(project).map((signal) => `- ${signal.label}: ${signal.value}`),
     project.builder.stack.length > 0 ? `- Stack: ${project.builder.stack.map(cleanText).join(", ")}` : null,
     project.studioLabel ? `- Label: ${cleanText(project.studioLabel)}` : null,
     project.tags.length > 0 ? `- Tags: ${project.tags.map(cleanText).join(", ")}` : null,
@@ -361,6 +368,7 @@ function projectMarkdown(project: PortfolioProject, path: string) {
     project.fullDescription ? `- Detail: ${cleanText(project.fullDescription)}` : null,
     project.studioLabel ? `- Label: ${cleanText(project.studioLabel)}` : null,
     project.builder.pipeline ? `- Pipeline: ${cleanText(project.builder.pipeline)}` : null,
+    ...projectProofSignals(project).map((signal) => `- ${signal.label}: ${signal.value}`),
     "",
     "## Skills and stack",
     project.builder.stack.length > 0 ? `- Stack: ${project.builder.stack.map(cleanText).join(", ")}` : "- Stack: not listed",
@@ -421,11 +429,34 @@ function projectJson(project: PortfolioProject, path?: string) {
     status: project.builder.status,
     scope: project.builder.scope,
     results: project.builder.results,
+    recruiterProof: projectProofSignals(project),
     github: project.github ?? null,
     linkedin: project.linkedin ?? null,
     liveLink: project.link ?? project.builder.demo?.href ?? null,
     demoVideo: project.builder.demo?.video ? absoluteUrl(project.builder.demo.video) : null,
   };
+}
+
+function projectProofSignals(project: PortfolioProject) {
+  const publicProof = [
+    project.github ? "public repo" : null,
+    project.link ? "live site" : null,
+    project.builder.demo?.video ? "demo video" : null,
+    project.builder.demo?.href ? "live demo" : null,
+    project.linkedin ? "public post" : null,
+  ].filter(isVisibleBuilderValue);
+  const outcome =
+    project.builder.results.find((item) => isVisibleBuilderValue(item.value))?.value ??
+    project.builder.status.label;
+  const timeframe = project.timeline ?? project.date;
+
+  return [
+    { label: "Ownership", value: cleanText(project.builder.role || project.role || PERSONAL_INFO.title) },
+    timeframe ? { label: "Timeframe", value: cleanText(timeframe) } : null,
+    project.builder.stack.length > 0 ? { label: "Stack", value: project.builder.stack.map(cleanText).join(", ") } : null,
+    publicProof.length > 0 ? { label: "Public proof", value: publicProof.join(" / ") } : null,
+    outcome ? { label: "Outcome", value: cleanText(outcome) } : null,
+  ].filter((signal): signal is { label: string; value: string } => Boolean(signal && isVisibleBuilderValue(signal.value)));
 }
 
 function metricLines(metrics: Array<{ label: string; value: string; note?: string }>) {
@@ -493,6 +524,7 @@ function normalizeAscii(value: string) {
     .replace(/[\u2013\u2014]/g, " - ")
     .replace(/\u2192/g, " -> ")
     .replace(/\u00d7/g, "x")
+    .replace(/\u00b7/g, " - ")
     .replace(/[\u201c\u201d]/g, '"')
     .replace(/[\u2018\u2019]/g, "'");
 }

@@ -539,6 +539,26 @@ body::after {
   position: relative;
 }
 
+.studio-detail-proof-strip {
+  display: grid;
+  gap: var(--space-2) var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  margin-top: var(--space-3);
+}
+
+.studio-detail-proof-strip dt {
+  color: var(--text-muted);
+  font-size: calc(var(--type-0) - 2px);
+  line-height: 1.2;
+}
+
+.studio-detail-proof-strip dd {
+  margin-top: var(--space-1);
+  color: var(--text-primary);
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
+}
+
 .studio-detail-hero-media {
   overflow: hidden;
   border-radius: var(--md-shape-lg);
