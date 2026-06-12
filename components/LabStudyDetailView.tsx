@@ -606,6 +606,7 @@ function AiLoopDemo({ reduceMotion }: DemoProps) {
           <button
             key={step.label}
             type="button"
+            aria-pressed={activeIndex === index}
             data-active={activeIndex === index}
             onMouseEnter={() => activateStep(index)}
             onPointerEnter={() => activateStep(index)}
@@ -623,6 +624,23 @@ function AiLoopDemo({ reduceMotion }: DemoProps) {
       </div>
 
       <div className="lab-loop-panel" aria-live="polite">
+        <div className="lab-loop-panel__trace" aria-hidden="true">
+          <div className="lab-loop-panel__trace-line">
+            <motion.span
+              animate={{ scaleX: (activeIndex + 1) / aiLoopSteps.length }}
+              transition={reduceMotion ? tweens.none : { ...tweens.fast, duration: 0.22 }}
+            />
+          </div>
+          <div className="lab-loop-panel__trace-nodes">
+            {aiLoopSteps.map((step, index) => (
+              <span
+                key={step.label}
+                data-active={activeIndex === index}
+                data-passed={index < activeIndex}
+              />
+            ))}
+          </div>
+        </div>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={activeStep.label}
@@ -632,8 +650,11 @@ function AiLoopDemo({ reduceMotion }: DemoProps) {
             transition={reduceMotion ? tweens.none : { ...tweens.fast, duration: 0.18 }}
             className="lab-loop-panel__content"
           >
-            <span className="lab-loop-panel__eyebrow">{manual ? "selected step" : "looping trace"}</span>
+            <span className="lab-loop-panel__eyebrow">
+              {manual ? "selected node" : "looping trace"} / {String(activeIndex + 1).padStart(2, "0")}
+            </span>
             <strong>{activeStep.label}</strong>
+            <span className="lab-loop-panel__meta">{activeStep.meta}</span>
             <p>{activeStep.detail}</p>
           </motion.div>
         </AnimatePresence>
