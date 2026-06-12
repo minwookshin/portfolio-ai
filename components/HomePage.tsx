@@ -9,7 +9,6 @@ import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
-import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
 import LottieMotionProof from "@/components/LottieMotionProof";
 import type { Project } from "@/components/ProjectCard";
@@ -124,18 +123,6 @@ const landingRevealItem: Variants = {
       opacity: { type: "tween", duration: 0.42, ease: LANDING_EASE },
       filter: { type: "tween", duration: 0.42, ease: LANDING_EASE },
       y: { type: "spring", stiffness: 260, damping: 32, mass: 1.2 },
-    },
-  },
-};
-
-const landingFooterItem: Variants = {
-  hidden: landingRevealItem.hidden,
-  visible: {
-    ...landingRevealItem.visible,
-    transition: {
-      opacity: { type: "tween", duration: 0.42, ease: LANDING_EASE, delay: 0.34 },
-      filter: { type: "tween", duration: 0.42, ease: LANDING_EASE, delay: 0.34 },
-      y: { type: "spring", stiffness: 260, damping: 32, mass: 1.2, delay: 0.34 },
     },
   },
 };
@@ -286,6 +273,37 @@ function getProjectDescriptor(project: Project) {
     : project.studioLabel ?? project.description;
 }
 
+function getProjectProofLabel(project: Project) {
+  const builder = "builder" in project
+    ? (project as Project & {
+        builder?: {
+          results?: Array<{ value?: string }>;
+          scope?: Array<{ value?: string }>;
+        };
+      }).builder
+    : undefined;
+
+  if (builder?.results?.length) {
+    const result = builder.results.find((item) => item.value)?.value;
+    if (result) return result;
+  }
+
+  if (builder?.scope?.length) {
+    const scope = builder.scope.find((item) => item.value)?.value;
+    if (scope) return scope;
+  }
+
+  return project.timeline ?? project.date ?? getProjectDescriptor(project);
+}
+
+function getProjectProofMedia(project: Project) {
+  if (project.slug === "portfolio-ai") {
+    return "/projects/portfolio-ai/architecture.png";
+  }
+
+  return project.image ?? project.icon ?? "";
+}
+
 function ProjectTextRow({
   onActivate,
   onDeactivate,
@@ -373,6 +391,119 @@ function ProjectTextRow({
         </Link>
       )}
     </motion.li>
+  );
+}
+
+function WorkProofMedia({ project }: { project: Project }) {
+  if (project.slug === "sentinel") {
+    const screens = [
+      "/projects/sentinel/weather-alerts.png",
+      "/projects/sentinel/main.png",
+      "/projects/sentinel/action-plan.png",
+    ];
+
+    return (
+      <div className="work-proof-phone-set work-proof-phone-set--sentinel" aria-label={`${project.title} app screens`}>
+        {screens.map((src, index) => (
+          <BlurImage
+            key={src}
+            src={src}
+            alt={`${project.title} screen ${index + 1}`}
+            width={1724}
+            height={3540}
+            draggable={false}
+            className="work-proof-phone"
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (project.slug === "mindline") {
+    return (
+      <div className="work-proof-phone-set work-proof-phone-set--mindline" aria-label={`${project.title} app screen`}>
+        <BlurImage
+          src="/projects/mindline/suggestion.png"
+          alt={`${project.title} suggestions screen`}
+          width={1265}
+          height={2595}
+          draggable={false}
+          className="work-proof-phone"
+        />
+      </div>
+    );
+  }
+
+  const mediaSrc = getProjectProofMedia(project);
+
+  if (!mediaSrc) {
+    return (
+      <div className="work-proof-media__fallback">
+        {project.glyph ?? project.title.charAt(0)}
+      </div>
+    );
+  }
+
+  return (
+    <BlurImage
+      src={mediaSrc}
+      alt={project.title}
+      fill
+      sizes="(max-width: 768px) 92vw, 620px"
+      draggable={false}
+      className="work-proof-media__asset object-cover"
+    />
+  );
+}
+
+function WorkProofTile({
+  primary = false,
+  project,
+}: {
+  primary?: boolean;
+  project: Project;
+}) {
+  const isDeviceProof = project.slug === "sentinel" || project.slug === "mindline";
+  const proofMediaClass = project.slug === "portfolio-ai"
+    ? "work-proof-media--diagram"
+    : isDeviceProof
+      ? "work-proof-media--device-proof"
+      : "";
+
+  return (
+    <Link
+      href={getProjectPath(project)}
+      className={`work-proof-tile micro-focus micro-pressable ${primary ? "work-proof-tile--primary" : ""}`.trim()}
+    >
+      <div className={`work-proof-media ${proofMediaClass}`.trim()}>
+        <WorkProofMedia project={project} />
+      </div>
+      <div className="work-proof-caption">
+        <span className="work-proof-caption__title">{project.title}</span>
+        <span className="work-proof-caption__meta">{getProjectProofLabel(project)}</span>
+      </div>
+    </Link>
+  );
+}
+
+function WorkProofGrid({ projects }: { projects: Project[] }) {
+  const primaryProject = projects.find((project) => !project.comingSoon) ?? projects[0];
+  const secondaryProjects = projects
+    .filter((project) => !project.comingSoon && project.id !== primaryProject?.id)
+    .slice(0, 2);
+
+  if (!primaryProject) return null;
+
+  return (
+    <motion.div
+      className="work-proof-grid"
+      variants={landingRevealItem}
+    >
+      <WorkProofTile primary project={primaryProject} />
+      {secondaryProjects.map((project) => (
+        <WorkProofTile key={project.id} project={project} />
+      ))}
+    </motion.div>
   );
 }
 
@@ -608,7 +739,8 @@ function WorkSection({
 
   return (
     <div className="relative">
-      <div>
+      <WorkProofGrid projects={projects} />
+      <div className="relative">
         <ul className="space-y-[var(--space-2)]">
           {projects.map((project, index) => (
             <ProjectTextRow
@@ -622,44 +754,44 @@ function WorkSection({
             />
           ))}
         </ul>
+        {canShowFixedPreview && (
+          <div
+            aria-hidden={canInteractWithPreview ? undefined : "true"}
+            className={previewShellClass}
+            onBlur={canInteractWithPreview ? () => deactivateRow() : undefined}
+            onFocus={canInteractWithPreview ? clearHideTimer : undefined}
+            onMouseEnter={canInteractWithPreview ? clearHideTimer : undefined}
+            onMouseLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
+            onPointerEnter={canInteractWithPreview ? clearHideTimer : undefined}
+            onPointerLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
+          >
+            <AnimatePresence initial={false}>
+              {previewProject && (
+                <motion.div
+                  key="work-preview-stage"
+                  className="absolute inset-0 transform-gpu"
+                  initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(5px)", scale: 0.996, y: 3 }}
+                  animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
+                  exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.996, y: 3 }}
+                  transition={
+                    reduceMotion
+                      ? tweens.instant
+                      : {
+                          opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
+                          filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
+                          scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                          y: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
+                        }
+                  }
+                  style={{ willChange: "opacity, filter, transform" }}
+                >
+                  <WorkFixedPreview feedbackKey={previewFeedbackKey} project={previewProject} reduceMotion={reduceMotion} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
-      {canShowFixedPreview && (
-        <div
-          aria-hidden={canInteractWithPreview ? undefined : "true"}
-          className={previewShellClass}
-          onBlur={canInteractWithPreview ? () => deactivateRow() : undefined}
-          onFocus={canInteractWithPreview ? clearHideTimer : undefined}
-          onMouseEnter={canInteractWithPreview ? clearHideTimer : undefined}
-          onMouseLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
-          onPointerEnter={canInteractWithPreview ? clearHideTimer : undefined}
-          onPointerLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
-        >
-          <AnimatePresence initial={false}>
-            {previewProject && (
-              <motion.div
-                key="work-preview-stage"
-                className="absolute inset-0 transform-gpu"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(5px)", scale: 0.996, y: 3 }}
-                animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.996, y: 3 }}
-                transition={
-                  reduceMotion
-                    ? tweens.instant
-                    : {
-                        opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
-                        filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                        scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                        y: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                      }
-                }
-                style={{ willChange: "opacity, filter, transform" }}
-              >
-                <WorkFixedPreview feedbackKey={previewFeedbackKey} project={previewProject} reduceMotion={reduceMotion} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
     </div>
   );
 }
@@ -871,7 +1003,7 @@ function HomeExploreSection({
         </motion.nav>
       </div>
 
-      <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
+      <div className={`mx-auto mt-[var(--space-2)] w-full text-left ${activeSection === "work" ? "max-w-[820px]" : "max-w-[620px]"}`}>
         {activeSection === "work" && <WorkSection projects={projects} />}
         {activeSection === "studies" && (
           <>
@@ -1096,15 +1228,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           />
         </div>
       </motion.div>
-      <motion.div
-        initial={reduceMotion ? false : "hidden"}
-        animate={introReady || reduceMotion ? "visible" : "hidden"}
-        variants={reduceMotion ? undefined : landingFooterItem}
-        className="pointer-events-none fixed inset-x-0 bottom-[var(--space-4)] z-[60] mx-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[620px] text-[length:var(--type-0)] sm:bottom-[var(--space-5)] sm:w-[calc(100%_-_(var(--space-5)*2))]"
-      >
-        <BuildMeta />
-      </motion.div>
-
       <AnimatePresence>
         {projectNotice && (
           <motion.div

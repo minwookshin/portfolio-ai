@@ -415,6 +415,7 @@ function writingMarkdown(post: WritingPost) {
 function projectJson(project: PortfolioProject, path?: string) {
   const categories = project.categories ?? [];
   const pageUrl = path ? absoluteUrl(path) : null;
+  const demoVideo = getAiReadableDemoVideo(project);
 
   return {
     title: project.title,
@@ -433,15 +434,19 @@ function projectJson(project: PortfolioProject, path?: string) {
     github: project.github ?? null,
     linkedin: project.linkedin ?? null,
     liveLink: project.link ?? project.builder.demo?.href ?? null,
-    demoVideo: project.builder.demo?.video ? absoluteUrl(project.builder.demo.video) : null,
+    demoVideo: demoVideo ? absoluteUrl(demoVideo) : null,
   };
+}
+
+function getAiReadableDemoVideo(project: PortfolioProject) {
+  return project.builder.demo?.video ?? (project.slug === "portfolio-ai" ? "/projects/portfolio-ai/demo.mp4" : null);
 }
 
 function projectProofSignals(project: PortfolioProject) {
   const publicProof = [
     project.github ? "public repo" : null,
     project.link ? "live site" : null,
-    project.builder.demo?.video ? "demo video" : null,
+    getAiReadableDemoVideo(project) ? "demo video" : null,
     project.builder.demo?.href ? "live demo" : null,
     project.linkedin ? "public post" : null,
   ].filter(isVisibleBuilderValue);

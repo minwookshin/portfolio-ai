@@ -4,7 +4,7 @@
 - Status: Active
 - Last refreshed: 2026-06-12
 - Primary product surfaces: portfolio homepage, selected-work browsing, studies browsing, project detail sheets, main-page profile/contact block, AI assistant input.
-- Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/LottieMotionProof.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, `public/lottie/rules-trace.json`, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
+- Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/LottieMotionProof.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, `public/lottie/rules-trace.json`, Work & Co work/case-study references, Pentagram work/case-study references, Instrument homepage/work pattern, Fantasy homepage positioning, Metalab project-first work grid, Clay outcome/category work index, BASIC/DEPT case-study archive, Huge work index, NN/g UX portfolio and grid guidance, Awwwards project-page collection, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
 ## Brand
 - Personality: quiet, editorial, precise, technical, image-led, confident without marketing noise.
@@ -24,10 +24,10 @@
 ## Information architecture
 - Primary navigation: minimal header identity plus a single inline `work, studies` tab row on the homepage; fixed assistant controls at the bottom. Contact stays in the intro link group, not as a primary tab.
 - Core routes/screens: home, studies, project sheet, lab study detail, writing detail, main-page profile/contact block, chat overlay.
-- Content hierarchy: identity statement, inline homepage section switcher, selected content panel, fixed assistant entry.
+- Content hierarchy: identity statement, inline homepage section switcher, large visual proof panel plus selected content list, fixed assistant entry.
 
 ## Design principles
-- Principle 1: Let project media carry the page before labels explain it.
+- Principle 1: Let project media carry the page before labels explain it; work pages should show proof visuals, outcomes, and project categories before long descriptions.
 - Principle 2: Use motion for spatial continuity, not spectacle.
 - Principle 3: Studies entries should make thinking tangible through small working interactions, short writing, and prototype proof, not long prose.
 - Tradeoffs: preserve the existing assistant and case-study system while replacing the icon-field homepage with an editorial browsing model.
@@ -35,14 +35,14 @@
 ## Visual language
 - Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and no blue accent on the homepage; highlights use the site black.
 - Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
-- Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, wider project media rows.
+- Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, wider project media rows, and quiet hierarchical proof grids that increase image weight without turning the page into a generic bento landing page.
 - Shape/radius/elevation: modest 8px radius; avoid nested cards and glassmorphism on the homepage; prefer flat ink and black hairline states over filled highlight slabs.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
 - Imagery/iconography: large project screenshots/videos first; icons are supporting identity marks.
 
 ## Components
 - Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
-- New/changed components: editorial project rows, selected-work preview system, studies text index, small Lottie motion proof, lab study detail view, sheet-style overlays.
+- New/changed components: editorial project rows, selected-work proof grid, selected-work preview system, studies text index, small Lottie motion proof, lab study detail view, sheet-style overlays.
 - Variants and states: selected work, studies entries, archived lab prototypes, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 
