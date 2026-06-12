@@ -6,21 +6,24 @@
     <title>Monochrome Assistant Interaction Lab</title>
     <style>
       :root {
-        color-scheme: dark;
-        --page: #09090a;
-        --surface: #101012;
-        --surface-2: #151517;
-        --surface-3: #1d1d20;
-        --ink: #f5f5f7;
-        --ink-soft: #d2d2d7;
-        --muted: #8d8d93;
-        --muted-2: #626269;
-        --hairline: rgba(245, 245, 247, 0.12);
-        --hairline-strong: rgba(245, 245, 247, 0.24);
-        --glass: rgba(29, 29, 32, 0.72);
-        --glass-light: rgba(245, 245, 247, 0.08);
-        --inner-glow: rgba(245, 245, 247, 0.11);
-        --shadow: rgba(0, 0, 0, 0.62);
+        color-scheme: light;
+        --page: #f5f5f7;
+        --surface: #ffffff;
+        --surface-2: #f8f8fa;
+        --surface-3: #eeeef1;
+        --ink: #1d1d1f;
+        --ink-soft: #3a3a3c;
+        --muted: #6e6e73;
+        --muted-2: #8f8f96;
+        --hairline: rgba(29, 29, 31, 0.12);
+        --hairline-strong: rgba(29, 29, 31, 0.22);
+        --glass: rgba(255, 255, 255, 0.76);
+        --glass-active: rgba(255, 255, 255, 0.88);
+        --glass-light: rgba(29, 29, 31, 0.055);
+        --inner-glow: rgba(255, 255, 255, 0.78);
+        --shadow: rgba(29, 29, 31, 0.14);
+        --reflection: rgba(29, 29, 31, 0.16);
+        --reflection-soft: rgba(29, 29, 31, 0.08);
 
         --ai-height: 56px;
         --ai-radius: 28px;
@@ -52,8 +55,8 @@
       body {
         margin: 0;
         background:
-          linear-gradient(rgba(245, 245, 247, 0.025) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(245, 245, 247, 0.022) 1px, transparent 1px),
+          linear-gradient(rgba(29, 29, 31, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(29, 29, 31, 0.035) 1px, transparent 1px),
           var(--page);
         background-size: 44px 44px;
         color: var(--ink);
@@ -98,7 +101,7 @@
         background: var(--surface);
         box-shadow:
           0 40px 120px var(--shadow),
-          inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          inset 0 1px 0 rgba(255, 255, 255, 0.92);
         isolation: isolate;
       }
 
@@ -116,11 +119,11 @@
 
       .stage[data-state="listening"]::before,
       .stage[data-state="thinking"]::before {
-        border-color: rgba(245, 245, 247, 0.52);
+        border-color: rgba(29, 29, 31, 0.26);
         box-shadow:
-          inset 0 0 0 1px rgba(245, 245, 247, 0.22),
-          inset 0 0 46px rgba(245, 245, 247, 0.08),
-          0 0 42px rgba(245, 245, 247, 0.18);
+          inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+          inset 0 0 46px rgba(29, 29, 31, 0.035),
+          0 0 42px rgba(29, 29, 31, 0.08);
         opacity: 1;
         animation: edge-breathe var(--ai-cycle) linear infinite;
       }
@@ -139,7 +142,7 @@
         height: 68px;
         padding: 0 28px;
         border-bottom: 1px solid var(--hairline);
-        background: rgba(16, 16, 18, 0.82);
+        background: rgba(255, 255, 255, 0.78);
         backdrop-filter: blur(18px);
       }
 
@@ -156,9 +159,9 @@
         border: 1px solid var(--hairline-strong);
         border-radius: 50%;
         background:
-          linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent),
-          #111113;
-        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.32);
+          linear-gradient(135deg, rgba(29, 29, 31, 0.09), transparent),
+          #f8f8fa;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.82);
       }
 
       .brand strong {
@@ -236,7 +239,7 @@
         padding: 14px;
         border: 1px solid var(--hairline);
         border-radius: 8px;
-        background: rgba(245, 245, 247, 0.025);
+        background: rgba(29, 29, 31, 0.025);
         transition:
           border-color var(--ai-frame-in) ease-out,
           background var(--ai-frame-in) ease-out,
@@ -260,8 +263,8 @@
 
       .stage[data-state="answered"] .rule:nth-child(2),
       .stage[data-state="thinking"] .rule:nth-child(2) {
-        border-color: rgba(245, 245, 247, 0.34);
-        background: rgba(245, 245, 247, 0.055);
+        border-color: rgba(29, 29, 31, 0.22);
+        background: rgba(29, 29, 31, 0.045);
         transform: translateY(-2px);
       }
 
@@ -271,15 +274,15 @@
         overflow: hidden;
         border: 1px solid var(--hairline);
         border-radius: 8px;
-        background: #0c0c0d;
+        background: var(--surface-2);
       }
 
       .work-panel::before {
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(180deg, rgba(245, 245, 247, 0.06), transparent 32%),
-          linear-gradient(90deg, transparent, rgba(245, 245, 247, 0.04), transparent);
+          linear-gradient(180deg, rgba(255, 255, 255, 0.8), transparent 34%),
+          linear-gradient(90deg, transparent, rgba(29, 29, 31, 0.035), transparent);
         content: "";
         opacity: 0.68;
         pointer-events: none;
@@ -297,15 +300,15 @@
         overflow: hidden;
         border: 1px solid var(--hairline);
         border-radius: 8px;
-        background: #111113;
+        background: #ffffff;
       }
 
       .preview-frame::before {
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(120deg, transparent 0 34%, rgba(255, 255, 255, 0.12) 45%, transparent 58%),
-          repeating-linear-gradient(0deg, rgba(245, 245, 247, 0.055), rgba(245, 245, 247, 0.055) 1px, transparent 1px, transparent 17px);
+          linear-gradient(120deg, transparent 0 34%, rgba(29, 29, 31, 0.08) 45%, transparent 58%),
+          repeating-linear-gradient(0deg, rgba(29, 29, 31, 0.06), rgba(29, 29, 31, 0.06) 1px, transparent 1px, transparent 17px);
         content: "";
         transform: translateX(-30%);
         transition: transform var(--ai-shift) var(--ease-in-out-quad);
@@ -328,8 +331,8 @@
         border: 1px solid var(--hairline);
         border-radius: 8px;
         background:
-          linear-gradient(180deg, rgba(245, 245, 247, 0.055), transparent),
-          #121214;
+          linear-gradient(180deg, rgba(255, 255, 255, 0.78), transparent),
+          #f2f2f5;
       }
 
       .tile:nth-child(2) {
@@ -365,7 +368,7 @@
       .stage[data-state="answered"] .row[data-target],
       .stage[data-state="thinking"] .row[data-target] {
         padding-left: 10px;
-        background: rgba(245, 245, 247, 0.04);
+        background: rgba(29, 29, 31, 0.04);
         color: var(--ink);
       }
 
@@ -398,14 +401,15 @@
         position: relative;
         min-height: var(--ai-height);
         overflow: hidden;
-        border: 1px solid rgba(245, 245, 247, 0.16);
+        border: 1px solid rgba(29, 29, 31, 0.14);
         border-radius: var(--ai-radius);
         background: var(--glass);
         box-shadow:
-          0 22px 70px rgba(0, 0, 0, 0.52),
-          inset 0 1px 0 rgba(255, 255, 255, 0.12),
-          inset 0 -1px 0 rgba(255, 255, 255, 0.035),
-          inset 0 0 0 1px rgba(0, 0, 0, 0.24);
+          0 22px 70px rgba(29, 29, 31, 0.16),
+          0 1px 2px rgba(29, 29, 31, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.92),
+          inset 0 -1px 0 rgba(29, 29, 31, 0.035),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.54);
         backdrop-filter: blur(var(--ai-blur)) saturate(1.1);
         transition:
           min-height var(--ai-reveal) var(--ease-out-quint),
@@ -423,8 +427,8 @@
       .stage[data-state="listening"] .assistant-shell,
       .stage[data-state="thinking"] .assistant-shell,
       .stage[data-state="answered"] .assistant-shell {
-        border-color: rgba(245, 245, 247, 0.34);
-        background: rgba(29, 29, 32, 0.82);
+        border-color: rgba(29, 29, 31, 0.22);
+        background: var(--glass-active);
       }
 
       .stage[data-state="thinking"] .assistant-shell,
@@ -438,8 +442,8 @@
         inset: -1px;
         border-radius: inherit;
         background:
-          linear-gradient(120deg, transparent 12%, rgba(245, 245, 247, 0.34), transparent 42%),
-          linear-gradient(260deg, transparent 16%, rgba(245, 245, 247, 0.18), transparent 52%);
+          linear-gradient(120deg, transparent 12%, var(--reflection), transparent 42%),
+          linear-gradient(260deg, transparent 16%, var(--reflection-soft), transparent 52%);
         content: "";
         opacity: 0;
         transform: translateX(-42%);
@@ -481,7 +485,7 @@
         height: 40px;
         place-items: center;
         border-radius: 50%;
-        background: rgba(245, 245, 247, 0.08);
+        background: rgba(29, 29, 31, 0.06);
         color: var(--ink-soft);
         transition:
           background var(--ai-frame-in) ease-out,
@@ -492,7 +496,7 @@
 
       .icon-button:hover,
       .icon-button:focus-visible {
-        background: rgba(245, 245, 247, 0.14);
+        background: rgba(29, 29, 31, 0.1);
         color: var(--ink);
         outline: none;
       }
@@ -502,7 +506,7 @@
       }
 
       .stage[data-state="listening"] .mic {
-        color: #fff;
+        color: var(--ink);
         animation: mic-pop 880ms var(--ease-out-quint) infinite alternate;
       }
 
@@ -555,9 +559,9 @@
         display: inline-flex;
         align-items: center;
         min-height: 32px;
-        border: 1px solid rgba(245, 245, 247, 0.13);
+        border: 1px solid rgba(29, 29, 31, 0.12);
         border-radius: 999px;
-        background: rgba(245, 245, 247, 0.07);
+        background: rgba(29, 29, 31, 0.045);
         color: var(--ink-soft);
         padding: 0 12px;
         font-size: 12px;
@@ -602,9 +606,9 @@
         align-items: center;
         gap: 7px;
         height: 34px;
-        border: 1px solid rgba(245, 245, 247, 0.2);
+        border: 1px solid rgba(29, 29, 31, 0.14);
         border-radius: 999px;
-        background: rgba(245, 245, 247, 0.1);
+        background: rgba(29, 29, 31, 0.06);
         color: var(--ink);
         padding: 0 12px;
         font-size: 12px;
@@ -615,7 +619,7 @@
 
       .action:hover,
       .action:focus-visible {
-        background: rgba(245, 245, 247, 0.16);
+        background: rgba(29, 29, 31, 0.1);
         outline: none;
       }
 
@@ -632,7 +636,7 @@
         height: 1px;
         overflow: hidden;
         border-radius: 999px;
-        background: rgba(245, 245, 247, 0.08);
+        background: rgba(29, 29, 31, 0.08);
         opacity: 0;
         transition: opacity var(--ai-fast) linear;
       }
@@ -645,7 +649,7 @@
         display: block;
         width: 0;
         height: 100%;
-        background: rgba(245, 245, 247, 0.8);
+        background: rgba(29, 29, 31, 0.72);
         content: "";
         animation: progress var(--ai-cycle) linear infinite;
       }
@@ -678,7 +682,7 @@
         width: 3px;
         height: 8px;
         border-radius: 999px;
-        background: rgba(245, 245, 247, 0.82);
+        background: rgba(29, 29, 31, 0.72);
         animation: wave 760ms ease-in-out infinite alternate;
       }
 
@@ -723,8 +727,9 @@
         height: 34px;
         border: 1px solid var(--hairline);
         border-radius: 50%;
-        background: rgba(245, 245, 247, 0.055);
+        background: rgba(255, 255, 255, 0.64);
         color: var(--muted);
+        box-shadow: 0 8px 24px rgba(29, 29, 31, 0.08);
         transition:
           border-color var(--ai-frame-in) ease-out,
           color var(--ai-frame-in) ease-out,
@@ -735,8 +740,8 @@
       .state-dock button:hover,
       .state-dock button:focus-visible,
       .state-dock button[aria-pressed="true"] {
-        border-color: rgba(245, 245, 247, 0.3);
-        background: rgba(245, 245, 247, 0.11);
+        border-color: rgba(29, 29, 31, 0.24);
+        background: rgba(255, 255, 255, 0.92);
         color: var(--ink);
         outline: none;
       }
@@ -763,15 +768,15 @@
         0%,
         100% {
           box-shadow:
-            inset 0 0 0 1px rgba(245, 245, 247, 0.2),
-            inset 0 0 34px rgba(245, 245, 247, 0.06),
-            0 0 30px rgba(245, 245, 247, 0.14);
+            inset 0 0 0 1px rgba(255, 255, 255, 0.78),
+            inset 0 0 34px rgba(29, 29, 31, 0.035),
+            0 0 30px rgba(29, 29, 31, 0.08);
         }
         50% {
           box-shadow:
-            inset 0 0 0 1px rgba(245, 245, 247, 0.36),
-            inset 0 0 58px rgba(245, 245, 247, 0.1),
-            0 0 58px rgba(245, 245, 247, 0.22);
+            inset 0 0 0 1px rgba(255, 255, 255, 0.92),
+            inset 0 0 58px rgba(29, 29, 31, 0.055),
+            0 0 58px rgba(29, 29, 31, 0.12);
         }
       }
 
@@ -913,25 +918,25 @@
         <div class="content">
           <section class="copy">
             <div>
-              <p class="kicker">MONOCHROME ASSISTANT SURFACE</p>
-              <h1>Quiet system. Living interface.</h1>
+              <p class="kicker">TEXT-FIRST ASSISTANT SURFACE</p>
+              <h1>Readable first. Assistant second.</h1>
               <p class="lede">
-                A restrained portfolio surface where the assistant is the only material that breathes, listens, and expands.
+                The portfolio stays scannable before a prompt. The assistant only appears as a shortcut for deeper context.
               </p>
             </div>
 
             <div class="rules" aria-label="Design rules">
               <article class="rule">
                 <strong>01</strong>
-                <span>Neutral depth instead of decorative color.</span>
+                <span>Core work is visible without asking.</span>
               </article>
               <article class="rule">
                 <strong>02</strong>
-                <span>Assistant states carry the personality.</span>
+                <span>Assistant states speed up exploration.</span>
               </article>
               <article class="rule">
                 <strong>03</strong>
-                <span>Motion behaves like material, not a flourish.</span>
+                <span>Motion behaves like material, not decoration.</span>
               </article>
             </div>
           </section>
