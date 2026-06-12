@@ -240,6 +240,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
           "Project-intake flow wired to real case studies",
         ],
         tags: ["Next.js", "React", "Gemini API", "TypeScript", "AI UX"],
+        hideMedia: true,
       },
       {
         kind: "stats",

@@ -66,6 +66,8 @@ function ProjectHeroMedia({
   proof?: BuilderProof;
   reduceMotion: boolean;
 }) {
+  if (hero?.hideMedia) return null;
+
   const video = proof?.demo?.video;
   const image = hero?.image ?? project.image ?? project.icon;
   const imageStyle = hero?.imageStyle;
@@ -120,6 +122,7 @@ function ProjectDetailHero({
   const title = hero?.title ?? project.title;
   const subtitle = hero?.subtitle ?? project.overview ?? proof?.oneLiner ?? project.fullDescription;
   const eyebrow = project.studioLabel ?? hero?.badge;
+  const hasHeroMedia = !hero?.hideMedia && Boolean(proof?.demo?.video || hero?.image || project.image || project.icon);
   const recruiterSignals = [
     { label: "ownership", value: proof?.role ?? project.role },
     { label: "timeframe", value: project.timeline ?? project.date },
@@ -160,14 +163,16 @@ function ProjectDetailHero({
           ))}
         </dl>
       )}
-      <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={reduceMotion ? tweens.none : { ...tweens.base, delay: 0.08 }}
-        className="mt-[var(--space-4)]"
-      >
-        <ProjectHeroMedia hero={hero} project={project} proof={proof} reduceMotion={reduceMotion} />
-      </motion.div>
+      {hasHeroMedia && (
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={reduceMotion ? tweens.none : { ...tweens.base, delay: 0.08 }}
+          className="mt-[var(--space-4)]"
+        >
+          <ProjectHeroMedia hero={hero} project={project} proof={proof} reduceMotion={reduceMotion} />
+        </motion.div>
+      )}
     </motion.section>
   );
 }

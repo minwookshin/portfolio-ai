@@ -24,6 +24,7 @@ export type DetailSection = ({
       tags?: string[];
       image?: string;
       imageStyle?: "phone" | "cover";
+      hideMedia?: boolean;
     }
   | { kind: "lead"; eyebrow?: string; heading: string; body: string }
   | { kind: "stats"; eyebrow?: string; heading?: string; items: { value: string; label: string }[] }
