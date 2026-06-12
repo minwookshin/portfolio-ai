@@ -10,111 +10,125 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
     sections: [
       {
         kind: "hero",
-        badge: "Capstone · AI triage system",
+        badge: "Team Atlas capstone - digital prototype system",
         title: "Atlas",
-        subtitle: "A multi-surface triage communication system for mass-casualty response.",
+        subtitle:
+          "I built the connected prototype layer for Atlas: first-responder mobile, incident-command iPad, ER intake, and the local server that kept patient state moving across the demo.",
         bullets: [
-          "Design Engineer - product system and prototype",
-          "First-responder, incident-command, and emergency-receiving surfaces",
-          "Demo video intentionally pending phone-recorded walkthrough",
+          "My scope: first structure, early monochrome iteration, and digital prototype engineering",
+          "Team-owned final visual system, research story, and physical prototype",
+          "Three native app surfaces connected through a TypeScript/WebSocket triage server",
         ],
-        tags: ["Figma", "SwiftUI", "TypeScript", "WebSocket", "AI Triage"],
-        image: "/projects/atlas/ic-map.png",
+        tags: ["SwiftUI", "TypeScript", "WebSocket", "Mapbox", "Prototype Systems"],
+        image: "/projects/atlas/ic-quick-send-photo.png",
         imageStyle: "cover",
       },
       {
         kind: "lead",
-        eyebrow: "The problem",
-        heading: "Emergency teams lose time when triage state is scattered",
+        eyebrow: "My contribution",
+        heading: "A portfolio page about the working prototype, not the whole design story",
         body:
-          "During a mass-casualty response, patient status, location, priority, and hospital capacity can move faster than the communication layer. Atlas explores a calmer system where each team sees the slice of state they need without rebuilding context from scratch.",
-        ask: ["What is Atlas?", "Who is it for?"],
-      },
-      {
-        kind: "split",
-        eyebrow: "The system",
-        heading: "Three surfaces, one patient state",
-        columns: [
-          {
-            label: "Field response",
-            title: "Fast patient updates",
-            body:
-              "First responders can update triage status and patient details through a focused mobile flow built for speed, not documentation theater.",
-          },
-          {
-            label: "Incident command",
-            title: "Map-based coordination",
-            body:
-              "Incident command sees responders, patient markers, sector state, and hospital assignments in one spatial view.",
-          },
-          {
-            label: "Emergency receiving",
-            title: "Queue and capacity awareness",
-            body:
-              "Receiving teams can understand what is coming next before patients arrive, reducing surprise handoffs.",
-          },
-        ],
-        ask: ["How does the system work?"],
-      },
-      {
-        kind: "flow",
-        eyebrow: "How it works",
-        heading: "Triage data moves with the patient",
-        steps: [
-          {
-            tag: "First responder",
-            title: "Capture a patient update",
-            body:
-              "Responder-facing screens focus on the minimum useful state: triage priority, condition, location, and action-ready notes.",
-          },
-          {
-            tag: "Incident command",
-            title: "Coordinate from the map",
-            body:
-              "The command view turns those updates into a spatial operating picture, connecting patient markers, units, and receiving destinations.",
-          },
-          {
-            tag: "Emergency receiving",
-            title: "Prepare the intake queue",
-            body:
-              "The receiving view converts field state into an intake queue so hospital teams can prepare resources before arrival.",
-          },
-        ],
-        note:
-          "The current portfolio version shows product structure and interface proof. The polished demo walkthrough will be added after fresh phone footage is recorded.",
+          "Atlas was a team capstone. I helped shape the first structural pass and a monochrome interface iteration, then focused on building the digital prototype system: the app surfaces, shared state, mock incident data, and live sync needed to make the concept demonstrable.",
+        ask: ["What did you build?", "What was team-owned?"],
       },
       {
         kind: "stats",
-        eyebrow: "Build proof",
-        heading: "What is visible now",
+        eyebrow: "Prototype proof",
+        heading: "The build behind the screens",
         items: [
-          { value: "3", label: "Primary surfaces" },
-          { value: "5", label: "Published interface frames" },
-          { value: "2026", label: "Capstone system" },
+          { value: "3", label: "Native app targets" },
+          { value: "134", label: "Swift files" },
+          { value: "7.1k", label: "Server code lines" },
+          { value: "207", label: "Server tests passed" },
         ],
+      },
+      {
+        kind: "split",
+        eyebrow: "Build scope",
+        heading: "Four pieces made the prototype feel alive",
+        columns: [
+          {
+            label: "FR mobile",
+            title: "Responder-facing updates",
+            body:
+              "A mobile surface for map context, patient lists, injury updates, and quick triage changes from the field.",
+          },
+          {
+            label: "IC iPad",
+            title: "Command and assignment",
+            body:
+              "An incident-command surface for the operating map, patient assignment, quick-send instructions, and hospital capacity.",
+          },
+          {
+            label: "ER iPad",
+            title: "Receiving preparation",
+            body:
+              "A hospital intake surface showing incoming patients, live vitals, injury locations, and status history.",
+          },
+          {
+            label: "Local server",
+            title: "Shared patient state",
+            body:
+              "A TypeScript REST/WebSocket server handled mock incident data and broadcast patient updates across the app surfaces.",
+          },
+        ],
+        ask: ["How did sync work?"],
       },
       {
         kind: "gallery",
-        eyebrow: "Interface system",
-        heading: "Field, command, and receiving views",
+        eyebrow: "Prototype surfaces",
+        heading: "The three apps I helped turn into a connected demo",
+        layout: "featured",
         images: [
-          { src: "/projects/atlas/fr-patient-update.png", caption: "First-responder patient update flow" },
-          { src: "/projects/atlas/er-queue.png", caption: "Emergency receiving queue" },
-          { src: "/projects/atlas/ic-patient-detail.png", caption: "Incident-command patient detail" },
-          { src: "/projects/atlas/ic-quick-send.png", caption: "Incident-command quick send flow" },
+          { src: "/projects/atlas/fr-map-photo.png", caption: "First-responder mobile map and patient context" },
+          { src: "/projects/atlas/ic-quick-send-photo.png", caption: "Incident-command quick-send and map coordination" },
+          { src: "/projects/atlas/er-patient-data-photo.png", caption: "Emergency receiving intake detail and patient status" },
         ],
       },
       {
+        kind: "flow",
+        eyebrow: "System flow",
+        heading: "The prototype was built around a single shared incident state",
+        steps: [
+          {
+            tag: "Mock incident",
+            title: "Seed a live scenario",
+            body:
+              "A local data layer could generate a 47-patient incident stream so the demo had enough movement to stress the experience.",
+          },
+          {
+            tag: "Server state",
+            title: "Centralize patient, responder, and hospital updates",
+            body:
+              "The TypeScript server kept one source of truth for patient status, locations, assignments, teams, and instructions.",
+          },
+          {
+            tag: "WebSocket broadcast",
+            title: "Push changes to every surface",
+            body:
+              "When a patient changed, the server broadcast state events so FR, IC, and ER screens could stay synchronized.",
+          },
+          {
+            tag: "Native clients",
+            title: "Render role-specific views",
+            body:
+              "Each SwiftUI target used the same shared models while showing only the slice of the incident that role needed.",
+          },
+        ],
+        note:
+          "The final visual direction came from Team Atlas. My implementation work translated that direction into prototype apps, shared components, and live system behavior.",
+      },
+      {
         kind: "outcome",
-        badge: "Current status",
-        heading: "Prepared as a case-study draft",
+        badge: "Credit boundary",
+        heading: "What this page should claim",
         body: [
-          "Atlas stays in the work archive as an in-progress capstone proof until the full case study is ready.",
-          "The project is intentionally presented without a demo video until the next recorded walkthrough is ready.",
+          "Atlas should be read as a team capstone where my strongest contribution was making the digital prototype work across multiple app surfaces.",
+          "I am not claiming ownership of the final visual design or physical prototype. This page focuses on the structure, early monochrome pass, native prototypes, and real-time system I helped build.",
         ],
       },
     ],
-    ask: ["What would you improve next?", "Show the system flow", "Why Atlas?"],
+    ask: ["Show the system flow", "What did you code?", "What was team-owned?"],
   },
 
   // Sentinel

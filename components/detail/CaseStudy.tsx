@@ -40,7 +40,7 @@ export type DetailSection = ({
   | { kind: "features"; eyebrow?: string; heading: string; items: { title: string; description: string; image?: string }[] }
   | { kind: "flow"; eyebrow?: string; heading: string; steps: { title: string; body: string; tag?: string }[]; note?: string }
   | { kind: "quote"; text: string; attribution?: string }
-  | { kind: "gallery"; eyebrow?: string; heading?: string; images: { src: string; caption?: string }[] }
+  | { kind: "gallery"; eyebrow?: string; heading?: string; layout?: "grid" | "featured"; images: { src: string; caption?: string }[] }
   | { kind: "video"; eyebrow?: string; heading?: string; src: string; poster?: string; aspect?: string }
   | { kind: "links"; items: { label: string; href: string }[] }
   | { kind: "outcome"; badge?: string; heading: string; body: string[] }) & {
@@ -384,7 +384,10 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <div className={`grid items-start gap-[var(--space-2)] ${section.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
             {section.images.map((img, gi) => (
-              <figure key={gi} className="overflow-hidden">
+              <figure
+                key={gi}
+                className={`overflow-hidden ${section.layout === "featured" && gi === 0 ? "sm:col-span-2" : ""}`}
+              >
                 <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
                 {img.caption && <figcaption className="py-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{img.caption}</figcaption>}
               </figure>

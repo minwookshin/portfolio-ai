@@ -58,11 +58,11 @@ describe("LabStudyDetailView interactions", () => {
     expect(preview).toHaveTextContent("sentinel");
     expect(preview).toHaveTextContent("preview handoff leads the hover");
 
-    const atlas = screen.getByRole("button", { name: /atlas: capstone in progress/i });
+    const atlas = screen.getByRole("button", { name: /atlas: digital prototype system/i });
     await user.hover(atlas);
     await waitFor(() => expect(atlas).toHaveAttribute("data-active", "true"));
     await waitFor(() => expect(preview).toHaveTextContent("atlas"));
-    expect(preview).toHaveTextContent("quiet row feedback");
+    expect(preview).toHaveTextContent("opens into build proof");
 
     const portfolioAi = screen.getByRole("button", { name: /portfolio ai: ai intake website/i });
     await user.click(portfolioAi);

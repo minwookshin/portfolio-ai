@@ -185,9 +185,9 @@ My background is unique: **Medicine** taught me scientific rigor, **Competitive 
     - **Focus:** burnout signals, team wellbeing, iOS-style UX, public web prototype. Year: 2025.
 
 9.  **Atlas**
-    - **Summary:** A capstone AI triage communication system for mass-casualty response.
-    - **Focus:** first-responder mobile flow, incident-command iPad map, emergency-receiving queue, multi-surface product systems.
-    - **Status:** Case study draft. Demo video is intentionally pending fresh phone-recorded walkthrough footage.
+    - **Summary:** A Team Atlas capstone where Minwook built the connected digital prototype layer for mass-casualty triage.
+    - **Focus:** first-responder mobile app, incident-command iPad app, emergency-receiving iPad app, SwiftUI prototypes, TypeScript/WebSocket patient-state server.
+    - **Role boundary:** Minwook helped with the first structure and an early monochrome iteration, then focused on the working digital prototypes. The final visual system, research story, and physical prototype were team-owned.
 
 **Handling User Queries:**
 

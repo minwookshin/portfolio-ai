@@ -280,8 +280,8 @@ function HoverRowDemo({ reduceMotion }: DemoProps) {
   const rows = [
     {
       title: "atlas",
-      meta: "capstone in progress",
-      detail: "quiet row feedback while the project stays unavailable",
+      meta: "digital prototype system",
+      detail: "quiet row feedback while the project opens into build proof",
       mark: "at",
     },
     {
@@ -356,7 +356,7 @@ function HoverRowDemo({ reduceMotion }: DemoProps) {
 function RouteTransitionDemo({ reduceMotion }: DemoProps) {
   const sections = {
     work: [
-      ["atlas", "capstone in progress"],
+      ["atlas", "digital prototype system"],
       ["sentinel", "native ios mvp"],
       ["portfolio ai", "ai intake website"],
     ],
