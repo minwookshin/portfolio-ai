@@ -2,9 +2,9 @@
 
 ## Source of truth
 - Status: Active
-- Last refreshed: 2026-06-07
+- Last refreshed: 2026-06-12
 - Primary product surfaces: portfolio homepage, selected-work browsing, studies browsing, project detail sheets, main-page profile/contact block, AI assistant input.
-- Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
+- Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/LottieMotionProof.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, `public/lottie/rules-trace.json`, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
 ## Brand
 - Personality: quiet, editorial, precise, technical, image-led, confident without marketing noise.
@@ -37,12 +37,12 @@
 - Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, wider project media rows.
 - Shape/radius/elevation: modest 8px radius; avoid nested cards and glassmorphism on the homepage; prefer flat ink and black hairline states over filled highlight slabs.
-- Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover.
+- Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
 - Imagery/iconography: large project screenshots/videos first; icons are supporting identity marks.
 
 ## Components
 - Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
-- New/changed components: editorial project rows, selected-work preview system, studies text index, lab study detail view, sheet-style overlays.
+- New/changed components: editorial project rows, selected-work preview system, studies text index, small Lottie motion proof, lab study detail view, sheet-style overlays.
 - Variants and states: selected work, studies entries, archived lab prototypes, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 
@@ -74,7 +74,7 @@
 ## Implementation constraints
 - Framework/styling system: Next.js App Router, React, Tailwind, CSS variables, Framer Motion.
 - Design-token constraints: continue using existing monochrome tokens, now biased toward dark surfaces with soft-white foregrounds.
-- Performance constraints: avoid heavy canvas/WebGL; lazy-load media; use CSS transforms for motion.
+- Performance constraints: avoid heavy canvas/WebGL; lazy-load media; use CSS transforms for primary motion; keep Lottie decorative, SVG-rendered, and narrowly scoped.
 - Compatibility constraints: keep existing chat API, project data, and case-study renderer.
 - Test/screenshot expectations: run unit tests, production build, and browser checks on localhost after major changes.
 

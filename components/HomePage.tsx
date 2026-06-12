@@ -11,6 +11,7 @@ import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import BuildMeta from "@/components/BuildMeta";
 import ChatInput from "@/components/ChatInput";
+import LottieMotionProof from "@/components/LottieMotionProof";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -802,20 +803,25 @@ function RulesIKeep() {
       className="rules-i-keep"
       variants={landingRevealItem}
     >
-      <h2 id="rules-i-keep-title" className="rules-i-keep__title">
-        rules i keep
-      </h2>
-      <ol className="rules-i-keep__list">
-        {RULES_I_KEEP.map((item, index) => (
-          <li key={item.rule} className="rules-i-keep__item">
-            <span className="rules-i-keep__index">{String(index + 1).padStart(2, "0")}</span>
-            <span className="rules-i-keep__copy">
-              <span>{item.rule}</span>
-              <span>{item.note}</span>
-            </span>
-          </li>
-        ))}
-      </ol>
+      <div className="rules-i-keep__inner">
+        <div className="rules-i-keep__copy-block">
+          <h2 id="rules-i-keep-title" className="rules-i-keep__title">
+            rules i keep
+          </h2>
+          <ol className="rules-i-keep__list">
+            {RULES_I_KEEP.map((item, index) => (
+              <li key={item.rule} className="rules-i-keep__item">
+                <span className="rules-i-keep__index">{String(index + 1).padStart(2, "0")}</span>
+                <span className="rules-i-keep__copy">
+                  <span>{item.rule}</span>
+                  <span>{item.note}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <LottieMotionProof className="rules-i-keep__proof" path="/lottie/rules-trace.json" />
+      </div>
     </motion.section>
   );
 }
