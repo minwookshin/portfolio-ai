@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <>
       <StructuredData data={profilePageJsonLd()} />
-      <HomePage activeSection="work" writingPosts={writingPosts} />
+      <HomePage activeSection="about" writingPosts={writingPosts} />
     </>
   );
 }

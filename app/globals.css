@@ -311,6 +311,25 @@ body::after {
   opacity: 0.82;
 }
 
+.home-orb-stage {
+  min-height: min(760px, 100dvh);
+  padding-top: clamp(116px, 24vh, 220px);
+}
+
+.home-orb-stage[data-section="work"],
+.home-orb-stage[data-section="studies"] {
+  padding-top: clamp(96px, 20vh, 180px);
+}
+
+.home-orb-content {
+  margin-top: clamp(14px, 3vh, 28px);
+  min-height: 220px;
+}
+
+.home-orb-panel {
+  width: 100%;
+}
+
 .section-orb-nav {
   display: flex;
   flex-wrap: nowrap;
@@ -384,12 +403,12 @@ body::after {
 
 .section-orb-nav__orb[data-orb-tone="work"] video {
   animation: section-orb-work-drift 10.5s cubic-bezier(0.45, 0, 0.2, 1) infinite alternate;
-  filter: hue-rotate(198deg) saturate(0.5) brightness(1.07) contrast(0.96);
+  filter: grayscale(0.42) saturate(0.6) brightness(1.08) contrast(0.92);
 }
 
 .section-orb-nav__orb[data-orb-tone="studies"] video {
   animation: section-orb-study-focus 12s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  filter: hue-rotate(70deg) saturate(0.42) brightness(1.12) contrast(0.94);
+  filter: grayscale(0.2) hue-rotate(24deg) saturate(0.38) brightness(1.12) contrast(0.93);
 }
 
 .section-orb-nav__item[data-active="true"] .section-orb-nav__orb {
@@ -421,39 +440,39 @@ body::after {
 
 @keyframes section-orb-work-drift {
   0% {
-    filter: hue-rotate(192deg) saturate(0.4) brightness(1.07) contrast(0.94);
+    filter: grayscale(0.5) saturate(0.48) brightness(1.1) contrast(0.9);
     transform: scale(1.18) translate3d(-4%, -1%, 0) rotate(-4deg);
   }
 
   42% {
-    filter: hue-rotate(206deg) saturate(0.58) brightness(1.09) contrast(0.98);
+    filter: grayscale(0.34) saturate(0.72) brightness(1.1) contrast(0.94);
     transform: scale(1.24) translate3d(2%, 3%, 0) rotate(2deg);
   }
 
   100% {
-    filter: hue-rotate(198deg) saturate(0.46) brightness(1.06) contrast(0.95);
+    filter: grayscale(0.44) saturate(0.56) brightness(1.08) contrast(0.91);
     transform: scale(1.19) translate3d(4%, -2%, 0) rotate(7deg);
   }
 }
 
 @keyframes section-orb-study-focus {
   0% {
-    filter: hue-rotate(64deg) saturate(0.34) brightness(1.14) contrast(0.92);
+    filter: grayscale(0.28) hue-rotate(16deg) saturate(0.3) brightness(1.15) contrast(0.9);
     transform: scale(1.14) translate3d(2%, -3%, 0) rotate(6deg);
   }
 
   34% {
-    filter: hue-rotate(78deg) saturate(0.48) brightness(1.1) contrast(0.98);
+    filter: grayscale(0.16) hue-rotate(30deg) saturate(0.44) brightness(1.12) contrast(0.95);
     transform: scale(1.21) translate3d(-3%, 1%, 0) rotate(-3deg);
   }
 
   68% {
-    filter: hue-rotate(70deg) saturate(0.4) brightness(1.14) contrast(0.94);
+    filter: grayscale(0.22) hue-rotate(24deg) saturate(0.36) brightness(1.15) contrast(0.92);
     transform: scale(1.16) translate3d(3%, 2%, 0) rotate(-8deg);
   }
 
   100% {
-    filter: hue-rotate(64deg) saturate(0.34) brightness(1.14) contrast(0.92);
+    filter: grayscale(0.28) hue-rotate(16deg) saturate(0.3) brightness(1.15) contrast(0.9);
     transform: scale(1.14) translate3d(2%, -3%, 0) rotate(6deg);
   }
 }

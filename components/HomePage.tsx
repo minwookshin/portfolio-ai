@@ -28,17 +28,17 @@ import {
 } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
 
-type HomeTab = "work" | "studies";
+type HomeSection = "about" | "work" | "studies";
 
 type HomePageProps = {
-  activeSection?: HomeTab;
+  activeSection?: HomeSection;
   writingPosts: WritingPostMeta[];
 };
 
-type HomeOrbId = "about" | HomeTab;
+type HomeOrbId = HomeSection;
 
 const HOME_ORB_LINKS: Array<{ href: string; id: HomeOrbId; label: string }> = [
-  { href: "#profile", id: "about", label: "about" },
+  { href: "/", id: "about", label: "about" },
   { href: "/work", id: "work", label: "work" },
   { href: "/studies", id: "studies", label: "studies" },
 ];
@@ -527,29 +527,27 @@ function WorkFixedPreview({
   );
 }
 
-function EditorialIntro() {
+function AboutSection() {
   return (
-    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
-      <motion.div id="profile" variants={landingIntroVariants} className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <motion.p variants={landingRevealItem} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</motion.p>
-        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</motion.p>
-        <motion.h1 variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-          I design and build interfaces for AI-native products, from early idea to working software.
-        </motion.h1>
-        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
-          {", "}
-          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
-          {", "}
-          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
-          {", "}
-          <span className="text-[var(--text-primary)]">and</span>
-          {" "}
-          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
-          {"."}
-        </motion.p>
-      </motion.div>
-    </section>
+    <motion.div id="profile" variants={landingIntroVariants} className="w-full scroll-mt-28 text-left">
+      <motion.p variants={landingRevealItem} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</motion.p>
+      <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</motion.p>
+      <motion.h1 variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+        I design and build interfaces for AI-native products, from early idea to working software.
+      </motion.h1>
+      <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+        <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
+        {", "}
+        <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
+        {", "}
+        <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
+        {", "}
+        <span className="text-[var(--text-primary)]">and</span>
+        {" "}
+        <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
+        {"."}
+      </motion.p>
+    </motion.div>
   );
 }
 
@@ -822,7 +820,7 @@ function RulesIKeep() {
   );
 }
 
-function SectionOrbNav({ activeSection }: { activeSection: HomeTab }) {
+function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
   const reduceMotion = Boolean(useReducedMotion());
 
   return (
@@ -853,19 +851,6 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeTab }) {
         );
         const className = "section-orb-nav__item micro-focus micro-focus-tight";
 
-        if (link.id === "about") {
-          return (
-            <a
-              key={link.id}
-              className={className}
-              data-active={selected ? "true" : "false"}
-              href={link.href}
-            >
-              {content}
-            </a>
-          );
-        }
-
         return (
           <Link
             key={link.id}
@@ -887,35 +872,50 @@ function HomeExploreSection({
   projects,
   studyItems,
 }: {
-  activeSection: HomeTab;
+  activeSection: HomeSection;
   projects: Project[];
   studyItems: StudyItem[];
 }) {
+  const reduceMotion = Boolean(useReducedMotion());
+
   return (
     <motion.section
       id={activeSection}
+      data-section={activeSection}
       variants={landingExploreVariants}
-      className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]"
+      className="home-orb-stage mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] sm:px-[var(--space-5)]"
     >
       <div className="mx-auto w-full max-w-[620px] text-left">
         <SectionOrbNav activeSection={activeSection} />
       </div>
 
-      <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
-        {activeSection === "work" && <WorkSection projects={projects} />}
-        {activeSection === "studies" && (
-          <>
-            <RulesIKeep />
-            <StudiesSection items={studyItems} />
-          </>
-        )}
+      <div className="home-orb-content mx-auto w-full max-w-[620px] text-left">
+        <AnimatePresence initial={false} mode="wait">
+          <motion.div
+            key={activeSection}
+            initial={reduceMotion ? false : { opacity: 0, filter: "blur(5px)", y: 10 }}
+            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+            exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(4px)", y: -6 }}
+            transition={reduceMotion ? tweens.none : { duration: 0.32, ease: LANDING_EASE }}
+            className="home-orb-panel"
+          >
+            {activeSection === "about" && <AboutSection />}
+            {activeSection === "work" && <WorkSection projects={projects} />}
+            {activeSection === "studies" && (
+              <>
+                <RulesIKeep />
+                <StudiesSection items={studyItems} />
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </motion.section>
   );
 }
 
 // Interface to store content snapshot for each message
-export default function HomePage({ activeSection = "work", writingPosts }: HomePageProps) {
+export default function HomePage({ activeSection = "about", writingPosts }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
   const currentSection = activeSection;
@@ -1055,12 +1055,20 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   const openProfile = () => {
     setChatOnTop(false);
     setHasStarted(false);
-    requestAnimationFrame(() => {
+    const scrollProfileIntoView = () => {
       document.getElementById("profile")?.scrollIntoView({
         behavior: reduceMotion ? "auto" : "smooth",
         block: "center",
       });
-    });
+    };
+
+    if (currentSection !== "about") {
+      router.push("/", { scroll: false });
+      window.setTimeout(scrollProfileIntoView, 80);
+      return;
+    }
+
+    requestAnimationFrame(scrollProfileIntoView);
   };
 
   const openProjectFromChat = (project: Project) => {
@@ -1118,7 +1126,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         className="flex-1"
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
-          <EditorialIntro />
           <HomeExploreSection
             activeSection={currentSection}
             projects={featuredProjects}
