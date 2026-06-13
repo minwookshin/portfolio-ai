@@ -1,30 +1,31 @@
 **Findings**
-- No actionable P0/P1/P2 findings remain for the portfolio reference orb integration.
+- No actionable P0/P1/P2 findings remain for the three-orb section navigation pass.
 
 **Open Questions**
-- Permission source: the user reported the author/friend allowed use of the original interaction. Keep that context with this asset if the portfolio later becomes public-facing with attribution requirements.
-- The live video cannot be frame-perfectly paused through the read-only browser QA surface, so focused source-vs-implementation captures may differ by a few frames. The implementation uses the same cropped source video asset, so this is temporal drift rather than a replacement-art mismatch.
+- Permission source: the user reported the author/friend allowed use of the original orb interaction. The new row still derives its animated material from the approved cropped video asset.
+- The final color palette is still exploratory. Current tones intentionally separate about/work/studies, but the work green can be reduced later if the direction returns closer to monochrome.
 
 **Implementation Checklist**
 - Source visual truth path: `/Users/minwook/Desktop/ㅇㅁ.mp4`
-- Source still reference path: `/var/folders/2m/3wr89r0d36b1yr3___jvbc7m0000gn/T/codex-clipboard-2869299a-9ad6-4629-bc46-3c60a95c7ba0.png`
 - Portfolio asset paths: `public/media/siri-reference-orb.mp4`, `public/media/siri-reference-orb-poster.png`
-- Implementation screenshot path: `prototypes/siri-interaction/qa/portfolio-orb-desktop-idle.png`
-- Focused comparison evidence: `prototypes/siri-interaction/qa/portfolio-orb-timed-source-vs-implementation.png`
-- Additional focused evidence: `prototypes/siri-interaction/qa/portfolio-orb-element-source-vs-implementation.png`, `prototypes/siri-interaction/qa/portfolio-orb-desktop-idle-crop.png`
+- Implementation screenshot path: `prototypes/siri-interaction/qa/section-orb-row-desktop-work.png`
+- Focused work-state evidence: `prototypes/siri-interaction/qa/section-orb-row-desktop-work-crop.png`
+- Focused studies-state evidence: `prototypes/siri-interaction/qa/section-orb-row-desktop-studies-crop.png`
+- Mobile evidence: `prototypes/siri-interaction/qa/section-orb-row-mobile-studies.png`
 - Viewports checked: desktop browser viewport around 1030x944; mobile override 390x844.
-- States checked: idle reference orb, menu opened state, menu closed back to idle.
-- Full-view comparison evidence: desktop idle screenshot shows the reference orb centered over the work list without a visible rectangular video background.
-- Focused region comparison evidence: source and implementation were placed side by side; frame timing differs because the live video continues playing, but the rendered element uses the same cropped source video.
-- Fonts and typography: no portfolio text styles were changed; menu prompt/chip typography remains from the previous WebGL pill integration.
-- Spacing and layout rhythm: desktop orb displays at 142px; mobile clamps to 122px to reduce text obstruction while preserving the same centered interaction.
-- Colors and visual tokens: idle orb color now comes from the reference raster/video, not CSS gradients or handcrafted shader approximations.
-- Image quality and asset fidelity: source video was cropped to the orb region, stripped of audio, kept as a 54KB H.264 loop with a PNG poster; idle WebGL is hidden so the visual reads as one glass sphere layer.
-- Copy and content: no visible app copy was added or changed.
-- Patches made since previous QA pass: added the cropped reference video/poster asset, added a reference video orb in `PortfolioSiriOrb`, hid the WebGL canvas while idle, and added responsive orb sizing for mobile.
+- States checked: `/work` active work orb, `/studies` active studies orb, mobile one-line layout, and absence of the previous centered floating orb.
+- Full-view comparison evidence: desktop work screenshot shows the three animated circles integrated into the text-first portfolio rhythm without the previous center overlay.
+- Focused region comparison evidence: cropped row screenshots confirm three inline animated circles and active-state movement between work and studies.
+- Fonts and typography: labels reuse the existing text scale and keep the text-first page structure.
+- Spacing and layout rhythm: the row remains a single 52px-tall horizontal navigation band; mobile width is 342px inside a 390px viewport with no wrapping.
+- Colors and visual tokens: all three circles use the same source video material with distinct CSS-filtered tones: monochrome about, green work, pink studies.
+- Image quality and asset fidelity: no div-art or handcrafted SVG asset replacement was used; the visible orb animation comes from the existing cropped video source.
+- Copy and content: visible nav labels are `about`, `work`, and `studies`; existing project/study copy remains unchanged.
+- Patches made since previous QA pass: replaced the text-only work/studies tabs with a three-orb section row, linked about to the profile section, removed the centered `PortfolioSiriOrb` render from the home page, and saved desktop/mobile QA captures.
 
 **Follow-up Polish**
-- P3: If exact same-frame QA is needed later, add a temporary local QA-only pause hook for the video element and remove it before shipping.
-- P3: The existing Next/Turbopack dev overlay reports a performance-measure issue in local dev; production build passed and this is not tied to the orb asset.
+- P3: Tune the work orb away from green/yellow if the final palette needs to feel more monochrome.
+- P3: Consider adding a selected about state if the route later exposes an explicit about section.
+- P3: The existing Next/Turbopack dev overlay reports a performance-measure issue in local dev; production build verification will determine whether the shipped bundle is clear.
 
 final result: passed

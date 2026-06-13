@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,6 @@ import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
 import LottieMotionProof from "@/components/LottieMotionProof";
-import PortfolioSiriOrb from "@/components/PortfolioSiriOrb";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -36,10 +35,16 @@ type HomePageProps = {
   writingPosts: WritingPostMeta[];
 };
 
-const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = [
+type HomeOrbId = "about" | HomeTab;
+
+const HOME_ORB_LINKS: Array<{ href: string; id: HomeOrbId; label: string }> = [
+  { href: "#profile", id: "about", label: "about" },
   { href: "/work", id: "work", label: "work" },
   { href: "/studies", id: "studies", label: "studies" },
 ];
+
+const SECTION_ORB_SRC = "/media/siri-reference-orb.mp4";
+const SECTION_ORB_POSTER = "/media/siri-reference-orb-poster.png";
 
 const RULES_I_KEEP = [
   {
@@ -817,14 +822,72 @@ function RulesIKeep() {
   );
 }
 
+function SectionOrbNav({ activeSection }: { activeSection: HomeTab }) {
+  const reduceMotion = Boolean(useReducedMotion());
+
+  return (
+    <motion.nav
+      aria-label="sections"
+      variants={landingRevealItem}
+      className="section-orb-nav"
+    >
+      {HOME_ORB_LINKS.map((link) => {
+        const selected = link.id === activeSection;
+        const content = (
+          <>
+            <span className="section-orb-nav__orb" aria-hidden="true" data-orb-tone={link.id}>
+              <video
+                autoPlay={!reduceMotion}
+                disablePictureInPicture
+                draggable={false}
+                loop
+                muted
+                playsInline
+                poster={SECTION_ORB_POSTER}
+                preload="auto"
+                src={SECTION_ORB_SRC}
+              />
+            </span>
+            <span className="section-orb-nav__label">{link.label}</span>
+          </>
+        );
+        const className = "section-orb-nav__item micro-focus micro-focus-tight";
+
+        if (link.id === "about") {
+          return (
+            <a
+              key={link.id}
+              className={className}
+              data-active={selected ? "true" : "false"}
+              href={link.href}
+            >
+              {content}
+            </a>
+          );
+        }
+
+        return (
+          <Link
+            key={link.id}
+            aria-current={selected ? "page" : undefined}
+            className={className}
+            data-active={selected ? "true" : "false"}
+            href={link.href}
+          >
+            {content}
+          </Link>
+        );
+      })}
+    </motion.nav>
+  );
+}
+
 function HomeExploreSection({
   activeSection,
-  onActiveProjectChange,
   projects,
   studyItems,
 }: {
   activeSection: HomeTab;
-  onActiveProjectChange?: (project: Project | null) => void;
   projects: Project[];
   studyItems: StudyItem[];
 }) {
@@ -835,37 +898,11 @@ function HomeExploreSection({
       className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]"
     >
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <motion.nav
-          aria-label="sections"
-          variants={landingRevealItem}
-          className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
-        >
-          {HOME_SECTION_LINKS.map((link, index) => {
-            const selected = link.id === activeSection;
-
-            return (
-              <Fragment key={link.id}>
-                <Link
-                  aria-current={selected ? "page" : undefined}
-                  className="home-tab-button micro-focus micro-focus-tight"
-                  data-active={selected ? "true" : "false"}
-                  href={link.href}
-                >
-                  {link.label}
-                </Link>
-                {index < HOME_SECTION_LINKS.length - 1 && (
-                  <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]" role="presentation">
-                    ,
-                  </span>
-                )}
-              </Fragment>
-            );
-          })}
-        </motion.nav>
+        <SectionOrbNav activeSection={activeSection} />
       </div>
 
       <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
-        {activeSection === "work" && <WorkSection onActiveProjectChange={onActiveProjectChange} projects={projects} />}
+        {activeSection === "work" && <WorkSection projects={projects} />}
         {activeSection === "studies" && (
           <>
             <RulesIKeep />
@@ -890,7 +927,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   // behind it so that view is in focus again.
   const [chatOnTop, setChatOnTop] = useState(false);
   const [projectNotice, setProjectNotice] = useState<string | null>(null);
-  const [guideProject, setGuideProject] = useState<Project | null>(null);
   // Keep the landing motion quiet: the page simply settles in, with no separate
   // logo trace or position handoff.
   const [introReady, setIntroReady] = useState(false);
@@ -1041,36 +1077,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     router.push(projectPath);
   };
 
-  const openWork = () => {
-    setChatOnTop(false);
-    setHasStarted(false);
-    if (currentSection !== "work") {
-      router.push("/work", { scroll: false });
-      return;
-    }
-    requestAnimationFrame(() => {
-      document.getElementById("work")?.scrollIntoView({
-        behavior: reduceMotion ? "auto" : "smooth",
-        block: "start",
-      });
-    });
-  };
-
-  const openStudies = () => {
-    setChatOnTop(false);
-    setHasStarted(false);
-    if (currentSection !== "studies") {
-      router.push("/studies", { scroll: false });
-      return;
-    }
-    requestAnimationFrame(() => {
-      document.getElementById("studies")?.scrollIntoView({
-        behavior: reduceMotion ? "auto" : "smooth",
-        block: "start",
-      });
-    });
-  };
-
   return (
     <main
       className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
@@ -1115,20 +1121,11 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           <EditorialIntro />
           <HomeExploreSection
             activeSection={currentSection}
-            onActiveProjectChange={setGuideProject}
             projects={featuredProjects}
             studyItems={studyItems}
           />
         </div>
       </motion.div>
-      <PortfolioSiriOrb
-        activeProject={currentSection === "work" ? guideProject : null}
-        activeSection={currentSection}
-        onOpenProfile={openProfile}
-        onOpenProject={openProjectFromChat}
-        onOpenStudies={openStudies}
-        onOpenWork={openWork}
-      />
       <AnimatePresence>
         {projectNotice && (
           <motion.div
