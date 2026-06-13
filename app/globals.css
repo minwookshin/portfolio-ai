@@ -315,14 +315,16 @@ body::after {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 18px;
-  min-height: 52px;
+  justify-content: center;
+  gap: clamp(18px, 4vw, 34px);
+  min-height: 132px;
 }
 
 .section-orb-nav__item {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
   color: var(--text-muted);
   text-decoration: none;
@@ -341,27 +343,25 @@ body::after {
 
 .section-orb-nav__item:hover,
 .section-orb-nav__item:focus-visible {
-  transform: translate3d(0, -1px, 0);
+  transform: translate3d(0, -2px, 0);
 }
 
 .section-orb-nav__orb {
   --section-orb-scale: 1;
 
   display: block;
-  width: 42px;
-  height: 42px;
+  width: clamp(72px, 8.8vw, 92px);
+  height: clamp(72px, 8.8vw, 92px);
   overflow: hidden;
-  border: 1px solid rgb(17 18 20 / 0.06);
+  border: 0;
   border-radius: var(--md-shape-full);
-  background: var(--bg-base);
+  background: transparent;
   box-shadow:
-    inset 0 1px 1px rgb(255 255 255 / 0.72),
-    0 8px 28px rgb(17 18 20 / 0.045);
-  opacity: 0.74;
+    0 14px 38px rgb(17 18 20 / 0.055);
+  opacity: 0.84;
   transform: scale(var(--section-orb-scale));
   transform-origin: center;
   transition:
-    border-color var(--motion-duration-base) var(--motion-ease-standard),
     box-shadow var(--motion-duration-base) var(--motion-ease-standard),
     opacity var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-base) var(--motion-ease-standard);
@@ -373,6 +373,8 @@ body::after {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  transform: scale(1.12);
+  transform-origin: center;
 }
 
 .section-orb-nav__orb[data-orb-tone="about"] video {
@@ -388,25 +390,37 @@ body::after {
 }
 
 .section-orb-nav__item[data-active="true"] .section-orb-nav__orb {
-  --section-orb-scale: 1.08;
+  --section-orb-scale: 1.06;
 
-  border-color: rgb(17 18 20 / 0.1);
   box-shadow:
-    inset 0 1px 1px rgb(255 255 255 / 0.82),
-    0 10px 34px rgb(17 18 20 / 0.07);
+    0 16px 44px rgb(17 18 20 / 0.08);
   opacity: 1;
 }
 
 .section-orb-nav__item:hover .section-orb-nav__orb,
 .section-orb-nav__item:focus-visible .section-orb-nav__orb {
-  --section-orb-scale: 1.14;
+  --section-orb-scale: 1.1;
 
   opacity: 1;
 }
 
 .section-orb-nav__label {
+  display: block;
   font-size: var(--type-0);
   line-height: var(--leading-heading);
+  opacity: 0.58;
+  transform: translate3d(0, -6px, 0);
+  transition:
+    color var(--motion-duration-base) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.section-orb-nav__item[data-active="true"] .section-orb-nav__label,
+.section-orb-nav__item:hover .section-orb-nav__label,
+.section-orb-nav__item:focus-visible .section-orb-nav__label {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 .home-tab-button:hover,
