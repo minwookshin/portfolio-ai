@@ -11,7 +11,7 @@ import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
 import LottieMotionProof from "@/components/LottieMotionProof";
-import QuietGlassGuide from "@/components/QuietGlassGuide";
+import PortfolioSiriOrb from "@/components/PortfolioSiriOrb";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -1121,16 +1121,13 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           />
         </div>
       </motion.div>
-      <QuietGlassGuide
+      <PortfolioSiriOrb
         activeProject={currentSection === "work" ? guideProject : null}
         activeSection={currentSection}
-        onAsk={handleMessage}
         onOpenProfile={openProfile}
         onOpenProject={openProjectFromChat}
         onOpenStudies={openStudies}
         onOpenWork={openWork}
-        projectCount={featuredProjects.length}
-        studyCount={studyItems.length}
       />
       <AnimatePresence>
         {projectNotice && (
