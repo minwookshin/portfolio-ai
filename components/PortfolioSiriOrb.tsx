@@ -73,8 +73,11 @@ type OrbAction = {
   project?: Project;
 };
 
-const IDLE_BANDS: Bands = { low: 0.02, mid: 0.012, high: 0.006 };
-const LIVE_BANDS: Bands = { low: 0.08, mid: 0.035, high: 0.018 };
+const ORB_RESTING_SIZE = 115;
+const ORB_MENU_WIDTH = 387;
+const ORB_MENU_HEIGHT = 124;
+const IDLE_BANDS: Bands = { low: 0.055, mid: 0.028, high: 0.014 };
+const LIVE_BANDS: Bands = { low: 0.18, mid: 0.082, high: 0.04 };
 
 function solidSource(color: string) {
   const tile = document.createElement("canvas");
@@ -264,9 +267,9 @@ export default function PortfolioSiriOrb({
 
       renderer.container = { black: 0.72, fade: 1, gauss: 9, strength: 0.82 };
       renderer.panelOffset = [0, 0];
-      siri.sizes.expanded.width = 128;
-      siri.sizes.answer.width = 430;
-      siri.sizes.answer.height = 138;
+      siri.sizes.expanded.width = ORB_RESTING_SIZE;
+      siri.sizes.answer.width = ORB_MENU_WIDTH;
+      siri.sizes.answer.height = ORB_MENU_HEIGHT;
       siri.select(activeProjectRef.current ? "listening" : "idle");
 
       renderer.setBackgroundImage(solidSource("#000000"));
