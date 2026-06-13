@@ -889,6 +889,7 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
             aria-current={selected ? "page" : undefined}
             className={className}
             data-active={selected ? "true" : "false"}
+            data-orb-tone={link.id}
             href={link.href}
             onPointerLeave={resetPointerPosition}
             onPointerMove={updatePointerPosition}

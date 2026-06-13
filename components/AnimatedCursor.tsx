@@ -130,6 +130,8 @@ export default function AnimatedCursor() {
       style={{ transform: pointerTransform }}
     >
       <span className="animated-cursor__ring" />
+      <span className="animated-cursor__lens" />
+      <span className="animated-cursor__core" />
     </motion.div>
   );
 }
