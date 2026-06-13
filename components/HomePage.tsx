@@ -11,6 +11,7 @@ import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
 import LottieMotionProof from "@/components/LottieMotionProof";
+import QuietGlassGuide from "@/components/QuietGlassGuide";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -548,8 +549,10 @@ function EditorialIntro() {
 }
 
 function WorkSection({
+  onActiveProjectChange,
   projects,
 }: {
+  onActiveProjectChange?: (project: Project | null) => void;
   projects: Project[];
 }) {
   const reduceMotion = Boolean(useReducedMotion());
@@ -567,20 +570,23 @@ function WorkSection({
   const activateRow = useCallback((index: number) => {
     clearHideTimer();
     setPreviewIndex(index);
-  }, [clearHideTimer]);
+    onActiveProjectChange?.(projects[index] ?? null);
+  }, [clearHideTimer, onActiveProjectChange, projects]);
 
   const activateUnavailablePreview = useCallback((index: number) => {
     clearHideTimer();
     setPreviewIndex(index);
     setPreviewFeedbackKey((key) => key + 1);
-  }, [clearHideTimer]);
+    onActiveProjectChange?.(projects[index] ?? null);
+  }, [clearHideTimer, onActiveProjectChange, projects]);
 
   const deactivateRow = useCallback((delay = 70) => {
     clearHideTimer();
     hidePreviewTimer.current = window.setTimeout(() => {
       setPreviewIndex(null);
+      onActiveProjectChange?.(null);
     }, delay);
-  }, [clearHideTimer]);
+  }, [clearHideTimer, onActiveProjectChange]);
 
   useEffect(() => {
     return () => clearHideTimer();
@@ -813,10 +819,12 @@ function RulesIKeep() {
 
 function HomeExploreSection({
   activeSection,
+  onActiveProjectChange,
   projects,
   studyItems,
 }: {
   activeSection: HomeTab;
+  onActiveProjectChange?: (project: Project | null) => void;
   projects: Project[];
   studyItems: StudyItem[];
 }) {
@@ -857,7 +865,7 @@ function HomeExploreSection({
       </div>
 
       <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
-        {activeSection === "work" && <WorkSection projects={projects} />}
+        {activeSection === "work" && <WorkSection onActiveProjectChange={onActiveProjectChange} projects={projects} />}
         {activeSection === "studies" && (
           <>
             <RulesIKeep />
@@ -882,6 +890,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   // behind it so that view is in focus again.
   const [chatOnTop, setChatOnTop] = useState(false);
   const [projectNotice, setProjectNotice] = useState<string | null>(null);
+  const [guideProject, setGuideProject] = useState<Project | null>(null);
   // Keep the landing motion quiet: the page simply settles in, with no separate
   // logo trace or position handoff.
   const [introReady, setIntroReady] = useState(false);
@@ -1032,6 +1041,36 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     router.push(projectPath);
   };
 
+  const openWork = () => {
+    setChatOnTop(false);
+    setHasStarted(false);
+    if (currentSection !== "work") {
+      router.push("/work", { scroll: false });
+      return;
+    }
+    requestAnimationFrame(() => {
+      document.getElementById("work")?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+  };
+
+  const openStudies = () => {
+    setChatOnTop(false);
+    setHasStarted(false);
+    if (currentSection !== "studies") {
+      router.push("/studies", { scroll: false });
+      return;
+    }
+    requestAnimationFrame(() => {
+      document.getElementById("studies")?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+  };
+
   return (
     <main
       className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
@@ -1076,11 +1115,23 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           <EditorialIntro />
           <HomeExploreSection
             activeSection={currentSection}
+            onActiveProjectChange={setGuideProject}
             projects={featuredProjects}
             studyItems={studyItems}
           />
         </div>
       </motion.div>
+      <QuietGlassGuide
+        activeProject={currentSection === "work" ? guideProject : null}
+        activeSection={currentSection}
+        onAsk={handleMessage}
+        onOpenProfile={openProfile}
+        onOpenProject={openProjectFromChat}
+        onOpenStudies={openStudies}
+        onOpenWork={openWork}
+        projectCount={featuredProjects.length}
+        studyCount={studyItems.length}
+      />
       <AnimatePresence>
         {projectNotice && (
           <motion.div
