@@ -29,6 +29,7 @@ import { WAVE_PRESETS, waveUniforms, dotsUniforms } from './shaders/uniforms.js'
 
 const MAX_DPR = 2;
 const PANEL_MARGIN_PX = 20;
+const PANEL_VIEWPORT_GUTTER_PX = 32;
 const EFFECT_OVERDRAW = 1.18; // effect FBO is 18% larger than the panel core
 // corner radius ceiling (CSS px) = the resting pill's capsule radius (150/2).
 // Below it the shape is a true capsule/circle; past it (tall dynamic answer
@@ -314,7 +315,11 @@ export class SiriRenderer {
 		const baseSize = sizes.expanded.width * this.dpr;
 		const answerWidth = Math.min(sizes.answer.width * this.dpr, this.width - 48 * this.dpr);
 		const answerHeight = sizes.answer.height * this.dpr;
-		const coreWidth = (baseSize + (answerWidth - baseSize) * answer) * pressScale;
+		const maxCoreWidth = this.width - (PANEL_VIEWPORT_GUTTER_PX * 2 + PANEL_MARGIN_PX * 2) * this.dpr;
+		const coreWidth = Math.min(
+			(baseSize + (answerWidth - baseSize) * answer) * pressScale,
+			Math.max(baseSize, maxCoreWidth),
+		);
 		const coreHeight = (baseSize + (answerHeight - baseSize) * answer) * pressScale;
 		const panelWidth = coreWidth + margin * 2;
 		const panelHeight = coreHeight + margin * 2;

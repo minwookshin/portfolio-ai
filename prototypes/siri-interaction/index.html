@@ -4,90 +4,25 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" href="data:," />
-		<title>Siri Glass Orb — Interactive WebGL Recreation of Apple's Siri Animation · z1han</title>
+		<title>Siri Interaction Study</title>
 		<meta
 			name="description"
-			content="Click to ask. An interactive WebGL2 recreation of Apple's Siri glass orb: liquid-glass refraction, audio-reactive spectral waveform, six-dot thinking ring, and the answer pill that streams real AI replies — rebuilt as readable, dependency-free source."
+			content="A center-only local WebGL interaction study with a glass orb, ask chips, and reply pill."
 		/>
-		<link rel="canonical" href="https://www.z1han.com/shader/siriai" />
-		<meta name="author" content="z1han" />
 		<meta name="theme-color" content="#000000" />
 
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="z1han" />
-		<meta property="og:url" content="https://www.z1han.com/shader/siriai" />
-		<meta property="og:title" content="Siri Glass Orb — Interactive WebGL Recreation of Apple's Siri Animation" />
-		<meta
-			property="og:description"
-			content="Hold to speak. Liquid-glass refraction, audio-reactive spectral waveform, six-dot thinking ring, and the answer pill — Apple's Siri animation rebuilt in pure WebGL2."
-		/>
-		<meta property="og:image" content="https://www.z1han.com/shader/siriai/og.jpg" />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Siri Glass Orb — Interactive WebGL Recreation of Apple's Siri Animation" />
-		<meta
-			name="twitter:description"
-			content="Hold to speak. Apple's Siri animation rebuilt in pure WebGL2 — liquid glass, spectral waveform, thinking dots, answer pill."
-		/>
-		<meta name="twitter:image" content="https://www.z1han.com/shader/siriai/og.jpg" />
-
-		<script type="application/ld+json">
-		{
-			"@context": "https://schema.org",
-			"@type": "WebApplication",
-			"name": "Siri Glass Orb",
-			"url": "https://www.z1han.com/shader/siriai",
-			"applicationCategory": "DesignApplication",
-			"operatingSystem": "Any (web browser with WebGL2)",
-			"description": "Interactive WebGL2 recreation of Apple's Siri glass orb animation: liquid-glass refraction, audio-reactive spectral waveform, six-dot thinking ring with a gather-burst finale, and a circle-to-pill answer morph.",
-			"image": "https://www.z1han.com/shader/siriai/og.jpg",
-			"author": { "@type": "Person", "name": "z1han", "url": "https://www.z1han.com" },
-			"isBasedOn": [
-				{ "@type": "CreativeWork", "name": "siri27", "author": { "@type": "Person", "name": "Xiaolin" }, "url": "https://xiaolin.work/shaders/siri27/" },
-				{ "@type": "CreativeWork", "name": "siriWaveCore", "author": { "@type": "Person", "name": "aaaa-zhen" }, "url": "https://aaaa-zhen.github.io/siri-glsl/siri-wave.html" }
-			],
-			"keywords": "Siri animation, WebGL, GLSL shader, Apple Intelligence orb, liquid glass, Siri orb, audio visualizer"
-		}
-		</script>
 		<script type="module" src="/shader/siriai/js/main.js"></script>
-		<link rel="stylesheet" href="/shader/siriai/styles/siri27.css" />
 		<link rel="stylesheet" href="/shader/siriai/styles/base.css" />
+		<link rel="stylesheet" href="/shader/siriai/styles/siri27.css" />
 	</head>
 	<body>
 		<main class="siri-page">
-			<h1 class="sr-only">Siri Glass Orb — an interactive WebGL recreation of Apple's Siri animation</h1>
+			<h1 class="sr-only">Siri interaction study</h1>
 			<p class="sr-only">
-				A faithful WebGL2 rebuild of the Siri experience: a draggable liquid-glass orb with refraction and
-				edge highlights, an audio-reactive spectral waveform driven by your microphone, a six-dot thinking
-				ring that gathers and bursts, and a glass answer pill. Click the orb, type a question, and the answer streams into the glass pill.
-				No frameworks, no dependencies — readable GLSL and JavaScript source.
+				A WebGL glass orb interaction with an ask panel, suggestion chips, and reply state.
 			</p>
 			<noscript><p>This interactive Siri shader needs JavaScript and a WebGL2-capable browser.</p></noscript>
 			<canvas id="siri27-canvas" class="siri-canvas" aria-label="Siri glass orb shader"></canvas>
-
-			<a class="byline" href="https://z1han.com" target="_blank" rel="noopener">z1han</a>
-
-			<nav class="backdrops" aria-label="Backdrop">
-				<button type="button" class="dot-white" data-backdrop="white" aria-label="White backdrop" aria-pressed="false"></button>
-				<button type="button" class="dot-black" data-backdrop="black" aria-label="Black backdrop" aria-pressed="false"></button>
-				<button type="button" class="dot-tahoe" data-backdrop="tahoe" aria-label="Tahoe Beach wallpaper" aria-pressed="true"></button>
-				<button type="button" class="dot-sonoma" data-backdrop="sonoma" aria-label="Sonoma Horizon wallpaper" aria-pressed="false"></button>
-			</nav>
-
-			<div class="credits">
-				<span class="credits-label" aria-hidden="true">credits</span>
-				<div class="credits-list">
-					<nav aria-label="Original works">
-						<a href="https://xiaolin.work/shaders/siri27/" target="_blank" rel="noopener">siri27 · Xiaolin</a>
-						<a href="https://aaaa-zhen.github.io/siri-glsl/siri-wave.html" target="_blank" rel="noopener">siriWaveCore · aaaa-zhen</a>
-					</nav>
-					<p class="credits-note">
-						remix by z1han — soft-bloom wave,<br />
-						gather-burst finale, rebuilt as readable source
-					</p>
-				</div>
-			</div>
 
 			<div id="pill-overlay" class="pill-overlay">
 				<div id="ask-panel" class="ask-panel">
@@ -113,7 +48,6 @@
 				<p id="answer-card" class="answer-card" aria-live="polite"><span id="answer-text"></span></p>
 			</div>
 
-			<p id="siri-hint" class="siri-hint" aria-live="polite">Click to ask · hold to speak</p>
 			<p id="mic-status" class="sr-only" aria-live="polite">Idle.</p>
 		</main>
 	</body>

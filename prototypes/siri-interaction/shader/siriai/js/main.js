@@ -24,16 +24,14 @@ import { createSiriState } from './state.js';
 import { Spring } from './spring.js';
 import { createAskFlow } from './ask-flow.js';
 
-const HINTS = {
-	idle: 'Click to ask · hold to speak',
-	ask: 'Enter to send · Esc to close',
-	thinking: 'Thinking…',
-	reply: '',
+const MODE_STATUS = {
+	idle: 'Idle.',
+	ask: 'Ask open.',
+	thinking: 'Thinking.',
+	reply: 'Reply.',
 };
-const HINT_LISTENING = 'Listening…';
 
 const canvas = document.querySelector('#siri27-canvas');
-const hint = document.querySelector('#siri-hint');
 const micStatus = document.querySelector('#mic-status');
 const pillOverlay = document.querySelector('#pill-overlay');
 
@@ -44,7 +42,7 @@ canvas.addEventListener('siri-render-error', (event) => {
 // ?wave=classic restores the original xiaolin.work thin-line tuning;
 // default is the lush "bloom" preset (aaaa-zhen's siriWaveCore IR values)
 const wavePreset = new URLSearchParams(window.location.search).get('wave') || 'bloom';
-const renderer = new SiriRenderer(canvas, { wavePreset });
+const renderer = new SiriRenderer(canvas, { wavePreset, embedded: true });
 const audio = new AudioAnalyzer();
 const siri = createSiriState();
 
@@ -52,10 +50,6 @@ let rafId = 0;
 let prevTimestamp = 0;
 
 if (renderer.error) micStatus.textContent = renderer.error.message;
-
-function setHint(text) {
-	if (hint) hint.textContent = text;
-}
 
 // the journey core — shared with the z1 homepage embed (SiriOrb.tsx)
 const flow = createAskFlow({
@@ -69,15 +63,10 @@ const flow = createAskFlow({
 		card: document.querySelector('#answer-card'),
 		text: document.querySelector('#answer-text'),
 	},
-	onMode: (mode) => setHint(HINTS[mode]),
+	onMode: (mode) => {
+		if (micStatus) micStatus.textContent = MODE_STATUS[mode] || mode;
+	},
 });
-
-// ---------------------------------------------------------------------------
-// backdrop: a wallpaper (async, cached) or a solid — the dots up top.
-// Solids are 1x1 canvases fed through the same texture path; the cover-fit
-// sampler turns a single pixel into a uniform field, so no renderer changes.
-// Adding a wallpaper = one PHOTO_BACKDROPS entry + one dot in index.html.
-// ---------------------------------------------------------------------------
 
 function solidSource(color) {
 	const tile = document.createElement('canvas');
@@ -89,56 +78,7 @@ function solidSource(color) {
 	return tile;
 }
 
-const SOLID_BACKDROPS = { white: solidSource('#ffffff'), black: solidSource('#000000') };
-// module-relative so the page works at any mount path (with or without a
-// trailing slash) — document-relative './assets/…' would break under rewrites
-const PHOTO_BACKDROPS = {
-	tahoe: new URL('../assets/tahoe-beach-day.jpg', import.meta.url).href,
-	sonoma: new URL('../assets/sonoma-horizon.jpg', import.meta.url).href,
-};
-const backdropButtons = document.querySelectorAll('.backdrops button');
-const photoCache = new Map();
-let backdrop = 'tahoe';
-
-function loadPhoto(mode) {
-	const image = new Image();
-	let applied = false;
-	function apply() {
-		if (applied) return;
-		applied = true;
-		photoCache.set(mode, image);
-		if (backdrop === mode) renderer.setBackgroundImage(image);
-	}
-	image.decoding = 'async';
-	image.addEventListener('load', apply, { once: true });
-	image.addEventListener(
-		'error',
-		() => {
-			micStatus.textContent = 'Background image failed to load; using fallback.';
-		},
-		{ once: true },
-	);
-	image.src = PHOTO_BACKDROPS[mode];
-	if (typeof image.decode === 'function') image.decode().then(apply).catch(() => {});
-}
-
-function setBackdrop(mode) {
-	backdrop = mode;
-	for (const button of backdropButtons) {
-		button.setAttribute('aria-pressed', String(button.dataset.backdrop === mode));
-	}
-	if (SOLID_BACKDROPS[mode]) {
-		renderer.setBackgroundImage(SOLID_BACKDROPS[mode]);
-		return;
-	}
-	const cached = photoCache.get(mode);
-	if (cached) renderer.setBackgroundImage(cached);
-	else loadPhoto(mode);
-}
-
-for (const button of backdropButtons) {
-	button.addEventListener('click', () => setBackdrop(button.dataset.backdrop));
-}
+const interactionBackdrop = solidSource('#000000');
 
 window.addEventListener('keydown', (event) => {
 	if (event.key === 'Escape' && flow.mode !== 'idle') flow.close();
@@ -193,7 +133,6 @@ function startVoiceHold() {
 	if (!dragging || moved || flow.mode !== 'idle') return;
 	voiceHold = true;
 	siri.select('listening');
-	setHint(HINT_LISTENING);
 	micStatus.textContent = 'Listening.';
 	audio.start().catch(() => {
 		micStatus.textContent = 'Microphone unavailable — wave runs silent.';
@@ -205,7 +144,6 @@ function endVoiceHold() {
 	voiceHold = false;
 	audio.stop();
 	siri.select('idle');
-	setHint(HINTS.idle);
 	micStatus.textContent = 'Idle.';
 }
 
@@ -291,11 +229,11 @@ canvas.addEventListener('lostpointercapture', onRelease);
 // ---------------------------------------------------------------------------
 
 siri.select('idle');
-setHint(HINTS.idle);
+if (micStatus) micStatus.textContent = MODE_STATUS.idle;
 const initialBands = audio.update(0);
 siri.tick(0, initialBands);
 renderFrame(initialBands);
-setBackdrop(backdrop);
+renderer.setBackgroundImage(interactionBackdrop);
 audio.prepare(); // pre-warm the worklet so the voice hold starts instantly
 rafId = requestAnimationFrame(frame);
 

@@ -1,8 +1,8 @@
 **Findings**
-- No actionable P0/P1/P2 findings remain for the permitted source-code version.
+- No actionable P0/P1/P2 findings remain for the center-only interaction extraction.
 
 **Open Questions**
-- Permission source: the user reported that the author/friend said the original code can be used. Keep credit visible unless the author asks otherwise.
+- Permission source: the user reported that the author/friend said the original code can be used. Visible credits were removed from the prototype per user request; keep attribution context in commit/design notes before public integration.
 - The upstream `/api/siri` endpoint is not present on localhost, so submitted questions fall back to the original error path and show `no answer right now`.
 
 **Implementation Checklist**
@@ -11,14 +11,14 @@
 - Implementation screenshots: prototypes/siri-interaction/qa/local-desktop-idle.png, prototypes/siri-interaction/qa/local-desktop-ask.png, prototypes/siri-interaction/qa/local-mobile-idle.png
 - Viewports: desktop browser viewport around 1029x944; mobile 390x844.
 - State: idle, ask, reply path checked on `http://localhost:4173/`.
-- Full-view comparison evidence: source and local captures are now produced from the same upstream HTML/CSS/JS/shader structure.
-- Focused region comparison evidence: desktop ask panel, chip row, top chrome, bottom hint, and reply pill were checked in-browser.
-- Fonts and typography: upstream CSS is vendored directly.
-- Spacing and layout rhythm: upstream CSS and WebGL layout are vendored directly.
-- Colors and visual tokens: upstream shader/CSS/background assets are vendored directly.
-- Image quality and asset fidelity: upstream Tahoe/Sonoma/OG JPEG assets are copied locally under `prototypes/siri-interaction/shader/siriai/`.
-- Copy and content: upstream HTML is vendored directly, including visible credit links.
-- Patches made since previous QA pass: replaced the clean-room reconstruction with the permitted upstream source tree under `/shader/siriai/` and removed the local reconstruction modules.
+- Full-view comparison evidence: local captures now intentionally exclude the source page chrome and show only the middle orb/pill interaction.
+- Focused region comparison evidence: desktop idle, desktop ask, desktop reply, mobile idle, and mobile ask states were checked in-browser.
+- Fonts and typography: upstream interaction typography is retained inside the pill.
+- Spacing and layout rhythm: the central overlay stays fixed at viewport center; mobile chip wrapping was checked at 390x844.
+- Colors and visual tokens: the orb/pill shader uses the upstream glass material over a fixed internal black backdrop, with the page background left transparent.
+- Image quality and asset fidelity: unused Tahoe/Sonoma/OG JPEG assets were removed because this variant no longer exposes backdrop switching or social preview imagery.
+- Copy and content: visible byline, backdrop selector, credits, and bottom hint were removed; screen-reader-only status remains.
+- Patches made since previous QA pass: isolated the permitted source into a center-only prototype, enabled embedded rendering, removed visible page chrome, removed unused backdrop assets, and clamped the WebGL pill width for mobile.
 
 **Follow-up Polish**
 - P3: Wire a local `/api/siri` endpoint only if this study page needs real streamed answers.
