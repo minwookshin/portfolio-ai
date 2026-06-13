@@ -22,6 +22,7 @@ uniform float uContainer;        // dark-container strength (0 = off)
 uniform float uContainerBlack;   // gy where the solid-black zone ends (= Dynamic-Island height)
 uniform float uContainerFade;    // gaussian fade span below the black zone
 uniform float uContainerGauss;   // gaussian falloff steepness
+uniform vec3 uContainerColor;    // premultiplied container face color
 
 out vec4 outColor;
 
@@ -44,9 +45,9 @@ void main() {
 	float edgeLR = smoothstep(0.0, 0.14, min(effectUv.x, 1.0 - effectUv.x)); // soften left/right only
 	float containerA = clamp(uContainer, 0.0, 1.0) * vfade * edgeLR;
 
-	// effect OVER container, both premultiplied (container.rgb = 0)
+	// effect OVER container, both premultiplied.
 	float invEffectA = 1.0 - effect.a;
-	vec3 outRGB = effect.rgb;
+	vec3 outRGB = effect.rgb + uContainerColor * containerA * invEffectA;
 	float outA = effect.a + containerA * invEffectA;
 	outColor = vec4(outRGB, outA);
 }

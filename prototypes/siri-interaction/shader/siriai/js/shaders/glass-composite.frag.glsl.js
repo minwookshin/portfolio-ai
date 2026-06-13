@@ -46,6 +46,9 @@ uniform float uHlCurv;
 
 uniform float uBackgroundReady;
 uniform float uTransparentOutside; // 0 = framed page (photo fills canvas), 1 = embedded (outside the panel is transparent)
+uniform float uGlassFace;
+uniform vec3 uGlassTint;
+uniform vec3 uGlassEdgeTint;
 
 // chip lenses: small glass capsules INSIDE the panel (the suggestion buttons).
 // DOM supplies text + hit area; the glass material is rendered here, as a
@@ -202,6 +205,12 @@ vec4 glassFragment(vec2 pixel) {
 	// glass = refraction + highlight ONLY — no face color (no saturation/black/luma/tint),
 	// so it looks like untouched glass over whatever is behind it.
 	vec3 col = sampleScene(rUv);
+	vec2 normalized = p / max(halfSize, vec2(1.0));
+	float radial = saturate(length(normalized));
+	float centerLift = 1.0 - smoothstep(0.15, 0.92, radial);
+	float edgeBloom = smoothstep(0.58, 1.0, radial);
+	col = mix(col, uGlassTint, clamp(uGlassFace * (0.3 + centerLift * 0.34), 0.0, 0.9));
+	col += uGlassEdgeTint * (edgeBloom * uGlassFace * 0.4);
 	col += vec3(highlightBand(d, grad) * uHlAmount);
 
 	// chip lenses: glass-on-glass. Each capsule refracts the already-refracted

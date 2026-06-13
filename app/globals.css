@@ -1052,34 +1052,6 @@ body::after {
   background: transparent;
 }
 
-.portfolio-siri__grain {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  width: 104px;
-  aspect-ratio: 1;
-  border-radius: var(--md-shape-full);
-  background:
-    radial-gradient(circle at 50% 52%, rgba(255, 255, 255, 0.16), transparent 38%),
-    repeating-linear-gradient(
-      92deg,
-      rgba(255, 255, 255, 0.08) 0,
-      rgba(255, 255, 255, 0.08) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-  filter: contrast(1.55);
-  mix-blend-mode: screen;
-  opacity: 0.09;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-}
-
-.portfolio-siri[data-mode="menu"] .portfolio-siri__grain {
-  opacity: 0;
-}
-
 .portfolio-siri__overlay {
   position: fixed;
   left: 50%;
@@ -1111,11 +1083,11 @@ body::after {
 
 .portfolio-siri__prompt {
   margin: 0;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(12, 14, 18, 0.66);
   font: 400 16px/1.35 system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   letter-spacing: 0;
   text-align: left;
-  text-shadow: 0 1px 6px rgb(0 0 0 / 0.42);
+  text-shadow: 0 1px 10px rgb(255 255 255 / 0.42);
 }
 
 .portfolio-siri__chips {
@@ -1130,14 +1102,14 @@ body::after {
   border: 0;
   border-radius: var(--md-shape-full);
   background: transparent;
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(12, 14, 18, 0.68);
   cursor: pointer;
   font: 400 13px/1 system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   letter-spacing: 0;
   padding: 8px 12px;
   pointer-events: auto;
   text-align: center;
-  text-shadow: 0 1px 4px rgb(0 0 0 / 0.36);
+  text-shadow: 0 1px 8px rgb(255 255 255 / 0.5);
   white-space: nowrap;
 }
 

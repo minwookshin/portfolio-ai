@@ -32,6 +32,7 @@ type SiriRendererRuntime = {
   };
   container: {
     black: number;
+    color?: [number, number, number];
     fade: number;
     gauss: number;
     strength: number;
@@ -40,6 +41,11 @@ type SiriRendererRuntime = {
   dispose: () => void;
   dpr: number;
   error?: Error | null;
+  glass?: {
+    edgeTint: [number, number, number];
+    face: number;
+    tint: [number, number, number];
+  };
   panelOffset: number[];
   render: (args: {
     bands: Bands;
@@ -275,14 +281,15 @@ export default function PortfolioSiriOrb({
       const renderer = new SiriRenderer(canvas, { embedded: true, wavePreset: "portfolio" });
       const siri = createSiriState();
 
-      renderer.container = { black: 0.72, fade: 1, gauss: 9, strength: 0.82 };
+      renderer.container = { black: 1, color: [0.975, 0.98, 1], fade: 0.01, gauss: 1, strength: 0.88 };
+      renderer.glass = { edgeTint: [0.6, 0.56, 1], face: 0.86, tint: [1, 1, 1] };
       renderer.panelOffset = [0, 0];
       siri.sizes.expanded.width = ORB_RESTING_SIZE;
       siri.sizes.answer.width = ORB_MENU_WIDTH;
       siri.sizes.answer.height = ORB_MENU_HEIGHT;
       siri.select(activeProjectRef.current ? "listening" : "idle");
 
-      renderer.setBackgroundImage(solidSource("#000000"));
+      renderer.setBackgroundImage(solidSource("#ffffff"));
       rendererRef.current = renderer;
       siriRef.current = siri;
 
@@ -323,7 +330,6 @@ export default function PortfolioSiriOrb({
   return (
     <div className="portfolio-siri" data-mode={mode}>
       <canvas ref={canvasRef} className="portfolio-siri__canvas" aria-label="Portfolio Siri orb" />
-      <div className="portfolio-siri__grain" aria-hidden="true" />
       {mode === "menu" && (
         <button type="button" className="portfolio-siri__scrim" aria-label="Close portfolio orb" onClick={closeOrb} />
       )}

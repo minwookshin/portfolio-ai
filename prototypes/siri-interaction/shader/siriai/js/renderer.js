@@ -184,7 +184,8 @@ export class SiriRenderer {
 		this._lastImage = null;
 		this._contextLost = false;
 		// Dynamic-Island dark container (see effect-composite shader)
-		this.container = { black: 0.25, fade: 1, gauss: 8, strength: 0.9 };
+		this.container = { black: 0.25, color: [0, 0, 0], fade: 1, gauss: 8, strength: 0.9 };
+		this.glass = { edgeTint: [1, 1, 1], face: 0, tint: [1, 1, 1] };
 
 		this._onContextLost = (event) => {
 			event.preventDefault();
@@ -409,6 +410,7 @@ export class SiriRenderer {
 				{ name: 'uContainerBlack', value: this.container.black },
 				{ name: 'uContainerFade', value: this.container.fade },
 				{ name: 'uContainerGauss', value: this.container.gauss },
+				{ name: 'uContainerColor', type: 'vec3', value: this.container.color || [0, 0, 0] },
 			],
 			[{ name: 'uEffectTexture', texture: this.effectTarget.texture, unit: 0 }],
 		);
@@ -454,6 +456,9 @@ export class SiriRenderer {
 				{ name: 'uChipHeight', value: 7 * this.dpr },
 				{ name: 'uChipHlAmount', value: 0.6 },
 				{ name: 'uChipFace', value: 0.1 },
+				{ name: 'uGlassFace', value: this.glass?.face || 0 },
+				{ name: 'uGlassTint', type: 'vec3', value: this.glass?.tint || [1, 1, 1] },
+				{ name: 'uGlassEdgeTint', type: 'vec3', value: this.glass?.edgeTint || [1, 1, 1] },
 			],
 			[
 				{ name: 'uSceneTexture', texture: this.sceneTarget.texture, unit: 0 },
