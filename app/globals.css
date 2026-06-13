@@ -2731,9 +2731,10 @@ body::after {
   top: 0;
   opacity: 0;
   pointer-events: none;
-  --cursor-rgb: 17 18 20;
-  --cursor-outline-rgb: 255 255 255;
-  --cursor-outline-opacity: 0.96;
+  --cursor-border-rgb: 17 18 20;
+  --cursor-fill-rgb: 17 18 20;
+  --cursor-fill-opacity: 0.045;
+  --cursor-size: 18px;
   transition:
     opacity var(--motion-duration-instant) var(--motion-ease-standard);
   will-change: transform, opacity;
@@ -2741,8 +2742,8 @@ body::after {
 
 .animated-cursor-pointer {
   z-index: 2147483647;
-  width: 13px;
-  height: 15px;
+  width: 1px;
+  height: 1px;
 }
 
 .animated-cursor-pointer.is-visible {
@@ -2750,57 +2751,48 @@ body::after {
 }
 
 .animated-cursor-pointer--light {
-  --cursor-rgb: 247 248 248;
-  --cursor-outline-rgb: 17 18 20;
-  --cursor-outline-opacity: 0.82;
+  --cursor-border-rgb: 247 248 248;
+  --cursor-fill-rgb: 247 248 248;
+  --cursor-fill-opacity: 0.075;
 }
 
 .animated-cursor-pointer--native.is-visible {
   opacity: 0;
 }
 
-.animated-cursor__arrow {
+.animated-cursor__ring {
   position: absolute;
   left: 0;
-  top: -0.5px;
-  width: 13px;
-  height: 15px;
-  overflow: visible;
-  filter:
-    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.24))
-    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.10));
-  transform: rotate(-9deg);
-  transform-origin: 2px 2px;
+  top: 0;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  border: 1px solid rgb(var(--cursor-border-rgb) / 0.72);
+  border-radius: var(--md-shape-full);
+  background: rgb(var(--cursor-fill-rgb) / var(--cursor-fill-opacity));
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.2),
+    0 8px 24px rgb(var(--cursor-border-rgb) / 0.08);
+  transform: translate(-50%, -50%);
+  transform-origin: center;
   transition:
-    filter var(--motion-duration-fast) var(--motion-ease-standard),
-    transform var(--motion-duration-fast) var(--motion-ease-standard);
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+    height var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard),
+    width var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
-.animated-cursor__fill {
-  fill: rgb(var(--cursor-rgb));
-  stroke: rgb(var(--cursor-rgb));
-  stroke-width: 0.12px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  transition:
-    fill var(--motion-duration-fast) var(--motion-ease-standard),
-    stroke var(--motion-duration-fast) var(--motion-ease-standard);
+.animated-cursor-pointer--interactive {
+  --cursor-fill-opacity: 0.095;
+  --cursor-size: 26px;
 }
 
-.animated-cursor__outline {
-  fill: none;
-  stroke: rgb(var(--cursor-outline-rgb));
-  stroke-opacity: var(--cursor-outline-opacity);
-  stroke-width: 1.45px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  transition:
-    stroke var(--motion-duration-fast) var(--motion-ease-standard),
-    stroke-opacity var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.animated-cursor-pointer--interactive .animated-cursor__arrow {
-  transform: translate(1px, 1px) rotate(-9deg) scale(0.92);
+.animated-cursor-pointer--interactive .animated-cursor__ring {
+  border-color: rgb(var(--cursor-border-rgb) / 0.56);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.24),
+    0 10px 30px rgb(var(--cursor-border-rgb) / 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2853,7 +2845,7 @@ body::after {
   }
 
   .animated-cursor-pointer,
-  .animated-cursor__arrow {
+  .animated-cursor__ring {
     transition: none !important;
   }
 

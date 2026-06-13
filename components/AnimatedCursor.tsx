@@ -7,7 +7,6 @@ import {
   useMotionValue,
   useReducedMotion,
 } from "framer-motion";
-import { cursorGlyphPath } from "@/lib/cursorGlyph";
 
 type CursorMode = "idle" | "interactive" | "native";
 type CursorTone = "dark" | "light";
@@ -130,10 +129,7 @@ export default function AnimatedCursor() {
       }`}
       style={{ transform: pointerTransform }}
     >
-      <svg className="animated-cursor__arrow" viewBox="0 0 14 15">
-        <path className="animated-cursor__outline" d={cursorGlyphPath} />
-        <path className="animated-cursor__fill" d={cursorGlyphPath} />
-      </svg>
+      <span className="animated-cursor__ring" />
     </motion.div>
   );
 }
