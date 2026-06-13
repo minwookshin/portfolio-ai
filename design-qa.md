@@ -13,6 +13,8 @@
 - Work-state evidence: `prototypes/siri-interaction/qa/section-orb-single-desktop-work.png`
 - Studies-state evidence: `prototypes/siri-interaction/qa/section-orb-single-desktop-studies.png`
 - Mobile evidence: `prototypes/siri-interaction/qa/section-orb-single-mobile-studies.png`
+- Cursor idle evidence: `prototypes/siri-interaction/qa/glass-cursor-idle-studies.png`
+- Cursor interactive evidence: `prototypes/siri-interaction/qa/glass-cursor-interactive-studies.png`
 - Viewports checked: desktop browser viewport around 1030x944; mobile override 390x844.
 - States checked: `/` active about as the default, `/work` active work, `/studies` active studies, mobile stacked layout, and absence of always-visible intro text above the orb control.
 - Motion checked: the visible orb remounts between states with a subtle glass-wash transition; about uses a very slow `section-orb-about-breathe`; work uses faster lateral `section-orb-work-flow`; studies uses slower `section-orb-study-orbit`; reduced-motion disables these CSS animations.
@@ -21,10 +23,10 @@
 - Fonts and typography: labels reuse the existing text scale and keep the text-first page structure.
 - Spacing and layout rhythm: desktop uses a 620px centered grid with a 154px orb and a compact vertical text selector; mobile keeps a 126px orb above the text selector inside a 342px control with no wrapping.
 - Colors and visual tokens: the single circle uses the same source video material with distinct CSS-filtered tones: ceramic white/monochrome about, optical blue work, and muted sage/graphite studies. Shared tokens now include `--optic-blue`, `--optic-blue-soft`, `--optic-blue-deep`, `--study-sage`, `--study-sage-soft`, and `--study-graphite`.
-- Interaction quality: the selected state is expressed by one persistent state object instead of three competing circles; pointer position subtly drives the glass highlight on fine pointers; state changes add a soft splash-like glass wash without adding a visible hard rim. The custom cursor renders as a glass lens with ring, lens, and core layers, expanding on interactive targets.
+- Interaction quality: the selected state is expressed by one persistent state object instead of three competing circles; pointer position subtly drives the glass highlight on fine pointers; state changes add a soft splash-like glass wash without adding a visible hard rim. The custom cursor renders as a glass lens with a stronger refractive edge, internal highlight, caustic shadow, and a smaller glint core, expanding on interactive targets.
 - Image quality and asset fidelity: no div-art or handcrafted SVG asset replacement was used; the visible orb animation comes from the existing cropped video source, scaled slightly so the gradient reaches the circular edge with no white rim.
 - Copy and content: visible nav labels are `about`, `work`, and `studies`; about/work/studies text lives in the selected content area below the orb control.
-- Patches made since previous QA pass: changed the three-orb row into a single glass state orb with adjacent text navigation, added a glass-wash state transition, preserved distinct per-section motion/tone, and saved desktop/mobile QA captures.
+- Patches made since previous QA pass: changed the three-orb row into a single glass state orb with adjacent text navigation, added a glass-wash state transition, preserved distinct per-section motion/tone, upgraded the cursor from a soft dot to a refractive glass lens, and saved desktop/mobile QA captures.
 
 **Follow-up Polish**
 - P3: Continue tuning the studies sage amount if the final palette needs to feel even closer to monochrome.
