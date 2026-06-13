@@ -43,6 +43,15 @@ const HOME_ORB_LINKS: Array<{ href: string; id: HomeOrbId; label: string }> = [
   { href: "/studies", id: "studies", label: "studies" },
 ];
 
+function getHomeSectionHref(section: HomeSection) {
+  return HOME_ORB_LINKS.find((link) => link.id === section)?.href ?? "/";
+}
+
+function getHomeSectionFromPathname(pathname: string): HomeSection {
+  const normalizedPathname = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
+  return HOME_ORB_LINKS.find((link) => link.href === normalizedPathname)?.id ?? "about";
+}
+
 const SECTION_ORB_SRC = "/media/siri-reference-orb.mp4";
 const SECTION_ORB_POSTER = "/media/siri-reference-orb-poster.png";
 
@@ -826,25 +835,15 @@ function RulesIKeep() {
   );
 }
 
-function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
-  const router = useRouter();
+function SectionOrbNav({
+  activeSection,
+  onSectionChange,
+}: {
+  activeSection: HomeSection;
+  onSectionChange: (section: HomeSection) => void;
+}) {
   const reduceMotion = Boolean(useReducedMotion());
-  const [pendingSection, setPendingSection] = useState<HomeSection | null>(null);
-  const routeTimerRef = useRef<number | null>(null);
-  const pendingClearTimerRef = useRef<number | null>(null);
-  const visualSection = pendingSection ?? activeSection;
   const activeLink = HOME_ORB_LINKS.find((link) => link.id === activeSection) ?? HOME_ORB_LINKS[0];
-
-  useEffect(() => {
-    return () => {
-      if (routeTimerRef.current !== null) {
-        window.clearTimeout(routeTimerRef.current);
-      }
-      if (pendingClearTimerRef.current !== null) {
-        window.clearTimeout(pendingClearTimerRef.current);
-      }
-    };
-  }, []);
 
   const updatePointerPosition = (event: PointerEvent<HTMLDivElement>) => {
     if (reduceMotion) return;
@@ -878,22 +877,7 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
     }
 
     event.preventDefault();
-    setPendingSection(link.id);
-
-    if (routeTimerRef.current !== null) {
-      window.clearTimeout(routeTimerRef.current);
-    }
-    if (pendingClearTimerRef.current !== null) {
-      window.clearTimeout(pendingClearTimerRef.current);
-    }
-
-    const transitionDelay = reduceMotion ? 0 : 260;
-    routeTimerRef.current = window.setTimeout(() => {
-      router.push(link.href);
-      pendingClearTimerRef.current = window.setTimeout(() => {
-        setPendingSection((currentSection) => (currentSection === link.id ? null : currentSection));
-      }, reduceMotion ? 0 : 720);
-    }, transitionDelay);
+    onSectionChange(link.id);
   };
 
   return (
@@ -901,12 +885,12 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
       aria-label="sections"
       variants={landingRevealItem}
       className="section-orb-nav"
-      data-section={visualSection}
+      data-section={activeSection}
     >
       <div
         aria-hidden="true"
         className="section-orb-nav__visual"
-        data-orb-tone={visualSection}
+        data-orb-tone={activeSection}
         onPointerLeave={resetPointerPosition}
         onPointerMove={updatePointerPosition}
       >
@@ -918,7 +902,7 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
         />
         <motion.span
           className="section-orb-nav__orb"
-          data-orb-tone={visualSection}
+          data-orb-tone={activeSection}
           initial={reduceMotion ? false : { opacity: 0, filter: "blur(8px)", scale: 0.96 }}
           animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
           transition={reduceMotion ? tweens.none : { duration: 0.42, ease: LANDING_EASE }}
@@ -940,13 +924,12 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
             />
           ))}
           <span className="section-orb-nav__orb-glass" aria-hidden="true" />
-          <span key={`wash-${visualSection}`} className="section-orb-nav__orb-wash" aria-hidden="true" />
+          <span key={`wash-${activeSection}`} className="section-orb-nav__orb-wash" aria-hidden="true" />
         </motion.span>
       </div>
 
       <div className="section-orb-nav__links">
         {HOME_ORB_LINKS.map((link) => {
-          const selected = link.id === visualSection;
           const current = link.id === activeSection;
           const className = "section-orb-nav__item micro-focus micro-focus-tight";
 
@@ -955,12 +938,12 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
               key={link.id}
               aria-current={current ? "page" : undefined}
               className={className}
-              data-active={selected ? "true" : "false"}
+              data-active={current ? "true" : "false"}
               data-orb-tone={link.id}
               href={link.href}
               onClick={(event) => handleLinkClick(event, link)}
             >
-              {selected && (
+              {current && (
                 <motion.span
                   aria-hidden="true"
                   className="section-orb-nav__text-indicator"
@@ -980,10 +963,12 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
 
 function HomeExploreSection({
   activeSection,
+  onSectionChange,
   projects,
   studyItems,
 }: {
   activeSection: HomeSection;
+  onSectionChange: (section: HomeSection) => void;
   projects: Project[];
   studyItems: StudyItem[];
 }) {
@@ -997,7 +982,7 @@ function HomeExploreSection({
       className="home-orb-stage mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] sm:px-[var(--space-5)]"
     >
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <SectionOrbNav activeSection={activeSection} />
+        <SectionOrbNav activeSection={activeSection} onSectionChange={onSectionChange} />
       </div>
 
       <div className="home-orb-content mx-auto w-full max-w-[620px] text-left">
@@ -1029,7 +1014,7 @@ function HomeExploreSection({
 export default function HomePage({ activeSection = "about", writingPosts }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
-  const currentSection = activeSection;
+  const [currentSection, setCurrentSection] = useState<HomeSection>(activeSection);
   const [hasStarted, setHasStarted] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (for example, a page section) instead of snapping back home. The
@@ -1045,6 +1030,15 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
   useEffect(() => {
     const timer = setTimeout(() => setIntroReady(true), 80);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentSection(getHomeSectionFromPathname(window.location.pathname));
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -1163,6 +1157,15 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
   const studyItems = buildStudyItems(writingPosts);
 
+  const changeHomeSection = useCallback((nextSection: HomeSection) => {
+    setCurrentSection(nextSection);
+
+    const nextHref = getHomeSectionHref(nextSection);
+    if (window.location.pathname !== nextHref) {
+      window.history.pushState({ section: nextSection }, "", nextHref);
+    }
+  }, []);
+
   const openProfile = () => {
     setChatOnTop(false);
     setHasStarted(false);
@@ -1174,7 +1177,7 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
     };
 
     if (currentSection !== "about") {
-      router.push("/", { scroll: false });
+      changeHomeSection("about");
       window.setTimeout(scrollProfileIntoView, 80);
       return;
     }
@@ -1239,6 +1242,7 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <HomeExploreSection
             activeSection={currentSection}
+            onSectionChange={changeHomeSection}
             projects={featuredProjects}
             studyItems={studyItems}
           />
@@ -1329,7 +1333,7 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
                               if (target === "profile") {
                                 openProfile();
                               } else if (target === "projects") {
-                                router.push("/work", { scroll: false });
+                                changeHomeSection("work");
                                 requestAnimationFrame(() => {
                                   document.getElementById("work")?.scrollIntoView({
                                     behavior: reduceMotion ? "auto" : "smooth",
