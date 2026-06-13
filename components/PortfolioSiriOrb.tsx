@@ -54,7 +54,7 @@ type SiriRendererRuntime = {
 
 type SiriRendererConstructor = new (
   canvas: HTMLCanvasElement,
-  options?: { embedded?: boolean; wavePreset?: "bloom" | "classic" },
+  options?: { embedded?: boolean; wavePreset?: "bloom" | "classic" | "portfolio" },
 ) => SiriRendererRuntime;
 
 type PortfolioSiriOrbProps = {
@@ -76,8 +76,8 @@ type OrbAction = {
 const ORB_RESTING_SIZE = 115;
 const ORB_MENU_WIDTH = 387;
 const ORB_MENU_HEIGHT = 124;
-const IDLE_BANDS: Bands = { low: 0.055, mid: 0.028, high: 0.014 };
-const LIVE_BANDS: Bands = { low: 0.18, mid: 0.082, high: 0.04 };
+const IDLE_BANDS: Bands = { low: 0.045, mid: 0.025, high: 0.015 };
+const LIVE_BANDS: Bands = { low: 0.11, mid: 0.064, high: 0.034 };
 
 function solidSource(color: string) {
   const tile = document.createElement("canvas");
@@ -93,6 +93,16 @@ function solidSource(color: string) {
 
 function projectLabel(project: Project) {
   return `open ${project.title}`;
+}
+
+function animatedBands(time: number, live: boolean): Bands {
+  const source = live ? LIVE_BANDS : IDLE_BANDS;
+  const seconds = time * 0.001;
+  return {
+    low: source.low * (1 + Math.sin(seconds * 1.3) * 0.22 + Math.sin(seconds * 4.7) * 0.05),
+    mid: source.mid * (1 + Math.sin(seconds * 1.9 + 1.2) * 0.24 + Math.sin(seconds * 5.3) * 0.04),
+    high: source.high * (1 + Math.sin(seconds * 2.6 + 0.4) * 0.18),
+  };
 }
 
 export default function PortfolioSiriOrb({
@@ -262,7 +272,7 @@ export default function PortfolioSiriOrb({
 
       if (cancelled) return;
 
-      const renderer = new SiriRenderer(canvas, { embedded: true, wavePreset: "classic" });
+      const renderer = new SiriRenderer(canvas, { embedded: true, wavePreset: "portfolio" });
       const siri = createSiriState();
 
       renderer.container = { black: 0.72, fade: 1, gauss: 9, strength: 0.82 };
@@ -281,7 +291,7 @@ export default function PortfolioSiriOrb({
         const dt = previousTime ? Math.min((time - previousTime) / 1000, 0.1) : 0;
         previousTime = time;
         const live = modeRef.current === "menu" || Boolean(activeProjectRef.current);
-        const bands = live ? LIVE_BANDS : IDLE_BANDS;
+        const bands = animatedBands(time, live);
 
         feedChipLenses(renderer);
         siri.tick(dt, bands);
@@ -313,6 +323,7 @@ export default function PortfolioSiriOrb({
   return (
     <div className="portfolio-siri" data-mode={mode}>
       <canvas ref={canvasRef} className="portfolio-siri__canvas" aria-label="Portfolio Siri orb" />
+      <div className="portfolio-siri__grain" aria-hidden="true" />
       {mode === "menu" && (
         <button type="button" className="portfolio-siri__scrim" aria-label="Close portfolio orb" onClick={closeOrb} />
       )}

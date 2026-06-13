@@ -1052,6 +1052,34 @@ body::after {
   background: transparent;
 }
 
+.portfolio-siri__grain {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 104px;
+  aspect-ratio: 1;
+  border-radius: var(--md-shape-full);
+  background:
+    radial-gradient(circle at 50% 52%, rgba(255, 255, 255, 0.16), transparent 38%),
+    repeating-linear-gradient(
+      92deg,
+      rgba(255, 255, 255, 0.08) 0,
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  filter: contrast(1.55);
+  mix-blend-mode: screen;
+  opacity: 0.09;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.portfolio-siri[data-mode="menu"] .portfolio-siri__grain {
+  opacity: 0;
+}
+
 .portfolio-siri__overlay {
   position: fixed;
   left: 50%;

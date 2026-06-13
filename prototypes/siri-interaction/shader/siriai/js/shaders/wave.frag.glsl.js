@@ -57,6 +57,11 @@ uniform float uMidSoftness;
 uniform float uHighAberration;
 uniform float uHighAberrationAmplitude;
 uniform float uWhiteClip;
+uniform float uCircleClip;
+uniform float uCircleFeather;
+uniform float uInnerCircle;
+uniform float uMonoMix;
+uniform float uNoiseAmount;
 
 out vec4 outColor;
 
@@ -70,6 +75,12 @@ vec3 spectrumTri(float t) {
 
 float smoothUnit(float value) {
 	return value * value * (3.0 - 2.0 * value);
+}
+
+float hash21(vec2 p) {
+	p = fract(p * vec2(123.34, 456.21));
+	p += dot(p, p + 45.32);
+	return fract(p.x * p.y);
 }
 
 void main() {
@@ -156,6 +167,14 @@ void main() {
 	emMask = smoothUnit(emMask);
 	float fall = exp(-pow(px * uFalloff, 2.0));
 	col = cgl * mix(1.0, emMask * fall, res) * res * saturate(uLayerOpacity);
+
+	float circleMask = 1.0 - smoothstep(uInnerCircle, uInnerCircle + max(uCircleFeather, 0.001), r);
+	col *= mix(1.0, circleMask, saturate(uCircleClip));
+
+	float grain = hash21(gid + floor(uTime * 38.0)) - 0.5;
+	col *= 1.0 + grain * clamp(uNoiseAmount, 0.0, 0.4);
+	vec3 monochrome = vec3(dot(col, vec3(0.299, 0.587, 0.114)));
+	col = mix(col, monochrome, saturate(uMonoMix));
 
 	// overflow handling, blendable per preset (uWhiteClip):
 	//   0 — hue-preserving scale-down (classic): keeps the core's hue, but
