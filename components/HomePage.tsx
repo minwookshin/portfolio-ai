@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect, useRef } from "react";
-import type { KeyboardEvent, PointerEvent } from "react";
+import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
@@ -827,8 +827,24 @@ function RulesIKeep() {
 }
 
 function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
+  const router = useRouter();
   const reduceMotion = Boolean(useReducedMotion());
+  const [pendingSection, setPendingSection] = useState<HomeSection | null>(null);
+  const routeTimerRef = useRef<number | null>(null);
+  const pendingClearTimerRef = useRef<number | null>(null);
+  const visualSection = pendingSection ?? activeSection;
   const activeLink = HOME_ORB_LINKS.find((link) => link.id === activeSection) ?? HOME_ORB_LINKS[0];
+
+  useEffect(() => {
+    return () => {
+      if (routeTimerRef.current !== null) {
+        window.clearTimeout(routeTimerRef.current);
+      }
+      if (pendingClearTimerRef.current !== null) {
+        window.clearTimeout(pendingClearTimerRef.current);
+      }
+    };
+  }, []);
 
   const updatePointerPosition = (event: PointerEvent<HTMLDivElement>) => {
     if (reduceMotion) return;
@@ -845,42 +861,74 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
     event.currentTarget.style.setProperty("--orb-pointer-y", "38%");
   };
 
+  const handleLinkClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    link: (typeof HOME_ORB_LINKS)[number],
+  ) => {
+    if (
+      link.id === activeSection ||
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.shiftKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    setPendingSection(link.id);
+
+    if (routeTimerRef.current !== null) {
+      window.clearTimeout(routeTimerRef.current);
+    }
+    if (pendingClearTimerRef.current !== null) {
+      window.clearTimeout(pendingClearTimerRef.current);
+    }
+
+    const transitionDelay = reduceMotion ? 0 : 260;
+    routeTimerRef.current = window.setTimeout(() => {
+      router.push(link.href);
+      pendingClearTimerRef.current = window.setTimeout(() => {
+        setPendingSection((currentSection) => (currentSection === link.id ? null : currentSection));
+      }, reduceMotion ? 0 : 720);
+    }, transitionDelay);
+  };
+
   return (
     <motion.nav
       aria-label="sections"
       variants={landingRevealItem}
       className="section-orb-nav"
-      data-section={activeSection}
+      data-section={visualSection}
     >
       <div
         aria-hidden="true"
         className="section-orb-nav__visual"
-        data-orb-tone={activeSection}
+        data-orb-tone={visualSection}
         onPointerLeave={resetPointerPosition}
         onPointerMove={updatePointerPosition}
       >
         <motion.span
           className="section-orb-nav__active-field"
-          key={`field-${activeSection}`}
           initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={reduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
           transition={reduceMotion ? tweens.none : SECTION_ORB_FOCUS_TRANSITION}
         />
-        <AnimatePresence initial={false} mode="wait">
-          <motion.span
-            key={activeSection}
-            className="section-orb-nav__orb"
-            data-orb-tone={activeSection}
-            initial={reduceMotion ? false : { opacity: 0, filter: "blur(8px)", scale: 0.96 }}
-            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-            exit={reduceMotion ? undefined : { opacity: 0, filter: "blur(8px)", scale: 1.04 }}
-            transition={reduceMotion ? tweens.none : { duration: 0.42, ease: LANDING_EASE }}
-          >
-            <span className="section-orb-nav__orb-glass" aria-hidden="true" />
-            <span className="section-orb-nav__orb-wash" aria-hidden="true" />
+        <motion.span
+          className="section-orb-nav__orb"
+          data-orb-tone={visualSection}
+          initial={reduceMotion ? false : { opacity: 0, filter: "blur(8px)", scale: 0.96 }}
+          animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+          transition={reduceMotion ? tweens.none : { duration: 0.42, ease: LANDING_EASE }}
+        >
+          {HOME_ORB_LINKS.map((link) => (
             <video
+              key={link.id}
               autoPlay={!reduceMotion}
+              className="section-orb-nav__orb-video"
+              data-orb-tone={link.id}
               disablePictureInPicture
               draggable={false}
               loop
@@ -890,23 +938,27 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
               preload="auto"
               src={SECTION_ORB_SRC}
             />
-          </motion.span>
-        </AnimatePresence>
+          ))}
+          <span className="section-orb-nav__orb-glass" aria-hidden="true" />
+          <span key={`wash-${visualSection}`} className="section-orb-nav__orb-wash" aria-hidden="true" />
+        </motion.span>
       </div>
 
       <div className="section-orb-nav__links">
         {HOME_ORB_LINKS.map((link) => {
-          const selected = link.id === activeSection;
+          const selected = link.id === visualSection;
+          const current = link.id === activeSection;
           const className = "section-orb-nav__item micro-focus micro-focus-tight";
 
           return (
             <Link
               key={link.id}
-              aria-current={selected ? "page" : undefined}
+              aria-current={current ? "page" : undefined}
               className={className}
               data-active={selected ? "true" : "false"}
               data-orb-tone={link.id}
               href={link.href}
+              onClick={(event) => handleLinkClick(event, link)}
             >
               {selected && (
                 <motion.span
