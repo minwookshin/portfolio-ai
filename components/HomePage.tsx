@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect, useRef } from "react";
-import type { KeyboardEvent } from "react";
+import type { CSSProperties, KeyboardEvent, PointerEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
@@ -64,6 +64,12 @@ const RULES_I_KEEP = [
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
 const LANDING_ROW_BASE_DELAY = 0.4;
+const SECTION_ORB_FOCUS_TRANSITION: Transition = {
+  type: "spring",
+  stiffness: 210,
+  damping: 27,
+  mass: 1.18,
+};
 const STUDY_ROW_SCROLL_OFFSETS: Array<"start 92%" | "start 68%" | "end 32%" | "end 8%"> = [
   "start 92%",
   "start 68%",
@@ -822,6 +828,20 @@ function RulesIKeep() {
 
 function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
   const reduceMotion = Boolean(useReducedMotion());
+  const updatePointerPosition = (event: PointerEvent<HTMLAnchorElement>) => {
+    if (reduceMotion) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+    event.currentTarget.style.setProperty("--orb-pointer-x", `${Math.round(x)}%`);
+    event.currentTarget.style.setProperty("--orb-pointer-y", `${Math.round(y)}%`);
+  };
+
+  const resetPointerPosition = (event: PointerEvent<HTMLAnchorElement>) => {
+    event.currentTarget.style.setProperty("--orb-pointer-x", "50%");
+    event.currentTarget.style.setProperty("--orb-pointer-y", "38%");
+  };
 
   return (
     <motion.nav
@@ -829,11 +849,23 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
       variants={landingRevealItem}
       className="section-orb-nav"
     >
-      {HOME_ORB_LINKS.map((link) => {
+      {HOME_ORB_LINKS.map((link, index) => {
         const selected = link.id === activeSection;
+        const itemStyle = {
+          "--orb-order": index,
+        } as CSSProperties;
         const content = (
           <>
+            {selected && (
+              <motion.span
+                aria-hidden="true"
+                className="section-orb-nav__active-field"
+                layoutId={reduceMotion ? undefined : "section-orb-active-field"}
+                transition={SECTION_ORB_FOCUS_TRANSITION}
+              />
+            )}
             <span className="section-orb-nav__orb" aria-hidden="true" data-orb-tone={link.id}>
+              <span className="section-orb-nav__orb-glass" aria-hidden="true" />
               <video
                 autoPlay={!reduceMotion}
                 disablePictureInPicture
@@ -858,6 +890,9 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
             className={className}
             data-active={selected ? "true" : "false"}
             href={link.href}
+            onPointerLeave={resetPointerPosition}
+            onPointerMove={updatePointerPosition}
+            style={itemStyle}
           >
             {content}
           </Link>

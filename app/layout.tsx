@@ -71,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable portfolio guide" />
         <link rel="alternate" type="text/markdown" href="/portfolio.md" title="AI-readable portfolio summary" />
