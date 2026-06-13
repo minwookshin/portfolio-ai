@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect, useRef } from "react";
-import type { CSSProperties, KeyboardEvent, PointerEvent } from "react";
+import type { KeyboardEvent, PointerEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
@@ -828,7 +828,9 @@ function RulesIKeep() {
 
 function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
   const reduceMotion = Boolean(useReducedMotion());
-  const updatePointerPosition = (event: PointerEvent<HTMLAnchorElement>) => {
+  const activeLink = HOME_ORB_LINKS.find((link) => link.id === activeSection) ?? HOME_ORB_LINKS[0];
+
+  const updatePointerPosition = (event: PointerEvent<HTMLDivElement>) => {
     if (reduceMotion) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
@@ -838,7 +840,7 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
     event.currentTarget.style.setProperty("--orb-pointer-y", `${Math.round(y)}%`);
   };
 
-  const resetPointerPosition = (event: PointerEvent<HTMLAnchorElement>) => {
+  const resetPointerPosition = (event: PointerEvent<HTMLDivElement>) => {
     event.currentTarget.style.setProperty("--orb-pointer-x", "50%");
     event.currentTarget.style.setProperty("--orb-pointer-y", "38%");
   };
@@ -848,57 +850,78 @@ function SectionOrbNav({ activeSection }: { activeSection: HomeSection }) {
       aria-label="sections"
       variants={landingRevealItem}
       className="section-orb-nav"
+      data-section={activeSection}
     >
-      {HOME_ORB_LINKS.map((link, index) => {
-        const selected = link.id === activeSection;
-        const itemStyle = {
-          "--orb-order": index,
-        } as CSSProperties;
-        const content = (
-          <>
-            {selected && (
-              <motion.span
-                aria-hidden="true"
-                className="section-orb-nav__active-field"
-                layoutId={reduceMotion ? undefined : "section-orb-active-field"}
-                transition={SECTION_ORB_FOCUS_TRANSITION}
-              />
-            )}
-            <span className="section-orb-nav__orb" aria-hidden="true" data-orb-tone={link.id}>
-              <span className="section-orb-nav__orb-glass" aria-hidden="true" />
-              <video
-                autoPlay={!reduceMotion}
-                disablePictureInPicture
-                draggable={false}
-                loop
-                muted
-                playsInline
-                poster={SECTION_ORB_POSTER}
-                preload="auto"
-                src={SECTION_ORB_SRC}
-              />
-            </span>
-            <span className="section-orb-nav__label">{link.label}</span>
-          </>
-        );
-        const className = "section-orb-nav__item micro-focus micro-focus-tight";
-
-        return (
-          <Link
-            key={link.id}
-            aria-current={selected ? "page" : undefined}
-            className={className}
-            data-active={selected ? "true" : "false"}
-            data-orb-tone={link.id}
-            href={link.href}
-            onPointerLeave={resetPointerPosition}
-            onPointerMove={updatePointerPosition}
-            style={itemStyle}
+      <div
+        aria-hidden="true"
+        className="section-orb-nav__visual"
+        data-orb-tone={activeSection}
+        onPointerLeave={resetPointerPosition}
+        onPointerMove={updatePointerPosition}
+      >
+        <motion.span
+          className="section-orb-nav__active-field"
+          key={`field-${activeSection}`}
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={reduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
+          transition={reduceMotion ? tweens.none : SECTION_ORB_FOCUS_TRANSITION}
+        />
+        <AnimatePresence initial={false} mode="wait">
+          <motion.span
+            key={activeSection}
+            className="section-orb-nav__orb"
+            data-orb-tone={activeSection}
+            initial={reduceMotion ? false : { opacity: 0, filter: "blur(8px)", scale: 0.96 }}
+            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, filter: "blur(8px)", scale: 1.04 }}
+            transition={reduceMotion ? tweens.none : { duration: 0.42, ease: LANDING_EASE }}
           >
-            {content}
-          </Link>
-        );
-      })}
+            <span className="section-orb-nav__orb-glass" aria-hidden="true" />
+            <span className="section-orb-nav__orb-wash" aria-hidden="true" />
+            <video
+              autoPlay={!reduceMotion}
+              disablePictureInPicture
+              draggable={false}
+              loop
+              muted
+              playsInline
+              poster={SECTION_ORB_POSTER}
+              preload="auto"
+              src={SECTION_ORB_SRC}
+            />
+          </motion.span>
+        </AnimatePresence>
+      </div>
+
+      <div className="section-orb-nav__links">
+        {HOME_ORB_LINKS.map((link) => {
+          const selected = link.id === activeSection;
+          const className = "section-orb-nav__item micro-focus micro-focus-tight";
+
+          return (
+            <Link
+              key={link.id}
+              aria-current={selected ? "page" : undefined}
+              className={className}
+              data-active={selected ? "true" : "false"}
+              data-orb-tone={link.id}
+              href={link.href}
+            >
+              {selected && (
+                <motion.span
+                  aria-hidden="true"
+                  className="section-orb-nav__text-indicator"
+                  layoutId={reduceMotion ? undefined : "section-orb-text-indicator"}
+                  transition={SECTION_ORB_FOCUS_TRANSITION}
+                />
+              )}
+              <span className="section-orb-nav__label">{link.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+      <span className="sr-only">Current section: {activeLink.label}</span>
     </motion.nav>
   );
 }
