@@ -82,6 +82,8 @@ type OrbAction = {
 const ORB_RESTING_SIZE = 115;
 const ORB_MENU_WIDTH = 387;
 const ORB_MENU_HEIGHT = 124;
+const ORB_REFERENCE_SRC = "/media/siri-reference-orb.mp4";
+const ORB_REFERENCE_POSTER = "/media/siri-reference-orb-poster.png";
 const IDLE_BANDS: Bands = { low: 0.045, mid: 0.025, high: 0.015 };
 const LIVE_BANDS: Bands = { low: 0.11, mid: 0.064, high: 0.034 };
 
@@ -330,6 +332,19 @@ export default function PortfolioSiriOrb({
   return (
     <div className="portfolio-siri" data-mode={mode}>
       <canvas ref={canvasRef} className="portfolio-siri__canvas" aria-label="Portfolio Siri orb" />
+      <div className="portfolio-siri__reference-orb" aria-hidden="true">
+        <video
+          autoPlay
+          disablePictureInPicture
+          draggable={false}
+          loop
+          muted
+          playsInline
+          poster={ORB_REFERENCE_POSTER}
+          preload="auto"
+          src={ORB_REFERENCE_SRC}
+        />
+      </div>
       {mode === "menu" && (
         <button type="button" className="portfolio-siri__scrim" aria-label="Close portfolio orb" onClick={closeOrb} />
       )}
