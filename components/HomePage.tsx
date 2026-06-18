@@ -10,7 +10,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
-import LottieMotionProof from "@/components/LottieMotionProof";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -39,21 +38,6 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
   { href: "/work", id: "work", label: "work" },
   { href: "/studies", id: "studies", label: "studies" },
 ];
-
-const RULES_I_KEEP = [
-  {
-    rule: "motion explains state change.",
-    note: "not spectacle.",
-  },
-  {
-    rule: "proof before polish.",
-    note: "working software beats a polished claim.",
-  },
-  {
-    rule: "ai interfaces should show the loop.",
-    note: "intent, trace, eval, checkpoint.",
-  },
-] as const;
 
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
@@ -786,36 +770,6 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
   );
 }
 
-function RulesIKeep() {
-  return (
-    <motion.section
-      aria-labelledby="rules-i-keep-title"
-      className="rules-i-keep"
-      variants={landingRevealItem}
-    >
-      <div className="rules-i-keep__inner">
-        <div className="rules-i-keep__copy-block">
-          <h2 id="rules-i-keep-title" className="rules-i-keep__title">
-            rules i keep
-          </h2>
-          <ol className="rules-i-keep__list">
-            {RULES_I_KEEP.map((item, index) => (
-              <li key={item.rule} className="rules-i-keep__item">
-                <span className="rules-i-keep__index">{String(index + 1).padStart(2, "0")}</span>
-                <span className="rules-i-keep__copy">
-                  <span>{item.rule}</span>
-                  <span>{item.note}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <LottieMotionProof className="rules-i-keep__proof" path="/lottie/rules-trace.json" />
-      </div>
-    </motion.section>
-  );
-}
-
 function HomeExploreSection({
   activeSection,
   projects,
@@ -863,12 +817,7 @@ function HomeExploreSection({
 
       <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
         {activeSection === "work" && <WorkSection projects={projects} />}
-        {activeSection === "studies" && (
-          <>
-            <RulesIKeep />
-            <StudiesSection items={studyItems} />
-          </>
-        )}
+        {activeSection === "studies" && <StudiesSection items={studyItems} />}
       </div>
     </motion.section>
   );
