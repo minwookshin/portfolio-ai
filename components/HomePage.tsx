@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect, useRef } from "react";
-import type { KeyboardEvent, MouseEvent, PointerEvent } from "react";
+import type { KeyboardEvent, MouseEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
@@ -35,25 +35,20 @@ type HomePageProps = {
   writingPosts: WritingPostMeta[];
 };
 
-type HomeOrbId = HomeSection;
-
-const HOME_ORB_LINKS: Array<{ href: string; id: HomeOrbId; label: string }> = [
+const HOME_SECTION_LINKS: Array<{ href: string; id: HomeSection; label: string }> = [
   { href: "/", id: "about", label: "about" },
   { href: "/work", id: "work", label: "work" },
   { href: "/studies", id: "studies", label: "studies" },
 ];
 
 function getHomeSectionHref(section: HomeSection) {
-  return HOME_ORB_LINKS.find((link) => link.id === section)?.href ?? "/";
+  return HOME_SECTION_LINKS.find((link) => link.id === section)?.href ?? "/";
 }
 
 function getHomeSectionFromPathname(pathname: string): HomeSection {
   const normalizedPathname = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
-  return HOME_ORB_LINKS.find((link) => link.href === normalizedPathname)?.id ?? "about";
+  return HOME_SECTION_LINKS.find((link) => link.href === normalizedPathname)?.id ?? "about";
 }
-
-const SECTION_ORB_SRC = "/media/siri-reference-orb.mp4";
-const SECTION_ORB_POSTER = "/media/siri-reference-orb-poster.png";
 
 const RULES_I_KEEP = [
   {
@@ -73,12 +68,6 @@ const RULES_I_KEEP = [
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
 const LANDING_ROW_BASE_DELAY = 0.4;
-const SECTION_ORB_FOCUS_TRANSITION: Transition = {
-  type: "spring",
-  stiffness: 210,
-  damping: 27,
-  mass: 1.18,
-};
 const STUDY_ROW_SCROLL_OFFSETS: Array<"start 92%" | "start 68%" | "end 32%" | "end 8%"> = [
   "start 92%",
   "start 68%",
@@ -835,7 +824,7 @@ function RulesIKeep() {
   );
 }
 
-function SectionOrbNav({
+function SectionTextNav({
   activeSection,
   onSectionChange,
 }: {
@@ -843,26 +832,11 @@ function SectionOrbNav({
   onSectionChange: (section: HomeSection) => void;
 }) {
   const reduceMotion = Boolean(useReducedMotion());
-  const activeLink = HOME_ORB_LINKS.find((link) => link.id === activeSection) ?? HOME_ORB_LINKS[0];
-
-  const updatePointerPosition = (event: PointerEvent<HTMLDivElement>) => {
-    if (reduceMotion) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-
-    event.currentTarget.style.setProperty("--orb-pointer-x", `${Math.round(x)}%`);
-    event.currentTarget.style.setProperty("--orb-pointer-y", `${Math.round(y)}%`);
-  };
-
-  const resetPointerPosition = (event: PointerEvent<HTMLDivElement>) => {
-    event.currentTarget.style.setProperty("--orb-pointer-x", "50%");
-    event.currentTarget.style.setProperty("--orb-pointer-y", "38%");
-  };
+  const activeLink = HOME_SECTION_LINKS.find((link) => link.id === activeSection) ?? HOME_SECTION_LINKS[0];
 
   const handleLinkClick = (
     event: MouseEvent<HTMLAnchorElement>,
-    link: (typeof HOME_ORB_LINKS)[number],
+    link: (typeof HOME_SECTION_LINKS)[number],
   ) => {
     if (
       link.id === activeSection ||
@@ -884,54 +858,13 @@ function SectionOrbNav({
     <motion.nav
       aria-label="sections"
       variants={landingRevealItem}
-      className="section-orb-nav"
+      className="home-text-nav"
       data-section={activeSection}
     >
-      <div
-        aria-hidden="true"
-        className="section-orb-nav__visual"
-        data-orb-tone={activeSection}
-        onPointerLeave={resetPointerPosition}
-        onPointerMove={updatePointerPosition}
-      >
-        <motion.span
-          className="section-orb-nav__active-field"
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={reduceMotion ? tweens.none : SECTION_ORB_FOCUS_TRANSITION}
-        />
-        <motion.span
-          className="section-orb-nav__orb"
-          data-orb-tone={activeSection}
-          initial={reduceMotion ? false : { opacity: 0, filter: "blur(8px)", scale: 0.96 }}
-          animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-          transition={reduceMotion ? tweens.none : { duration: 0.42, ease: LANDING_EASE }}
-        >
-          {HOME_ORB_LINKS.map((link) => (
-            <video
-              key={link.id}
-              autoPlay={!reduceMotion}
-              className="section-orb-nav__orb-video"
-              data-orb-tone={link.id}
-              disablePictureInPicture
-              draggable={false}
-              loop
-              muted
-              playsInline
-              poster={SECTION_ORB_POSTER}
-              preload="auto"
-              src={SECTION_ORB_SRC}
-            />
-          ))}
-          <span className="section-orb-nav__orb-glass" aria-hidden="true" />
-          <span key={`wash-${activeSection}`} className="section-orb-nav__orb-wash" aria-hidden="true" />
-        </motion.span>
-      </div>
-
-      <div className="section-orb-nav__links">
-        {HOME_ORB_LINKS.map((link) => {
+      <div className="home-text-nav__links">
+        {HOME_SECTION_LINKS.map((link) => {
           const current = link.id === activeSection;
-          const className = "section-orb-nav__item micro-focus micro-focus-tight";
+          const className = "home-text-nav__item micro-focus micro-focus-tight";
 
           return (
             <Link
@@ -939,19 +872,18 @@ function SectionOrbNav({
               aria-current={current ? "page" : undefined}
               className={className}
               data-active={current ? "true" : "false"}
-              data-orb-tone={link.id}
               href={link.href}
               onClick={(event) => handleLinkClick(event, link)}
             >
               {current && (
                 <motion.span
                   aria-hidden="true"
-                  className="section-orb-nav__text-indicator"
-                  layoutId={reduceMotion ? undefined : "section-orb-text-indicator"}
-                  transition={SECTION_ORB_FOCUS_TRANSITION}
+                  className="home-text-nav__indicator"
+                  layoutId={reduceMotion ? undefined : "home-text-nav-indicator"}
+                  transition={springs.spatialFast}
                 />
               )}
-              <span className="section-orb-nav__label">{link.label}</span>
+              <span className="home-text-nav__label">{link.label}</span>
             </Link>
           );
         })}
@@ -979,13 +911,13 @@ function HomeExploreSection({
       id={activeSection}
       data-section={activeSection}
       variants={landingExploreVariants}
-      className="home-orb-stage mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] sm:px-[var(--space-5)]"
+      className="home-text-stage mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] sm:px-[var(--space-5)]"
     >
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <SectionOrbNav activeSection={activeSection} onSectionChange={onSectionChange} />
+        <SectionTextNav activeSection={activeSection} onSectionChange={onSectionChange} />
       </div>
 
-      <div className="home-orb-content mx-auto w-full max-w-[620px] text-left">
+      <div className="home-text-content mx-auto w-full max-w-[620px] text-left">
         <AnimatePresence initial={false} mode="wait">
           <motion.div
             key={activeSection}
@@ -993,7 +925,7 @@ function HomeExploreSection({
             animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(4px)", y: -6 }}
             transition={reduceMotion ? tweens.none : { duration: 0.32, ease: LANDING_EASE }}
-            className="home-orb-panel"
+            className="home-text-panel"
           >
             {activeSection === "about" && <AboutSection />}
             {activeSection === "work" && <WorkSection projects={projects} />}
