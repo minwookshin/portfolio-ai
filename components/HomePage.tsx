@@ -1,10 +1,9 @@
 "use client";
 
 import { Fragment, useCallback, useState, useEffect, useRef } from "react";
-import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -19,6 +18,7 @@ import {
   FEATURED_PROJECT_IDS,
   LAB_PROJECT_IDS,
   MAIN_PROJECTS,
+  PROJECT_PREVIEW_VIDEOS,
   getLabProjectPath,
   getProjectPath,
   isLabProject,
@@ -39,6 +39,12 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
   { href: "/studies", id: "studies", label: "studies" },
 ];
 
+const PROFILE_PROOF_ROWS = [
+  { href: "/work/atlas", label: "Atlas", value: "2026" },
+  { href: "/work/sentinel", label: "Sentinel", value: "2025" },
+  { href: "/work/portfolio-ai", label: "Portfolio AI", value: "2025" },
+] as const;
+
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
 const LANDING_ROW_BASE_DELAY = 0.4;
@@ -48,20 +54,6 @@ const STUDY_ROW_SCROLL_OFFSETS: Array<"start 92%" | "start 68%" | "end 32%" | "e
   "end 32%",
   "end 8%",
 ];
-
-function unavailableFeedbackAnimation() {
-  return {
-    rotateX: [0, -7, 3, 0],
-    rotateY: [0, 6, -2, 0],
-    scale: [1, 0.985, 1.002, 1],
-    x: [0, 1, -1, 0],
-    y: [0, -1, 0],
-    transition: {
-      duration: 0.34,
-      ease: LANDING_EASE,
-    },
-  };
-}
 
 const landingPageVariants: Variants = {
   hidden: {},
@@ -160,21 +152,6 @@ function StudyMetaLine({
   );
 }
 
-function useCanShowWorkPreview() {
-  const [canShow, setCanShow] = useState(false);
-
-  useEffect(() => {
-    const query = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 768px)");
-    const update = () => setCanShow(query.matches);
-
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-
-  return canShow;
-}
-
 // The model appends hidden directive lines at the end of each reply:
 //   <<<SHOW>>>project:Sentinel | projects | profile   (what the UI should open)
 //   <<<FOLLOWUPS>>>q1|q2|q3                            (tappable next questions)
@@ -257,383 +234,183 @@ function getProjectDescriptor(project: Project) {
     : project.studioLabel ?? project.description;
 }
 
-function ProjectTextRow({
-  onActivate,
-  onDeactivate,
-  onUnavailableActivate,
-  project,
-  index,
-  list,
-}: {
-  onActivate?: () => void;
-  onDeactivate?: () => void;
-  onUnavailableActivate?: () => void;
-  project: Project;
-  index: number;
-  list: "work";
-}) {
-  const reduceMotion = useReducedMotion();
-  const unavailableControls = useAnimationControls();
-  const descriptor = getProjectDescriptor(project);
-  const rowClass =
-    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] border-0 bg-transparent px-2 py-1 text-left text-[inherit]";
-  const titleClass = [
-    "font-normal leading-[var(--leading-tight)]",
-    "project-row-title-line--lateral",
-  ]
-    .filter(Boolean)
-    .join(" ");
-  const rowText = (
-    <>
-      <span className="project-row-copy flex min-w-0 flex-col items-start gap-2">
-        <span className={titleClass}>
-          {project.title}
-        </span>
-        <span className="project-row-meta min-w-0 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
-          {descriptor}
-        </span>
-      </span>
-    </>
-  );
-  const playUnavailableFeedback = useCallback(() => {
-    onUnavailableActivate?.();
-    if (reduceMotion) return;
-
-    unavailableControls.stop();
-    void unavailableControls.start(unavailableFeedbackAnimation());
-  }, [onUnavailableActivate, reduceMotion, unavailableControls]);
-
+function PortfolioProfilePanel({ activeSection }: { activeSection: HomeTab }) {
   return (
-    <motion.li
-      onBlur={onDeactivate}
-      onFocus={onActivate}
-      onMouseEnter={onActivate}
-      onMouseLeave={onDeactivate}
-      onPointerEnter={onActivate}
-      onPointerLeave={onDeactivate}
-      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 10 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
-      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
-      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
-      data-project-row={list}
-      className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
+    <motion.aside
+      id="profile"
+      variants={landingIntroVariants}
+      className="portfolio-profile-panel"
     >
-      {project.comingSoon ? (
-        <motion.button
-          type="button"
-          aria-disabled="true"
-          aria-label={`${project.title} is not ready yet`}
-          animate={unavailableControls}
-          className={`${rowClass} cursor-pointer`}
-          onClick={playUnavailableFeedback}
-          style={{
-            transformOrigin: "50% 60%",
-            transformPerspective: 900,
-            transformStyle: "preserve-3d",
-          }}
-        >
-          {rowText}
-        </motion.button>
-      ) : (
-        <Link
-          href={getProjectPath(project)}
-          className={rowClass}
-        >
-          {rowText}
-        </Link>
-      )}
-    </motion.li>
+      <motion.div variants={landingRevealItem} className="portfolio-profile-panel__intro">
+        <p>{PERSONAL_INFO.name} is a design engineer.</p>
+        <p>{PERSONAL_INFO.bio}</p>
+        <p>
+          Currently shaping interaction systems for AI-native products. Always down for a good chat{" "}
+          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>email</IntroLink>
+        </p>
+        <p>
+          Occasionally updating{" "}
+          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
+          {", "}
+          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
+          {", and "}
+          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
+        </p>
+      </motion.div>
+
+      <motion.nav
+        aria-label="sections"
+        variants={landingRevealItem}
+        className="portfolio-profile-panel__nav"
+      >
+        {HOME_SECTION_LINKS.map((link, index) => {
+          const selected = link.id === activeSection;
+
+          return (
+            <Fragment key={link.id}>
+              <Link
+                aria-current={selected ? "page" : undefined}
+                className="home-tab-button micro-focus micro-focus-tight"
+                data-active={selected ? "true" : "false"}
+                href={link.href}
+              >
+                {link.label}
+              </Link>
+              {index < HOME_SECTION_LINKS.length - 1 && (
+                <span aria-hidden="true" className="portfolio-profile-panel__comma" role="presentation">
+                  ,
+                </span>
+              )}
+            </Fragment>
+          );
+        })}
+      </motion.nav>
+
+      <motion.div variants={landingRevealItem} className="portfolio-profile-panel__proof">
+        <p className="portfolio-profile-panel__eyebrow">selected proof</p>
+        <div className="portfolio-profile-panel__proof-list">
+          {PROFILE_PROOF_ROWS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="portfolio-profile-panel__proof-row micro-focus micro-focus-tight micro-pressable"
+            >
+              <span>{item.label}</span>
+              <span>{item.value}</span>
+            </Link>
+          ))}
+        </div>
+      </motion.div>
+    </motion.aside>
   );
 }
 
-function WorkPreviewContent({
-  project,
+function WorkMediaCard({
+  featured = false,
+  index,
+  projects,
 }: {
-  project: Project;
+  featured?: boolean;
+  index: number;
+  projects: Project[];
 }) {
-  const isStaticLogoPreview = project.slug === "atlas";
-  const isSentinelPreview = project.slug === "sentinel";
+  const project = projects[index];
+  const reduceMotion = Boolean(useReducedMotion());
 
-  const src = isStaticLogoPreview ? project.icon ?? project.image : project.image ?? project.icon;
+  if (!project) return null;
 
-  if (src) {
-    if (isSentinelPreview) {
-      return (
-        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
-          <div className="relative h-[88%] w-[88%]">
-            <BlurImage
-              src={src}
-              alt={project.title}
-              fill
-              sizes="(max-width: 768px) 64vw, 560px"
-              draggable={false}
-              className="object-contain"
-            />
-          </div>
-        </div>
-      );
-    }
-
-    if (isStaticLogoPreview) {
-      return (
-        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
+  const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
+  const imageSrc = project.image ?? project.icon;
+  const descriptor = project.studioLabel ?? project.description;
+  const cardClass = [
+    "work-media-card",
+    featured ? "work-media-card--featured" : "",
+    project.comingSoon ? "work-media-card--disabled" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const card = (
+    <motion.span
+      className={cardClass}
+      initial={reduceMotion ? false : { opacity: 0, filter: "blur(5px)", y: 12 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
+      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
+      viewport={reduceMotion ? undefined : { once: true, margin: "-90px" }}
+      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
+    >
+      <span className="work-media-card__media" aria-hidden="true">
+        {previewVideo ? (
+          <video
+            autoPlay={!reduceMotion}
+            className="work-media-card__video"
+            loop
+            muted
+            playsInline
+            poster={project.image}
+            preload="metadata"
+          >
+            <source src={previewVideo} type="video/mp4" />
+          </video>
+        ) : imageSrc ? (
           <BlurImage
-            src={src}
+            src={imageSrc}
             alt={project.title}
-            width={342}
-            height={299}
-            sizes="320px"
+            fill
+            sizes={featured ? "(min-width: 1024px) 64vw, 100vw" : "(min-width: 1024px) 32vw, 100vw"}
             draggable={false}
-            className="h-auto w-[260px] max-w-[58%] object-contain"
+            className="work-media-card__image"
           />
-        </div>
-      );
-    }
+        ) : (
+          <span className="work-media-card__glyph">
+            {project.glyph ?? project.title.charAt(0)}
+          </span>
+        )}
+      </span>
+      <span className="work-media-card__shade" aria-hidden="true" />
+      <span className="work-media-card__copy">
+        <span className="work-media-card__title">{project.title}</span>
+        <span className="work-media-card__meta">{descriptor}</span>
+      </span>
+    </motion.span>
+  );
 
+  if (project.comingSoon) {
     return (
-      <BlurImage
-        src={src}
-        alt={project.title}
-        fill
-        sizes="(max-width: 768px) 74vw, 680px"
-        draggable={false}
-        className="object-cover"
-      />
+      <button
+        type="button"
+        aria-disabled="true"
+        className="work-media-card-link work-media-card-link--button micro-focus micro-focus-tight"
+      >
+        {card}
+      </button>
     );
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-center bg-transparent text-4xl text-[var(--text-primary)]">
-      {project.glyph ?? project.title.charAt(0)}
-    </div>
-  );
-}
-
-function WorkFixedPreview({
-  feedbackKey = 0,
-  project,
-  reduceMotion,
-}: {
-  feedbackKey?: number;
-  project: Project;
-  reduceMotion: boolean;
-}) {
-  const unavailableControls = useAnimationControls();
-  const lastFeedbackKey = useRef(0);
-  const canPlayUnavailableFeedback = Boolean(project.comingSoon);
-  const previewFrameClass = [
-    "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent",
-    canPlayUnavailableFeedback ? "work-preview-unavailable micro-focus cursor-pointer" : "",
-    project.slug === "sentinel" ? "work-preview-sentinel-video" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-  const playUnavailableFeedback = useCallback(() => {
-    if (!canPlayUnavailableFeedback) return;
-
-    unavailableControls.stop();
-    if (!reduceMotion) {
-      void unavailableControls.start(unavailableFeedbackAnimation());
-    }
-  }, [canPlayUnavailableFeedback, reduceMotion, unavailableControls]);
-
-  useEffect(() => {
-    if (!canPlayUnavailableFeedback || feedbackKey <= 0 || feedbackKey === lastFeedbackKey.current) return;
-
-    lastFeedbackKey.current = feedbackKey;
-    unavailableControls.stop();
-    if (!reduceMotion) {
-      void unavailableControls.start(unavailableFeedbackAnimation());
-    }
-  }, [canPlayUnavailableFeedback, feedbackKey, reduceMotion, unavailableControls]);
-  const handlePreviewKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-    if (!canPlayUnavailableFeedback) return;
-    if (event.key !== " " && event.key !== "Enter") return;
-
-    event.preventDefault();
-    playUnavailableFeedback();
-  }, [canPlayUnavailableFeedback, playUnavailableFeedback]);
-
-  return (
-    <motion.div
-      aria-label={canPlayUnavailableFeedback ? `${project.title} is not ready yet` : undefined}
-      className={previewFrameClass}
-      onClick={canPlayUnavailableFeedback ? playUnavailableFeedback : undefined}
-      onKeyDown={canPlayUnavailableFeedback ? handlePreviewKeyDown : undefined}
-      role={canPlayUnavailableFeedback ? "button" : undefined}
-      tabIndex={canPlayUnavailableFeedback ? 0 : undefined}
+    <Link
+      href={getProjectPath(project)}
+      className={`work-media-card-link ${featured ? "work-media-card-link--featured" : ""} micro-focus micro-focus-tight`}
     >
-      <AnimatePresence initial={false} mode="popLayout">
-        <motion.div
-          key={project.id}
-          className="absolute inset-0 transform-gpu"
-          initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(6px)", scale: 0.992, x: 3 }}
-          animate={{ opacity: 1, filter: "blur(0px)", scale: 1, x: 0 }}
-          exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(4px)", scale: 1.002, x: -3 }}
-          transition={
-            reduceMotion
-              ? tweens.instant
-              : {
-                  opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
-                  filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                  scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                  x: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                }
-          }
-          style={{ willChange: "opacity, filter, transform" }}
-        >
-          {canPlayUnavailableFeedback ? (
-            <motion.div
-              animate={unavailableControls}
-              className="h-full w-full transform-gpu"
-              style={{
-                transformOrigin: "50% 60%",
-                transformPerspective: 900,
-                transformStyle: "preserve-3d",
-                willChange: "transform",
-              }}
-            >
-              <WorkPreviewContent project={project} />
-            </motion.div>
-          ) : (
-            <WorkPreviewContent project={project} />
-          )}
-        </motion.div>
-      </AnimatePresence>
-    </motion.div>
-  );
-}
-
-function EditorialIntro() {
-  return (
-    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
-      <motion.div id="profile" variants={landingIntroVariants} className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <motion.p variants={landingRevealItem} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</motion.p>
-        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</motion.p>
-        <motion.h1 variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-          I design and build interfaces for AI-native products, from early idea to working software.
-        </motion.h1>
-        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
-          {", "}
-          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
-          {", "}
-          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
-          {", "}
-          <span className="text-[var(--text-primary)]">and</span>
-          {" "}
-          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
-          {"."}
-        </motion.p>
-      </motion.div>
-    </section>
+      {card}
+    </Link>
   );
 }
 
 function WorkSection({
-  onActiveProjectChange,
   projects,
 }: {
-  onActiveProjectChange?: (project: Project | null) => void;
   projects: Project[];
 }) {
-  const reduceMotion = Boolean(useReducedMotion());
-  const canShowFixedPreview = useCanShowWorkPreview();
-  const hidePreviewTimer = useRef<number | null>(null);
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const [previewFeedbackKey, setPreviewFeedbackKey] = useState(0);
-
-  const clearHideTimer = useCallback(() => {
-    if (!hidePreviewTimer.current) return;
-    window.clearTimeout(hidePreviewTimer.current);
-    hidePreviewTimer.current = null;
-  }, []);
-
-  const activateRow = useCallback((index: number) => {
-    clearHideTimer();
-    setPreviewIndex(index);
-    onActiveProjectChange?.(projects[index] ?? null);
-  }, [clearHideTimer, onActiveProjectChange, projects]);
-
-  const activateUnavailablePreview = useCallback((index: number) => {
-    clearHideTimer();
-    setPreviewIndex(index);
-    setPreviewFeedbackKey((key) => key + 1);
-    onActiveProjectChange?.(projects[index] ?? null);
-  }, [clearHideTimer, onActiveProjectChange, projects]);
-
-  const deactivateRow = useCallback((delay = 70) => {
-    clearHideTimer();
-    hidePreviewTimer.current = window.setTimeout(() => {
-      setPreviewIndex(null);
-      onActiveProjectChange?.(null);
-    }, delay);
-  }, [clearHideTimer, onActiveProjectChange]);
-
-  useEffect(() => {
-    return () => clearHideTimer();
-  }, [clearHideTimer]);
-
-  const previewProject = previewIndex === null ? null : projects[previewIndex];
-  const canInteractWithPreview = Boolean(previewProject?.comingSoon);
-  const previewShellClass = [
-    "absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block",
-    canInteractWithPreview ? "pointer-events-auto" : "pointer-events-none",
-  ].join(" ");
-
   return (
-    <div className="relative">
-      <ul className="space-y-[var(--space-2)]">
-        {projects.map((project, index) => (
-          <ProjectTextRow
-            key={project.id}
-            onActivate={() => activateRow(index)}
-            onDeactivate={() => deactivateRow(project.comingSoon ? 180 : 70)}
-            onUnavailableActivate={project.comingSoon ? () => activateUnavailablePreview(index) : undefined}
-            project={project}
-            index={index}
-            list="work"
-          />
-        ))}
-      </ul>
-      {canShowFixedPreview && (
-        <div
-          aria-hidden={canInteractWithPreview ? undefined : "true"}
-          className={previewShellClass}
-          onBlur={canInteractWithPreview ? () => deactivateRow() : undefined}
-          onFocus={canInteractWithPreview ? clearHideTimer : undefined}
-          onMouseEnter={canInteractWithPreview ? clearHideTimer : undefined}
-          onMouseLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
-          onPointerEnter={canInteractWithPreview ? clearHideTimer : undefined}
-          onPointerLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
-        >
-          <AnimatePresence initial={false}>
-            {previewProject && (
-              <motion.div
-                key="work-preview-stage"
-                className="absolute inset-0 transform-gpu"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(5px)", scale: 0.996, y: 3 }}
-                animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.996, y: 3 }}
-                transition={
-                  reduceMotion
-                    ? tweens.instant
-                    : {
-                        opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
-                        filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                        scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                        y: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                      }
-                }
-                style={{ willChange: "opacity, filter, transform" }}
-              >
-                <WorkFixedPreview feedbackKey={previewFeedbackKey} project={previewProject} reduceMotion={reduceMotion} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
+    <div className="work-media-grid">
+      {projects.map((project, index) => (
+        <WorkMediaCard
+          key={project.id}
+          featured={index === 0}
+          index={index}
+          projects={projects}
+        />
+      ))}
     </div>
   );
 }
@@ -783,41 +560,14 @@ function HomeExploreSection({
     <motion.section
       id={activeSection}
       variants={landingExploreVariants}
-      className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]"
+      className="portfolio-split-section"
     >
-      <div className="mx-auto w-full max-w-[620px] text-left">
-        <motion.nav
-          aria-label="sections"
-          variants={landingRevealItem}
-          className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
-        >
-          {HOME_SECTION_LINKS.map((link, index) => {
-            const selected = link.id === activeSection;
-
-            return (
-              <Fragment key={link.id}>
-                <Link
-                  aria-current={selected ? "page" : undefined}
-                  className="home-tab-button micro-focus micro-focus-tight"
-                  data-active={selected ? "true" : "false"}
-                  href={link.href}
-                >
-                  {link.label}
-                </Link>
-                {index < HOME_SECTION_LINKS.length - 1 && (
-                  <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]" role="presentation">
-                    ,
-                  </span>
-                )}
-              </Fragment>
-            );
-          })}
-        </motion.nav>
-      </div>
-
-      <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
-        {activeSection === "work" && <WorkSection projects={projects} />}
-        {activeSection === "studies" && <StudiesSection items={studyItems} />}
+      <div className="portfolio-split-layout">
+        <div className="portfolio-split-main">
+          {activeSection === "work" && <WorkSection projects={projects} />}
+          {activeSection === "studies" && <StudiesSection items={studyItems} />}
+        </div>
+        <PortfolioProfilePanel activeSection={activeSection} />
       </div>
     </motion.section>
   );
@@ -988,7 +738,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
 
   return (
     <main
-      className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
+      className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[#0e1010] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
@@ -1026,8 +776,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         variants={reduceMotion ? undefined : landingPageVariants}
         className="flex-1"
       >
-        <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
-          <EditorialIntro />
+        <div className="portfolio-split-theme light-cursor-dark">
           <HomeExploreSection
             activeSection={currentSection}
             projects={featuredProjects}
