@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState, useEffect, useRef } from "react";
-import type { KeyboardEvent, MouseEvent } from "react";
+import { Fragment, useCallback, useState, useEffect, useRef } from "react";
+import type { KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
@@ -28,27 +28,17 @@ import {
 } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
 
-type HomeSection = "about" | "work" | "studies";
+type HomeTab = "work" | "studies";
 
 type HomePageProps = {
-  activeSection?: HomeSection;
+  activeSection?: HomeTab;
   writingPosts: WritingPostMeta[];
 };
 
-const HOME_SECTION_LINKS: Array<{ href: string; id: HomeSection; label: string }> = [
-  { href: "/", id: "about", label: "about" },
+const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = [
   { href: "/work", id: "work", label: "work" },
   { href: "/studies", id: "studies", label: "studies" },
 ];
-
-function getHomeSectionHref(section: HomeSection) {
-  return HOME_SECTION_LINKS.find((link) => link.id === section)?.href ?? "/";
-}
-
-function getHomeSectionFromPathname(pathname: string): HomeSection {
-  const normalizedPathname = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
-  return HOME_SECTION_LINKS.find((link) => link.href === normalizedPathname)?.id ?? "about";
-}
 
 const RULES_I_KEEP = [
   {
@@ -531,27 +521,29 @@ function WorkFixedPreview({
   );
 }
 
-function AboutSection() {
+function EditorialIntro() {
   return (
-    <motion.div id="profile" variants={landingIntroVariants} className="w-full scroll-mt-28 text-left">
-      <motion.p variants={landingRevealItem} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</motion.p>
-      <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</motion.p>
-      <motion.h1 variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-        I design and build interfaces for AI-native products, from early idea to working software.
-      </motion.h1>
-      <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-        <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
-        {", "}
-        <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
-        {", "}
-        <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
-        {", "}
-        <span className="text-[var(--text-primary)]">and</span>
-        {" "}
-        <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
-        {"."}
-      </motion.p>
-    </motion.div>
+    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
+      <motion.div id="profile" variants={landingIntroVariants} className="w-full max-w-[620px] scroll-mt-28 text-left">
+        <motion.p variants={landingRevealItem} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</motion.p>
+        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</motion.p>
+        <motion.h1 variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+          I design and build interfaces for AI-native products, from early idea to working software.
+        </motion.h1>
+        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
+          {", "}
+          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
+          {", "}
+          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
+          {", "}
+          <span className="text-[var(--text-primary)]">and</span>
+          {" "}
+          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
+          {"."}
+        </motion.p>
+      </motion.div>
+    </section>
   );
 }
 
@@ -824,129 +816,69 @@ function RulesIKeep() {
   );
 }
 
-function SectionTextNav({
-  activeSection,
-  onSectionChange,
-}: {
-  activeSection: HomeSection;
-  onSectionChange: (section: HomeSection) => void;
-}) {
-  const reduceMotion = Boolean(useReducedMotion());
-  const activeLink = HOME_SECTION_LINKS.find((link) => link.id === activeSection) ?? HOME_SECTION_LINKS[0];
-
-  const handleLinkClick = (
-    event: MouseEvent<HTMLAnchorElement>,
-    link: (typeof HOME_SECTION_LINKS)[number],
-  ) => {
-    if (
-      link.id === activeSection ||
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.altKey ||
-      event.ctrlKey ||
-      event.shiftKey
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-    onSectionChange(link.id);
-  };
-
-  return (
-    <motion.nav
-      aria-label="sections"
-      variants={landingRevealItem}
-      className="home-text-nav"
-      data-section={activeSection}
-    >
-      <div className="home-text-nav__links">
-        {HOME_SECTION_LINKS.map((link) => {
-          const current = link.id === activeSection;
-          const className = "home-text-nav__item micro-focus micro-focus-tight";
-
-          return (
-            <Link
-              key={link.id}
-              aria-current={current ? "page" : undefined}
-              className={className}
-              data-active={current ? "true" : "false"}
-              href={link.href}
-              onClick={(event) => handleLinkClick(event, link)}
-            >
-              {current && (
-                <motion.span
-                  aria-hidden="true"
-                  className="home-text-nav__indicator"
-                  layoutId={reduceMotion ? undefined : "home-text-nav-indicator"}
-                  transition={springs.spatialFast}
-                />
-              )}
-              <span className="home-text-nav__label">{link.label}</span>
-            </Link>
-          );
-        })}
-      </div>
-      <span className="sr-only">Current section: {activeLink.label}</span>
-    </motion.nav>
-  );
-}
-
 function HomeExploreSection({
   activeSection,
-  onSectionChange,
   projects,
   studyItems,
 }: {
-  activeSection: HomeSection;
-  onSectionChange: (section: HomeSection) => void;
+  activeSection: HomeTab;
   projects: Project[];
   studyItems: StudyItem[];
 }) {
-  const reduceMotion = Boolean(useReducedMotion());
-
   return (
     <motion.section
       id={activeSection}
-      data-section={activeSection}
       variants={landingExploreVariants}
-      className="home-text-stage mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] sm:px-[var(--space-5)]"
+      className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]"
     >
       <div className="mx-auto w-full max-w-[620px] text-left">
-        <SectionTextNav activeSection={activeSection} onSectionChange={onSectionChange} />
+        <motion.nav
+          aria-label="sections"
+          variants={landingRevealItem}
+          className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
+        >
+          {HOME_SECTION_LINKS.map((link, index) => {
+            const selected = link.id === activeSection;
+
+            return (
+              <Fragment key={link.id}>
+                <Link
+                  aria-current={selected ? "page" : undefined}
+                  className="home-tab-button micro-focus micro-focus-tight"
+                  data-active={selected ? "true" : "false"}
+                  href={link.href}
+                >
+                  {link.label}
+                </Link>
+                {index < HOME_SECTION_LINKS.length - 1 && (
+                  <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]" role="presentation">
+                    ,
+                  </span>
+                )}
+              </Fragment>
+            );
+          })}
+        </motion.nav>
       </div>
 
-      <div className="home-text-content mx-auto w-full max-w-[620px] text-left">
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div
-            key={activeSection}
-            initial={reduceMotion ? false : { opacity: 0, filter: "blur(5px)", y: 10 }}
-            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(4px)", y: -6 }}
-            transition={reduceMotion ? tweens.none : { duration: 0.32, ease: LANDING_EASE }}
-            className="home-text-panel"
-          >
-            {activeSection === "about" && <AboutSection />}
-            {activeSection === "work" && <WorkSection projects={projects} />}
-            {activeSection === "studies" && (
-              <>
-                <RulesIKeep />
-                <StudiesSection items={studyItems} />
-              </>
-            )}
-          </motion.div>
-        </AnimatePresence>
+      <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
+        {activeSection === "work" && <WorkSection projects={projects} />}
+        {activeSection === "studies" && (
+          <>
+            <RulesIKeep />
+            <StudiesSection items={studyItems} />
+          </>
+        )}
       </div>
     </motion.section>
   );
 }
 
 // Interface to store content snapshot for each message
-export default function HomePage({ activeSection = "about", writingPosts }: HomePageProps) {
+export default function HomePage({ activeSection = "work", writingPosts }: HomePageProps) {
   const router = useRouter();
   const reduceMotion = useReducedMotion();
-  const [currentSection, setCurrentSection] = useState<HomeSection>(activeSection);
+  const currentSection = activeSection;
   const [hasStarted, setHasStarted] = useState(false);
   // When true, the chat floats ON TOP of whatever view the user was in
   // (for example, a page section) instead of snapping back home. The
@@ -962,15 +894,6 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
   useEffect(() => {
     const timer = setTimeout(() => setIntroReady(true), 80);
     return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      setCurrentSection(getHomeSectionFromPathname(window.location.pathname));
-    };
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -1089,32 +1012,15 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
   const studyItems = buildStudyItems(writingPosts);
 
-  const changeHomeSection = useCallback((nextSection: HomeSection) => {
-    setCurrentSection(nextSection);
-
-    const nextHref = getHomeSectionHref(nextSection);
-    if (window.location.pathname !== nextHref) {
-      window.history.pushState({ section: nextSection }, "", nextHref);
-    }
-  }, []);
-
   const openProfile = () => {
     setChatOnTop(false);
     setHasStarted(false);
-    const scrollProfileIntoView = () => {
+    requestAnimationFrame(() => {
       document.getElementById("profile")?.scrollIntoView({
         behavior: reduceMotion ? "auto" : "smooth",
         block: "center",
       });
-    };
-
-    if (currentSection !== "about") {
-      changeHomeSection("about");
-      window.setTimeout(scrollProfileIntoView, 80);
-      return;
-    }
-
-    requestAnimationFrame(scrollProfileIntoView);
+    });
   };
 
   const openProjectFromChat = (project: Project) => {
@@ -1172,9 +1078,9 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
         className="flex-1"
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
+          <EditorialIntro />
           <HomeExploreSection
             activeSection={currentSection}
-            onSectionChange={changeHomeSection}
             projects={featuredProjects}
             studyItems={studyItems}
           />
@@ -1265,7 +1171,7 @@ export default function HomePage({ activeSection = "about", writingPosts }: Home
                               if (target === "profile") {
                                 openProfile();
                               } else if (target === "projects") {
-                                changeHomeSection("work");
+                                router.push("/work", { scroll: false });
                                 requestAnimationFrame(() => {
                                   document.getElementById("work")?.scrollIntoView({
                                     behavior: reduceMotion ? "auto" : "smooth",
