@@ -2719,96 +2719,6 @@ body::after {
   --md-hairline: var(--dark-border);
 }
 
-@media (pointer: fine) {
-  .animated-cursor-active,
-  .animated-cursor-active * {
-    cursor: none !important;
-  }
-
-  .animated-cursor-active [data-cursor="native"],
-  .animated-cursor-active [data-cursor="native"] * {
-    cursor: auto !important;
-  }
-}
-
-.animated-cursor-pointer {
-  position: fixed;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  pointer-events: none;
-  --cursor-rgb: 17 18 20;
-  --cursor-outline-rgb: 255 255 255;
-  --cursor-outline-opacity: 0.96;
-  transition:
-    opacity var(--motion-duration-instant) var(--motion-ease-standard);
-  will-change: transform, opacity;
-}
-
-.animated-cursor-pointer {
-  z-index: 2147483647;
-  width: 13px;
-  height: 15px;
-}
-
-.animated-cursor-pointer.is-visible {
-  opacity: 1;
-}
-
-.animated-cursor-pointer--light {
-  --cursor-rgb: 247 248 248;
-  --cursor-outline-rgb: 17 18 20;
-  --cursor-outline-opacity: 0.82;
-}
-
-.animated-cursor-pointer--native.is-visible {
-  opacity: 0;
-}
-
-.animated-cursor__arrow {
-  position: absolute;
-  left: 0;
-  top: -0.5px;
-  width: 13px;
-  height: 15px;
-  overflow: visible;
-  filter:
-    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.24))
-    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.10));
-  transform: rotate(-9deg);
-  transform-origin: 2px 2px;
-  transition:
-    filter var(--motion-duration-fast) var(--motion-ease-standard),
-    transform var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.animated-cursor__fill {
-  fill: rgb(var(--cursor-rgb));
-  stroke: rgb(var(--cursor-rgb));
-  stroke-width: 0.12px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  transition:
-    fill var(--motion-duration-fast) var(--motion-ease-standard),
-    stroke var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.animated-cursor__outline {
-  fill: none;
-  stroke: rgb(var(--cursor-outline-rgb));
-  stroke-opacity: var(--cursor-outline-opacity);
-  stroke-width: 1.45px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-  transition:
-    stroke var(--motion-duration-fast) var(--motion-ease-standard),
-    stroke-opacity var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.animated-cursor-pointer--interactive .animated-cursor__arrow {
-  transform: translate(1px, 1px) rotate(-9deg) scale(0.92);
-}
-
 @media (prefers-reduced-motion: reduce) {
   body {
     transition: none !important;
@@ -2856,11 +2766,6 @@ body::after {
   .lab-hold-action__reset:hover,
   .lab-hold-action__reset:focus-visible {
     transform: none !important;
-  }
-
-  .animated-cursor-pointer,
-  .animated-cursor__arrow {
-    transition: none !important;
   }
 
   .micro-link,

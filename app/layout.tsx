@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
-import AnimatedCursor from "@/components/AnimatedCursor";
 import StructuredData from "@/components/StructuredData";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, rootJsonLd } from "@/lib/seo";
 import "@carrot-kpi/switzer-font/latin.css";
@@ -82,7 +81,6 @@ export default function RootLayout({
       <body className={geistMono.variable}>
         <StructuredData data={rootJsonLd()} />
         {children}
-        <AnimatedCursor />
       </body>
     </html>
   );

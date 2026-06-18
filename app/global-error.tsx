@@ -1,6 +1,5 @@
 "use client";
 
-import AnimatedCursor from "@/components/AnimatedCursor";
 import StatusPage from "@/components/StatusPage";
 
 export default function GlobalError({
@@ -23,7 +22,6 @@ export default function GlobalError({
           title="this site could not finish loading."
           body="you can try again or move back into the main sections."
         />
-        <AnimatedCursor />
       </body>
     </html>
   );
