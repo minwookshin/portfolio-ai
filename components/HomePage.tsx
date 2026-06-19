@@ -1,13 +1,12 @@
 "use client";
 
-import { Fragment, useCallback, useState, useEffect, useRef } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
@@ -18,12 +17,12 @@ import {
   FEATURED_PROJECT_IDS,
   LAB_PROJECT_IDS,
   MAIN_PROJECTS,
-  PROJECT_PREVIEW_VIDEOS,
   getLabProjectPath,
   getProjectPath,
   isLabProject,
   isLabStudyProject,
   orderProjects,
+  type PortfolioProject,
 } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
 
@@ -39,22 +38,16 @@ const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = 
   { href: "/studies", id: "studies", label: "studies" },
 ];
 
-const PROFILE_PROOF_ROWS = [
-  { href: "/work/atlas", label: "Atlas", value: "2026" },
-  { href: "/work/sentinel", label: "Sentinel", value: "2025" },
-  { href: "/work/portfolio-ai", label: "Portfolio AI", value: "2025" },
+const CONTACT_LINKS = [
+  { href: `mailto:${PERSONAL_INFO.email}`, label: "email", external: false },
+  { href: PERSONAL_INFO.github, label: "github", external: true },
+  { href: PERSONAL_INFO.linkedin, label: "linkedin", external: true },
+  { href: PERSONAL_INFO.resume, label: "resume", external: true },
 ] as const;
 
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
 const LANDING_ROW_BASE_DELAY = 0.4;
-const STUDY_ROW_SCROLL_OFFSETS: Array<"start 92%" | "start 68%" | "end 32%" | "end 8%"> = [
-  "start 92%",
-  "start 68%",
-  "end 32%",
-  "end 8%",
-];
-
 const landingPageVariants: Variants = {
   hidden: {},
   visible: {
@@ -130,7 +123,7 @@ type StudyItem =
       kind: "lab";
       label: string;
       meta: string;
-      project: Project;
+      project: PortfolioProject;
       title: string;
     };
 
@@ -234,34 +227,27 @@ function getProjectDescriptor(project: Project) {
     : project.studioLabel ?? project.description;
 }
 
-function PortfolioProfilePanel({ activeSection }: { activeSection: HomeTab }) {
+function PortfolioTextHeader({ activeSection }: { activeSection: HomeTab }) {
   return (
-    <motion.aside
+    <motion.header
       id="profile"
       variants={landingIntroVariants}
-      className="portfolio-profile-panel"
+      className="portfolio-text-header"
     >
-      <motion.div variants={landingRevealItem} className="portfolio-profile-panel__intro">
-        <p>{PERSONAL_INFO.name} is a design engineer.</p>
-        <p>{PERSONAL_INFO.bio}</p>
-        <p>
-          Currently shaping interaction systems for AI-native products. Always down for a good chat{" "}
-          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>email</IntroLink>
+      <motion.div variants={landingRevealItem} className="portfolio-text-header__identity">
+        <p className="portfolio-text-header__kicker">
+          {PERSONAL_INFO.name} / {PERSONAL_INFO.title}
         </p>
-        <p>
-          Occasionally updating{" "}
-          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
-          {", "}
-          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
-          {", and "}
-          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
-        </p>
+        <div className="portfolio-text-header__intro">
+          <p>{PERSONAL_INFO.bio}</p>
+          <p>Currently shaping interaction systems for AI-native products.</p>
+        </div>
       </motion.div>
 
       <motion.nav
         aria-label="sections"
         variants={landingRevealItem}
-        className="portfolio-profile-panel__nav"
+        className="portfolio-text-header__nav"
       >
         {HOME_SECTION_LINKS.map((link, index) => {
           const selected = link.id === activeSection;
@@ -277,7 +263,7 @@ function PortfolioProfilePanel({ activeSection }: { activeSection: HomeTab }) {
                 {link.label}
               </Link>
               {index < HOME_SECTION_LINKS.length - 1 && (
-                <span aria-hidden="true" className="portfolio-profile-panel__comma" role="presentation">
+                <span aria-hidden="true" className="portfolio-text-header__comma" role="presentation">
                   ,
                 </span>
               )}
@@ -286,131 +272,108 @@ function PortfolioProfilePanel({ activeSection }: { activeSection: HomeTab }) {
         })}
       </motion.nav>
 
-      <motion.div variants={landingRevealItem} className="portfolio-profile-panel__proof">
-        <p className="portfolio-profile-panel__eyebrow">selected proof</p>
-        <div className="portfolio-profile-panel__proof-list">
-          {PROFILE_PROOF_ROWS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="portfolio-profile-panel__proof-row micro-focus micro-focus-tight micro-pressable"
-            >
-              <span>{item.label}</span>
-              <span>{item.value}</span>
-            </Link>
-          ))}
-        </div>
+      <motion.div variants={landingRevealItem} className="portfolio-text-header__links">
+        {CONTACT_LINKS.map((item, index) => (
+          <Fragment key={item.href}>
+            <IntroLink href={item.href} external={item.external}>
+              {item.label}
+            </IntroLink>
+            {index < CONTACT_LINKS.length - 1 && (
+              <span aria-hidden="true" className="portfolio-text-header__comma" role="presentation">
+                ,
+              </span>
+            )}
+          </Fragment>
+        ))}
       </motion.div>
-    </motion.aside>
+    </motion.header>
   );
 }
 
-function WorkMediaCard({
-  featured = false,
+function WorkTextRow({
   index,
-  projects,
+  project,
 }: {
-  featured?: boolean;
   index: number;
-  projects: Project[];
+  project: PortfolioProject;
 }) {
-  const project = projects[index];
-  const reduceMotion = Boolean(useReducedMotion());
-
-  if (!project) return null;
-
-  const previewVideo = PROJECT_PREVIEW_VIDEOS[project.title];
-  const imageSrc = project.image ?? project.icon;
-  const descriptor = project.studioLabel ?? project.description;
-  const cardClass = [
-    "work-media-card",
-    featured ? "work-media-card--featured" : "",
-    project.comingSoon ? "work-media-card--disabled" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-  const card = (
-    <motion.span
-      className={cardClass}
-      initial={reduceMotion ? false : { opacity: 0, filter: "blur(5px)", y: 12 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
-      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
-      viewport={reduceMotion ? undefined : { once: true, margin: "-90px" }}
-      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
-    >
-      <span className="work-media-card__media" aria-hidden="true">
-        {previewVideo ? (
-          <video
-            autoPlay={!reduceMotion}
-            className="work-media-card__video"
-            loop
-            muted
-            playsInline
-            poster={project.image}
-            preload="metadata"
-          >
-            <source src={previewVideo} type="video/mp4" />
-          </video>
-        ) : imageSrc ? (
-          <BlurImage
-            src={imageSrc}
-            alt={project.title}
-            fill
-            sizes={featured ? "(min-width: 1024px) 64vw, 100vw" : "(min-width: 1024px) 32vw, 100vw"}
-            draggable={false}
-            className="work-media-card__image"
-          />
-        ) : (
-          <span className="work-media-card__glyph">
-            {project.glyph ?? project.title.charAt(0)}
+  const reduceMotion = useReducedMotion();
+  const descriptor = project.builder?.oneLiner ?? getProjectDescriptor(project);
+  const meta = [
+    project.studioLabel ?? project.role,
+    project.date,
+  ].filter(Boolean).join(" / ");
+  const status = project.builder?.status?.label ?? project.timeline ?? "case study";
+  const rowInner = (
+    <span className="portfolio-index-row__inner">
+      <span className="portfolio-index-row__number">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+      <span className="portfolio-index-row__body">
+        <span className="project-row-copy portfolio-index-row__copy">
+          <span className="project-row-title-line--lateral portfolio-index-row__title">
+            {project.title}
           </span>
-        )}
+          <span className="portfolio-index-row__description">
+            {descriptor}
+          </span>
+        </span>
       </span>
-      <span className="work-media-card__shade" aria-hidden="true" />
-      <span className="work-media-card__copy">
-        <span className="work-media-card__title">{project.title}</span>
-        <span className="work-media-card__meta">{descriptor}</span>
+      <span className="portfolio-index-row__meta">
+        <span>{meta}</span>
+        <span>{status}</span>
       </span>
-    </motion.span>
+    </span>
   );
 
-  if (project.comingSoon) {
-    return (
-      <button
-        type="button"
-        aria-disabled="true"
-        className="work-media-card-link work-media-card-link--button micro-focus micro-focus-tight"
-      >
-        {card}
-      </button>
-    );
-  }
-
   return (
-    <Link
-      href={getProjectPath(project)}
-      className={`work-media-card-link ${featured ? "work-media-card-link--featured" : ""} micro-focus micro-focus-tight`}
+    <motion.li
+      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 8 }}
+      animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
+      data-project-row="work"
+      className="portfolio-index-list__item group"
     >
-      {card}
-    </Link>
+      {project.comingSoon ? (
+        <button
+          type="button"
+          aria-disabled="true"
+          className="portfolio-index-row portfolio-index-row--disabled micro-focus micro-focus-tight"
+        >
+          {rowInner}
+        </button>
+      ) : (
+        <Link
+          href={getProjectPath(project)}
+          className="portfolio-index-row micro-focus micro-focus-tight micro-pressable"
+        >
+          {rowInner}
+        </Link>
+      )}
+    </motion.li>
   );
 }
 
 function WorkSection({
   projects,
 }: {
-  projects: Project[];
+  projects: PortfolioProject[];
 }) {
   return (
-    <div className="work-media-grid">
-      {projects.map((project, index) => (
-        <WorkMediaCard
-          key={project.id}
-          featured={index === 0}
-          index={index}
-          projects={projects}
-        />
-      ))}
+    <div className="portfolio-index-block">
+      <div className="portfolio-index-block__label" aria-hidden="true">
+        <span>selected work</span>
+        <span>{String(projects.length).padStart(2, "0")}</span>
+      </div>
+      <ul className="portfolio-index-list">
+        {projects.map((project, index) => (
+          <WorkTextRow
+            key={project.id}
+            index={index}
+            project={project}
+          />
+        ))}
+      </ul>
     </div>
   );
 }
@@ -455,69 +418,52 @@ function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
 
 function StudyTextRow({
   index,
-  isLast = false,
   item,
 }: {
   index: number;
-  isLast?: boolean;
   item: StudyItem;
 }) {
   const reduceMotion = useReducedMotion();
-  const rowRef = useRef<HTMLLIElement | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: rowRef,
-    offset: STUDY_ROW_SCROLL_OFFSETS,
-  });
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [1, 1, 1, 1] : [0, 1, 1, 0]);
-  const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [0, 0, 0, 0] : [10, 0, 0, -8]);
-  const scrollBlur = useTransform(scrollYProgress, (value) => {
-    if (isLast) return "blur(0px)";
-
-    const entryBlur = value < 0.22 ? 1 - value / 0.22 : 0;
-    const blur = entryBlur * 3;
-
-    return `blur(${blur.toFixed(2)}px)`;
-  });
+  const description = item.kind === "writing"
+    ? item.description
+    : item.project.builder.oneLiner ?? item.project.description;
 
   return (
     <motion.li
-      ref={rowRef}
       key={item.id}
       initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 8 }}
-      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 1, filter: "blur(0px)", y: 0 }}
+      animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
       transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row="studies"
-      className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
+      className="portfolio-index-list__item group"
     >
-      <motion.div
-        className="inline-flex max-w-full transform-gpu"
-        style={
-          reduceMotion
-            ? undefined
-            : {
-                opacity: scrollOpacity,
-                filter: scrollBlur,
-                y: scrollY,
-                willChange: "opacity, filter, transform",
-              }
-        }
+      <Link
+        href={item.href}
+        className="portfolio-index-row portfolio-index-row--study micro-focus micro-focus-tight micro-pressable"
       >
-        <Link
-          href={item.href}
-          className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
-        >
-          <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
-            <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
-              {item.title}
+        <span className="portfolio-index-row__inner">
+          <span className="portfolio-index-row__number">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span className="portfolio-index-row__body">
+            <span className="project-row-copy portfolio-index-row__copy">
+              <span className="project-row-title-line--lateral portfolio-index-row__title">
+                {item.title}
+              </span>
+              <span className="portfolio-index-row__description">
+                {description}
+              </span>
             </span>
+          </span>
+          <span className="portfolio-index-row__meta">
             <StudyMetaLine
               label={item.label}
               meta={item.meta}
-              className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]"
+              className="project-row-meta"
             />
           </span>
-        </Link>
-      </motion.div>
+        </span>
+      </Link>
     </motion.li>
   );
 }
@@ -532,13 +478,16 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
   }
 
   return (
-    <div className="relative">
-      <ul className="space-y-[var(--space-2)]">
+    <div className="portfolio-index-block">
+      <div className="portfolio-index-block__label" aria-hidden="true">
+        <span>studies</span>
+        <span>{String(items.length).padStart(2, "0")}</span>
+      </div>
+      <ul className="portfolio-index-list">
         {items.map((item, index) => (
           <StudyTextRow
             key={item.id}
             index={index}
-            isLast={index === items.length - 1}
             item={item}
           />
         ))}
@@ -553,21 +502,21 @@ function HomeExploreSection({
   studyItems,
 }: {
   activeSection: HomeTab;
-  projects: Project[];
+  projects: PortfolioProject[];
   studyItems: StudyItem[];
 }) {
   return (
     <motion.section
       id={activeSection}
       variants={landingExploreVariants}
-      className="portfolio-split-section"
+      className="portfolio-text-section"
     >
-      <div className="portfolio-split-layout">
-        <div className="portfolio-split-main">
+      <div className="portfolio-text-shell">
+        <PortfolioTextHeader activeSection={activeSection} />
+        <div className="portfolio-text-content">
           {activeSection === "work" && <WorkSection projects={projects} />}
           {activeSection === "studies" && <StudiesSection items={studyItems} />}
         </div>
-        <PortfolioProfilePanel activeSection={activeSection} />
       </div>
     </motion.section>
   );
@@ -737,9 +686,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   };
 
   return (
-    <main
-      className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[#0e1010] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
-    >
+    <main className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[#090909] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]">
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
           hidden, but real content so the page isn't an empty chat shell to bots. */}
@@ -776,7 +723,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         variants={reduceMotion ? undefined : landingPageVariants}
         className="flex-1"
       >
-        <div className="portfolio-split-theme light-cursor-dark">
+        <div className="portfolio-text-theme">
           <HomeExploreSection
             activeSection={currentSection}
             projects={featuredProjects}
