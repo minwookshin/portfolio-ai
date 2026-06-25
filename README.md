@@ -1,6 +1,38 @@
 # minwook shin
 
-AI-native portfolio and studio site for Minwook Shin. The site combines selected work, writing, Lab prototypes, hover/demo motion, project case studies, and a Gemini-powered assistant that can route visitors to relevant proof.
+AI-native portfolio and recruiter intake site for Minwook Shin. The site combines selected work, case studies, interaction studies, a Gemini-powered assistant, and public machine-readable proof routes.
+
+Live: https://www.minwookshin.com
+Case study: https://www.minwookshin.com/work/portfolio-ai
+
+## What This Proves
+
+- Design engineering ownership: Figma-to-code product thinking, frontend implementation, motion, and case-study craft.
+- AI product interface thinking: conversational intake, project routing, and hallucination-aware proof links.
+- System thinking: design tokens, component primitives, interaction rules, accessibility rules, and AI-readable docs.
+- Recruiter readability: PDF resume, JSON resume, markdown portfolio, and `llms.txt` are exposed as public routes.
+
+## Main Surfaces
+
+- `/` - selected work, studies, contact, and AI intake
+- `/work` - selected work index
+- `/work/[slug]` - project case studies
+- `/studies` - interaction studies, prototypes, and writing
+- `/api/chat` - streaming Gemini assistant endpoint
+- `/portfolio.md` - AI-readable portfolio summary
+- `/hiring.md` - recruiter-facing hiring brief with target roles, availability, proof points, and evaluation hints
+- `/llms.txt` - concise guide for LLMs and recruiter tools
+- `/resume.json` - structured machine-readable resume
+- `/resume.pdf` - public resume PDF
+- `/design-system` - compact AI-native design-system proof
+- `/design-system.md` - design-system proof in markdown
+- `/design-system/tokens.json` - token roles for UI generation
+
+## Selected Proof
+
+- Portfolio AI - Next.js, React, TypeScript, Gemini API, Framer Motion
+- Sentinel - hackathon-winning SwiftUI app for predictive home maintenance
+- Caret - iOS-style team wellbeing app concept with public web prototype source
 
 ## Stack
 
@@ -11,13 +43,24 @@ AI-native portfolio and studio site for Minwook Shin. The site combines selected
 - Gemini API for the assistant
 - ffmpeg-driven local hover preview rendering
 
-## Main Surfaces
+## Verification Snapshot
 
-- `/work` — selected work with hover preview motion
-- `/writing` — notes and essays
-- `/lab` — prototype archive with autoplay demo tiles
-- `/work/[slug]` and `/lab/[slug]` — project detail pages
-- `/api/chat` — streaming Gemini assistant endpoint
+Verified from a public clone:
+
+```bash
+npm ci
+npm test
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Current public proof:
+
+- Tests: 20 passing
+- Build: 60 generated static pages
+- Audit: 0 npm vulnerabilities after `npm ci`
+- Routes: `/portfolio.md`, `/llms.txt`, `/resume.json`, `/design-system.md`, `/design-system/tokens.json`
 
 ## Local Development
 

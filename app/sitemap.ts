@@ -38,6 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: absoluteUrl("/hiring.md"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.65,
+    },
+    {
       url: absoluteUrl("/portfolio.md"),
       lastModified: now,
       changeFrequency: "weekly",
