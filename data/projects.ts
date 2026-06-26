@@ -421,10 +421,10 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           ],
         },
         {
-          heading: "video controls as proof surface",
+          heading: "native video controls as proof surface",
           body: [
-            "The player chrome should appear only when it helps someone inspect the demo. The video stays the proof; the controls sit as a thin translucent layer over moving media.",
-            "Glass works here because it improves legibility over changing frames. If it becomes a permanent visual effect, it starts competing with the work.",
+            "The player chrome should stay familiar so someone can inspect the demo without learning a custom layer first. The video stays the proof; the browser controls do the playback work.",
+            "Native controls work here because they respect the operating system, keyboard behavior, and expected media affordances without competing with the work.",
           ],
         },
       ],

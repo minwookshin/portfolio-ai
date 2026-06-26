@@ -148,8 +148,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "cards and surfaces",
-    description: "Surfaces are reserved for media, code, video chrome, and functional controls; document structure relies on bullets and spacing.",
-    primitives: ["media frame", "code block", "video controls", "status block"],
+    description: "Surfaces are reserved for media, code, native video playback, and functional controls; document structure relies on bullets and spacing.",
+    primitives: ["media frame", "code block", "native video controls", "status block"],
   },
   {
     name: "machine-readable proof blocks",
@@ -165,7 +165,7 @@ export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",
-  "Buttons, links, project rows, and video controls must be reachable by keyboard and expose visible focus states.",
+  "Buttons, links, project rows, and native video controls must be reachable by keyboard and expose visible focus states.",
   "Loading states should preserve space so rows, inputs, and proof blocks do not jump.",
 ] as const;
 

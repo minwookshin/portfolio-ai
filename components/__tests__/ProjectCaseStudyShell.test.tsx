@@ -19,6 +19,15 @@ function getWorkProject(slug: string) {
   return project;
 }
 
+function expectNativeVideo(label: string) {
+  const video = screen.getByLabelText(label);
+
+  expect(video.tagName).toBe("VIDEO");
+  expect(video).toHaveAttribute("controls");
+  expect(video).toHaveAttribute("playsinline");
+  return video;
+}
+
 describe("ProjectCaseStudyShell", () => {
   it("renders work detail navigation as a quiet back link", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("sentinel")} />);
@@ -30,9 +39,7 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("ownership")).toBeInTheDocument();
     expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
     expect(screen.getByText("build path")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Play video" })).toBeInTheDocument();
-    expect(screen.getByRole("slider", { name: "Sentinel demo timeline" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Unmute video" })).toBeInTheDocument();
+    expectNativeVideo("Sentinel demo");
   });
 
   it("does not duplicate video-only demos in proof links", () => {
@@ -53,8 +60,7 @@ describe("ProjectCaseStudyShell", () => {
     render(<ProjectCaseStudyShell mode="video-only" project={getWorkProject("tomo")} />);
 
     expect(screen.getByRole("heading", { name: "Tomo" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Play video" })).toBeInTheDocument();
-    expect(screen.getByRole("slider", { name: "Tomo demo timeline" })).toBeInTheDocument();
+    expectNativeVideo("Tomo demo");
     expect(screen.queryByText("links")).not.toBeInTheDocument();
     expect(screen.queryByText("build path")).not.toBeInTheDocument();
   });
