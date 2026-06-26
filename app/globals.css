@@ -648,9 +648,10 @@ button.home-row {
   gap: 8px;
   padding-left: 9px;
   color: var(--text-muted);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+  font-family: inherit;
+  font-size: inherit;
+  font-variant-numeric: inherit;
+  line-height: inherit;
   vertical-align: middle;
   transition:
     color 140ms var(--motion-ease-standard),
@@ -1907,9 +1908,10 @@ button.home-row {
   align-items: center;
   gap: 8px;
   color: var(--text-muted);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+  font-family: inherit;
+  font-size: inherit;
+  font-variant-numeric: inherit;
+  line-height: inherit;
   transition:
     color 140ms var(--motion-ease-standard),
     opacity 140ms var(--motion-ease-standard);
