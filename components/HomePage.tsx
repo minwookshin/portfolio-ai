@@ -122,7 +122,7 @@ type StudyItem =
       href: string;
       id: string;
       kind: "writing";
-      label: string;
+      label?: string;
       meta: string;
       title: string;
     }
@@ -142,9 +142,13 @@ function StudyMetaLine({
   meta,
 }: {
   className?: string;
-  label: string;
+  label?: string;
   meta: string;
 }) {
+  if (!label) {
+    return <span className={`study-meta-row ${className}`.trim()}>{meta}</span>;
+  }
+
   return (
     <span className={`study-meta-row ${className}`.trim()}>
       <span className="study-meta-label">{label}</span>
@@ -421,7 +425,6 @@ function buildNoteItems(posts: WritingPostMeta[]): StudyItem[] {
     href: `/notes/${post.slug}`,
     id: `writing-${post.slug}`,
     kind: "writing",
-    label: "note",
     meta: formatWritingDate(post.date),
     title: post.title,
   }));
