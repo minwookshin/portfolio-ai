@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
-import { cursorGlyphPath } from "@/lib/cursorGlyph";
 import { motionEasings, tweens } from "@/lib/material/motion";
 
 type DemoProps = {
@@ -435,15 +434,6 @@ function RouteTransitionDemo({ reduceMotion }: DemoProps) {
   );
 }
 
-function CursorGlyph() {
-  return (
-    <svg viewBox="0 0 14 15" aria-hidden="true" className="lab-cursor-glyph">
-      <path className="lab-cursor-glyph__outline" d={cursorGlyphPath} />
-      <path className="lab-cursor-glyph__fill" d={cursorGlyphPath} />
-    </svg>
-  );
-}
-
 const cursorStudyTargets: Array<{ label: string; note: string; cursor: "idle" | "interactive" | "native" }> = [
   { label: "default surface", note: "quiet arrow", cursor: "idle" },
   { label: "interactive text", note: "subtle press state", cursor: "interactive" },
@@ -677,95 +667,6 @@ function LabStudyDemo({ kind, reduceMotion }: { kind: LabStudy["kind"]; reduceMo
   if (kind === "route-transition") return <RouteTransitionDemo reduceMotion={reduceMotion} />;
   if (kind === "cursor-study") return <CursorStudyDemo />;
   return <MotionCurveTesterDemo reduceMotion={reduceMotion} />;
-}
-
-function LabStudyGlyph({ kind }: { kind: LabStudy["kind"] }) {
-  if (kind === "hover-row") {
-    return (
-      <span className="lab-study-glyph lab-study-glyph--rows">
-        <span />
-        <span />
-        <span />
-        <span className="lab-study-glyph__row-indicator" />
-      </span>
-    );
-  }
-
-  if (kind === "route-transition") {
-    return (
-      <span className="lab-study-glyph lab-study-glyph--route">
-        <span />
-        <span />
-        <span />
-      </span>
-    );
-  }
-
-  if (kind === "cursor-study") {
-    return (
-      <span className="lab-study-glyph lab-study-glyph--cursor">
-        <span className="lab-study-glyph__cursor-target" />
-        <CursorGlyph />
-      </span>
-    );
-  }
-
-  if (kind === "motion-curve") {
-    return (
-      <span className="lab-study-glyph lab-study-glyph--curve">
-        <svg viewBox="0 0 120 84" aria-hidden="true">
-          <path className="lab-study-glyph__curve-guide" d="M16 58 C38 16 72 70 104 26" />
-          <path className="lab-study-glyph__curve-line" d="M16 58 C38 16 72 70 104 26" />
-          <circle cx="16" cy="58" r="2.5" />
-          <circle cx="104" cy="26" r="2.5" />
-          <circle className="lab-study-glyph__curve-dot" cx="16" cy="58" r="4" />
-        </svg>
-      </span>
-    );
-  }
-
-  if (kind === "ai-loop") {
-    return (
-      <span className="lab-study-glyph lab-study-glyph--loop">
-        <span />
-        <span />
-        <span />
-        <span />
-        <span className="lab-study-glyph__loop-dot" />
-      </span>
-    );
-  }
-
-  return (
-    <span className="lab-study-glyph lab-study-glyph--motion">
-      <span className="lab-study-glyph__motion-frame" />
-      <span className="lab-study-glyph__motion-card" />
-      <span className="lab-study-glyph__motion-dot" />
-    </span>
-  );
-}
-
-export function LabStudyTileVisual({
-  animated = true,
-  className = "",
-  kind,
-}: {
-  animated?: boolean;
-  className?: string;
-  kind: LabStudy["kind"];
-}) {
-  const classes = [
-    "lab-study-tile-visual",
-    `lab-study-tile-visual--${kind}`,
-    animated ? "lab-study-tile-visual--animated" : "",
-    className,
-  ].filter(Boolean).join(" ");
-
-  return (
-    <span className={classes}>
-      <LabStudyGlyph kind={kind} />
-    </span>
-  );
 }
 
 export default function LabStudyDetailView({ project }: { project: PortfolioProject & { labStudy: LabStudy } }) {

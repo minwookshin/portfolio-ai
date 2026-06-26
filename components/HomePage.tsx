@@ -896,7 +896,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                   ? { body: msg.content, followups: [] as string[], show: null }
                   : parseAssistant(msg.content);
                 const target = !isUser ? showToTarget(show) : null;
-                const question = mi > 0 ? messages[mi - 1]?.content ?? "" : "";
                 const isLast = mi === messages.length - 1;
                 const showFollowups = !isUser && isLast && !isStreaming && followups.length > 0;
                 return (
