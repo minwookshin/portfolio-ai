@@ -34,27 +34,22 @@ export const metadata: Metadata = {
   },
 };
 
-function cleanStatus(label?: string) {
-  return label?.replace(/^[^a-zA-Z0-9]+/, "").trim();
-}
-
 function getProofMeta(project: (typeof MAIN_PROJECTS)[number]) {
   const hasVideoProof = Boolean(project.builder.demo?.video ?? PROJECT_PREVIEW_VIDEOS[project.title]);
   const proof = [
-    cleanStatus(project.builder.status.label),
     project.github ? "github" : null,
     project.link || project.builder.demo?.href ? "live" : null,
     hasVideoProof ? "demo" : null,
   ].filter(isVisibleBuilderValue);
 
-  return Array.from(new Set(proof)).slice(0, 3).join(" / ");
+  return Array.from(new Set(proof.map((item) => item.toLowerCase()))).slice(0, 3).join(" / ");
 }
 
 function getWorkEntries(): ArchiveEntry[] {
   return MAIN_PROJECTS
     .filter((project) => !project.comingSoon && isWorkArchiveProject(project))
     .map((project) => ({
-      description: project.builder.oneLiner,
+      description: project.studioLabel,
       href: getProjectPath(project),
       id: project.id,
       meta: getProofMeta(project),

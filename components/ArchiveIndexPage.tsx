@@ -84,39 +84,43 @@ export default function ArchiveIndexPage({
 
               return (
                 <li key={year} id={yearId} className="archive-year-group">
-                  <a
-                    aria-label={`${year}, ${yearEntries.length} ${itemLabel}`}
-                    className="archive-year micro-focus micro-focus-tight"
-                    data-liquid-glass-row="true"
-                    href={`#${yearId}`}
-                  >
-                    <span className="archive-bullet-cell" aria-hidden="true">
-                      <span className="archive-year-bullet" />
-                    </span>
-                    <span className="archive-year-label">{year}</span>
-                    <span className="archive-count">{yearEntries.length}</span>
-                  </a>
+                  <details className="archive-year-details" open>
+                    <summary
+                      aria-label={`${year}, ${yearEntries.length} ${itemLabel}`}
+                      className="archive-year micro-focus micro-focus-tight"
+                      data-liquid-glass-row="true"
+                    >
+                      <span className="archive-bullet-cell" aria-hidden="true">
+                        <span className="archive-year-bullet" />
+                        <span className="archive-caret">
+                          <span />
+                        </span>
+                      </span>
+                      <span className="archive-year-label">{year}</span>
+                      <span className="archive-count">{yearEntries.length}</span>
+                    </summary>
 
-                  <ul className="archive-list">
-                    {yearEntries.map((entry) => (
-                      <li key={entry.id} className="archive-item">
-                        <Link
-                          href={entry.href}
-                          className="archive-row micro-focus micro-focus-tight"
-                          data-liquid-glass-row="true"
-                        >
-                          <span className="archive-bullet-cell" aria-hidden="true">
-                            <span className="archive-row-bullet" />
-                          </span>
-                          <span className="archive-row-title">{entry.title}</span>
-                          {entry.description && (
-                            <span className="archive-row-description">{entry.description}</span>
-                          )}
-                          {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                    <ul className="archive-list">
+                      {yearEntries.map((entry) => (
+                        <li key={entry.id} className="archive-item">
+                          <Link
+                            href={entry.href}
+                            className="archive-row micro-focus micro-focus-tight"
+                            data-liquid-glass-row="true"
+                          >
+                            <span className="archive-bullet-cell" aria-hidden="true">
+                              <span className="archive-row-bullet" />
+                            </span>
+                            <span className="archive-row-title">{entry.title}</span>
+                            {entry.description && (
+                              <span className="archive-row-description">{entry.description}</span>
+                            )}
+                            {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
                 </li>
               );
             })}

@@ -1811,9 +1811,20 @@ button.home-row {
 }
 
 .archive-year-group {
+  scroll-margin-top: 108px;
+}
+
+.archive-year-details {
   display: grid;
   gap: 8px;
-  scroll-margin-top: 108px;
+}
+
+.archive-year-details > summary {
+  list-style: none;
+}
+
+.archive-year-details > summary::-webkit-details-marker {
+  display: none;
 }
 
 .archive-year {
@@ -1829,6 +1840,8 @@ button.home-row {
   font-variant-numeric: tabular-nums;
   line-height: 1.55;
   text-decoration: none;
+  cursor: pointer;
+  user-select: none;
 }
 
 .archive-bullet-cell {
@@ -1850,8 +1863,43 @@ button.home-row {
   opacity: 0.62;
   transition:
     opacity var(--motion-duration-instant) var(--motion-ease-standard),
+    width var(--motion-duration-instant) var(--motion-ease-standard),
+    height var(--motion-duration-instant) var(--motion-ease-standard),
     background-color var(--motion-duration-instant) var(--motion-ease-standard),
     border-color var(--motion-duration-instant) var(--motion-ease-standard);
+}
+
+.archive-year-details[open] > .archive-year .archive-year-bullet {
+  width: 6px;
+  height: 6px;
+  border-color: transparent;
+  background: currentColor;
+  opacity: 0.68;
+}
+
+.archive-caret {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-instant) var(--motion-ease-standard);
+}
+
+.archive-caret span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.archive-year-details[open] > .archive-year .archive-caret span {
+  transform: rotate(45deg) translate(-1px, -1px);
 }
 
 .archive-row-bullet {
@@ -1947,9 +1995,16 @@ button.home-row {
     background: transparent;
   }
 
-  .archive-year:hover .archive-year-bullet,
   .archive-row:hover .archive-row-bullet {
     opacity: 0.74;
+  }
+
+  .archive-year:hover .archive-year-bullet {
+    opacity: 0;
+  }
+
+  .archive-year:hover .archive-caret {
+    opacity: 1;
   }
 
   .archive-row:hover .archive-row-title {
