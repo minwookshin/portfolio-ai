@@ -17,12 +17,10 @@ import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 import {
   FEATURED_PROJECT_IDS,
-  LAB_PROJECT_IDS,
   MAIN_PROJECTS,
   getLabProjectPath,
   getProjectPath,
   isLabProject,
-  isLabStudyProject,
   orderProjects,
 } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
@@ -256,37 +254,6 @@ function HomeOutlineSection({
   );
 }
 
-function HomeNestedOutlineSection({
-  children,
-  count,
-  defaultOpen = false,
-  title,
-}: {
-  children: ReactNode;
-  count?: number;
-  defaultOpen?: boolean;
-  title: string;
-}) {
-  const [isOpen, setIsOpen] = useState(() => defaultOpen);
-
-  return (
-    <details
-      className="home-node home-node--section home-node--nested"
-      onToggle={(event) => setIsOpen(event.currentTarget.open)}
-      open={isOpen}
-    >
-      <summary className="home-row home-row--summary micro-focus micro-focus-tight" data-liquid-glass-row="true">
-        <HomeBulletCell section />
-        <span className="home-label">
-          {title}
-          {typeof count === "number" && <span className="home-count">{count}</span>}
-        </span>
-      </summary>
-      <div className="home-children">{children}</div>
-    </details>
-  );
-}
-
 // The model appends hidden directive lines at the end of each reply:
 //   <<<SHOW>>>project:Sentinel | projects | profile   (what the UI should open)
 //   <<<FOLLOWUPS>>>q1|q2|q3                            (tappable next questions)
@@ -430,63 +397,21 @@ function ProjectTextRow({
   );
 }
 
-function WorkSection({
-  interactionItems,
-  projects,
-}: {
-  interactionItems: StudyItem[];
-  projects: PortfolioProject[];
-}) {
-  const [leadProject, ...restProjects] = projects;
-
+function WorkSection({ projects }: { projects: PortfolioProject[] }) {
   return (
     <div className="relative">
       <ul className="home-list">
-        {leadProject && (
-          <ProjectTextRow
-            key={leadProject.id}
-            project={leadProject}
-            index={0}
-            list="work"
-          />
-        )}
-        <li className="home-node list-none">
-          <HomeNestedOutlineSection
-            count={interactionItems.length}
-            title="interaction systems"
-          >
-            <OutlineListSection emptyLabel="interaction systems are coming soon." items={interactionItems} />
-            <HomeLeafRow>
-              <HomeMetaLink href="/studies">all systems</HomeMetaLink>
-            </HomeLeafRow>
-          </HomeNestedOutlineSection>
-        </li>
-        {restProjects.map((project, index) => (
+        {projects.map((project, index) => (
           <ProjectTextRow
             key={project.id}
             project={project}
-            index={index + 1}
+            index={index}
             list="work"
           />
         ))}
       </ul>
     </div>
   );
-}
-
-function buildInteractionItems(): StudyItem[] {
-  const labProjects = orderProjects(MAIN_PROJECTS, LAB_PROJECT_IDS);
-  const labStudyProjects = labProjects.filter(isLabStudyProject);
-
-  return labStudyProjects.map((project): StudyItem => ({
-    href: getLabProjectPath(project),
-    id: `lab-${project.id}`,
-    kind: "lab",
-    label: "system",
-    meta: project.studioLabel ?? project.tags.slice(0, 2).join(" / "),
-    project,
-    title: project.title,
-  }));
 }
 
 function buildNoteItems(posts: WritingPostMeta[]): StudyItem[] {
@@ -600,12 +525,10 @@ function OutlineListSection({ emptyLabel, items }: { emptyLabel: string; items: 
 
 function HomeDocument({
   activeSection,
-  interactionItems,
   noteItems,
   projects,
 }: {
   activeSection: HomeTab;
-  interactionItems: StudyItem[];
   noteItems: StudyItem[];
   projects: PortfolioProject[];
 }) {
@@ -638,12 +561,12 @@ function HomeDocument({
 
         <HomeOutlineSection
           active={activeSection === "work" || activeSection === "studies"}
-          count={projects.length + interactionItems.length}
+          count={projects.length}
           defaultOpen={activeSection === "work"}
           sectionId="work"
           title="selected work"
         >
-          <WorkSection interactionItems={interactionItems} projects={projects} />
+          <WorkSection projects={projects} />
           <HomeLeafRow>
             <HomeMetaLink href="/work">all work</HomeMetaLink>
           </HomeLeafRow>
@@ -818,7 +741,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   };
 
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
-  const interactionItems = buildInteractionItems();
   const noteItems = buildNoteItems(writingPosts);
 
   const openProfile = () => {
@@ -855,14 +777,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
       <section className="sr-only">
         <h2>{PERSONAL_INFO.name}, {PERSONAL_INFO.title}</h2>
         <p>{PERSONAL_INFO.bio}</p>
-        <h3>Interaction systems</h3>
-        <ul>
-          {interactionItems.map((item) => (
-            <li key={item.id}>
-              <strong>{item.title}</strong>, {item.meta}
-            </li>
-          ))}
-        </ul>
         <h3>Notes</h3>
         <ul>
           {noteItems.map((item) => (
@@ -896,7 +810,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <HomeDocument
             activeSection={currentSection}
-            interactionItems={interactionItems}
             noteItems={noteItems}
             projects={featuredProjects}
           />
