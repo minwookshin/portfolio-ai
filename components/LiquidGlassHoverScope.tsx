@@ -27,11 +27,23 @@ type LiquidGlassHoverScopeProps = {
 };
 
 const DEFAULT_ROW_SELECTOR = '[data-liquid-glass-row="true"]';
-const GLASS_INSET_X = 8;
-const GLASS_INSET_Y = 1;
+const GLASS_INSET_X = 16;
+const GLASS_INSET_Y = 8;
+const HIDE_DELAY_MS = 500;
+const TEXT_SHIFT_SCALE = 0.18;
+
+const BASE_SPRING = { type: "spring", duration: 0.72, bounce: 0.22 } as const;
+const RADIUS_SPRING = { type: "spring", duration: 0.6, bounce: 0 } as const;
+const TILT_SPRING = { type: "spring", duration: 0.45, bounce: 0.06 } as const;
+const SHIFT_SPRING = { type: "spring", duration: 0.6, bounce: 0.15 } as const;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+function softenSigned(value: number, power: number) {
+  const clamped = clamp(value, -1, 1);
+  return Math.sign(clamped) * (1 - Math.pow(1 - Math.abs(clamped), 1 / Math.max(1, power)));
 }
 
 function initialMotion(): GlassMotion {
@@ -42,6 +54,25 @@ function initialMotion(): GlassMotion {
     rotateY: 0,
     shiftX: 0,
     shiftY: 0,
+  };
+}
+
+function getVisibleContentRect(row: HTMLElement) {
+  const childRects = Array.from(row.children)
+    .map((child) => child.getBoundingClientRect())
+    .filter((rect) => rect.width > 0 && rect.height > 0);
+
+  if (childRects.length === 0) {
+    return row.getBoundingClientRect();
+  }
+
+  return {
+    bottom: Math.max(...childRects.map((rect) => rect.bottom)),
+    height: 0,
+    left: Math.min(...childRects.map((rect) => rect.left)),
+    right: Math.max(...childRects.map((rect) => rect.right)),
+    top: Math.min(...childRects.map((rect) => rect.top)),
+    width: 0,
   };
 }
 
@@ -69,6 +100,20 @@ export default function LiquidGlassHoverScope({
     hideTimerRef.current = null;
   }, []);
 
+  const clearActiveRow = useCallback(() => {
+    if (!activeRowRef.current) return;
+
+    activeRowRef.current.removeAttribute("data-liquid-glass-active");
+    activeRowRef.current.style.removeProperty("--liquid-row-shift-x");
+    activeRowRef.current.style.removeProperty("--liquid-row-shift-y");
+  }, []);
+
+  const applyTextShift = useCallback((row: HTMLElement, motion: GlassMotion) => {
+    row.dataset.liquidGlassActive = "true";
+    row.style.setProperty("--liquid-row-shift-x", `${motion.shiftX * TEXT_SHIFT_SCALE}px`);
+    row.style.setProperty("--liquid-row-shift-y", `${motion.shiftY * TEXT_SHIFT_SCALE}px`);
+  }, []);
+
   const getRowFromTarget = useCallback(
     (target: EventTarget | null) => {
       if (!(target instanceof HTMLElement)) return null;
@@ -87,43 +132,50 @@ export default function LiquidGlassHoverScope({
     if (!scope) return;
 
     const scopeRect = scope.getBoundingClientRect();
-    const rowRect = row.getBoundingClientRect();
+    const contentRect = getVisibleContentRect(row);
 
     setRect({
-      height: rowRect.height + GLASS_INSET_Y * 2,
-      left: rowRect.left - scopeRect.left - GLASS_INSET_X,
-      top: rowRect.top - scopeRect.top - GLASS_INSET_Y,
-      width: rowRect.width + GLASS_INSET_X * 2,
+      height: contentRect.bottom - contentRect.top + GLASS_INSET_Y * 2,
+      left: contentRect.left - scopeRect.left - GLASS_INSET_X,
+      top: contentRect.top - scopeRect.top - GLASS_INSET_Y,
+      width: contentRect.right - contentRect.left + GLASS_INSET_X * 2,
     });
   }, []);
 
   const updatePointerMotion = useCallback((event: PointerEvent<HTMLElement>, row: HTMLElement) => {
     if (reduceMotion) return;
 
-    const rowRect = row.getBoundingClientRect();
-    const relativeX = clamp((event.clientX - rowRect.left) / rowRect.width, 0, 1);
-    const relativeY = clamp((event.clientY - rowRect.top) / rowRect.height, 0, 1);
-    const centeredX = relativeX - 0.5;
-    const centeredY = relativeY - 0.5;
+    const contentRect = getVisibleContentRect(row);
+    const width = Math.max(1, contentRect.right - contentRect.left);
+    const height = Math.max(1, contentRect.bottom - contentRect.top);
+    const relativeX = clamp((event.clientX - contentRect.left) / width, 0, 1);
+    const relativeY = clamp((event.clientY - contentRect.top) / height, 0, 1);
+    const normalizedX = relativeX * 2 - 1;
+    const normalizedY = relativeY * 2 - 1;
+    const aspect = Math.max(1, width / height);
+    const nextMotion = {
+      originX: 30 + relativeX * 40,
+      originY: 30 + relativeY * 40,
+      rotateX: -normalizedY * Math.min(1.6, 0.7 + 0.18 * aspect),
+      rotateY: normalizedX * 0.8,
+      shiftX: 12 * softenSigned(normalizedX, 2),
+      shiftY: 8 * softenSigned(normalizedY, 2),
+    };
 
-    setMotionState({
-      originX: clamp(42 + relativeX * 16, 42, 58),
-      originY: clamp(38 + relativeY * 24, 38, 62),
-      rotateX: -centeredY * 1.4,
-      rotateY: centeredX * 1.1,
-      shiftX: centeredX * 5,
-      shiftY: centeredY * 3,
-    });
-  }, [reduceMotion]);
+    setMotionState(nextMotion);
+    applyTextShift(row, nextMotion);
+  }, [applyTextShift, reduceMotion]);
 
   const activateRow = useCallback(
     (row: HTMLElement) => {
       clearHideTimer();
+      if (activeRowRef.current !== row) clearActiveRow();
       activeRowRef.current = row;
+      row.dataset.liquidGlassActive = "true";
       measureRow(row);
       setVisible(true);
     },
-    [clearHideTimer, measureRow],
+    [clearActiveRow, clearHideTimer, measureRow],
   );
 
   const scheduleHide = useCallback(() => {
@@ -131,9 +183,10 @@ export default function LiquidGlassHoverScope({
     hideTimerRef.current = window.setTimeout(() => {
       setVisible(false);
       setMotionState(initialMotion());
+      clearActiveRow();
       activeRowRef.current = null;
-    }, 180);
-  }, [clearHideTimer]);
+    }, HIDE_DELAY_MS);
+  }, [clearActiveRow, clearHideTimer]);
 
   const handlePointerOver = useCallback(
     (event: PointerEvent<HTMLDivElement>) => {
@@ -194,6 +247,7 @@ export default function LiquidGlassHoverScope({
           height: rect.height,
           left: rect.left,
           opacity: visible ? 1 : 0,
+          borderRadius: 16,
           rotateX: reduceMotion ? 0 : motionState.rotateX,
           rotateY: reduceMotion ? 0 : motionState.rotateY,
           top: rect.top,
@@ -205,15 +259,16 @@ export default function LiquidGlassHoverScope({
           reduceMotion
             ? { duration: 0 }
             : {
-                height: { type: "spring", stiffness: 520, damping: 42, mass: 0.78 },
-                left: { type: "spring", stiffness: 520, damping: 42, mass: 0.78 },
-                opacity: { duration: 0.18 },
-                rotateX: { type: "spring", stiffness: 420, damping: 36, mass: 0.7 },
-                rotateY: { type: "spring", stiffness: 420, damping: 36, mass: 0.7 },
-                top: { type: "spring", stiffness: 520, damping: 42, mass: 0.78 },
-                width: { type: "spring", stiffness: 520, damping: 42, mass: 0.78 },
-                x: { type: "spring", stiffness: 420, damping: 36, mass: 0.7 },
-                y: { type: "spring", stiffness: 420, damping: 36, mass: 0.7 },
+                height: BASE_SPRING,
+                left: BASE_SPRING,
+                opacity: { duration: 0.8 },
+                borderRadius: RADIUS_SPRING,
+                rotateX: TILT_SPRING,
+                rotateY: TILT_SPRING,
+                top: BASE_SPRING,
+                width: BASE_SPRING,
+                x: SHIFT_SPRING,
+                y: SHIFT_SPRING,
               }
         }
         style={glassStyle}
