@@ -20,13 +20,13 @@ function getWorkProject(slug: string) {
 }
 
 describe("ProjectCaseStudyShell", () => {
-  it("renders work detail breadcrumbs as direct links", () => {
+  it("renders work detail navigation as a quiet back link", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("sentinel")} />);
 
-    const nav = screen.getByRole("navigation", { name: "breadcrumb" });
-    expect(within(nav).getByRole("link", { name: "minwook shin" })).toHaveAttribute("href", "/work");
-    expect(within(nav).getByRole("link", { name: "work" })).toHaveAttribute("href", "/work");
-    expect(within(nav).getByText("Sentinel")).toHaveAttribute("aria-current", "page");
+    const nav = screen.getByRole("navigation", { name: "Sentinel navigation" });
+    expect(within(nav).getByRole("link", { name: "back to work" })).toHaveAttribute("href", "/work");
+    expect(within(nav).queryByRole("link", { name: "minwook shin" })).not.toBeInTheDocument();
+    expect(within(nav).queryByText("Sentinel")).not.toBeInTheDocument();
     expect(screen.getByText("ownership")).toBeInTheDocument();
     expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
     expect(screen.getByText("build path")).toBeInTheDocument();
@@ -63,7 +63,7 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("/ json")).toBeInTheDocument();
   });
 
-  it("renders study detail breadcrumbs in page order", () => {
+  it("renders study detail navigation as a quiet back link", () => {
     render(
       <ProjectCaseStudyShell
         project={getStudyProject("motion-taste-system")}
@@ -72,10 +72,10 @@ describe("ProjectCaseStudyShell", () => {
       />,
     );
 
-    const nav = screen.getByRole("navigation", { name: "breadcrumb" });
-    expect(within(nav).getByRole("link", { name: "minwook shin" })).toHaveAttribute("href", "/work");
-    expect(within(nav).getByRole("link", { name: "studies" })).toHaveAttribute("href", "/studies");
-    expect(within(nav).getByText("Motion Taste System")).toHaveAttribute("aria-current", "page");
+    const nav = screen.getByRole("navigation", { name: "Motion Taste System navigation" });
+    expect(within(nav).getByRole("link", { name: "back to studies" })).toHaveAttribute("href", "/studies");
+    expect(within(nav).queryByRole("link", { name: "minwook shin" })).not.toBeInTheDocument();
+    expect(within(nav).queryByText("Motion Taste System")).not.toBeInTheDocument();
     expect(within(nav).queryAllByText("studies")).toHaveLength(1);
   });
 });
