@@ -158,7 +158,7 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={reduceMotion ? { opacity: 0, scale: 1, x: 0 } : { opacity: 0, scale: 0.96, x: 14 }}
               transition={activeMotion}
-              className="micro-focus micro-focus-tight micro-pressable group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-xs font-normal lowercase text-on-surface hover:bg-outline-variant"
+              className="micro-focus micro-focus-tight micro-pressable group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-[length:var(--type-micro)] font-normal lowercase text-on-surface hover:bg-outline-variant"
             >
               <span className="relative">esc</span>
             </motion.button>
@@ -204,7 +204,7 @@ export default function ChatInput({
             onBlur={() => setFocused(false)}
             placeholder="ask me"
             aria-label="ask me"
-            className="relative z-10 flex-1 min-w-0 bg-transparent outline-none font-light text-on-surface placeholder:text-on-surface-variant text-base pl-3 pr-2"
+            className="relative z-10 flex-1 min-w-0 bg-transparent outline-none font-light text-on-surface placeholder:text-on-surface-variant text-[length:var(--type-row)] pl-3 pr-2"
           />
 
           <IconButton
