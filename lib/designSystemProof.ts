@@ -152,9 +152,9 @@ export const DESIGN_SYSTEM_COMPONENTS = [
     primitives: ["media frame", "code block", "video controls", "status block"],
   },
   {
-    name: "status and proof blocks",
-    description: "Build version, updated time, resume links, markdown routes, and public repository proof.",
-    primitives: ["build meta", "proof repository list", "markdown route", "tokens JSON"],
+    name: "machine-readable proof blocks",
+    description: "Resume links, markdown routes, token routes, and public repository proof.",
+    primitives: ["proof repository list", "markdown route", "tokens JSON"],
   },
 ] as const;
 

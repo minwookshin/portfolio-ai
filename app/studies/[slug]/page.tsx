@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
-import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import StructuredData from "@/components/StructuredData";
 import {
@@ -123,7 +122,6 @@ export default async function StudyProjectPage({ params }: StudyProjectPageProps
           variant="lab"
         />
       </div>
-      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

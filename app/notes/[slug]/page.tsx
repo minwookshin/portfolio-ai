@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import BuildMeta from "@/components/BuildMeta";
 import StructuredData from "@/components/StructuredData";
 import WritingPostDetail from "@/components/WritingPostDetail";
 import { LIGHT_PROJECT_TOKENS } from "@/data/projects";
@@ -62,7 +61,6 @@ export default async function NotePage({ params }: NotePageProps) {
     >
       <StructuredData data={writingPostJsonLd(post)} />
       <WritingPostDetail post={post} />
-      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

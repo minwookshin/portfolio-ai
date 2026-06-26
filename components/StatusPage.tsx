@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import BuildMeta from "@/components/BuildMeta";
 import { PERSONAL_INFO } from "@/data/personal";
 
 type StatusPageProps = {
@@ -100,8 +99,6 @@ export default function StatusPage({ code, eyebrow, title, body, action }: Statu
           </nav>
         </div>
       </section>
-
-      <BuildMeta className="mx-auto mt-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[720px] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:w-[calc(100%_-_(var(--space-5)*2))]" />
     </main>
   );
 }

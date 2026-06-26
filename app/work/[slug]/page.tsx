@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import StructuredData from "@/components/StructuredData";
 import {
@@ -102,7 +101,6 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
         />
         {!videoOnly && <RelatedWriting posts={relatedWriting} />}
       </div>
-      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

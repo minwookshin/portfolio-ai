@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
-import BuildMeta from "@/components/BuildMeta";
 import StructuredData from "@/components/StructuredData";
 import {
   DESIGN_SYSTEM_ACCESSIBILITY_RULES,
@@ -195,8 +194,6 @@ export default function DesignSystemPage() {
           </div>
         </Section>
       </article>
-
-      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }
