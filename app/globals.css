@@ -311,6 +311,65 @@ body::after {
   outline-offset: 2px;
 }
 
+.theme-toggle-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 90;
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 0;
+  border-radius: var(--md-shape-sm);
+  background: transparent;
+  color: var(--text-muted);
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.theme-toggle-button:hover,
+.theme-toggle-button:focus-visible {
+  background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  color: var(--text-primary);
+  transform: translate3d(0, -1px, 0);
+}
+
+.theme-toggle-button:active {
+  transform: translate3d(0, 0, 0) scale(0.94);
+}
+
+.theme-toggle-button__icon {
+  grid-area: 1 / 1;
+  width: 16px;
+  height: 16px;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.theme-toggle-button__icon--sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle-button__icon--moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.82);
+}
+
+html[data-theme="dark"] .theme-toggle-button__icon--sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.82);
+}
+
+html[data-theme="dark"] .theme-toggle-button__icon--moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
 .micro-link,
 .micro-richtext :is(a) {
   --micro-link-rest-line: var(--text-underline-muted);

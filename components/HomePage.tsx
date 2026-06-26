@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
+import ThemeToggle from "@/components/ThemeToggle";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -990,6 +991,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     <main
       className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
+      <ThemeToggle />
 
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
           hidden, but real content so the page isn't an empty chat shell to bots. */}
