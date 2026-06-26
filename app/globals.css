@@ -1717,14 +1717,19 @@ button.home-row {
   gap: 8px 18px;
   margin-bottom: 28px;
   color: var(--text-muted);
-  font-size: var(--type-meta);
+  font-size: var(--type-body);
   font-variant-numeric: tabular-nums;
-  line-height: 1.5;
+  line-height: var(--leading-body);
 }
 
 .archive-nav a,
 .archive-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   color: inherit;
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
   text-decoration: none;
   transition:
     color var(--motion-duration-fast) var(--motion-ease-standard),
@@ -1746,6 +1751,13 @@ button.home-row {
 .archive-back-link:hover,
 .archive-back-link:focus-visible {
   color: var(--text-primary);
+}
+
+.site-back-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  color: currentColor;
 }
 
 .archive-header {
