@@ -83,8 +83,8 @@ export default function WorkPage() {
         })}
       />
       <ArchiveIndexPage
-        description="selected product systems, AI-native interfaces, and working prototypes. github proves the build; the case studies hold the context."
-        eyebrow="work archive"
+        description="selected product systems, AI-native interfaces, and working prototypes. organized by year."
+        itemLabel="projects"
         sections={sections}
         title="work"
       />

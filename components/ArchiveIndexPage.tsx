@@ -19,7 +19,7 @@ export type ArchiveSection = {
 
 type ArchiveIndexPageProps = {
   description: string;
-  eyebrow: string;
+  itemLabel?: string;
   sections: ArchiveSection[];
   title: string;
 };
@@ -48,71 +48,54 @@ function groupByYear(entries: ArchiveEntry[]) {
 
 export default function ArchiveIndexPage({
   description,
-  eyebrow,
+  itemLabel = "entries",
   sections,
   title,
 }: ArchiveIndexPageProps) {
   const totalCount = sections.reduce((count, section) => count + section.entries.length, 0);
+  const entries = sections.flatMap((section) => section.entries);
 
   return (
     <main className="site-lowercase archive-page-shell">
       <ThemeToggle />
       <article className="archive-page" aria-labelledby="archive-title">
         <nav className="archive-nav" aria-label="archive navigation">
-          <Link href="/">index</Link>
-          <Link href="/work">work</Link>
-          <Link href="/studies">studies</Link>
+          <Link href="/">↩ index</Link>
         </nav>
 
         <header className="archive-header">
-          <p className="archive-eyebrow">{eyebrow}</p>
           <h1 id="archive-title" className="archive-title">
             {title}
-            <span>{totalCount}</span>
+            <span>, {totalCount} {itemLabel}</span>
           </h1>
           <p className="archive-description">{description}</p>
         </header>
 
-        <div className="archive-sections">
-          {sections.map((section) => (
-            <section key={section.id} className="archive-section" aria-labelledby={`${section.id}-title`}>
-              <header className="archive-section-header">
-                <h2 id={`${section.id}-title`}>{section.title}</h2>
-                {section.description && <p>{section.description}</p>}
-              </header>
-
-              <div className="archive-year-groups">
-                {groupByYear(section.entries).map(([year, entries]) => (
-                  <div key={`${section.id}-${year}`} className="archive-year-group">
-                    <div className="archive-year">
-                      <span>{year}</span>
-                      <span>{entries.length}</span>
-                    </div>
-
-                    <ul className="archive-list">
-                      {entries.map((entry) => (
-                        <li key={entry.id} className="archive-item">
-                          <Link href={entry.href} className="archive-row micro-focus micro-focus-tight">
-                            <span className="archive-row-bullet" aria-hidden="true" />
-                            <span className="archive-row-body">
-                              <span className="archive-row-line">
-                                <span className="archive-row-title">{entry.title}</span>
-                                {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
-                              </span>
-                              {entry.description && (
-                                <span className="archive-row-description">{entry.description}</span>
-                              )}
-                            </span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+        <ol className="archive-year-list">
+          {groupByYear(entries).map(([year, yearEntries]) => (
+            <li key={year} className="archive-year-group">
+              <div className="archive-year">
+                <span className="archive-year-bullet" aria-hidden="true" />
+                <span>{year}</span>
+                <span>{yearEntries.length}</span>
               </div>
-            </section>
+
+              <ul className="archive-list">
+                {yearEntries.map((entry) => (
+                  <li key={entry.id} className="archive-item">
+                    <Link href={entry.href} className="archive-row micro-focus micro-focus-tight">
+                      <span className="archive-row-title">{entry.title}</span>
+                      {entry.description && (
+                        <span className="archive-row-description">{entry.description}</span>
+                      )}
+                      {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
           ))}
-        </div>
+        </ol>
       </article>
     </main>
   );

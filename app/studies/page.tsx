@@ -80,8 +80,8 @@ export default function StudiesPage() {
         })}
       />
       <ArchiveIndexPage
-        description="interaction systems, motion rules, AI loop studies, and notes from building this practice."
-        eyebrow="studies archive"
+        description="interaction systems, motion rules, AI loop studies, and notes from building this practice. organized by year."
+        itemLabel="entries"
         sections={sections}
         title="studies"
       />
