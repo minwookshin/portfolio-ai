@@ -618,10 +618,13 @@ function HomeDocument({
     >
       <motion.div id="profile" variants={landingIntroVariants} className="home-doc scroll-mt-28">
         <LiquidGlassHoverScope>
-        <motion.h1 variants={landingRevealItem} className="home-doc-title">
-          Minwook Shin
-          <span> / design engineer</span>
-        </motion.h1>
+        <motion.div variants={landingRevealItem} className="home-doc-title-row">
+          <h1 className="home-doc-title">
+            Minwook Shin
+            <span> / design engineer</span>
+          </h1>
+          <ThemeToggle glassHover placement="inline" />
+        </motion.div>
 
         <motion.div variants={landingRevealItem}>
           <HomeLeafRow>

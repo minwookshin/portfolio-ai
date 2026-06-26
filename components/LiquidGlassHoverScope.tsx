@@ -30,7 +30,6 @@ const DEFAULT_ROW_SELECTOR = '[data-liquid-glass-row="true"]';
 const GLASS_INSET_X = 16;
 const GLASS_INSET_Y = 8;
 const HIDE_DELAY_MS = 500;
-const TEXT_SHIFT_SCALE = 0.18;
 
 const BASE_SPRING = { type: "spring", duration: 0.72, bounce: 0.22 } as const;
 const RADIUS_SPRING = { type: "spring", duration: 0.6, bounce: 0 } as const;
@@ -104,14 +103,6 @@ export default function LiquidGlassHoverScope({
     if (!activeRowRef.current) return;
 
     activeRowRef.current.removeAttribute("data-liquid-glass-active");
-    activeRowRef.current.style.removeProperty("--liquid-row-shift-x");
-    activeRowRef.current.style.removeProperty("--liquid-row-shift-y");
-  }, []);
-
-  const applyTextShift = useCallback((row: HTMLElement, motion: GlassMotion) => {
-    row.dataset.liquidGlassActive = "true";
-    row.style.setProperty("--liquid-row-shift-x", `${motion.shiftX * TEXT_SHIFT_SCALE}px`);
-    row.style.setProperty("--liquid-row-shift-y", `${motion.shiftY * TEXT_SHIFT_SCALE}px`);
   }, []);
 
   const getRowFromTarget = useCallback(
@@ -163,8 +154,7 @@ export default function LiquidGlassHoverScope({
     };
 
     setMotionState(nextMotion);
-    applyTextShift(row, nextMotion);
-  }, [applyTextShift, reduceMotion]);
+  }, [reduceMotion]);
 
   const activateRow = useCallback(
     (row: HTMLElement) => {
