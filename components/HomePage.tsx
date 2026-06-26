@@ -423,7 +423,7 @@ function buildInteractionItems(): StudyItem[] {
     id: `lab-${project.id}`,
     kind: "lab",
     label: "system",
-    meta: project.builder.oneLiner,
+    meta: project.studioLabel ?? project.tags.slice(0, 2).join(" / "),
     project,
     title: project.title,
   }));
