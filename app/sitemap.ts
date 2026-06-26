@@ -38,6 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: absoluteUrl("/notes"),
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.75,
+    },
+    {
       url: absoluteUrl("/hiring.md"),
       lastModified: now,
       changeFrequency: "weekly",
@@ -98,7 +104,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: project.labStudy ? 0.75 : 0.65,
     })),
     ...writingPosts.map((post) => ({
-      url: absoluteUrl(`/studies/${post.slug}`),
+      url: absoluteUrl(`/notes/${post.slug}`),
       lastModified: parsedDate(post.date) ?? now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
@@ -112,6 +118,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...getStudyMarkdownSlugs().map((slug) => ({
       url: absoluteUrl(`/studies/${slug}.md`),
       lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+    ...writingPosts.map((post) => ({
+      url: absoluteUrl(`/notes/${post.slug}.md`),
+      lastModified: parsedDate(post.date) ?? now,
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),

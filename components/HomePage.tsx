@@ -491,7 +491,7 @@ function buildNoteItems(posts: WritingPostMeta[]): StudyItem[] {
   return posts.map((post) => ({
     date: post.date,
     description: post.description,
-    href: `/studies/${post.slug}`,
+    href: `/notes/${post.slug}`,
     id: `writing-${post.slug}`,
     kind: "writing",
     label: "note",
@@ -652,7 +652,7 @@ function HomeDocument({
         >
           <OutlineListSection emptyLabel="notes are coming soon." items={noteItems} />
           <HomeLeafRow>
-            <HomeMetaLink href="/studies">all notes</HomeMetaLink>
+            <HomeMetaLink href="/notes">all notes</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
 

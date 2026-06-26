@@ -66,15 +66,20 @@ export function workCollectionItems() {
     .map((project) => projectCollectionItem(project, getProjectPath(project)));
 }
 
-export function studiesCollectionItems(posts: WritingPostMeta[]) {
+export function studiesCollectionItems() {
   const labItems = getLabProjects().map((project) => projectCollectionItem(project, getLabProjectPath(project)));
+
+  return labItems;
+}
+
+export function notesCollectionItems(posts: WritingPostMeta[]) {
   const writingItems = posts.map((post) => ({
     description: post.description,
     name: post.title,
-    url: absoluteUrl(`/studies/${post.slug}`),
+    url: absoluteUrl(`/notes/${post.slug}`),
   }));
 
-  return [...labItems, ...writingItems];
+  return writingItems;
 }
 
 export function collectionPageJsonLd({
@@ -170,7 +175,7 @@ export function projectJsonLd(project: PortfolioProject, path: string) {
 }
 
 export function writingPostJsonLd(post: WritingPostMeta) {
-  const url = absoluteUrl(`/studies/${post.slug}`);
+  const url = absoluteUrl(`/notes/${post.slug}`);
 
   return {
     "@context": "https://schema.org",

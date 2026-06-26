@@ -63,7 +63,7 @@ function RelatedWriting({ posts }: { posts: WritingPostMeta[] }) {
         {posts.map((post) => (
           <Link
             key={post.slug}
-            href={`/studies/${post.slug}`}
+            href={`/notes/${post.slug}`}
             className="related-work-link micro-focus micro-pressable inline-flex w-fit text-[length:var(--type-0)] leading-[var(--leading-body)]"
           >
             {post.title}
@@ -85,7 +85,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
   return (
     <main
       style={LIGHT_PROJECT_TOKENS}
-      className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
+      className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
       <StructuredData data={projectJsonLd(project, `/work/${project.slug}`)} />
       <div className="mx-auto w-full max-w-[620px]">

@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { notFound, permanentRedirect } from "next/navigation";
-import { absoluteUrl } from "@/lib/seo";
+import { notFound } from "next/navigation";
+import BuildMeta from "@/components/BuildMeta";
+import StructuredData from "@/components/StructuredData";
+import WritingPostDetail from "@/components/WritingPostDetail";
+import { LIGHT_PROJECT_TOKENS } from "@/data/projects";
+import { absoluteUrl, writingPostJsonLd } from "@/lib/seo";
 import { getWritingPost, getWritingPosts } from "@/lib/writing";
 
-type WritingPostPageProps = {
+type NotePageProps = {
   params: Promise<{ slug: string }>;
 };
 
@@ -11,13 +15,13 @@ export function generateStaticParams() {
   return getWritingPosts().map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: WritingPostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: NotePageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = getWritingPost(slug);
 
   if (!post) {
     return {
-      title: "studies",
+      title: "notes",
     };
   }
 
@@ -45,11 +49,20 @@ export async function generateMetadata({ params }: WritingPostPageProps): Promis
   };
 }
 
-export default async function WritingPostPage({ params }: WritingPostPageProps) {
+export default async function NotePage({ params }: NotePageProps) {
   const { slug } = await params;
   const post = getWritingPost(slug);
 
   if (!post) notFound();
 
-  permanentRedirect(`/notes/${post.slug}`);
+  return (
+    <main
+      style={LIGHT_PROJECT_TOKENS}
+      className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]"
+    >
+      <StructuredData data={writingPostJsonLd(post)} />
+      <WritingPostDetail post={post} />
+      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
+    </main>
+  );
 }

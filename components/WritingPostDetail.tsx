@@ -22,8 +22,8 @@ export default function WritingPostDetail({ post }: { post: WritingPost }) {
     <article className="article-readable studio-detail mx-auto w-full max-w-[620px]">
       <DetailBreadcrumb
         currentLabel={post.title}
-        sectionHref="/studies"
-        sectionLabel="studies"
+        sectionHref="/notes"
+        sectionLabel="notes"
         trailing={<time dateTime={post.date}>{formatWritingDate(post.date)}</time>}
       />
 

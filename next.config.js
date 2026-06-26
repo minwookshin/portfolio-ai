@@ -60,6 +60,10 @@ const nextConfig = {
         source: "/studies/:slug.md",
         destination: "/api/markdown/studies/:slug",
       },
+      {
+        source: "/notes/:slug.md",
+        destination: "/api/markdown/studies/:slug",
+      },
     ];
   },
   // Pin the workspace root so Next doesn't pick a stray parent lockfile

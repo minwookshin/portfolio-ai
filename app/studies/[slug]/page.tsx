@@ -3,7 +3,6 @@ import { notFound, permanentRedirect } from "next/navigation";
 import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import StructuredData from "@/components/StructuredData";
-import WritingPostDetail from "@/components/WritingPostDetail";
 import {
   LIGHT_PROJECT_TOKENS,
   getLabProjectPath,
@@ -12,7 +11,7 @@ import {
   getProjectMetadataDescription,
   isLabProject,
 } from "@/data/projects";
-import { absoluteUrl, projectJsonLd, writingPostJsonLd } from "@/lib/seo";
+import { absoluteUrl, projectJsonLd } from "@/lib/seo";
 import { getWritingPost, getWritingPosts } from "@/lib/writing";
 
 type StudyProjectPageProps = {
@@ -43,7 +42,7 @@ export async function generateMetadata({ params }: StudyProjectPageProps): Promi
       };
     }
 
-    const url = absoluteUrl(`/studies/${post.slug}`);
+    const url = absoluteUrl(`/notes/${post.slug}`);
 
     return {
       title: post.title,
@@ -102,16 +101,7 @@ export default async function StudyProjectPage({ params }: StudyProjectPageProps
 
     if (!post) notFound();
 
-    return (
-      <main
-        style={LIGHT_PROJECT_TOKENS}
-        className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
-      >
-        <StructuredData data={writingPostJsonLd(post)} />
-        <WritingPostDetail post={post} />
-        <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
-      </main>
-    );
+    permanentRedirect(`/notes/${post.slug}`);
   }
 
   const canonicalPath = getLabProjectPath(project);
@@ -123,7 +113,7 @@ export default async function StudyProjectPage({ params }: StudyProjectPageProps
   return (
     <main
       style={LIGHT_PROJECT_TOKENS}
-      className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]"
+      className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
       <StructuredData data={projectJsonLd(project, getLabProjectPath(project))} />
       <div className="mx-auto w-full max-w-[620px]">
