@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -63,10 +64,9 @@ const reveal = {
   transition: tweens.base,
 } as const;
 
-const card = "studio-detail-panel";
 const eyebrowCls = "text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]";
 const h2Cls = "text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]";
-const bodyCls = "text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]";
+const sectionCls = "detail-outline-section";
 
 // Hero content staggers gently so the detail page keeps the homepage's quiet
 // cadence while still feeling responsive.
@@ -81,15 +81,52 @@ const heroItem = {
 
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
   return (
-    <div className="mb-[var(--space-3)]">
-      {eyebrow && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{eyebrow}</p>}
-      <h2 className={h2Cls}>{heading}</h2>
+    <div className="detail-outline-heading-row">
+      <span className="detail-outline-bullet-cell" aria-hidden="true">
+        <span className="detail-outline-bullet detail-outline-bullet--section" />
+      </span>
+      <div className="detail-outline-heading-copy">
+        <h2 className={h2Cls}>{heading}</h2>
+        {eyebrow && <p className={eyebrowCls}>{eyebrow}</p>}
+      </div>
     </div>
   );
 }
 
 function Dot() {
   return <span className="mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-[var(--text-muted)]" />;
+}
+
+function DetailRow({
+  body,
+  children,
+  className = "",
+  meta,
+  title,
+}: {
+  body?: ReactNode;
+  children?: ReactNode;
+  className?: string;
+  meta?: ReactNode;
+  title?: ReactNode;
+}) {
+  return (
+    <div className={`detail-outline-row ${className}`}>
+      <span className="detail-outline-bullet-cell" aria-hidden="true">
+        <span className="detail-outline-bullet" />
+      </span>
+      <div className="detail-outline-row-copy">
+        {(title || meta) && (
+          <p className="detail-outline-row-line">
+            {title && <span className="detail-outline-row-title">{title}</span>}
+            {meta && <span className="detail-outline-row-meta">{meta}</span>}
+          </p>
+        )}
+        {body && <p className="detail-outline-row-body">{body}</p>}
+        {children}
+      </div>
+    </div>
+  );
 }
 
 function isExternalHref(href: string) {
@@ -163,13 +200,13 @@ function Tags({ tags }: { tags: string[] }) {
 function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "phone" | "cover" }) {
   if (style === "phone") {
     return (
-      <div className="studio-detail-media studio-detail-phone-media mx-auto w-full max-w-[260px]">
+      <div className="studio-detail-media studio-detail-phone-media detail-outline-media mx-auto w-full max-w-[260px]">
         <img src={src} alt={alt} className="w-full h-auto" draggable={false} loading="lazy" decoding="async" />
       </div>
     );
   }
   return (
-    <div className="studio-detail-media overflow-hidden">
+    <div className="studio-detail-media detail-outline-media overflow-hidden">
       <img src={src} alt={alt} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
     </div>
   );
@@ -195,7 +232,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
           {...(reduceMotion
             ? { initial: false }
             : { variants: heroContainer, initial: "hidden" as const, animate: "show" as const })}
-          className="pt-0"
+          className="detail-outline-hero pt-0"
         >
           <motion.h1 {...(reduceMotion ? {} : { variants: heroItem })} className="max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
             {section.title}
@@ -227,10 +264,9 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "lead":
       return (
-        <motion.section key={i} {...sectionMotion} className="max-w-2xl">
-          {section.eyebrow && <p className={`${eyebrowCls} mb-3`}>{section.eyebrow}</p>}
-          <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
-          <p className={bodyCls}>{section.body}</p>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
+          <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
+          <DetailRow body={section.body} />
         </motion.section>
       );
 
@@ -240,14 +276,11 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       if (statsItems.length === 0) return null;
 
       return (
-        <motion.section key={i} {...sectionMotion}>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className="grid grid-cols-2 gap-[var(--space-2)] sm:grid-cols-3">
+          <div className="detail-outline-list detail-outline-list--grid">
             {statsItems.map((s) => (
-              <div key={s.label} className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
-                <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.value}</p>
-                <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{s.label}</p>
-              </div>
+              <DetailRow key={s.label} meta={s.label} title={s.value} />
             ))}
           </div>
         </motion.section>
@@ -258,13 +291,12 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
       const problemStats = section.stats?.filter((stat) => isVisibleBuilderValue(stat.value)) ?? [];
 
       return (
-        <motion.section key={i} {...sectionMotion}>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
-          <div className="grid gap-[var(--space-2)] md:grid-cols-5">
-            <div className={`${card} px-[var(--space-2)] py-[var(--space-2)] md:col-span-3`}>
-              <p className={bodyCls}>{section.body}</p>
+          <div className="detail-outline-list">
+            <DetailRow body={section.body}>
               {problemStats.length > 0 && (
-                <div className="mt-[var(--space-3)] grid grid-cols-2 gap-[var(--space-3)]">
+                <div className="detail-outline-mini-grid">
                   {problemStats.map((s) => (
                     <div key={s.label}>
                       <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.value}</p>
@@ -273,13 +305,10 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                   ))}
                 </div>
               )}
-            </div>
+            </DetailRow>
             {section.persona && (
-              <div className={`${card} px-[var(--space-2)] py-[var(--space-2)] md:col-span-2`}>
-                <p className={`${eyebrowCls} mb-[var(--space-2)]`}>Target user</p>
-                <h3 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{section.persona.name}</h3>
-                <p className="mb-[var(--space-2)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{section.persona.role}</p>
-                <div className="space-y-[var(--space-2)]">
+              <DetailRow meta={section.persona.role} title={section.persona.name}>
+                <div className="detail-outline-nested-list">
                   {section.persona.points.map((p) => (
                     <div key={p} className="flex items-start gap-[var(--space-1)]">
                       <Dot />
@@ -287,7 +316,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                     </div>
                   ))}
                 </div>
-              </div>
+              </DetailRow>
             )}
           </div>
         </motion.section>
@@ -296,17 +325,11 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "split":
       return (
-        <motion.section key={i} {...sectionMotion}>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
-          <div className="grid gap-[var(--space-2)] sm:grid-cols-2">
+          <div className="detail-outline-list">
             {section.columns.map((c) => (
-              <div key={c.label} className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
-                <span className={`${eyebrowCls} mb-[var(--space-2)] inline-block`}>
-                  {c.label}
-                </span>
-                <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{c.title}</h3>
-                <p className={bodyCls}>{c.body}</p>
-              </div>
+              <DetailRow key={c.label} body={c.body} meta={c.label} title={c.title} />
             ))}
           </div>
         </motion.section>
@@ -314,7 +337,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "features":
       return (
-        <motion.section key={i} {...sectionMotion}>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="space-y-[var(--space-5)]">
             {section.items.map((f, fi) => (
@@ -328,7 +351,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                       viewport: { once: true, margin: "-60px" },
                       transition: tweens.base,
                     })}
-                className="grid items-center gap-[var(--space-3)] sm:grid-cols-2"
+                className="detail-outline-feature-row"
               >
                 {f.image && (
                   <div className={fi % 2 === 1 ? "sm:order-2" : ""}>
@@ -336,9 +359,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
                   </div>
                 )}
                 <div className={fi % 2 === 1 ? "sm:order-1" : ""}>
-                  <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{`Feature ${fi + 1}`}</p>
-                  <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{f.title}</h3>
-                  <p className={bodyCls}>{f.description}</p>
+                  <DetailRow body={f.description} meta={`feature ${fi + 1}`} title={f.title} />
                 </div>
               </motion.div>
             ))}
@@ -348,30 +369,26 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "flow":
       return (
-        <motion.section key={i} {...sectionMotion}>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
-          <div className="space-y-[var(--space-3)]">
+          <div className="detail-outline-list">
             {section.steps.map((s, si) => (
-              <div key={s.title} className="max-w-[var(--measure)]">
-                <div className="mb-[var(--space-1)] flex flex-wrap items-center gap-x-[var(--space-1)] gap-y-1">
-                  <p className={eyebrowCls}>{String(si + 1).padStart(2, "0")}</p>
-                  {s.tag && <p className={eyebrowCls}>{s.tag}</p>}
-                </div>
-                <div>
-                  <h3 className="mb-[var(--space-1)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{s.title}</h3>
-                  <p className={bodyCls}>{s.body}</p>
-                </div>
-              </div>
+              <DetailRow
+                key={s.title}
+                body={s.body}
+                meta={[String(si + 1).padStart(2, "0"), s.tag].filter(Boolean).join(" / ")}
+                title={s.title}
+              />
             ))}
           </div>
-          {section.note && <p className={`${bodyCls} mt-[var(--space-3)]`}>{section.note}</p>}
+          {section.note && <DetailRow body={section.note} className="detail-outline-row--note" />}
         </motion.section>
       );
 
     case "quote":
       return (
-        <motion.section key={i} {...sectionMotion}>
-          <blockquote className="max-w-[var(--measure)]">
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
+          <blockquote className="detail-outline-quote">
             <p className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{section.text}</p>
             {section.attribution && <p className="mt-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{section.attribution}</p>}
           </blockquote>
@@ -380,13 +397,13 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "gallery":
       return (
-        <motion.section key={i} {...sectionMotion}>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className={`grid items-start gap-[var(--space-2)] ${section.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
+          <div className={`detail-outline-media-grid ${section.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
             {section.images.map((img, gi) => (
               <figure
                 key={gi}
-                className={`overflow-hidden ${section.layout === "featured" && gi === 0 ? "sm:col-span-2" : ""}`}
+                className={`detail-outline-figure overflow-hidden ${section.layout === "featured" && gi === 0 ? "sm:col-span-2" : ""}`}
               >
                 <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
                 {img.caption && <figcaption className="py-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{img.caption}</figcaption>}
@@ -398,7 +415,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "video":
       return (
-        <motion.section key={i} {...sectionMotion}>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
           <StudioVideoPlayer
             src={section.src}
@@ -413,8 +430,8 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "links":
       return (
-        <motion.section key={i} {...sectionMotion}>
-          <p className={`${eyebrowCls} mb-[var(--space-1)]`}>links</p>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
+          <SectionHead heading="links" />
           <div className="studio-detail-link-list">
             {section.items.map((l) => (
               <DetailLink key={l.href} label={l.label} href={l.href} />
@@ -425,16 +442,12 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
 
     case "outcome":
       return (
-        <motion.section key={i} {...sectionMotion}>
-          <div className={`${card} px-[var(--space-2)] py-[var(--space-2)]`}>
-            <h2 className={`${h2Cls} mb-[var(--space-3)]`}>{section.heading}</h2>
-            <div className="space-y-[var(--space-2)]">
-              {section.body.map((p, pi) => (
-                <p key={pi} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-                  {p}
-                </p>
-              ))}
-            </div>
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
+          <SectionHead eyebrow={section.badge} heading={section.heading} />
+          <div className="detail-outline-list">
+            {section.body.map((p, pi) => (
+              <DetailRow key={pi} body={p} />
+            ))}
           </div>
         </motion.section>
       );
@@ -490,7 +503,7 @@ export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: st
   const reduceMotion = Boolean(useReducedMotion());
 
   return (
-    <div className="space-y-[var(--space-5)]">
+    <div className="case-study-sections detail-outline-stack">
       {data.sections.map((s, i) => (
         <div key={i}>
           {renderSection(s, i, reduceMotion)}

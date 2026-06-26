@@ -72,7 +72,7 @@ export default function LabProjectDetailView({ project }: { project: PortfolioPr
       initial={reduceMotion ? false : { opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={reduceMotion ? tweens.none : tweens.base}
-      className="studio-lab-detail"
+      className="studio-lab-detail detail-outline-stack"
     >
       {videoSrc ? (
         <StudioVideoPlayer
@@ -92,24 +92,31 @@ export default function LabProjectDetailView({ project }: { project: PortfolioPr
         </div>
       )}
 
-      <section>
-        <h1 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-          {project.title}
-        </h1>
-        {oneLine && (
-          <p className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-            {oneLine}
-          </p>
-        )}
+      <section className="detail-outline-section">
+        <div className="detail-outline-heading-row">
+          <span className="detail-outline-bullet-cell" aria-hidden="true">
+            <span className="detail-outline-bullet detail-outline-bullet--section" />
+          </span>
+          <div className="detail-outline-heading-copy">
+            <h1 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
+              {project.title}
+            </h1>
+            {oneLine && (
+              <p className="max-w-[var(--measure)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
+                {oneLine}
+              </p>
+            )}
+          </div>
+        </div>
         {links.length > 0 && (
-          <div className="mt-[var(--space-2)] flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
+          <div className="studio-detail-link-list">
             {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="studio-lateral-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]"
+                className="studio-lateral-link studio-detail-link-row micro-focus micro-pressable text-[length:var(--type-0)]"
               >
                 {link.label}
               </a>

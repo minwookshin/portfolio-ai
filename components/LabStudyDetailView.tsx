@@ -135,6 +135,31 @@ function StudyCodeBlock({
   );
 }
 
+function StudySectionHead({ heading, meta }: { heading: string; meta?: string }) {
+  return (
+    <div className="detail-outline-heading-row">
+      <span className="detail-outline-bullet-cell" aria-hidden="true">
+        <span className="detail-outline-bullet detail-outline-bullet--section" />
+      </span>
+      <div className="detail-outline-heading-copy">
+        <h2 className="lab-study-section-heading">{heading}</h2>
+        {meta && <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{meta}</p>}
+      </div>
+    </div>
+  );
+}
+
+function StudyTextRow({ children }: { children: ReactNode }) {
+  return (
+    <div className="detail-outline-row">
+      <span className="detail-outline-bullet-cell" aria-hidden="true">
+        <span className="detail-outline-bullet" />
+      </span>
+      <p className="detail-outline-row-body">{children}</p>
+    </div>
+  );
+}
+
 function getStudyStory(study: LabStudy) {
   if (study.story?.length) return study.story;
 
@@ -154,13 +179,13 @@ function LabStudyStory({ study }: { study: LabStudy }) {
   const story = getStudyStory(study);
 
   return (
-    <section className="lab-study-article" aria-label="study notes">
+    <section className="lab-study-article detail-outline-stack" aria-label="study notes">
       {story.map((section) => (
-        <div key={section.heading} className="lab-study-story-block">
-          <h2 className="lab-study-section-heading">{section.heading}</h2>
-          <div className="lab-study-story-body">
+        <div key={section.heading} className="lab-study-story-block detail-outline-section">
+          <StudySectionHead heading={section.heading} />
+          <div className="lab-study-story-body detail-outline-list">
             {section.body.map((paragraph) => (
-              <p key={paragraph}>{renderInlineStudyText(paragraph)}</p>
+              <StudyTextRow key={paragraph}>{renderInlineStudyText(paragraph)}</StudyTextRow>
             ))}
           </div>
         </div>
@@ -173,20 +198,27 @@ function LabStudyRules({ rules }: { rules: LabStudy["rules"] }) {
   if (rules.length === 0) return null;
 
   return (
-    <section className="lab-study-rule-section">
-      <h2 className="lab-study-section-heading">rules I keep</h2>
-      <div className="lab-study-rule-list" aria-label="rules">
+    <section className="lab-study-rule-section detail-outline-section">
+      <StudySectionHead heading="rules I keep" />
+      <div className="lab-study-rule-list detail-outline-list" aria-label="rules">
         {rules.map((rule) => (
-          <p key={rule.label} className="lab-study-rule-item">
-            <span className="lab-study-rule-label">{rule.label}</span>{" "}
-            <span className="lab-study-rule-value">{renderInlineStudyText(rule.value)}</span>
-            {rule.note && (
-              <>
-                {" "}
-                <span className="lab-study-rule-note">{renderInlineStudyText(rule.note)}</span>
-              </>
-            )}
-          </p>
+          <div key={rule.label} className="detail-outline-row">
+            <span className="detail-outline-bullet-cell" aria-hidden="true">
+              <span className="detail-outline-bullet" />
+            </span>
+            <div className="detail-outline-row-copy">
+              <p className="lab-study-rule-item">
+                <span className="lab-study-rule-label">{rule.label}</span>{" "}
+                <span className="lab-study-rule-value">{renderInlineStudyText(rule.value)}</span>
+                {rule.note && (
+                  <>
+                    {" "}
+                    <span className="lab-study-rule-note">{renderInlineStudyText(rule.note)}</span>
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
         ))}
       </div>
     </section>
@@ -198,6 +230,7 @@ function LabStudyTechnicalArtifact({ artifact }: { artifact: LabStudy["technical
 
   return (
     <section className="lab-study-artifact-section" aria-label={artifact.title}>
+      <StudySectionHead heading="technical artifact" meta={artifact.title} />
       <StudyCodeBlock className="lab-study-artifact" heading={artifact.title}>
         {artifact.body}
       </StudyCodeBlock>
@@ -746,7 +779,10 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
         </p>
       </header>
 
-      <LabStudyDemo kind={study.kind} reduceMotion={reduceMotion} />
+      <section className="lab-study-demo-section detail-outline-section">
+        <StudySectionHead heading="prototype" meta={detailLabels[study.kind]} />
+        <LabStudyDemo kind={study.kind} reduceMotion={reduceMotion} />
+      </section>
 
       <LabStudyStory study={study} />
 
@@ -755,9 +791,7 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
       <LabStudyRules rules={study.rules} />
 
       <section className="lab-study-code-section">
-        <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-          final code
-        </h2>
+        <StudySectionHead heading="final code" />
         <StudyCodeBlock className="lab-study-code">
           {study.code}
         </StudyCodeBlock>
