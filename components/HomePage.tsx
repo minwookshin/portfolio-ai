@@ -256,6 +256,37 @@ function HomeOutlineSection({
   );
 }
 
+function HomeNestedOutlineSection({
+  children,
+  count,
+  defaultOpen = false,
+  title,
+}: {
+  children: ReactNode;
+  count?: number;
+  defaultOpen?: boolean;
+  title: string;
+}) {
+  const [isOpen, setIsOpen] = useState(() => defaultOpen);
+
+  return (
+    <details
+      className="home-node home-node--section home-node--nested"
+      onToggle={(event) => setIsOpen(event.currentTarget.open)}
+      open={isOpen}
+    >
+      <summary className="home-row home-row--summary micro-focus micro-focus-tight">
+        <HomeBulletCell section />
+        <span className="home-label">
+          {title}
+          {typeof count === "number" && <span className="home-count">{count}</span>}
+        </span>
+      </summary>
+      <div className="home-children">{children}</div>
+    </details>
+  );
+}
+
 // The model appends hidden directive lines at the end of each reply:
 //   <<<SHOW>>>project:Sentinel | projects | profile   (what the UI should open)
 //   <<<FOLLOWUPS>>>q1|q2|q3                            (tappable next questions)
@@ -397,15 +428,42 @@ function ProjectTextRow({
   );
 }
 
-function WorkSection({ projects }: { projects: PortfolioProject[] }) {
+function WorkSection({
+  interactionItems,
+  projects,
+}: {
+  interactionItems: StudyItem[];
+  projects: PortfolioProject[];
+}) {
+  const [leadProject, ...restProjects] = projects;
+
   return (
     <div className="relative">
       <ul className="home-list">
-        {projects.map((project, index) => (
+        {leadProject && (
+          <ProjectTextRow
+            key={leadProject.id}
+            project={leadProject}
+            index={0}
+            list="work"
+          />
+        )}
+        <li className="home-node list-none">
+          <HomeNestedOutlineSection
+            count={interactionItems.length}
+            title="interaction systems"
+          >
+            <OutlineListSection emptyLabel="interaction systems are coming soon." items={interactionItems} />
+            <HomeLeafRow>
+              <HomeMetaLink href="/studies">all systems</HomeMetaLink>
+            </HomeLeafRow>
+          </HomeNestedOutlineSection>
+        </li>
+        {restProjects.map((project, index) => (
           <ProjectTextRow
             key={project.id}
             project={project}
-            index={index}
+            index={index + 1}
             list="work"
           />
         ))}
@@ -573,28 +631,15 @@ function HomeDocument({
         </HomeOutlineSection>
 
         <HomeOutlineSection
-          active={activeSection === "work"}
-          count={projects.length}
+          active={activeSection === "work" || activeSection === "studies"}
+          count={projects.length + interactionItems.length}
           defaultOpen={activeSection === "work"}
           sectionId="work"
           title="selected work"
         >
-          <WorkSection projects={projects} />
+          <WorkSection interactionItems={interactionItems} projects={projects} />
           <HomeLeafRow>
             <HomeMetaLink href="/work">all work</HomeMetaLink>
-          </HomeLeafRow>
-        </HomeOutlineSection>
-
-        <HomeOutlineSection
-          active={activeSection === "studies"}
-          count={interactionItems.length}
-          defaultOpen
-          sectionId="interaction-systems"
-          title="interaction systems"
-        >
-          <OutlineListSection emptyLabel="interaction systems are coming soon." items={interactionItems} />
-          <HomeLeafRow>
-            <HomeMetaLink href="/studies">all systems</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
 
