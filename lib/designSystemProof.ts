@@ -86,7 +86,7 @@ export const DESIGN_SYSTEM_TOKENS = {
   ],
   elevation: [
     { role: "default", value: "none", usage: "the product relies on spacing, type, and hairlines instead of decorative shadows" },
-    { role: "cursor", value: "small shadow only", usage: "custom cursor affordance, not layout surfaces" },
+    { role: "cursor", value: "low-opacity black circle", usage: "fine-pointer cursor affordance, not layout surface decoration" },
   ],
   motion: {
     durations: [

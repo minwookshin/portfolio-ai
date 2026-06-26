@@ -651,20 +651,20 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     title: "Cursor Study",
     description: "A quiet custom cursor that stays behind the work.",
     fullDescription:
-      "A lab study for cursor shape, shadow, scale, and when the system cursor should win.",
+      "A lab study for cursor shape, opacity, scale, and when the system cursor should win.",
     tags: ["Cursor", "Interaction", "Micro-detail"],
     categories: ["Lab", "Interaction"],
     date: "2026",
     glyph: "cs",
     studioLabel: "pointer shape study",
     metadataDescription:
-      "A cursor interaction study about shape, scale, shadow, and restraint.",
+      "A cursor interaction study about shape, opacity, scale, and restraint.",
     builder: {
       role: "Interaction study",
       stack: ["SVG", "CSS", "React"],
       status: { label: "Study" },
-      oneLiner: "A quiet custom cursor that stays behind the work.",
-      pipeline: "Codex-like pointer reference -> reduced shape -> site-specific cursor.",
+      oneLiner: "A quiet low-opacity circle cursor that stays behind the work.",
+      pipeline: "Pointer reference -> reduced circular mark -> site-specific cursor.",
       scope: [],
       results: [],
     },
@@ -681,8 +681,8 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         {
           heading: "setting up the shape",
           body: [
-            "The cursor keeps the familiar arrow silhouette, then softens it with a smaller size, rounded geometry, and a slight rotation.",
-            "The white outline sits outside the black fill, so it separates from dark or busy surfaces without becoming a halo.",
+            "The cursor becomes a simple circle: a 24px canvas with a small black center at low opacity.",
+            "The circle stays quiet on the light canvas, so it signals presence without becoming a decorative sticker.",
           ],
         },
         {
@@ -702,37 +702,35 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     │   └── No
     │
     ├── Does contrast need help?
-    │   ├── Yes -> outside white outline
-    │   └── No  -> black fill only
+    │   ├── Yes -> keep the black circle at 22% opacity
+    │   └── No  -> reduce opacity further
     │
     └── Is the cursor becoming decorative?
-        ├── Yes -> reduce size / shadow
+        ├── Yes -> reduce size / opacity
         └── No  -> keep it`,
         caption: "A custom cursor should earn its place; the native cursor wins whenever precision matters.",
       },
       points: [
-        "Make the shape slightly rounded so it feels designed, not novelty.",
-        "Keep the shadow subtle enough to separate on white without becoming a sticker.",
+        "Make the shape perfectly circular so it feels calm, not novelty.",
+        "Keep opacity low enough to separate on white without becoming a sticker.",
         "Disable special cursor behavior where `precision` or native affordance matters.",
       ],
       rules: [
-        { label: "size", value: "13x15px", note: "smaller than a decorative badge" },
-        { label: "rotation", value: "-8deg", note: "lying down slightly, still readable" },
-        { label: "outline", value: "outside white", note: "drawn behind the fill so it stays outside the black shape" },
-        { label: "shadow", value: "two soft drops", note: "separation without glow" },
+        { label: "canvas", value: "24x24px", note: "large enough to feel calm, small enough to stay out of the way" },
+        { label: "mark", value: "14px circle", note: "centered on the pointer hotspot" },
+        { label: "color", value: "black / 22%", note: "visible on light canvas without feeling heavy" },
+        { label: "fallback", value: "native", note: "text fields, media controls, touch, and unsupported browsers keep system behavior" },
       ],
-      code: `.animated-cursor__arrow {
-  width: 13px;
-  height: 15px;
-  transform: rotate(-8deg);
-  filter:
-    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28))
-    drop-shadow(0 3px 5px rgba(0, 0, 0, 0.12));
+      code: `:root {
+  --cursor-soft-circle: url("data:image/svg+xml,%3Csvg ...%3E") 12 12, auto;
 }
 
-.animated-cursor__outline {
-  stroke: rgb(255 255 255);
-  stroke-width: 1.6px;
+@media (hover: hover) and (pointer: fine) {
+  body,
+  a,
+  button {
+    cursor: var(--cursor-soft-circle);
+  }
 }`,
     },
   },

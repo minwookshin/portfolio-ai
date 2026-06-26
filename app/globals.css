@@ -155,6 +155,7 @@
   --code-shadow: none;
   --code-font-size: 13px;
   --code-line-height: 1.55;
+  --cursor-soft-circle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='7' fill='%2318181B' fill-opacity='0.22'/%3E%3C/svg%3E") 12 12, auto;
 }
 
 /* Base font */
@@ -168,8 +169,8 @@ body {
   transition: background-color var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-/* The animated cursor below takes over on fine pointers; native cursor remains
-   as the fallback for reduced motion, touch, and unsupported browsers. */
+/* Fine-pointer devices use a quiet low-opacity circle cursor; native cursors
+   remain for text fields, media controls, touch, and unsupported browsers. */
 
 /* Hide scrollbars everywhere (scrolling still works) for a cleaner look */
 * {
@@ -3033,6 +3034,43 @@ button.home-row {
 .site-lowercase .lab-study-code,
 .site-lowercase .lab-study-code code {
   text-transform: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(
+    html,
+    body,
+    a,
+    button,
+    [role="button"],
+    summary,
+    label,
+    .cursor-pointer,
+    .home-row,
+    .archive-row,
+    .archive-year,
+    .micro-link,
+    .micro-pressable,
+    .studio-lateral-link,
+    .related-work-link,
+    .portfolio-siri__chip,
+    .lab-study-control,
+    .lab-cursor-target,
+    .lab-hold-action,
+    .lab-hold-action__reset,
+    .lab-hover-row,
+    .lab-loop-panel__control
+  ) {
+    cursor: var(--cursor-soft-circle) !important;
+  }
+
+  :is(input, textarea, [contenteditable="true"], .cursor-text) {
+    cursor: text !important;
+  }
+
+  :is(select, video, video *) {
+    cursor: auto !important;
+  }
 }
 
 .dark-embed {
