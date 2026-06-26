@@ -681,7 +681,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         {
           heading: "setting up the shape",
           body: [
-            "The cursor becomes a soft circle: a 24px canvas with a low-opacity black center and no hard outline.",
+            "The cursor becomes a solid circle: a 24px canvas with a low-opacity black fill and no outline.",
             "The circle stays quiet on the light canvas, so it signals presence without becoming a decorative sticker.",
           ],
         },
@@ -702,7 +702,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     │   └── No
     │
     ├── Does contrast need help?
-    │   ├── Yes -> keep a 20% black center with a transparent edge
+    │   ├── Yes -> keep the black fill at 20% opacity
     │   └── No  -> reduce opacity further
     │
     └── Is the cursor becoming decorative?
@@ -717,8 +717,8 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       ],
       rules: [
         { label: "canvas", value: "24x24px", note: "large enough to feel calm, small enough to stay out of the way" },
-        { label: "mark", value: "14px soft circle", note: "centered on the pointer hotspot, with no stroke" },
-        { label: "color", value: "black / 20% center", note: "visible on light canvas with a transparent edge" },
+        { label: "mark", value: "14px solid circle", note: "centered on the pointer hotspot, with no stroke" },
+        { label: "color", value: "black / 20%", note: "visible on light canvas without a border" },
         { label: "fallback", value: "native", note: "text fields, media controls, touch, and unsupported browsers keep system behavior" },
       ],
       code: `:root {
