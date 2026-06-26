@@ -747,6 +747,10 @@ button.home-row {
   opacity: 0.65;
 }
 
+.home-node--section[open] > .home-row .home-count {
+  display: none;
+}
+
 .home-children {
   position: relative;
   margin-left: 26px;
@@ -1965,6 +1969,10 @@ button.home-row {
   border-radius: var(--md-shape-full);
   background: currentColor;
   opacity: 0.65;
+}
+
+.archive-year-details[open] > .archive-year .archive-count {
+  display: none;
 }
 
 .archive-list {
