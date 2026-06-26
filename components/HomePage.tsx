@@ -684,42 +684,32 @@ function WorkSection({
   );
 }
 
-function buildStudyItems(posts: WritingPostMeta[]): StudyItem[] {
+function buildInteractionItems(): StudyItem[] {
   const labProjects = orderProjects(MAIN_PROJECTS, LAB_PROJECT_IDS);
   const labStudyProjects = labProjects.filter(isLabStudyProject);
-  const archivedLabProjects = labProjects.filter((project) => !isLabStudyProject(project));
-  const writingItems: StudyItem[] = posts.map((post) => ({
+
+  return labStudyProjects.map((project): StudyItem => ({
+    href: getLabProjectPath(project),
+    id: `lab-${project.id}`,
+    kind: "lab",
+    label: "system",
+    meta: project.builder.oneLiner,
+    project,
+    title: project.title,
+  }));
+}
+
+function buildNoteItems(posts: WritingPostMeta[]): StudyItem[] {
+  return posts.map((post) => ({
     date: post.date,
     description: post.description,
     href: `/studies/${post.slug}`,
     id: `writing-${post.slug}`,
     kind: "writing",
-    label: "writing",
+    label: "note",
     meta: formatWritingDate(post.date),
     title: post.title,
   }));
-
-  return [
-    ...labStudyProjects.map((project): StudyItem => ({
-      href: getLabProjectPath(project),
-      id: `lab-${project.id}`,
-      kind: "lab",
-      label: "study",
-      meta: project.studioLabel ?? project.builder.oneLiner,
-      project,
-      title: project.title,
-    })),
-    ...writingItems,
-    ...archivedLabProjects.map((project): StudyItem => ({
-      href: getLabProjectPath(project),
-      id: `lab-${project.id}`,
-      kind: "lab",
-      label: "prototype",
-      meta: project.studioLabel ?? getProjectDescriptor(project),
-      project,
-      title: project.title,
-    })),
-  ];
 }
 
 function StudyTextRow({
@@ -792,11 +782,11 @@ function StudyTextRow({
   );
 }
 
-function StudiesSection({ items }: { items: StudyItem[] }) {
+function OutlineListSection({ emptyLabel, items }: { emptyLabel: string; items: StudyItem[] }) {
   if (items.length === 0) {
     return (
       <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-        studies are coming soon.
+        {emptyLabel}
       </p>
     );
   }
@@ -819,12 +809,14 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
 
 function HomeDocument({
   activeSection,
+  interactionItems,
+  noteItems,
   projects,
-  studyItems,
 }: {
   activeSection: HomeTab;
+  interactionItems: StudyItem[];
+  noteItems: StudyItem[];
   projects: Project[];
-  studyItems: StudyItem[];
 }) {
   return (
     <motion.section
@@ -865,18 +857,31 @@ function HomeDocument({
 
         <HomeOutlineSection
           active={activeSection === "studies"}
-          count={studyItems.length}
-          defaultOpen={activeSection === "studies"}
-          sectionId="studies"
-          title="studies"
+          count={interactionItems.length}
+          defaultOpen
+          sectionId="interaction-systems"
+          title="interaction systems"
         >
-          <StudiesSection items={studyItems} />
+          <OutlineListSection emptyLabel="interaction systems are coming soon." items={interactionItems} />
           <HomeLeafRow>
-            <HomeMetaLink href="/studies">all studies</HomeMetaLink>
+            <HomeMetaLink href="/studies">all systems</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
 
-        <HomeOutlineSection count={4} defaultOpen title="elsewhere">
+        <HomeOutlineSection
+          active={activeSection === "studies"}
+          count={noteItems.length}
+          defaultOpen
+          sectionId="studies"
+          title="notes"
+        >
+          <OutlineListSection emptyLabel="notes are coming soon." items={noteItems} />
+          <HomeLeafRow>
+            <HomeMetaLink href="/studies">all notes</HomeMetaLink>
+          </HomeLeafRow>
+        </HomeOutlineSection>
+
+        <HomeOutlineSection count={4} defaultOpen title="contact">
           <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.linkedin} external>linkedin.com/in/minwookshin</HomeMetaLink>
           </HomeLeafRow>
@@ -1031,7 +1036,8 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   };
 
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
-  const studyItems = buildStudyItems(writingPosts);
+  const interactionItems = buildInteractionItems();
+  const noteItems = buildNoteItems(writingPosts);
 
   const openProfile = () => {
     setChatOnTop(false);
@@ -1069,9 +1075,17 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
       <section className="sr-only">
         <h2>{PERSONAL_INFO.name}, {PERSONAL_INFO.title}</h2>
         <p>{PERSONAL_INFO.bio}</p>
-        <h3>Studies</h3>
+        <h3>Interaction systems</h3>
         <ul>
-          {studyItems.map((item) => (
+          {interactionItems.map((item) => (
+            <li key={item.id}>
+              <strong>{item.title}</strong>, {item.meta}
+            </li>
+          ))}
+        </ul>
+        <h3>Notes</h3>
+        <ul>
+          {noteItems.map((item) => (
             <li key={item.id}>
               <strong>{item.title}</strong>, {item.meta}
             </li>
@@ -1102,8 +1116,9 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <HomeDocument
             activeSection={currentSection}
+            interactionItems={interactionItems}
+            noteItems={noteItems}
             projects={featuredProjects}
-            studyItems={studyItems}
           />
         </div>
       </motion.div>
