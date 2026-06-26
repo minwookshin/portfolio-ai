@@ -95,14 +95,14 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
       className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
       <StructuredData data={projectJsonLd(project, `/work/${project.slug}`)} />
-      <div className="mx-auto w-full max-w-[620px]">
+      <div className="w-full max-w-[720px]">
         <ProjectCaseStudyShell
           mode={videoOnly ? "video-only" : "case-study"}
           project={project}
         />
         {!videoOnly && <RelatedWriting posts={relatedWriting} />}
       </div>
-      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
+      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

@@ -116,14 +116,14 @@ export default async function StudyProjectPage({ params }: StudyProjectPageProps
       className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
       <StructuredData data={projectJsonLd(project, getLabProjectPath(project))} />
-      <div className="mx-auto w-full max-w-[620px]">
+      <div className="w-full max-w-[720px]">
         <ProjectCaseStudyShell
           project={project}
           baseHref="/studies"
           variant="lab"
         />
       </div>
-      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
+      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

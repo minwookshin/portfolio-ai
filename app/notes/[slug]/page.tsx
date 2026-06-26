@@ -62,7 +62,7 @@ export default async function NotePage({ params }: NotePageProps) {
     >
       <StructuredData data={writingPostJsonLd(post)} />
       <WritingPostDetail post={post} />
-      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
+      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

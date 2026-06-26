@@ -43,7 +43,7 @@ export default function StatusPage({ code, eyebrow, title, body, action }: Statu
   return (
     <main className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] text-[length:var(--type-0)] text-[var(--text-primary)]">
       <section className="mx-auto flex w-full max-w-[1180px] justify-center px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
-        <div className="w-full max-w-[620px] text-left">
+        <div className="w-full max-w-[720px] text-left">
           <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">
             {code}
           </p>
@@ -60,7 +60,7 @@ export default function StatusPage({ code, eyebrow, title, body, action }: Statu
       </section>
 
       <section className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]">
-        <div className="mx-auto w-full max-w-[620px] text-left">
+        <div className="mx-auto w-full max-w-[720px] text-left">
           <nav aria-label="status navigation" className="flex flex-wrap items-baseline gap-x-0 gap-y-1 leading-[var(--leading-heading)]">
             <StatusLink href="/work">work</StatusLink>
             <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
@@ -101,7 +101,7 @@ export default function StatusPage({ code, eyebrow, title, body, action }: Statu
         </div>
       </section>
 
-      <BuildMeta className="mx-auto mt-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[620px] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:w-[calc(100%_-_(var(--space-5)*2))]" />
+      <BuildMeta className="mx-auto mt-auto w-[calc(100%_-_(var(--space-3)*2))] max-w-[720px] pb-[var(--space-4)] pt-[var(--space-4)] text-[length:var(--type-0)] sm:w-[calc(100%_-_(var(--space-5)*2))]" />
     </main>
   );
 }

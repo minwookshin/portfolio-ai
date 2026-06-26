@@ -19,7 +19,7 @@ export default function WritingPostDetail({ post }: { post: WritingPost }) {
   const relatedWork = getRelatedWorkLinks(post);
 
   return (
-    <article className="article-readable studio-detail mx-auto w-full max-w-[620px]">
+    <article className="article-readable studio-detail w-full max-w-[720px]">
       <DetailBreadcrumb
         currentLabel={post.title}
         sectionHref="/notes"

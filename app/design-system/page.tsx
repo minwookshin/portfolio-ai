@@ -108,9 +108,9 @@ export default function DesignSystemPage() {
   };
 
   return (
-    <main className="site-lowercase flex min-h-dvh flex-col bg-[var(--bg-base)] px-[var(--space-3)] pb-[calc(var(--space-8)*2)] pt-[92px] text-[length:var(--type-0)] text-[var(--text-primary)] sm:px-[var(--space-5)] md:pt-[122px]">
+    <main className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]">
       <StructuredData data={jsonLd} />
-      <article className="mx-auto flex w-full max-w-[620px] flex-1 flex-col gap-[var(--space-6)]">
+      <article className="flex w-full max-w-[720px] flex-1 flex-col gap-[var(--space-6)]">
         <nav aria-label="breadcrumb" className="flex flex-wrap items-center gap-x-[var(--space-1)] gap-y-1">
           <TextLink href="/work">work</TextLink>
           <span className="text-[var(--text-muted)]" aria-hidden="true">/</span>
@@ -196,7 +196,7 @@ export default function DesignSystemPage() {
         </Section>
       </article>
 
-      <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
+      <BuildMeta className="mt-auto w-full max-w-[720px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>
   );
 }

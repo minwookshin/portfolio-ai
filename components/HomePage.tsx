@@ -852,8 +852,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     <main
       className="site-lowercase flex min-h-dvh flex-col overflow-x-hidden bg-[var(--bg-base)] pb-[calc(var(--space-8)*1.5)] text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
-      <ThemeToggle />
-
       {/* Crawlable substance for search engines and non-chatting visitors. Visually
           hidden, but real content so the page isn't an empty chat shell to bots. */}
       <section className="sr-only">

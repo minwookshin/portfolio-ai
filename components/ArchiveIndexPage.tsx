@@ -1,6 +1,5 @@
 import Link from "next/link";
 import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
-import ThemeToggle from "@/components/ThemeToggle";
 
 export type ArchiveEntry = {
   description?: string;
@@ -58,7 +57,6 @@ export default function ArchiveIndexPage({
 
   return (
     <main className="site-lowercase archive-page-shell">
-      <ThemeToggle />
       <article className="archive-page" aria-labelledby="archive-title">
         <LiquidGlassHoverScope>
         <nav className="archive-nav" aria-label="archive navigation">

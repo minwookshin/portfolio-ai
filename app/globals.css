@@ -320,6 +320,8 @@ body::after {
   border-radius: var(--md-shape-sm);
   background: transparent;
   color: var(--text-muted);
+  line-height: 1;
+  padding: 0;
   transition:
     color var(--motion-duration-fast) var(--motion-ease-standard),
     background-color var(--motion-duration-fast) var(--motion-ease-standard),
@@ -331,9 +333,11 @@ body::after {
   top: auto;
   right: auto;
   z-index: 1;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
+  align-self: center;
   flex: 0 0 auto;
+  margin-left: 2px;
 }
 
 .theme-toggle-button:hover,
@@ -357,6 +361,7 @@ body::after {
   grid-area: 1 / 1;
   width: 16px;
   height: 16px;
+  display: block;
   transition:
     opacity var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-base) var(--motion-ease-standard);
@@ -489,7 +494,7 @@ html[data-theme="dark"] .liquid-glass-hover__highlight {
 .home-doc-title-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   padding: 0 0 16px;
 }
 
@@ -801,8 +806,8 @@ button.home-row {
   }
 
   .theme-toggle-button--inline {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -1717,16 +1722,19 @@ button.home-row {
 
 .archive-page-shell,
 .detail-page-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   min-height: 100dvh;
-  padding: 132px 32px 200px 96px;
+  padding: 132px 32px 200px;
   background: var(--bg-base);
   color: var(--text-primary);
 }
 
 .archive-page {
   width: 100%;
-  max-width: 680px;
+  max-width: 720px;
 }
 
 .archive-nav {
@@ -1889,7 +1897,7 @@ button.home-row {
 @media (max-width: 720px) {
   .archive-page-shell,
   .detail-page-shell {
-    padding: 108px 24px 160px 60px;
+    padding: 108px 24px 160px;
   }
 
   .archive-header {
