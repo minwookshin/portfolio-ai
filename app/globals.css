@@ -21,7 +21,7 @@
   --theme-dark-rule: rgba(255, 255, 255, 0.08);
   --theme-dark-tint: rgba(255, 255, 255, 0.05);
 
-  /* Cretu.dev-inspired active theme tokens. */
+  /* Public site tokens stay fixed to the light Cretu.dev-inspired canvas. */
   --bg-base: var(--theme-light-bg);
   --bg-surface: var(--theme-light-surface);
   --bg-element: var(--theme-light-element);
@@ -35,7 +35,7 @@
   --font-sans: "Switzer", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "Geist Mono", "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
-  /* Embedded Dark Mode (For Project Cards/Code Blocks) */
+  /* Contained dark colors for project cards/code blocks, not a site theme. */
   --dark-bg-base: var(--theme-dark-bg);
   --dark-bg-surface: var(--theme-dark-surface);
   --dark-border: var(--theme-dark-rule);
@@ -157,51 +157,6 @@
   --code-line-height: 1.55;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg-base: var(--theme-dark-bg);
-    --bg-surface: var(--theme-dark-surface);
-    --bg-element: var(--theme-dark-element);
-    --border-light: var(--theme-dark-rule);
-    --text-primary: var(--theme-dark-ink);
-    --text-secondary: var(--theme-dark-muted);
-    --text-muted: var(--theme-dark-faint);
-    --text-dim: var(--theme-dark-dim);
-    --text-underline-muted: var(--theme-dark-dim);
-    --gradient-fade: rgba(15, 15, 16, 0);
-  }
-}
-
-html[data-theme="light"] {
-  color-scheme: light;
-  --bg-base: var(--theme-light-bg);
-  --bg-surface: var(--theme-light-surface);
-  --bg-element: var(--theme-light-element);
-  --border-light: var(--theme-light-rule);
-  --text-primary: var(--theme-light-ink);
-  --text-secondary: var(--theme-light-muted);
-  --text-muted: var(--theme-light-faint);
-  --text-dim: var(--theme-light-dim);
-  --text-underline-muted: var(--theme-light-dim);
-  --gradient-fade: rgba(250, 250, 250, 0);
-}
-
-html[data-theme="dark"] {
-  color-scheme: dark;
-  --bg-base: var(--theme-dark-bg);
-  --bg-surface: var(--theme-dark-surface);
-  --bg-element: var(--theme-dark-element);
-  --border-light: var(--theme-dark-rule);
-  --text-primary: var(--theme-dark-ink);
-  --text-secondary: var(--theme-dark-muted);
-  --text-muted: var(--theme-dark-faint);
-  --text-dim: var(--theme-dark-dim);
-  --text-underline-muted: var(--theme-dark-dim);
-  --gradient-fade: rgba(15, 15, 16, 0);
-  --code-string: #73c991;
-}
-
 /* Base font */
 body {
   font-family: var(--font-sans);
@@ -240,7 +195,7 @@ body {
   margin: -4px -8px;
 }
 
-/* Smooth theme transitions - scoped to the page background only.
+/* Smooth page transitions - scoped to the page background only.
    A universal `* { transition }` rule forces a style recalc on every
    element during Framer Motion transforms and the globe rAF loop,
    which is the main source of animation jank. */
@@ -305,86 +260,6 @@ body::after {
 
 .micro-focus-tight:focus-visible {
   outline-offset: 2px;
-}
-
-.theme-toggle-button {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 90;
-  display: inline-grid;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border: 0;
-  border-radius: var(--md-shape-sm);
-  background: transparent;
-  color: var(--text-muted);
-  line-height: 1;
-  padding: 0;
-  transition:
-    color var(--motion-duration-fast) var(--motion-ease-standard),
-    background-color var(--motion-duration-fast) var(--motion-ease-standard),
-    transform var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-.theme-toggle-button--inline {
-  position: relative;
-  top: auto;
-  right: auto;
-  z-index: 1;
-  width: 24px;
-  height: 24px;
-  align-self: center;
-  flex: 0 0 auto;
-  margin-left: 2px;
-}
-
-.theme-toggle-button:hover,
-.theme-toggle-button:focus-visible {
-  background: color-mix(in srgb, var(--text-primary) 5%, transparent);
-  color: var(--text-primary);
-  transform: translate3d(0, -1px, 0);
-}
-
-.theme-toggle-button--inline:hover,
-.theme-toggle-button--inline:focus-visible {
-  background: transparent;
-  transform: none;
-}
-
-.theme-toggle-button:active {
-  transform: translate3d(0, 0, 0) scale(0.94);
-}
-
-.theme-toggle-button__icon {
-  grid-area: 1 / 1;
-  width: 16px;
-  height: 16px;
-  display: block;
-  transition:
-    opacity var(--motion-duration-fast) var(--motion-ease-standard),
-    transform var(--motion-duration-base) var(--motion-ease-standard);
-}
-
-.theme-toggle-button__icon--sun {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
-.theme-toggle-button__icon--moon {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.82);
-}
-
-html[data-theme="dark"] .theme-toggle-button__icon--sun {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.82);
-}
-
-html[data-theme="dark"] .theme-toggle-button__icon--moon {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
 }
 
 .home-doc-shell {
@@ -464,26 +339,6 @@ html[data-theme="dark"] .theme-toggle-button__icon--moon {
       0 4px 14px -10px color(display-p3 0.2085 0.2085 0.3025 / 0.4),
       0 11px 28px -10px color(display-p3 0.2085 0.2085 0.3025 / 0.1);
   }
-}
-
-html[data-theme="dark"] .liquid-glass-hover {
-  border-color: color-mix(in srgb, #fff 11%, transparent);
-  background: linear-gradient(180deg, #232326, #19191b);
-  box-shadow:
-    inset 0 2px 4px 0 color-mix(in srgb, #fff 9%, transparent),
-    inset 0 -4px 4px 0 color-mix(in srgb, #fff 3%, transparent),
-    inset 0 -4px 16px 0 color-mix(in srgb, #000 18%, transparent),
-    inset 0 4px 10px 0 color-mix(in srgb, #fff 4%, transparent),
-    0 4px 14px -10px color-mix(in srgb, #000 82%, transparent),
-    0 11px 28px -10px color-mix(in srgb, #000 68%, transparent);
-}
-
-html[data-theme="dark"] .liquid-glass-hover__highlight {
-  background: radial-gradient(
-    circle at 50% var(--liquid-glass-highlight-y, 50%),
-    color-mix(in srgb, #fff 13%, transparent),
-    transparent 58%
-  );
 }
 
 .liquid-glass-hover-scope [data-liquid-glass-row="true"] {
@@ -824,10 +679,6 @@ button.home-row {
     font-size: 22px;
   }
 
-  .theme-toggle-button--inline {
-    width: 24px;
-    height: 24px;
-  }
 }
 
 @media (pointer: coarse) {

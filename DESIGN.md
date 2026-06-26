@@ -2,7 +2,7 @@
 
 ## Source of truth
 - Status: Active
-- Last refreshed: 2026-06-12
+- Last refreshed: 2026-06-26
 - Primary product surfaces: portfolio homepage, selected-work browsing, studies browsing, project detail sheets, main-page profile/contact block, AI assistant input.
 - Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Work & Co work/case-study references, Pentagram work/case-study references, Instrument homepage/work pattern, Fantasy homepage positioning, Metalab project-first work grid, Clay outcome/category work index, BASIC/DEPT case-study archive, Huge work index, NN/g UX portfolio and grid guidance, Awwwards project-page collection, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
@@ -49,7 +49,7 @@
 ## Accessibility
 - Target standard: keyboard reachable project cards, profile controls, assistant input, and sheet dismissal.
 - Keyboard/focus behavior: project cards open on click/keyboard, Escape closes sheets, visible focus rings remain.
-- Contrast/readability: soft white text on near-black; muted gray text only for secondary copy.
+- Contrast/readability: near-black text on the soft white canvas; muted gray text only for secondary copy.
 - Screen-reader semantics: real headings, button labels, image alt text, hidden crawlable content retained.
 - Reduced motion and sensory considerations: no essential interaction should depend on animation.
 
@@ -73,7 +73,7 @@
 
 ## Implementation constraints
 - Framework/styling system: Next.js App Router, React, Tailwind, CSS variables, Framer Motion.
-- Design-token constraints: continue using existing monochrome tokens, now biased toward dark surfaces with soft-white foregrounds.
+- Design-token constraints: keep the public site locked to the light monochrome tokens; do not reintroduce a theme toggle or OS-preference dark override. Dark variables may remain only for contained embeds such as code or project surfaces.
 - Performance constraints: avoid heavy canvas/WebGL; lazy-load media; use CSS transforms for primary motion; keep Lottie decorative, SVG-rendered, and narrowly scoped.
 - Compatibility constraints: keep existing chat API, project data, and case-study renderer.
 - Test/screenshot expectations: run unit tests, production build, and browser checks on localhost after major changes.

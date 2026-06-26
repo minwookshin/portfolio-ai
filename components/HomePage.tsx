@@ -10,7 +10,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
 import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
-import ThemeToggle from "@/components/ThemeToggle";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -623,7 +622,6 @@ function HomeDocument({
             Minwook Shin
             <span> / design engineer</span>
           </h1>
-          <ThemeToggle glassHover placement="inline" />
         </motion.div>
 
         <motion.div variants={landingRevealItem}>
