@@ -16,6 +16,11 @@ export const DESIGN_SYSTEM_PROOF = {
     "app/globals.css",
     "lib/material/motion.ts",
     "components/HomePage.tsx",
+    "components/ArchiveIndexPage.tsx",
+    "components/LiquidGlassHoverScope.tsx",
+    "components/ThemeToggle.tsx",
+    "components/ProjectDetailView.tsx",
+    "components/LabStudyDetailView.tsx",
     "components/detail/CaseStudy.tsx",
     "components/StudioVideoPlayer.tsx",
     "lib/aiPortfolio.ts",
@@ -23,7 +28,7 @@ export const DESIGN_SYSTEM_PROOF = {
 } as const;
 
 export const DESIGN_SYSTEM_TOKENS = {
-  schemaVersion: "2026-06-09",
+  schemaVersion: "2026-06-26",
   name: DESIGN_SYSTEM_PROOF.name,
   sourceFiles: DESIGN_SYSTEM_PROOF.sourceFiles,
   colors: [
@@ -115,19 +120,29 @@ export const DESIGN_SYSTEM_TOKENS = {
 
 export const DESIGN_SYSTEM_COMPONENTS = [
   {
-    name: "navigation",
-    description: "Text-first work/studies routing, identity link, and contact links using the same lateral link motion.",
-    primitives: ["identity link", "section tabs", "contact links", "breadcrumb trail"],
+    name: "document shell",
+    description: "Centered 720px reading axis shared by home, archive pages, notes, work details, studies, and design-system proof.",
+    primitives: ["home doc shell", "archive page shell", "detail page shell", "lowercase site scope"],
   },
   {
-    name: "project preview",
-    description: "Row-based project selection with static media fallback, subtle hover movement, and reduced-motion support.",
-    primitives: ["project row", "preview frame", "metadata line", "case-study route"],
+    name: "outline rows",
+    description: "Notion-like document structure using small bullets, section circles, short metadata, and fixed-position text.",
+    primitives: ["outline section", "outline row", "bullet cell", "metadata line", "section count"],
   },
   {
-    name: "case study section",
-    description: "Editorial detail blocks for hero, lead, split proof, stats, gallery, video, links, and outcome.",
-    primitives: ["hero", "lead", "split", "stats", "gallery", "video", "links", "outcome"],
+    name: "archive index",
+    description: "Year-grouped work, notes, and studies lists using collapsible outline sections and short proof rows.",
+    primitives: ["archive year", "archive row", "archive count", "back to index link"],
+  },
+  {
+    name: "liquid glass hover",
+    description: "One absolute hover layer follows the active row; row text stays fixed while color and caret states clarify interaction.",
+    primitives: ["glass layer", "hover row measurement", "section caret", "inline theme toggle"],
+  },
+  {
+    name: "detail outline",
+    description: "Case studies and interaction-study details use the same outline sections for proof, story, rules, links, media, and code.",
+    primitives: ["detail hero", "proof strip", "detail outline row", "media frame", "code block"],
   },
   {
     name: "ai chat and recruiter intake",
@@ -136,13 +151,13 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "buttons and links",
-    description: "Plain text links, focus-visible outlines, press affordance, and no decorative icon dependency unless useful.",
+    description: "Plain text links, focus-visible outlines, press affordance, and color-first hover feedback.",
     primitives: ["micro link", "lateral link", "focus ring", "pressable row"],
   },
   {
     name: "cards and surfaces",
-    description: "Transparent or white surfaces with spacing-first hierarchy; borders appear only when structure needs them.",
-    primitives: ["detail panel", "media frame", "code block", "status block"],
+    description: "Surfaces are reserved for media, code, video chrome, and functional controls; document structure relies on bullets and spacing.",
+    primitives: ["media frame", "code block", "video controls", "status block"],
   },
   {
     name: "status and proof blocks",
@@ -152,7 +167,9 @@ export const DESIGN_SYSTEM_COMPONENTS = [
 ] as const;
 
 export const DESIGN_SYSTEM_INTERACTION_RULES = [
-  "Keep hover movement small: text and metadata can shift, but the layout should not reflow.",
+  "Keep hover movement on the glass or control layer; outline text should stay fixed and only become slightly clearer.",
+  "Hide section counts once a section is open so the visible content is the proof.",
+  "Use section carets only inside the bullet cell so caret and dot never overlap.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",
@@ -176,12 +193,13 @@ export const DESIGN_SYSTEM_AI_CONTRACT = {
     "Keep copy concise, evidence-based, and recruiter-readable.",
     "Prefer spacing, typography, and small motion over decorative surfaces.",
     "Expose important proof through both visible UI and machine-readable routes.",
+    "Treat interaction demos as contained exceptions; their surrounding story, rules, and code must still use the detail outline.",
   ],
   avoid: [
     "Do not invent metrics, employers, awards, repository links, or project outcomes.",
     "Do not create a separate visual system, large landing page, or marketing-heavy hero for proof pages.",
     "Do not add new dependencies for primitives that already exist in the codebase.",
-    "Do not use flashy gradients, decorative glass, or large motion that competes with the work.",
+    "Do not use flashy gradients, decorative glass, or large motion that competes with the work; liquid glass is reserved for row hover feedback.",
     "Do not remove reduced-motion, keyboard, or focus-visible behavior.",
   ],
 } as const;
