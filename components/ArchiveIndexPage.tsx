@@ -46,6 +46,11 @@ function groupByYear(entries: ArchiveEntry[]) {
   return Array.from(groups.entries()).sort(sortYearGroups);
 }
 
+function getYearAnchorId(year: string) {
+  const slug = year.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return `year-${slug || "undated"}`;
+}
+
 export default function ArchiveIndexPage({
   description,
   itemLabel = "entries",
@@ -59,47 +64,63 @@ export default function ArchiveIndexPage({
     <main className="site-lowercase archive-page-shell">
       <article className="archive-page" aria-labelledby="archive-title">
         <LiquidGlassHoverScope>
-        <nav className="archive-nav" aria-label="archive navigation">
-          <Link href="/">↩ index</Link>
-        </nav>
+          <nav className="archive-nav" aria-label="archive navigation">
+            <Link href="/" className="archive-nav-link" data-liquid-glass-row="true">
+              ↩ index
+            </Link>
+          </nav>
 
-        <header className="archive-header">
-          <h1 id="archive-title" className="archive-title">
-            {title}
-            <span>, {totalCount} {itemLabel}</span>
-          </h1>
-          <p className="archive-description">{description}</p>
-        </header>
+          <header className="archive-header">
+            <h1 id="archive-title" className="archive-title">
+              {title}
+              <span>, {totalCount} {itemLabel}</span>
+            </h1>
+            <p className="archive-description">{description}</p>
+          </header>
 
-        <ol className="archive-year-list">
-          {groupByYear(entries).map(([year, yearEntries]) => (
-            <li key={year} className="archive-year-group">
-              <div className="archive-year">
-                <span className="archive-year-bullet" aria-hidden="true" />
-                <span>{year}</span>
-                <span>{yearEntries.length}</span>
-              </div>
+          <ol className="archive-year-list">
+            {groupByYear(entries).map(([year, yearEntries]) => {
+              const yearId = getYearAnchorId(year);
 
-              <ul className="archive-list">
-                {yearEntries.map((entry) => (
-                  <li key={entry.id} className="archive-item">
-                    <Link
-                      href={entry.href}
-                      className="archive-row micro-focus micro-focus-tight"
-                      data-liquid-glass-row="true"
-                    >
-                      <span className="archive-row-title">{entry.title}</span>
-                      {entry.description && (
-                        <span className="archive-row-description">{entry.description}</span>
-                      )}
-                      {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
+              return (
+                <li key={year} id={yearId} className="archive-year-group">
+                  <a
+                    aria-label={`${year}, ${yearEntries.length} ${itemLabel}`}
+                    className="archive-year micro-focus micro-focus-tight"
+                    data-liquid-glass-row="true"
+                    href={`#${yearId}`}
+                  >
+                    <span className="archive-bullet-cell" aria-hidden="true">
+                      <span className="archive-year-bullet" />
+                    </span>
+                    <span className="archive-year-label">{year}</span>
+                    <span className="archive-count">{yearEntries.length}</span>
+                  </a>
+
+                  <ul className="archive-list">
+                    {yearEntries.map((entry) => (
+                      <li key={entry.id} className="archive-item">
+                        <Link
+                          href={entry.href}
+                          className="archive-row micro-focus micro-focus-tight"
+                          data-liquid-glass-row="true"
+                        >
+                          <span className="archive-bullet-cell" aria-hidden="true">
+                            <span className="archive-row-bullet" />
+                          </span>
+                          <span className="archive-row-title">{entry.title}</span>
+                          {entry.description && (
+                            <span className="archive-row-description">{entry.description}</span>
+                          )}
+                          {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              );
+            })}
+          </ol>
         </LiquidGlassHoverScope>
       </article>
     </main>
