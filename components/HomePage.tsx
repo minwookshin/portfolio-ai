@@ -24,7 +24,6 @@ import {
   getProjectPath,
   isLabProject,
   isLabStudyProject,
-  isVisibleBuilderValue,
   orderProjects,
 } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
@@ -329,21 +328,11 @@ function showToTarget(show: string | null): Project | "profile" | "projects" | n
 }
 
 function getProjectDescriptor(project: Project) {
-  return project.comingSoon
+  const descriptor = project.comingSoon
     ? project.unavailableMessage ?? "Coming soon."
     : project.studioLabel ?? project.description;
-}
 
-function hasBuilderProof(project: Project): project is PortfolioProject {
-  return "builder" in project && typeof project.builder === "object" && project.builder !== null;
-}
-
-function getProjectProcessLine(project: Project) {
-  if (hasBuilderProof(project) && isVisibleBuilderValue(project.builder.pipeline)) {
-    return project.builder.pipeline;
-  }
-
-  return project.overview ?? project.description;
+  return [project.date, descriptor].filter(Boolean).join(" / ");
 }
 
 function ProjectTextRow({
@@ -364,7 +353,6 @@ function ProjectTextRow({
   const reduceMotion = useReducedMotion();
   const unavailableControls = useAnimationControls();
   const descriptor = getProjectDescriptor(project);
-  const processLine = getProjectProcessLine(project);
   const rowClass =
     "home-row home-row--link micro-focus micro-focus-tight micro-pressable";
   const titleClass = [
@@ -382,9 +370,6 @@ function ProjectTextRow({
         </span>
         <span className="home-meta project-row-meta">
           {descriptor}
-        </span>
-        <span className="home-process-line">
-          {processLine}
         </span>
       </span>
     </>
