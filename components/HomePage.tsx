@@ -173,10 +173,14 @@ function useCanShowWorkPreview() {
   return canShow;
 }
 
-function HomeBulletCell({ section = false }: { section?: boolean }) {
+type HomeBulletVariant = "leaf" | "note" | "section" | "system" | "work";
+
+function HomeBulletCell({ section = false, variant = "leaf" }: { section?: boolean; variant?: HomeBulletVariant }) {
+  const bulletVariant = section ? "section" : variant;
+
   return (
     <span className="home-bullet-cell" aria-hidden="true">
-      <span className={section ? "home-bullet home-bullet--section" : "home-bullet"} />
+      <span className={`home-bullet home-bullet--${bulletVariant}`} />
       {section && (
         <span className="home-caret" aria-hidden="true">
           <span />
@@ -371,7 +375,7 @@ function ProjectTextRow({
     .join(" ");
   const rowText = (
     <>
-      <HomeBulletCell />
+      <HomeBulletCell variant="work" />
       <span className="home-label project-row-copy">
         <span className={titleClass}>
           {project.title}
@@ -783,7 +787,7 @@ function StudyTextRow({
           href={item.href}
           className="home-row home-row--link micro-focus micro-focus-tight micro-pressable"
         >
-          <HomeBulletCell />
+          <HomeBulletCell variant={item.kind === "lab" ? "system" : "note"} />
           <span className="home-label project-row-copy">
             <span className="project-row-title-line--lateral font-normal">
               {item.title}
