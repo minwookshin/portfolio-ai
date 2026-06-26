@@ -24,8 +24,10 @@ import {
   getProjectPath,
   isLabProject,
   isLabStudyProject,
+  isVisibleBuilderValue,
   orderProjects,
 } from "@/data/projects";
+import type { PortfolioProject } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
 
 type HomeTab = "work" | "studies";
@@ -328,6 +330,18 @@ function getProjectDescriptor(project: Project) {
     : project.studioLabel ?? project.description;
 }
 
+function hasBuilderProof(project: Project): project is PortfolioProject {
+  return "builder" in project && typeof project.builder === "object" && project.builder !== null;
+}
+
+function getProjectProcessLine(project: Project) {
+  if (hasBuilderProof(project) && isVisibleBuilderValue(project.builder.pipeline)) {
+    return project.builder.pipeline;
+  }
+
+  return project.overview ?? project.description;
+}
+
 function ProjectTextRow({
   onActivate,
   onDeactivate,
@@ -346,6 +360,7 @@ function ProjectTextRow({
   const reduceMotion = useReducedMotion();
   const unavailableControls = useAnimationControls();
   const descriptor = getProjectDescriptor(project);
+  const processLine = getProjectProcessLine(project);
   const rowClass =
     "home-row home-row--link micro-focus micro-focus-tight micro-pressable";
   const titleClass = [
@@ -363,6 +378,9 @@ function ProjectTextRow({
         </span>
         <span className="home-meta project-row-meta">
           {descriptor}
+        </span>
+        <span className="home-process-line">
+          {processLine}
         </span>
       </span>
     </>
@@ -582,7 +600,7 @@ function WorkSection({
   projects,
 }: {
   onActiveProjectChange?: (project: Project | null) => void;
-  projects: Project[];
+  projects: PortfolioProject[];
 }) {
   const reduceMotion = Boolean(useReducedMotion());
   const canShowFixedPreview = useCanShowWorkPreview();
@@ -816,7 +834,7 @@ function HomeDocument({
   activeSection: HomeTab;
   interactionItems: StudyItem[];
   noteItems: StudyItem[];
-  projects: Project[];
+  projects: PortfolioProject[];
 }) {
   return (
     <motion.section
