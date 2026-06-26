@@ -661,10 +661,10 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       "A cursor interaction study about shape, opacity, scale, and restraint.",
     builder: {
       role: "Interaction study",
-      stack: ["SVG", "CSS", "React"],
+      stack: ["DOM", "CSS", "React"],
       status: { label: "Study" },
       oneLiner: "A quiet low-opacity circle cursor that stays behind the work.",
-      pipeline: "Pointer reference -> reduced circular mark -> site-specific cursor.",
+      pipeline: "Pointer reference -> DOM cursor layer -> site-specific cursor.",
       scope: [],
       results: [],
     },
@@ -681,7 +681,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         {
           heading: "setting up the shape",
           body: [
-            "The cursor becomes a solid circle: a 24px canvas with a low-opacity black fill and no outline.",
+            "The cursor becomes a solid DOM circle: a low-opacity black fill with no SVG edge or outline.",
             "The circle stays quiet on the light canvas, so it signals presence without becoming a decorative sticker.",
           ],
         },
@@ -702,7 +702,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     │   └── No
     │
     ├── Does contrast need help?
-    │   ├── Yes -> keep the black fill at 20% opacity
+    │   ├── Yes -> keep the DOM circle at 20% opacity
     │   └── No  -> reduce opacity further
     │
     └── Is the cursor becoming decorative?
@@ -716,21 +716,22 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         "Disable special cursor behavior where `precision` or native affordance matters.",
       ],
       rules: [
-        { label: "canvas", value: "24x24px", note: "large enough to feel calm, small enough to stay out of the way" },
-        { label: "mark", value: "14px solid circle", note: "centered on the pointer hotspot, with no stroke" },
-        { label: "color", value: "black / 20%", note: "visible on light canvas without a border" },
+        { label: "layer", value: "fixed DOM node", note: "follows the pointer instead of relying on SVG cursor rasterization" },
+        { label: "mark", value: "14px solid circle", note: "centered on the pointer hotspot, with no stroke or border" },
+        { label: "color", value: "black / 20%", note: "visible on light canvas without a rendered outline" },
         { label: "fallback", value: "native", note: "text fields, media controls, touch, and unsupported browsers keep system behavior" },
       ],
-      code: `:root {
-  --cursor-soft-circle: url("data:image/svg+xml,%3Csvg ...%3E") 12 12, auto;
+      code: `.dom-cursor {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(24, 24, 27, 0.2);
+  pointer-events: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  body,
-  a,
-  button {
-    cursor: var(--cursor-soft-circle);
-  }
+html.dom-cursor-enabled * {
+  cursor: none;
 }`,
     },
   },

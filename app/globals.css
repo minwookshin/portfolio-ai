@@ -155,7 +155,63 @@
   --code-shadow: none;
   --code-font-size: 13px;
   --code-line-height: 1.55;
-  --cursor-soft-circle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='7' fill='%2318181B' fill-opacity='0.2' stroke='none'/%3E%3C/svg%3E") 12 12, auto;
+}
+
+.dom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483647;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(24, 24, 27, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-100px, -100px, 0);
+  transition:
+    width var(--motion-duration-fast) var(--motion-ease-standard),
+    height var(--motion-duration-fast) var(--motion-ease-standard),
+    margin var(--motion-duration-fast) var(--motion-ease-standard),
+    background var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  will-change: transform, width, height, margin, opacity, background;
+}
+
+.dom-cursor.is-visible {
+  opacity: 1;
+}
+
+.dom-cursor.is-interactive {
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  background: rgba(24, 24, 27, 0.18);
+}
+
+.dom-cursor.is-pressed {
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  background: rgba(24, 24, 27, 0.24);
+}
+
+.dom-cursor.is-native {
+  opacity: 0;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .dom-cursor {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dom-cursor {
+    transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  }
 }
 
 /* Base font */
@@ -3037,38 +3093,22 @@ button.home-row {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  :is(
-    html,
-    body,
-    a,
-    button,
-    [role="button"],
-    summary,
-    label,
-    .cursor-pointer,
-    .home-row,
-    .archive-row,
-    .archive-year,
-    .micro-link,
-    .micro-pressable,
-    .studio-lateral-link,
-    .related-work-link,
-    .portfolio-siri__chip,
-    .lab-study-control,
-    .lab-cursor-target,
-    .lab-hold-action,
-    .lab-hold-action__reset,
-    .lab-hover-row,
-    .lab-loop-panel__control
-  ) {
-    cursor: var(--cursor-soft-circle) !important;
+  html.dom-cursor-enabled,
+  html.dom-cursor-enabled body,
+  html.dom-cursor-enabled body * {
+    cursor: none !important;
   }
 
-  :is(input, textarea, [contenteditable="true"], .cursor-text) {
+  html.dom-cursor-enabled :is(
+    input:not([type="button"]):not([type="submit"]):not([type="reset"]),
+    textarea,
+    [contenteditable="true"],
+    .cursor-text
+  ) {
     cursor: text !important;
   }
 
-  :is(select, video, video *) {
+  html.dom-cursor-enabled :is(select, option, video, video *, iframe) {
     cursor: auto !important;
   }
 }

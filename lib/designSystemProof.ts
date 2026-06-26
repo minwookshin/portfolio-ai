@@ -17,6 +17,7 @@ export const DESIGN_SYSTEM_PROOF = {
     "lib/material/motion.ts",
     "components/HomePage.tsx",
     "components/ArchiveIndexPage.tsx",
+    "components/CustomCursor.tsx",
     "components/LiquidGlassHoverScope.tsx",
     "components/ProjectDetailView.tsx",
     "components/LabStudyDetailView.tsx",
@@ -86,7 +87,7 @@ export const DESIGN_SYSTEM_TOKENS = {
   ],
   elevation: [
     { role: "default", value: "none", usage: "the product relies on spacing, type, and hairlines instead of decorative shadows" },
-    { role: "cursor", value: "low-opacity black solid circle", usage: "fine-pointer cursor affordance, not layout surface decoration" },
+    { role: "cursor", value: "low-opacity black DOM circle", usage: "fine-pointer cursor affordance, not layout surface decoration" },
   ],
   motion: {
     durations: [
