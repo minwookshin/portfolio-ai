@@ -10,7 +10,6 @@
   --theme-light-dim: #C8C8CD;
   --theme-light-rule: rgba(24, 24, 27, 0.08);
   --theme-light-tint: rgba(24, 24, 27, 0.05);
-  --theme-light-row-hover: rgba(24, 24, 27, 0.03);
   --theme-light-row-focus: rgba(24, 24, 27, 0.06);
 
   --theme-dark-bg: #0F0F10;
@@ -28,7 +27,6 @@
   --bg-surface: var(--theme-light-surface);
   --bg-element: var(--theme-light-element);
   --border-light: var(--theme-light-rule);
-  --state-row-hover: var(--theme-light-row-hover);
   --state-row-focus: var(--theme-light-row-focus);
 
   --text-primary: var(--theme-light-ink);
@@ -712,10 +710,6 @@ button.home-row {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .home-row:hover {
-    background: var(--state-row-hover);
-  }
-
   .home-row:hover .home-bullet {
     opacity: 0.58;
     transform: scale(1.08);
@@ -1987,17 +1981,9 @@ button.home-row {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .archive-row:hover {
-    background: var(--state-row-hover);
-  }
-
   .archive-row:hover .archive-row-bullet {
     opacity: 0.58;
     transform: scale(1.08);
-  }
-
-  .archive-year:hover {
-    background: var(--state-row-hover);
   }
 
   .archive-year:hover .archive-year-bullet {
