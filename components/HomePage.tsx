@@ -246,7 +246,7 @@ function HomeOutlineSection({
         <HomeBulletCell section />
         <span className="home-label">
           {title}
-          {typeof count === "number" && <span className="home-count">{count}</span>}
+          {!isOpen && typeof count === "number" && <span className="home-count">{count}</span>}
         </span>
       </summary>
       <div className="home-children">{children}</div>

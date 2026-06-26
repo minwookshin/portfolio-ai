@@ -10,6 +10,8 @@
   --theme-light-dim: #C8C8CD;
   --theme-light-rule: rgba(24, 24, 27, 0.08);
   --theme-light-tint: rgba(24, 24, 27, 0.05);
+  --theme-light-row-hover: rgba(24, 24, 27, 0.03);
+  --theme-light-row-focus: rgba(24, 24, 27, 0.06);
 
   --theme-dark-bg: #0F0F10;
   --theme-dark-surface: #18181B;
@@ -26,6 +28,8 @@
   --bg-surface: var(--theme-light-surface);
   --bg-element: var(--theme-light-element);
   --border-light: var(--theme-light-rule);
+  --state-row-hover: var(--theme-light-row-hover);
+  --state-row-focus: var(--theme-light-row-focus);
 
   --text-primary: var(--theme-light-ink);
   --text-secondary: var(--theme-light-muted);
@@ -162,12 +166,13 @@
   top: 0;
   left: 0;
   z-index: 2147483647;
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
   border: 0;
   border-radius: 999px;
-  background: rgba(24, 24, 27, 0.2);
+  background: var(--text-muted);
+  mix-blend-mode: multiply;
   opacity: 0;
   pointer-events: none;
   transform: translate3d(-100px, -100px, 0);
@@ -181,21 +186,23 @@
 }
 
 .dom-cursor.is-visible {
-  opacity: 1;
+  opacity: 0.42;
 }
 
 .dom-cursor.is-interactive {
-  width: 18px;
-  height: 18px;
-  margin: -9px 0 0 -9px;
-  background: rgba(24, 24, 27, 0.18);
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  background: var(--text-primary);
+  opacity: 0.16;
 }
 
 .dom-cursor.is-pressed {
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0 -5px;
-  background: rgba(24, 24, 27, 0.24);
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  background: var(--text-primary);
+  opacity: 0.34;
 }
 
 .dom-cursor.is-native {
@@ -470,8 +477,8 @@ body::after {
   text-align: left;
   text-decoration: none;
   transition:
-    background-color var(--motion-duration-instant) var(--motion-ease-standard),
-    transform var(--motion-duration-instant) var(--motion-ease-standard);
+    background-color 140ms var(--motion-ease-standard),
+    transform 140ms var(--motion-ease-standard);
 }
 
 .home-row--link,
@@ -489,7 +496,7 @@ button.home-row {
 
 .home-row:focus-visible {
   outline: none;
-  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  background: var(--state-row-focus);
 }
 
 .home-row:focus-visible::before {
@@ -523,12 +530,12 @@ button.home-row {
   background: currentColor;
   opacity: 0.42;
   transition:
-    opacity var(--motion-duration-instant) var(--motion-ease-standard),
-    transform var(--motion-duration-instant) var(--motion-ease-standard),
-    width var(--motion-duration-instant) var(--motion-ease-standard),
-    height var(--motion-duration-instant) var(--motion-ease-standard),
-    background-color var(--motion-duration-instant) var(--motion-ease-standard),
-    border-color var(--motion-duration-instant) var(--motion-ease-standard);
+    opacity 140ms var(--motion-ease-standard),
+    transform 140ms var(--motion-ease-standard),
+    width 220ms var(--motion-ease-standard),
+    height 220ms var(--motion-ease-standard),
+    background-color 220ms var(--motion-ease-standard),
+    border-color 220ms var(--motion-ease-standard);
 }
 
 .home-bullet--work {
@@ -576,7 +583,7 @@ button.home-row {
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
-  transition: opacity var(--motion-duration-instant) var(--motion-ease-standard);
+  transition: opacity 140ms var(--motion-ease-standard);
 }
 
 .home-caret span {
@@ -586,7 +593,7 @@ button.home-row {
   border-right: 1.5px solid currentColor;
   border-bottom: 1.5px solid currentColor;
   transform: rotate(-45deg);
-  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+  transition: transform 220ms var(--motion-ease-standard);
 }
 
 .home-node--section[open] > .home-row > .home-bullet-cell > .home-caret span {
@@ -647,6 +654,9 @@ button.home-row {
   font-variant-numeric: tabular-nums;
   line-height: 1;
   vertical-align: middle;
+  transition:
+    color 140ms var(--motion-ease-standard),
+    opacity 140ms var(--motion-ease-standard);
 }
 
 .home-count::before {
@@ -703,12 +713,12 @@ button.home-row {
 
 @media (hover: hover) and (pointer: fine) {
   .home-row:hover {
-    background: transparent;
+    background: var(--state-row-hover);
   }
 
   .home-row:hover .home-bullet {
-    opacity: 0.74;
-    transform: none;
+    opacity: 0.58;
+    transform: scale(1.08);
   }
 
   .home-node--section > .home-row:hover .home-bullet {
@@ -1805,6 +1815,9 @@ button.home-row {
   text-decoration: none;
   cursor: pointer;
   user-select: none;
+  transition:
+    background-color 140ms var(--motion-ease-standard),
+    transform 140ms var(--motion-ease-standard);
 }
 
 .archive-bullet-cell {
@@ -1825,11 +1838,11 @@ button.home-row {
   border-radius: var(--md-shape-full);
   opacity: 0.62;
   transition:
-    opacity var(--motion-duration-instant) var(--motion-ease-standard),
-    width var(--motion-duration-instant) var(--motion-ease-standard),
-    height var(--motion-duration-instant) var(--motion-ease-standard),
-    background-color var(--motion-duration-instant) var(--motion-ease-standard),
-    border-color var(--motion-duration-instant) var(--motion-ease-standard);
+    opacity 140ms var(--motion-ease-standard),
+    width 220ms var(--motion-ease-standard),
+    height 220ms var(--motion-ease-standard),
+    background-color 220ms var(--motion-ease-standard),
+    border-color 220ms var(--motion-ease-standard);
 }
 
 .archive-year-details[open] > .archive-year .archive-year-bullet {
@@ -1849,7 +1862,7 @@ button.home-row {
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
-  transition: opacity var(--motion-duration-instant) var(--motion-ease-standard);
+  transition: opacity 140ms var(--motion-ease-standard);
 }
 
 .archive-caret span {
@@ -1859,7 +1872,7 @@ button.home-row {
   border-right: 1.5px solid currentColor;
   border-bottom: 1.5px solid currentColor;
   transform: rotate(-45deg);
-  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+  transition: transform 220ms var(--motion-ease-standard);
 }
 
 .archive-year-details[open] > .archive-year .archive-caret span {
@@ -1887,8 +1900,8 @@ button.home-row {
   background: currentColor;
   opacity: 0.42;
   transition:
-    opacity var(--motion-duration-instant) var(--motion-ease-standard),
-    transform var(--motion-duration-instant) var(--motion-ease-standard);
+    opacity 140ms var(--motion-ease-standard),
+    transform 140ms var(--motion-ease-standard);
 }
 
 .archive-year-label {
@@ -1903,6 +1916,9 @@ button.home-row {
   font-size: 12px;
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  transition:
+    color 140ms var(--motion-ease-standard),
+    opacity 140ms var(--motion-ease-standard);
 }
 
 .archive-count::before {
@@ -1972,11 +1988,16 @@ button.home-row {
 
 @media (hover: hover) and (pointer: fine) {
   .archive-row:hover {
-    background: transparent;
+    background: var(--state-row-hover);
   }
 
   .archive-row:hover .archive-row-bullet {
-    opacity: 0.74;
+    opacity: 0.58;
+    transform: scale(1.08);
+  }
+
+  .archive-year:hover {
+    background: var(--state-row-hover);
   }
 
   .archive-year:hover .archive-year-bullet {

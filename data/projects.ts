@@ -681,7 +681,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
         {
           heading: "setting up the shape",
           body: [
-            "The cursor becomes a solid DOM circle: a low-opacity black fill with no SVG edge or outline.",
+            "The cursor becomes a solid DOM circle: an 18px low-opacity black layer using multiply, with no SVG edge or outline.",
             "The circle stays quiet on the light canvas, so it signals presence without becoming a decorative sticker.",
           ],
         },
@@ -702,7 +702,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
     │   └── No
     │
     ├── Does contrast need help?
-    │   ├── Yes -> keep the DOM circle at 20% opacity
+    │   ├── Yes -> keep the DOM circle low-opacity with multiply
     │   └── No  -> reduce opacity further
     │
     └── Is the cursor becoming decorative?
@@ -717,16 +717,18 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       ],
       rules: [
         { label: "layer", value: "fixed DOM node", note: "follows the pointer instead of relying on SVG cursor rasterization" },
-        { label: "mark", value: "14px solid circle", note: "centered on the pointer hotspot, with no stroke or border" },
-        { label: "color", value: "black / 20%", note: "visible on light canvas without a rendered outline" },
+        { label: "mark", value: "18px solid circle", note: "centered on the pointer hotspot, with no stroke or border" },
+        { label: "color", value: "muted ink / multiply", note: "visible on light canvas without a rendered outline" },
         { label: "fallback", value: "native", note: "text fields, media controls, touch, and unsupported browsers keep system behavior" },
       ],
       code: `.dom-cursor {
   position: fixed;
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
-  background: rgba(24, 24, 27, 0.2);
+  background: var(--text-muted);
+  mix-blend-mode: multiply;
+  opacity: 0.42;
   pointer-events: none;
 }
 
