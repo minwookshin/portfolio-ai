@@ -19,9 +19,11 @@ describe("design system proof", () => {
   it("documents existing token roles and component primitives", () => {
     expect(DESIGN_SYSTEM_TOKENS.colors).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ role: "background.base", value: "#FFFFFF" }),
-        expect.objectContaining({ role: "text.primary", value: "#000000" }),
-        expect.objectContaining({ role: "text.muted", value: "#A1A1AA" }),
+        expect.objectContaining({ role: "theme.light.background", value: "#FAFAFA" }),
+        expect.objectContaining({ role: "theme.dark.background", value: "#0F0F10" }),
+        expect.objectContaining({ role: "background.base", value: "theme-aware" }),
+        expect.objectContaining({ role: "text.primary", value: "theme-aware" }),
+        expect.objectContaining({ role: "text.muted", value: "theme-aware" }),
       ]),
     );
     expect(DESIGN_SYSTEM_COMPONENTS.map((component) => component.name)).toContain("ai chat and recruiter intake");

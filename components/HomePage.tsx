@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, useCallback, useState, useEffect, useRef } from "react";
-import type { KeyboardEvent } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
@@ -34,11 +34,6 @@ type HomePageProps = {
   activeSection?: HomeTab;
   writingPosts: WritingPostMeta[];
 };
-
-const HOME_SECTION_LINKS: Array<{ href: string; id: HomeTab; label: string }> = [
-  { href: "/work", id: "work", label: "work" },
-  { href: "/studies", id: "studies", label: "studies" },
-];
 
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
@@ -176,6 +171,102 @@ function useCanShowWorkPreview() {
   return canShow;
 }
 
+function HomeBulletCell({ section = false }: { section?: boolean }) {
+  return (
+    <span className="home-bullet-cell" aria-hidden="true">
+      <span className={section ? "home-bullet home-bullet--section" : "home-bullet"} />
+      {section && (
+        <span className="home-caret" aria-hidden="true">
+          <span />
+        </span>
+      )}
+    </span>
+  );
+}
+
+function HomeLeafRow({ children }: { children: ReactNode }) {
+  return (
+    <div className="home-node">
+      <div className="home-row">
+        <HomeBulletCell />
+        <span className="home-label">{children}</span>
+      </div>
+    </div>
+  );
+}
+
+function HomeMetaLink({
+  children,
+  external = false,
+  href,
+}: {
+  children: string;
+  external?: boolean;
+  href: string;
+}) {
+  const className = "home-mention micro-focus micro-focus-tight micro-pressable";
+
+  if (external || href.startsWith("mailto:")) {
+    return (
+      <a
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        className={className}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={className}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function HomeOutlineSection({
+  active = false,
+  children,
+  count,
+  defaultOpen,
+  sectionId,
+  title,
+}: {
+  active?: boolean;
+  children: ReactNode;
+  count?: number;
+  defaultOpen: boolean;
+  sectionId?: string;
+  title: string;
+}) {
+  const [isOpen, setIsOpen] = useState(() => defaultOpen);
+
+  return (
+    <motion.details
+      className="home-node home-node--section"
+      data-active={active ? "true" : "false"}
+      id={sectionId}
+      onToggle={(event) => setIsOpen(event.currentTarget.open)}
+      open={isOpen}
+      variants={landingRevealItem}
+    >
+      <summary className="home-row home-row--summary micro-focus micro-focus-tight">
+        <HomeBulletCell section />
+        <span className="home-label">
+          {title}
+          {typeof count === "number" && <span className="home-count">{count}</span>}
+        </span>
+      </summary>
+      <div className="home-children">{children}</div>
+    </motion.details>
+  );
+}
+
 // The model appends hidden directive lines at the end of each reply:
 //   <<<SHOW>>>project:Sentinel | projects | profile   (what the UI should open)
 //   <<<FOLLOWUPS>>>q1|q2|q3                            (tappable next questions)
@@ -231,27 +322,6 @@ function showToTarget(show: string | null): Project | "profile" | "projects" | n
   return null;
 }
 
-function IntroLink({
-  href,
-  children,
-  external = false,
-}: {
-  href: string;
-  children: string;
-  external?: boolean;
-}) {
-  return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className="intro-contact-link micro-focus micro-pressable text-[length:var(--type-0)]"
-    >
-      {children}
-    </a>
-  );
-}
-
 function getProjectDescriptor(project: Project) {
   return project.comingSoon
     ? project.unavailableMessage ?? "Coming soon."
@@ -277,20 +347,21 @@ function ProjectTextRow({
   const unavailableControls = useAnimationControls();
   const descriptor = getProjectDescriptor(project);
   const rowClass =
-    "micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center gap-0.5 rounded-[var(--md-shape-lg)] border-0 bg-transparent px-2 py-1 text-left text-[inherit]";
+    "home-row home-row--link micro-focus micro-focus-tight micro-pressable";
   const titleClass = [
-    "font-normal leading-[var(--leading-tight)]",
+    "font-normal",
     "project-row-title-line--lateral",
   ]
     .filter(Boolean)
     .join(" ");
   const rowText = (
     <>
-      <span className="project-row-copy flex min-w-0 flex-col items-start gap-2">
+      <HomeBulletCell />
+      <span className="home-label project-row-copy">
         <span className={titleClass}>
           {project.title}
         </span>
-        <span className="project-row-meta min-w-0 text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">
+        <span className="home-meta project-row-meta">
           {descriptor}
         </span>
       </span>
@@ -318,7 +389,7 @@ function ProjectTextRow({
       viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
       transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row={list}
-      className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
+      className="home-node group relative z-0 list-none hover:z-30 focus-within:z-30"
     >
       {project.comingSoon ? (
         <motion.button
@@ -506,32 +577,6 @@ function WorkFixedPreview({
   );
 }
 
-function EditorialIntro() {
-  return (
-    <section id="top" className="mx-auto flex w-full max-w-[1180px] justify-center bg-[var(--bg-base)] px-[var(--space-3)] pb-[var(--space-4)] pt-[92px] sm:px-[var(--space-5)] md:pt-[122px]">
-      <motion.div id="profile" variants={landingIntroVariants} className="w-full max-w-[620px] scroll-mt-28 text-left">
-        <motion.p variants={landingRevealItem} className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)]">Minwook Shin</motion.p>
-        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">Design engineer</motion.p>
-        <motion.h1 variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
-          I design and build interfaces for AI-native products, from early idea to working software.
-        </motion.h1>
-        <motion.p variants={landingRevealItem} className="mt-[var(--space-1)] max-w-[var(--measure)] leading-[var(--leading-body)] text-[var(--text-muted)]">
-          <IntroLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</IntroLink>
-          {", "}
-          <IntroLink href={PERSONAL_INFO.linkedin} external>LinkedIn</IntroLink>
-          {", "}
-          <IntroLink href={PERSONAL_INFO.github} external>GitHub</IntroLink>
-          {", "}
-          <span className="text-[var(--text-primary)]">and</span>
-          {" "}
-          <IntroLink href={PERSONAL_INFO.resume} external>Resume</IntroLink>
-          {"."}
-        </motion.p>
-      </motion.div>
-    </section>
-  );
-}
-
 function WorkSection({
   onActiveProjectChange,
   projects,
@@ -585,7 +630,7 @@ function WorkSection({
 
   return (
     <div className="relative">
-      <ul className="space-y-[var(--space-2)]">
+      <ul className="home-list">
         {projects.map((project, index) => (
           <ProjectTextRow
             key={project.id}
@@ -711,10 +756,10 @@ function StudyTextRow({
       animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 1, filter: "blur(0px)", y: 0 }}
       transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row="studies"
-      className="-mx-2 group relative z-0 w-fit max-w-full list-none text-[length:var(--type-0)] hover:z-30 focus-within:z-30"
+      className="home-node group relative z-0 list-none hover:z-30 focus-within:z-30"
     >
       <motion.div
-        className="inline-flex max-w-full transform-gpu"
+        className="block max-w-full transform-gpu"
         style={
           reduceMotion
             ? undefined
@@ -728,16 +773,17 @@ function StudyTextRow({
       >
         <Link
           href={item.href}
-          className="micro-focus micro-pressable relative z-10 inline-flex min-h-12 max-w-full flex-col items-start justify-center rounded-[var(--md-shape-lg)] px-2 py-1 text-left"
+          className="home-row home-row--link micro-focus micro-focus-tight micro-pressable"
         >
-          <span className="project-row-copy flex max-w-full flex-col items-start gap-2">
-            <span className="project-row-title-line--lateral max-w-full font-normal leading-[var(--leading-tight)]">
+          <HomeBulletCell />
+          <span className="home-label project-row-copy">
+            <span className="project-row-title-line--lateral font-normal">
               {item.title}
             </span>
             <StudyMetaLine
               label={item.label}
               meta={item.meta}
-              className="project-row-meta text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]"
+              className="home-meta project-row-meta"
             />
           </span>
         </Link>
@@ -757,7 +803,7 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
 
   return (
     <div className="relative">
-      <ul className="space-y-[var(--space-2)]">
+      <ul className="home-list">
         {items.map((item, index) => (
           <StudyTextRow
             key={item.id}
@@ -771,7 +817,7 @@ function StudiesSection({ items }: { items: StudyItem[] }) {
   );
 }
 
-function HomeExploreSection({
+function HomeDocument({
   activeSection,
   projects,
   studyItems,
@@ -782,44 +828,69 @@ function HomeExploreSection({
 }) {
   return (
     <motion.section
-      id={activeSection}
+      id="top"
       variants={landingExploreVariants}
-      className="mx-auto w-full max-w-[1180px] px-[var(--space-3)] pb-[var(--space-6)] pt-[var(--space-4)] sm:px-[var(--space-5)]"
+      className="home-doc-shell"
     >
-      <div className="mx-auto w-full max-w-[620px] text-left">
-        <motion.nav
-          aria-label="sections"
-          variants={landingRevealItem}
-          className="flex flex-wrap items-baseline gap-x-0 gap-y-1 text-[length:var(--type-1)] leading-[var(--leading-heading)]"
+      <motion.div id="profile" variants={landingIntroVariants} className="home-doc scroll-mt-28">
+        <motion.h1 variants={landingRevealItem} className="home-doc-title">
+          Minwook Shin
+          <span> / design engineer</span>
+        </motion.h1>
+
+        <motion.div variants={landingRevealItem}>
+          <HomeLeafRow>
+            I design and build interfaces for AI-native products, from early idea to working software.
+          </HomeLeafRow>
+        </motion.div>
+
+        <HomeOutlineSection defaultOpen title="now">
+          <HomeLeafRow>still editing this website</HomeLeafRow>
+          <HomeLeafRow>building product interfaces that work as proof, not just presentation</HomeLeafRow>
+          <HomeLeafRow>keeping motion, code, and AI behavior in the same design system</HomeLeafRow>
+        </HomeOutlineSection>
+
+        <HomeOutlineSection
+          active={activeSection === "work"}
+          count={projects.length}
+          defaultOpen={activeSection === "work"}
+          sectionId="work"
+          title="selected work"
         >
-          {HOME_SECTION_LINKS.map((link, index) => {
-            const selected = link.id === activeSection;
+          <WorkSection projects={projects} />
+          <HomeLeafRow>
+            <HomeMetaLink href="/work">all work</HomeMetaLink>
+          </HomeLeafRow>
+        </HomeOutlineSection>
 
-            return (
-              <Fragment key={link.id}>
-                <Link
-                  aria-current={selected ? "page" : undefined}
-                  className="home-tab-button micro-focus micro-focus-tight"
-                  data-active={selected ? "true" : "false"}
-                  href={link.href}
-                >
-                  {link.label}
-                </Link>
-                {index < HOME_SECTION_LINKS.length - 1 && (
-                  <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]" role="presentation">
-                    ,
-                  </span>
-                )}
-              </Fragment>
-            );
-          })}
-        </motion.nav>
-      </div>
+        <HomeOutlineSection
+          active={activeSection === "studies"}
+          count={studyItems.length}
+          defaultOpen={activeSection === "studies"}
+          sectionId="studies"
+          title="studies"
+        >
+          <StudiesSection items={studyItems} />
+          <HomeLeafRow>
+            <HomeMetaLink href="/studies">all studies</HomeMetaLink>
+          </HomeLeafRow>
+        </HomeOutlineSection>
 
-      <div className="mx-auto mt-[var(--space-2)] w-full max-w-[620px] text-left">
-        {activeSection === "work" && <WorkSection projects={projects} />}
-        {activeSection === "studies" && <StudiesSection items={studyItems} />}
-      </div>
+        <HomeOutlineSection count={4} defaultOpen title="elsewhere">
+          <HomeLeafRow>
+            <HomeMetaLink href={PERSONAL_INFO.linkedin} external>linkedin.com/in/minwookshin</HomeMetaLink>
+          </HomeLeafRow>
+          <HomeLeafRow>
+            <HomeMetaLink href={PERSONAL_INFO.github} external>github.com/minwookshin</HomeMetaLink>
+          </HomeLeafRow>
+          <HomeLeafRow>
+            <HomeMetaLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</HomeMetaLink>
+          </HomeLeafRow>
+          <HomeLeafRow>
+            <HomeMetaLink href={PERSONAL_INFO.resume}>resume</HomeMetaLink>
+          </HomeLeafRow>
+        </HomeOutlineSection>
+      </motion.div>
     </motion.section>
   );
 }
@@ -1029,8 +1100,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         className="flex-1"
       >
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
-          <EditorialIntro />
-          <HomeExploreSection
+          <HomeDocument
             activeSection={currentSection}
             projects={featuredProjects}
             studyItems={studyItems}
