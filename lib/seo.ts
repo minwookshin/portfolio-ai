@@ -5,10 +5,9 @@ import {
   getLabProjects,
   getProjectPath,
   getProjectMetadataDescription,
-  isLabProject,
+  isLabStudyProject,
   isVisibleBuilderValue,
-  orderProjects,
-  FEATURED_PROJECT_IDS,
+  isWorkArchiveProject,
 } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -61,13 +60,15 @@ export function profilePageJsonLd() {
 }
 
 export function workCollectionItems() {
-  return orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS)
-    .filter((project) => !project.comingSoon && !isLabProject(project))
+  return MAIN_PROJECTS
+    .filter((project) => !project.comingSoon && isWorkArchiveProject(project))
     .map((project) => projectCollectionItem(project, getProjectPath(project)));
 }
 
 export function studiesCollectionItems() {
-  const labItems = getLabProjects().map((project) => projectCollectionItem(project, getLabProjectPath(project)));
+  const labItems = getLabProjects()
+    .filter(isLabStudyProject)
+    .map((project) => projectCollectionItem(project, getLabProjectPath(project)));
 
   return labItems;
 }

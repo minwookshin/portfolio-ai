@@ -4,7 +4,13 @@ import { notFound } from "next/navigation";
 import BuildMeta from "@/components/BuildMeta";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import StructuredData from "@/components/StructuredData";
-import { LIGHT_PROJECT_TOKENS, getOpenableProjects, getProjectBySlug, getProjectMetadataDescription } from "@/data/projects";
+import {
+  LIGHT_PROJECT_TOKENS,
+  getOpenableProjects,
+  getProjectBySlug,
+  getProjectMetadataDescription,
+  isSmallProject,
+} from "@/data/projects";
 import { absoluteUrl, projectJsonLd } from "@/lib/seo";
 import { getWritingPostsForWork } from "@/lib/writing";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -81,6 +87,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
   if (!project || project.comingSoon) notFound();
 
   const relatedWriting = getWritingPostsForWork(project.slug);
+  const videoOnly = isSmallProject(project);
 
   return (
     <main
@@ -90,9 +97,10 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
       <StructuredData data={projectJsonLd(project, `/work/${project.slug}`)} />
       <div className="mx-auto w-full max-w-[620px]">
         <ProjectCaseStudyShell
+          mode={videoOnly ? "video-only" : "case-study"}
           project={project}
         />
-        <RelatedWriting posts={relatedWriting} />
+        {!videoOnly && <RelatedWriting posts={relatedWriting} />}
       </div>
       <BuildMeta className="mx-auto mt-auto w-full max-w-[620px] pt-[var(--space-6)] text-[length:var(--type-0)]" />
     </main>

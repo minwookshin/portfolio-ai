@@ -49,6 +49,16 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("/ post")).toBeInTheDocument();
   });
 
+  it("renders small work in video-only mode", () => {
+    render(<ProjectCaseStudyShell mode="video-only" project={getWorkProject("tomo")} />);
+
+    expect(screen.getByRole("heading", { name: "Tomo" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Play video" })).toBeInTheDocument();
+    expect(screen.getByRole("slider", { name: "Tomo demo timeline" })).toBeInTheDocument();
+    expect(screen.queryByText("links")).not.toBeInTheDocument();
+    expect(screen.queryByText("build path")).not.toBeInTheDocument();
+  });
+
   it("renders Portfolio AI proof links as working public routes", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("portfolio-ai")} />);
 

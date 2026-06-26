@@ -972,6 +972,14 @@ export function isLabStudyProject(project: Project | PortfolioProject): project 
   return "labStudy" in project && Boolean(project.labStudy);
 }
 
+export function isSmallProject(project: Project | PortfolioProject) {
+  return isLabProject(project) && !isLabStudyProject(project);
+}
+
+export function isWorkArchiveProject(project: Project | PortfolioProject) {
+  return !isLabStudyProject(project);
+}
+
 export function getLabProjects() {
   return orderProjects(MAIN_PROJECTS, LAB_PROJECT_IDS).filter((project) => !project.comingSoon);
 }
@@ -981,7 +989,7 @@ export function getProjectPath(project: Project) {
 }
 
 export function getLabProjectPath(project: Project) {
-  if (getProjectSlug(project) === "caret") return getProjectPath(project);
+  if (!isLabStudyProject(project)) return getProjectPath(project);
   return `/studies/${getProjectSlug(project)}`;
 }
 

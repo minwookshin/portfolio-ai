@@ -1195,6 +1195,24 @@ button.home-row {
   display: block;
 }
 
+.studio-video-only-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.studio-video-only-media {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: var(--md-shape-lg);
+  background: var(--bg-surface);
+  contain: paint;
+  transform: translateZ(0);
+}
+
+.studio-video-only-media :is(img, video) {
+  display: block;
+}
+
 .studio-video-player {
   position: relative;
 }

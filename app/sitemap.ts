@@ -1,5 +1,12 @@
 import type { MetadataRoute } from "next";
-import { MAIN_PROJECTS, getLabProjectPath, getLabProjects, getProjectPath, isLabProject } from "@/data/projects";
+import {
+  MAIN_PROJECTS,
+  getLabProjectPath,
+  getLabProjects,
+  getProjectPath,
+  isLabStudyProject,
+  isWorkArchiveProject,
+} from "@/data/projects";
 import { getStudyMarkdownSlugs, getWorkMarkdownSlugs } from "@/lib/aiPortfolio";
 import { DESIGN_SYSTEM_PATHS } from "@/lib/designSystemProof";
 import { absoluteUrl } from "@/lib/seo";
@@ -14,8 +21,8 @@ function parsedDate(value?: string) {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const workProjects = MAIN_PROJECTS.filter((project) => !project.comingSoon && !isLabProject(project));
-  const labProjects = getLabProjects();
+  const workProjects = MAIN_PROJECTS.filter((project) => !project.comingSoon && isWorkArchiveProject(project));
+  const labProjects = getLabProjects().filter(isLabStudyProject);
   const writingPosts = getWritingPosts();
 
   return [

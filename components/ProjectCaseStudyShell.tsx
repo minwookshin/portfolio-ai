@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import DetailBreadcrumb from "@/components/DetailBreadcrumb";
 import LabProjectDetailView from "@/components/LabProjectDetailView";
 import ProjectDetailView from "@/components/ProjectDetailView";
+import ProjectVideoOnlyView from "@/components/ProjectVideoOnlyView";
 import type { PortfolioProject } from "@/data/projects";
 import { tweens } from "@/lib/material/motion";
 
@@ -11,11 +12,13 @@ export default function ProjectCaseStudyShell({
   project,
   baseHref = "/work",
   variant = "work",
+  mode = "case-study",
   className = "",
 }: {
   project: PortfolioProject;
   baseHref?: string;
   variant?: "work" | "lab";
+  mode?: "case-study" | "video-only";
   className?: string;
 }) {
   const reduceMotion = useReducedMotion();
@@ -34,7 +37,9 @@ export default function ProjectCaseStudyShell({
         sectionHref={baseHref}
         sectionLabel={sectionLabel}
       />
-      {variant === "lab" ? (
+      {mode === "video-only" ? (
+        <ProjectVideoOnlyView project={project} />
+      ) : variant === "lab" ? (
         <LabProjectDetailView project={project} />
       ) : (
         <ProjectDetailView project={project} hideBack onAsk={undefined} />

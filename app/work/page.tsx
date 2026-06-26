@@ -4,9 +4,10 @@ import type { ArchiveEntry, ArchiveSection } from "@/components/ArchiveIndexPage
 import StructuredData from "@/components/StructuredData";
 import {
   MAIN_PROJECTS,
+  PROJECT_PREVIEW_VIDEOS,
   getProjectPath,
-  isLabProject,
   isVisibleBuilderValue,
+  isWorkArchiveProject,
 } from "@/data/projects";
 import { absoluteUrl, collectionPageJsonLd, workCollectionItems } from "@/lib/seo";
 
@@ -38,11 +39,12 @@ function cleanStatus(label?: string) {
 }
 
 function getProofMeta(project: (typeof MAIN_PROJECTS)[number]) {
+  const hasVideoProof = Boolean(project.builder.demo?.video ?? PROJECT_PREVIEW_VIDEOS[project.title]);
   const proof = [
     cleanStatus(project.builder.status.label),
     project.github ? "github" : null,
     project.link || project.builder.demo?.href ? "live" : null,
-    project.builder.demo?.video ? "demo" : null,
+    hasVideoProof ? "demo" : null,
   ].filter(isVisibleBuilderValue);
 
   return Array.from(new Set(proof)).slice(0, 3).join(" / ");
@@ -50,7 +52,7 @@ function getProofMeta(project: (typeof MAIN_PROJECTS)[number]) {
 
 function getWorkEntries(): ArchiveEntry[] {
   return MAIN_PROJECTS
-    .filter((project) => !project.comingSoon && !isLabProject(project))
+    .filter((project) => !project.comingSoon && isWorkArchiveProject(project))
     .map((project) => ({
       description: project.builder.oneLiner,
       href: getProjectPath(project),
