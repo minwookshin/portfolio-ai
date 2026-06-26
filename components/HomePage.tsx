@@ -1,14 +1,13 @@
 "use client";
 
 import { useCallback, useState, useEffect, useRef } from "react";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import BlurImage from "@/components/BlurImage";
 import ChatInput from "@/components/ChatInput";
 import ThemeToggle from "@/components/ThemeToggle";
 import type { Project } from "@/components/ProjectCard";
@@ -155,21 +154,6 @@ function StudyMetaLine({
       <span className="study-meta-detail">{meta}</span>
     </span>
   );
-}
-
-function useCanShowWorkPreview() {
-  const [canShow, setCanShow] = useState(false);
-
-  useEffect(() => {
-    const query = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 768px)");
-    const update = () => setCanShow(query.matches);
-
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-
-  return canShow;
 }
 
 type HomeBulletVariant = "leaf" | "note" | "section" | "system" | "work";
@@ -336,16 +320,10 @@ function getProjectDescriptor(project: Project) {
 }
 
 function ProjectTextRow({
-  onActivate,
-  onDeactivate,
-  onUnavailableActivate,
   project,
   index,
   list,
 }: {
-  onActivate?: () => void;
-  onDeactivate?: () => void;
-  onUnavailableActivate?: () => void;
   project: Project;
   index: number;
   list: "work";
@@ -375,21 +353,14 @@ function ProjectTextRow({
     </>
   );
   const playUnavailableFeedback = useCallback(() => {
-    onUnavailableActivate?.();
     if (reduceMotion) return;
 
     unavailableControls.stop();
     void unavailableControls.start(unavailableFeedbackAnimation());
-  }, [onUnavailableActivate, reduceMotion, unavailableControls]);
+  }, [reduceMotion, unavailableControls]);
 
   return (
     <motion.li
-      onBlur={onDeactivate}
-      onFocus={onActivate}
-      onMouseEnter={onActivate}
-      onMouseLeave={onDeactivate}
-      onPointerEnter={onActivate}
-      onPointerLeave={onDeactivate}
       initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 10 }}
       whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
       animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
@@ -426,267 +397,19 @@ function ProjectTextRow({
   );
 }
 
-function WorkPreviewContent({
-  project,
-}: {
-  project: Project;
-}) {
-  const isStaticLogoPreview = project.slug === "atlas";
-  const isSentinelPreview = project.slug === "sentinel";
-
-  const src = isStaticLogoPreview ? project.icon ?? project.image : project.image ?? project.icon;
-
-  if (src) {
-    if (isSentinelPreview) {
-      return (
-        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
-          <div className="relative h-[88%] w-[88%]">
-            <BlurImage
-              src={src}
-              alt={project.title}
-              fill
-              sizes="(max-width: 768px) 64vw, 560px"
-              draggable={false}
-              className="object-contain"
-            />
-          </div>
-        </div>
-      );
-    }
-
-    if (isStaticLogoPreview) {
-      return (
-        <div className="flex h-full w-full items-center justify-center bg-[var(--bg-base)]">
-          <BlurImage
-            src={src}
-            alt={project.title}
-            width={342}
-            height={299}
-            sizes="320px"
-            draggable={false}
-            className="h-auto w-[260px] max-w-[58%] object-contain"
-          />
-        </div>
-      );
-    }
-
-    return (
-      <BlurImage
-        src={src}
-        alt={project.title}
-        fill
-        sizes="(max-width: 768px) 74vw, 680px"
-        draggable={false}
-        className="object-cover"
-      />
-    );
-  }
-
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-transparent text-4xl text-[var(--text-primary)]">
-      {project.glyph ?? project.title.charAt(0)}
-    </div>
-  );
-}
-
-function WorkFixedPreview({
-  feedbackKey = 0,
-  project,
-  reduceMotion,
-}: {
-  feedbackKey?: number;
-  project: Project;
-  reduceMotion: boolean;
-}) {
-  const unavailableControls = useAnimationControls();
-  const lastFeedbackKey = useRef(0);
-  const canPlayUnavailableFeedback = Boolean(project.comingSoon);
-  const previewFrameClass = [
-    "work-preview-stage work-preview-soft-edge relative aspect-[1.5] w-full overflow-hidden rounded-[var(--md-shape-lg)] bg-transparent",
-    canPlayUnavailableFeedback ? "work-preview-unavailable micro-focus cursor-pointer" : "",
-    project.slug === "sentinel" ? "work-preview-sentinel-video" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-  const playUnavailableFeedback = useCallback(() => {
-    if (!canPlayUnavailableFeedback) return;
-
-    unavailableControls.stop();
-    if (!reduceMotion) {
-      void unavailableControls.start(unavailableFeedbackAnimation());
-    }
-  }, [canPlayUnavailableFeedback, reduceMotion, unavailableControls]);
-
-  useEffect(() => {
-    if (!canPlayUnavailableFeedback || feedbackKey <= 0 || feedbackKey === lastFeedbackKey.current) return;
-
-    lastFeedbackKey.current = feedbackKey;
-    unavailableControls.stop();
-    if (!reduceMotion) {
-      void unavailableControls.start(unavailableFeedbackAnimation());
-    }
-  }, [canPlayUnavailableFeedback, feedbackKey, reduceMotion, unavailableControls]);
-  const handlePreviewKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-    if (!canPlayUnavailableFeedback) return;
-    if (event.key !== " " && event.key !== "Enter") return;
-
-    event.preventDefault();
-    playUnavailableFeedback();
-  }, [canPlayUnavailableFeedback, playUnavailableFeedback]);
-
-  return (
-    <motion.div
-      aria-label={canPlayUnavailableFeedback ? `${project.title} is not ready yet` : undefined}
-      className={previewFrameClass}
-      onClick={canPlayUnavailableFeedback ? playUnavailableFeedback : undefined}
-      onKeyDown={canPlayUnavailableFeedback ? handlePreviewKeyDown : undefined}
-      role={canPlayUnavailableFeedback ? "button" : undefined}
-      tabIndex={canPlayUnavailableFeedback ? 0 : undefined}
-    >
-      <AnimatePresence initial={false} mode="popLayout">
-        <motion.div
-          key={project.id}
-          className="absolute inset-0 transform-gpu"
-          initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(6px)", scale: 0.992, x: 3 }}
-          animate={{ opacity: 1, filter: "blur(0px)", scale: 1, x: 0 }}
-          exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, x: 0 } : { opacity: 0, filter: "blur(4px)", scale: 1.002, x: -3 }}
-          transition={
-            reduceMotion
-              ? tweens.instant
-              : {
-                  opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
-                  filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                  scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                  x: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                }
-          }
-          style={{ willChange: "opacity, filter, transform" }}
-        >
-          {canPlayUnavailableFeedback ? (
-            <motion.div
-              animate={unavailableControls}
-              className="h-full w-full transform-gpu"
-              style={{
-                transformOrigin: "50% 60%",
-                transformPerspective: 900,
-                transformStyle: "preserve-3d",
-                willChange: "transform",
-              }}
-            >
-              <WorkPreviewContent project={project} />
-            </motion.div>
-          ) : (
-            <WorkPreviewContent project={project} />
-          )}
-        </motion.div>
-      </AnimatePresence>
-    </motion.div>
-  );
-}
-
-function WorkSection({
-  onActiveProjectChange,
-  projects,
-}: {
-  onActiveProjectChange?: (project: Project | null) => void;
-  projects: PortfolioProject[];
-}) {
-  const reduceMotion = Boolean(useReducedMotion());
-  const canShowFixedPreview = useCanShowWorkPreview();
-  const hidePreviewTimer = useRef<number | null>(null);
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const [previewFeedbackKey, setPreviewFeedbackKey] = useState(0);
-
-  const clearHideTimer = useCallback(() => {
-    if (!hidePreviewTimer.current) return;
-    window.clearTimeout(hidePreviewTimer.current);
-    hidePreviewTimer.current = null;
-  }, []);
-
-  const activateRow = useCallback((index: number) => {
-    clearHideTimer();
-    setPreviewIndex(index);
-    onActiveProjectChange?.(projects[index] ?? null);
-  }, [clearHideTimer, onActiveProjectChange, projects]);
-
-  const activateUnavailablePreview = useCallback((index: number) => {
-    clearHideTimer();
-    setPreviewIndex(index);
-    setPreviewFeedbackKey((key) => key + 1);
-    onActiveProjectChange?.(projects[index] ?? null);
-  }, [clearHideTimer, onActiveProjectChange, projects]);
-
-  const deactivateRow = useCallback((delay = 70) => {
-    clearHideTimer();
-    hidePreviewTimer.current = window.setTimeout(() => {
-      setPreviewIndex(null);
-      onActiveProjectChange?.(null);
-    }, delay);
-  }, [clearHideTimer, onActiveProjectChange]);
-
-  useEffect(() => {
-    return () => clearHideTimer();
-  }, [clearHideTimer]);
-
-  const previewProject = previewIndex === null ? null : projects[previewIndex];
-  const canInteractWithPreview = Boolean(previewProject?.comingSoon);
-  const previewShellClass = [
-    "absolute right-0 top-0 z-20 hidden aspect-[1.5] w-[min(34vw,360px)] md:block",
-    canInteractWithPreview ? "pointer-events-auto" : "pointer-events-none",
-  ].join(" ");
-
+function WorkSection({ projects }: { projects: PortfolioProject[] }) {
   return (
     <div className="relative">
       <ul className="home-list">
         {projects.map((project, index) => (
           <ProjectTextRow
             key={project.id}
-            onActivate={() => activateRow(index)}
-            onDeactivate={() => deactivateRow(project.comingSoon ? 180 : 70)}
-            onUnavailableActivate={project.comingSoon ? () => activateUnavailablePreview(index) : undefined}
             project={project}
             index={index}
             list="work"
           />
         ))}
       </ul>
-      {canShowFixedPreview && (
-        <div
-          aria-hidden={canInteractWithPreview ? undefined : "true"}
-          className={previewShellClass}
-          onBlur={canInteractWithPreview ? () => deactivateRow() : undefined}
-          onFocus={canInteractWithPreview ? clearHideTimer : undefined}
-          onMouseEnter={canInteractWithPreview ? clearHideTimer : undefined}
-          onMouseLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
-          onPointerEnter={canInteractWithPreview ? clearHideTimer : undefined}
-          onPointerLeave={canInteractWithPreview ? () => deactivateRow() : undefined}
-        >
-          <AnimatePresence initial={false}>
-            {previewProject && (
-              <motion.div
-                key="work-preview-stage"
-                className="absolute inset-0 transform-gpu"
-                initial={reduceMotion ? { opacity: 1, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(5px)", scale: 0.996, y: 3 }}
-                animate={{ opacity: 1, filter: "blur(0px)", scale: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 0, filter: "blur(0px)", scale: 1, y: 0 } : { opacity: 0, filter: "blur(4px)", scale: 0.996, y: 3 }}
-                transition={
-                  reduceMotion
-                    ? tweens.instant
-                    : {
-                        opacity: { type: "tween", duration: 0.1, ease: [0.22, 1, 0.36, 1] },
-                        filter: { type: "tween", duration: 0.16, ease: [0.22, 1, 0.36, 1] },
-                        scale: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                        y: { type: "tween", duration: 0.18, ease: [0.22, 1, 0.36, 1] },
-                      }
-                }
-                style={{ willChange: "opacity, filter, transform" }}
-              >
-                <WorkFixedPreview feedbackKey={previewFeedbackKey} project={previewProject} reduceMotion={reduceMotion} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
     </div>
   );
 }
