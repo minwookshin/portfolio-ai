@@ -553,7 +553,7 @@ function HomeDocument({
           </HomeLeafRow>
         </motion.div>
 
-        <HomeOutlineSection defaultOpen title="now">
+        <HomeOutlineSection count={3} defaultOpen title="now">
           <HomeLeafRow>still editing this website</HomeLeafRow>
           <HomeLeafRow>building product interfaces that work as proof, not just presentation</HomeLeafRow>
           <HomeLeafRow>keeping motion, code, and AI behavior in the same design system</HomeLeafRow>
