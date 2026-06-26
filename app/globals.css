@@ -145,21 +145,16 @@
   --motion-ease-emphasized: cubic-bezier(0.34, 1.28, 0.5, 1);
 
   /* Code surfaces */
-  --code-surface: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--bg-surface) 94%, transparent),
-    color-mix(in srgb, var(--bg-element) 62%, transparent)
-  );
-  --code-inline-surface: color-mix(in srgb, var(--bg-element) 72%, var(--bg-surface));
-  --code-border: color-mix(in srgb, var(--text-primary) 9%, transparent);
+  --code-surface: color-mix(in srgb, var(--text-primary) 3%, var(--bg-surface));
+  --code-inline-surface: color-mix(in srgb, var(--text-primary) 5%, var(--bg-surface));
+  --code-border: color-mix(in srgb, var(--text-primary) 7%, transparent);
+  --code-comment: color-mix(in srgb, var(--text-muted) 84%, transparent);
+  --code-string: #208245;
   --code-radius: var(--md-shape-lg);
   --code-inline-radius: calc(var(--md-shape-sm) + 2px);
-  --code-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--bg-surface) 92%, transparent),
-    0 1px 2px color-mix(in srgb, var(--text-primary) 5%, transparent),
-    0 12px 32px color-mix(in srgb, var(--text-primary) 3%, transparent);
-  --code-font-size: calc(var(--type-0) - 3px);
-  --code-line-height: 1.62;
+  --code-shadow: none;
+  --code-font-size: 13px;
+  --code-line-height: 1.55;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -204,6 +199,7 @@ html[data-theme="dark"] {
   --text-dim: var(--theme-dark-dim);
   --text-underline-muted: var(--theme-dark-dim);
   --gradient-fade: rgba(15, 15, 16, 0);
+  --code-string: #73c991;
 }
 
 /* Base font */
@@ -1356,13 +1352,13 @@ button.home-row {
 
 .article-body :not(pre) > code {
   margin-inline: 0.08em;
-  border: 1px solid var(--code-border);
+  border: 0;
   border-radius: var(--code-inline-radius);
   background: var(--code-inline-surface);
-  padding: 0.08em 0.36em 0.12em;
+  padding: 0.12em 0.42em 0.14em;
   color: var(--text-primary);
   font-family: var(--font-mono);
-  font-size: 0.84em;
+  font-size: 0.82em;
   line-height: 1.12;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
@@ -1370,17 +1366,15 @@ button.home-row {
 
 .article-body pre {
   overflow-x: auto;
-  border: 1px solid var(--code-border);
+  border: 0;
   border-radius: var(--code-radius);
   background: var(--code-surface);
-  padding: var(--space-3);
+  padding: var(--space-2);
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: var(--code-font-size);
   line-height: var(--code-line-height);
   box-shadow: var(--code-shadow);
-  -webkit-backdrop-filter: blur(12px) saturate(1.04);
-  backdrop-filter: blur(12px) saturate(1.04);
   tab-size: 2;
 }
 
@@ -1904,13 +1898,13 @@ button.home-row {
 .lab-inline-code {
   display: inline;
   margin-inline: 0.08em;
-  border: 1px solid var(--code-border);
+  border: 0;
   border-radius: var(--code-inline-radius);
   background: var(--code-inline-surface);
-  padding: 0.08em 0.36em 0.12em;
+  padding: 0.12em 0.42em 0.14em;
   color: var(--text-primary);
   font-family: var(--font-mono);
-  font-size: 0.84em;
+  font-size: 0.82em;
   line-height: 1.12;
   text-transform: none !important;
   white-space: break-spaces;
@@ -1992,10 +1986,10 @@ button.home-row {
 .lab-study-artifact {
   margin: 0;
   overflow-x: auto;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 8%, transparent);
-  border-radius: var(--md-shape-sm);
-  background: color-mix(in srgb, var(--text-primary) 3%, transparent);
-  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--code-radius);
+  background: var(--code-surface);
+  padding: var(--space-2);
   color: var(--text-primary);
   tab-size: 2;
   text-transform: none !important;
@@ -2013,9 +2007,17 @@ button.home-row {
   text-transform: none !important;
 }
 
-.lab-study-artifact__heading {
-  color: var(--text-primary);
-  font-weight: 500;
+.lab-code-line {
+  display: block;
+  min-height: calc(var(--code-font-size) * var(--code-line-height));
+}
+
+.lab-code-line--comment {
+  color: var(--code-comment);
+}
+
+.lab-code-token-string {
+  color: var(--code-string);
 }
 
 .lab-study-artifact-caption {
@@ -2907,10 +2909,10 @@ button.home-row {
 .lab-study-code {
   position: relative;
   overflow-x: auto;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 8%, transparent);
-  border-radius: var(--md-shape-sm);
-  background: color-mix(in srgb, var(--text-primary) 3%, transparent);
-  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--code-radius);
+  background: var(--code-surface);
+  padding: var(--space-2);
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: var(--code-font-size);

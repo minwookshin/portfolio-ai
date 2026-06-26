@@ -77,6 +77,64 @@ function renderInlineStudyText(text: string): ReactNode {
   });
 }
 
+function renderCodeLine(line: string) {
+  const parts = line.split(/("[^"]*"|'[^']*'|`[^`]*`)/g).filter(Boolean);
+
+  if (parts.length === 0) return "\u00a0";
+
+  return parts.map((part, index) => {
+    const isString =
+      (part.startsWith("\"") && part.endsWith("\"")) ||
+      (part.startsWith("'") && part.endsWith("'")) ||
+      (part.startsWith("`") && part.endsWith("`"));
+
+    if (!isString) return part;
+
+    return (
+      <span key={`${part}-${index}`} className="lab-code-token-string">
+        {part}
+      </span>
+    );
+  });
+}
+
+function getCodeLineClass(line: string) {
+  const trimmed = line.trimStart();
+  const isComment =
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("/*") ||
+    trimmed.startsWith("*") ||
+    trimmed.startsWith("##");
+
+  return isComment ? "lab-code-line lab-code-line--comment" : "lab-code-line";
+}
+
+function StudyCodeBlock({
+  children,
+  className,
+  heading,
+}: {
+  children: string;
+  className: string;
+  heading?: string;
+}) {
+  const source = heading ? `## ${heading}\n\n${children}` : children;
+  const lines = source.split("\n");
+
+  return (
+    <pre className={className}>
+      <code>
+        {lines.map((line, index) => (
+          <span key={`${index}-${line}`} className={getCodeLineClass(line)}>
+            {renderCodeLine(line)}
+          </span>
+        ))}
+      </code>
+    </pre>
+  );
+}
+
 function getStudyStory(study: LabStudy) {
   if (study.story?.length) return study.story;
 
@@ -140,13 +198,9 @@ function LabStudyTechnicalArtifact({ artifact }: { artifact: LabStudy["technical
 
   return (
     <section className="lab-study-artifact-section" aria-label={artifact.title}>
-      <pre className="lab-study-artifact">
-        <code>
-          <span className="lab-study-artifact__heading">## {artifact.title}</span>
-          {"\n\n"}
-          {artifact.body}
-        </code>
-      </pre>
+      <StudyCodeBlock className="lab-study-artifact" heading={artifact.title}>
+        {artifact.body}
+      </StudyCodeBlock>
       {artifact.caption && <p className="lab-study-artifact-caption">{artifact.caption}</p>}
     </section>
   );
@@ -704,7 +758,9 @@ export default function LabStudyDetailView({ project }: { project: PortfolioProj
         <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">
           final code
         </h2>
-        <pre className="lab-study-code"><code>{study.code}</code></pre>
+        <StudyCodeBlock className="lab-study-code">
+          {study.code}
+        </StudyCodeBlock>
       </section>
     </motion.article>
   );
