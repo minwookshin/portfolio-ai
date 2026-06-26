@@ -1998,11 +1998,6 @@ button.home-row {
     visibility: visible;
   }
 
-  .archive-row:hover .archive-row-title {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
-  }
 }
 
 @media (max-width: 720px) {
