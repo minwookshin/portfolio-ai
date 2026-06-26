@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export type ArchiveEntry = {
@@ -59,6 +60,7 @@ export default function ArchiveIndexPage({
     <main className="site-lowercase archive-page-shell">
       <ThemeToggle />
       <article className="archive-page" aria-labelledby="archive-title">
+        <LiquidGlassHoverScope>
         <nav className="archive-nav" aria-label="archive navigation">
           <Link href="/">↩ index</Link>
         </nav>
@@ -83,7 +85,11 @@ export default function ArchiveIndexPage({
               <ul className="archive-list">
                 {yearEntries.map((entry) => (
                   <li key={entry.id} className="archive-item">
-                    <Link href={entry.href} className="archive-row micro-focus micro-focus-tight">
+                    <Link
+                      href={entry.href}
+                      className="archive-row micro-focus micro-focus-tight"
+                      data-liquid-glass-row="true"
+                    >
                       <span className="archive-row-title">{entry.title}</span>
                       {entry.description && (
                         <span className="archive-row-description">{entry.description}</span>
@@ -96,6 +102,7 @@ export default function ArchiveIndexPage({
             </li>
           ))}
         </ol>
+        </LiquidGlassHoverScope>
       </article>
     </main>
   );

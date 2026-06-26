@@ -9,6 +9,7 @@ import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
+import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
 import ThemeToggle from "@/components/ThemeToggle";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
@@ -176,7 +177,7 @@ function HomeBulletCell({ section = false, variant = "leaf" }: { section?: boole
 function HomeLeafRow({ children }: { children: ReactNode }) {
   return (
     <div className="home-node">
-      <div className="home-row">
+      <div className="home-row" data-liquid-glass-row="true">
         <HomeBulletCell />
         <span className="home-label">{children}</span>
       </div>
@@ -244,7 +245,7 @@ function HomeOutlineSection({
       open={isOpen}
       variants={landingRevealItem}
     >
-      <summary className="home-row home-row--summary micro-focus micro-focus-tight">
+      <summary className="home-row home-row--summary micro-focus micro-focus-tight" data-liquid-glass-row="true">
         <HomeBulletCell section />
         <span className="home-label">
           {title}
@@ -275,7 +276,7 @@ function HomeNestedOutlineSection({
       onToggle={(event) => setIsOpen(event.currentTarget.open)}
       open={isOpen}
     >
-      <summary className="home-row home-row--summary micro-focus micro-focus-tight">
+      <summary className="home-row home-row--summary micro-focus micro-focus-tight" data-liquid-glass-row="true">
         <HomeBulletCell section />
         <span className="home-label">
           {title}
@@ -407,6 +408,7 @@ function ProjectTextRow({
           aria-label={`${project.title} is not ready yet`}
           animate={unavailableControls}
           className={`${rowClass} cursor-pointer`}
+          data-liquid-glass-row="true"
           onClick={playUnavailableFeedback}
           style={{
             transformOrigin: "50% 60%",
@@ -420,6 +422,7 @@ function ProjectTextRow({
         <Link
           href={getProjectPath(project)}
           className={rowClass}
+          data-liquid-glass-row="true"
         >
           {rowText}
         </Link>
@@ -552,6 +555,7 @@ function StudyTextRow({
         <Link
           href={item.href}
           className="home-row home-row--link micro-focus micro-focus-tight micro-pressable"
+          data-liquid-glass-row="true"
         >
           <HomeBulletCell variant={item.kind === "lab" ? "system" : "note"} />
           <span className="home-label project-row-copy">
@@ -613,6 +617,7 @@ function HomeDocument({
       className="home-doc-shell"
     >
       <motion.div id="profile" variants={landingIntroVariants} className="home-doc scroll-mt-28">
+        <LiquidGlassHoverScope>
         <motion.h1 variants={landingRevealItem} className="home-doc-title">
           Minwook Shin
           <span> / design engineer</span>
@@ -670,6 +675,7 @@ function HomeDocument({
             <HomeMetaLink href={PERSONAL_INFO.resume}>resume</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
+        </LiquidGlassHoverScope>
       </motion.div>
     </motion.section>
   );

@@ -380,6 +380,71 @@ html[data-theme="dark"] .theme-toggle-button__icon--moon {
   text-align: left;
 }
 
+.liquid-glass-hover-scope {
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+}
+
+.liquid-glass-hover {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 5%, transparent);
+  border-radius: var(--md-shape-sm);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-surface) 92%, transparent),
+      color-mix(in srgb, var(--bg-element) 74%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 2px color-mix(in srgb, #fff 68%, transparent),
+    inset 0 -8px 18px color-mix(in srgb, #fff 32%, transparent),
+    0 10px 22px -18px color-mix(in srgb, var(--text-primary) 34%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  transform-style: preserve-3d;
+  will-change: top, left, width, height, opacity, transform;
+}
+
+.liquid-glass-hover__highlight {
+  position: absolute;
+  inset: -60% 0 auto;
+  height: 120%;
+  background:
+    radial-gradient(
+      circle at 50% var(--liquid-glass-highlight-y, 50%),
+      color-mix(in srgb, #fff 72%, transparent),
+      transparent 56%
+    );
+  opacity: calc(var(--liquid-glass-highlight-opacity, 0) * 0.42);
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+html[data-theme="dark"] .liquid-glass-hover {
+  border-color: color-mix(in srgb, #fff 7%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-surface) 72%, transparent),
+      color-mix(in srgb, var(--bg-element) 62%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 2px color-mix(in srgb, #fff 7%, transparent),
+    inset 0 -10px 18px color-mix(in srgb, #fff 3%, transparent),
+    0 12px 26px -20px color-mix(in srgb, #000 70%, transparent);
+}
+
+.liquid-glass-hover-scope [data-liquid-glass-row="true"] {
+  position: relative;
+  z-index: 1;
+}
+
 .home-doc-title {
   margin: 0;
   padding: 0 0 16px;
@@ -646,7 +711,7 @@ button.home-row {
 
 @media (hover: hover) and (pointer: fine) {
   .home-row:hover {
-    background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+    background: transparent;
   }
 
   .home-row:hover .home-bullet {
@@ -1732,7 +1797,7 @@ button.home-row {
 
 @media (hover: hover) and (pointer: fine) {
   .archive-row:hover {
-    background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+    background: transparent;
   }
 
   .archive-row:hover .archive-row-title {
