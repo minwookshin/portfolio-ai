@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useEffect, useRef } from "react";
+import { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ import ChatInput from "@/components/ChatInput";
 import MaterialArrowDownIcon from "@/components/MaterialArrowDownIcon";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import type { Project } from "@/components/ProjectCard";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Briefcase, Command, FileText, Mail, MessageCircle, NotebookText, Search } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -136,6 +136,165 @@ type StudyItem =
       project: Project;
       title: string;
     };
+
+type HomeCommandItem = {
+  action: () => void;
+  group: string;
+  icon: ReactNode;
+  id: string;
+  keywords: string[];
+  meta: string;
+  title: string;
+};
+
+function normalizeCommandText(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function HomeCommandPalette({
+  isOpen,
+  items,
+  onClose,
+}: {
+  isOpen: boolean;
+  items: HomeCommandItem[];
+  onClose: () => void;
+}) {
+  const reduceMotion = useReducedMotion();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [query, setQuery] = useState("");
+  const visibleItems = useMemo(() => {
+    const normalizedQuery = normalizeCommandText(query);
+    if (!normalizedQuery) return items;
+
+    return items.filter((item) =>
+      [item.title, item.meta, item.group, ...item.keywords]
+        .map(normalizeCommandText)
+        .some((value) => value.includes(normalizedQuery)),
+    );
+  }, [items, query]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const frame = window.requestAnimationFrame(() => inputRef.current?.focus());
+    return () => window.cancelAnimationFrame(frame);
+  }, [isOpen]);
+
+  const closePalette = useCallback(() => {
+    setQuery("");
+    setActiveIndex(0);
+    onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closePalette();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.body.classList.add("command-palette-open");
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("command-palette-open");
+    };
+  }, [closePalette, isOpen]);
+
+  const runCommand = (item: HomeCommandItem) => {
+    item.action();
+    closePalette();
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          key="command-layer"
+          className="command-layer"
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={reduceMotion ? tweens.none : tweens.base}
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closePalette();
+          }}
+        >
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="site command palette"
+            className="command-panel"
+            initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.985 }}
+            transition={reduceMotion ? tweens.none : springs.spatialFast}
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="command-search">
+              <Search className="command-search__icon" aria-hidden="true" />
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setActiveIndex(0);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "ArrowDown") {
+                    event.preventDefault();
+                    setActiveIndex((index) => Math.min(index + 1, Math.max(visibleItems.length - 1, 0)));
+                  } else if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    setActiveIndex((index) => Math.max(index - 1, 0));
+                  } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    const activeItem = visibleItems[activeIndex];
+                    if (activeItem) runCommand(activeItem);
+                  }
+                }}
+                placeholder="search or run a command"
+                aria-label="search commands"
+              />
+              <kbd aria-hidden="true">esc</kbd>
+            </div>
+
+            <div className="command-list" role="listbox" aria-label="site commands">
+              {visibleItems.length > 0 ? (
+                visibleItems.map((item, index) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="command-row micro-focus micro-focus-tight"
+                    data-active={index === activeIndex ? "true" : "false"}
+                    onClick={() => runCommand(item)}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    role="option"
+                    aria-selected={index === activeIndex}
+                  >
+                    <span className="command-row__icon" aria-hidden="true">{item.icon}</span>
+                    <span className="command-row__copy">
+                      <span className="command-row__title">{item.title}</span>
+                      <span className="command-row__meta">{item.meta}</span>
+                    </span>
+                    <span className="command-row__group">{item.group}</span>
+                  </button>
+                ))
+              ) : (
+                <p className="command-empty">no command found</p>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 
 function StudyMetaLine({
   className = "",
@@ -541,10 +700,12 @@ function OutlineListSection({ emptyLabel, items }: { emptyLabel: string; items: 
 function HomeDocument({
   activeSection,
   noteItems,
+  onOpenCommand,
   projects,
 }: {
   activeSection: HomeTab;
   noteItems: StudyItem[];
+  onOpenCommand: () => void;
   projects: PortfolioProject[];
 }) {
   return (
@@ -559,6 +720,14 @@ function HomeDocument({
             Minwook Shin
             <span> / design engineer</span>
           </h1>
+          <button
+            type="button"
+            className="command-trigger micro-focus micro-focus-tight micro-pressable"
+            aria-label="Open command palette"
+            onClick={onOpenCommand}
+          >
+            <Command aria-hidden="true" />
+          </button>
         </motion.div>
 
         <motion.div variants={landingRevealItem}>
@@ -599,7 +768,7 @@ function HomeDocument({
           </HomeLeafRow>
         </HomeOutlineSection>
 
-        <HomeOutlineSection count={5} defaultOpen title="contact">
+        <HomeOutlineSection count={5} defaultOpen sectionId="contact" title="contact">
           <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.linkedin} external>linkedin.com/in/minwookshin</HomeMetaLink>
           </HomeLeafRow>
@@ -638,10 +807,23 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   // Keep the landing motion quiet: the page simply settles in, with no separate
   // logo trace or position handoff.
   const [introReady, setIntroReady] = useState(false);
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIntroReady(true), 80);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setIsCommandOpen(true);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -669,7 +851,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     return () => clearTimeout(t);
   }, [projectNotice]);
 
-  const handleMessage = async (message: string) => {
+  const handleMessage = useCallback(async (message: string) => {
     if (!hasStarted) {
       setHasStarted(true);
     }
@@ -744,7 +926,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     } finally {
       setIsStreaming(false);
     }
-  };
+  }, [currentSection, hasStarted, messages]);
 
   // Leave the chat view but KEEP the conversation history (reload clears it)
   const leaveChat = () => {
@@ -771,6 +953,31 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     });
   };
 
+  const openProjectFromCommand = useCallback((project: Project) => {
+    if (project.comingSoon) {
+      setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
+      return;
+    }
+
+    setHasStarted(false);
+    setChatOnTop(false);
+    router.push(isLabProject(project) ? getLabProjectPath(project) : getProjectPath(project));
+  }, [router]);
+
+  const copyEmail = useCallback(() => {
+    if (navigator.clipboard?.writeText) {
+      void navigator.clipboard
+        .writeText(PERSONAL_INFO.email)
+        .then(() => setProjectNotice("email copied"))
+        .catch(() => {
+          window.location.href = `mailto:${PERSONAL_INFO.email}`;
+        });
+      return;
+    }
+
+    window.location.href = `mailto:${PERSONAL_INFO.email}`;
+  }, []);
+
   const openProjectFromChat = (project: Project) => {
     if (project.comingSoon) {
       setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
@@ -784,6 +991,122 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         : getProjectPath(project);
     router.push(projectPath);
   };
+
+  const commandItems = useMemo<HomeCommandItem[]>(() => {
+    const openProjects = MAIN_PROJECTS.filter((project) => !project.comingSoon);
+    const orderedProjects = [
+      ...featuredProjects,
+      ...openProjects.filter((project) => !featuredProjects.some((featured) => featured.id === project.id)),
+    ].filter((project) => !project.comingSoon);
+
+    return [
+      {
+        id: "view-work",
+        title: "view work",
+        meta: "proof log",
+        group: "navigate",
+        keywords: ["projects", "archive", "selected work"],
+        icon: <Briefcase />,
+        action: () => {
+          setHasStarted(false);
+          setChatOnTop(false);
+          router.push("/work");
+        },
+      },
+      {
+        id: "view-notes",
+        title: "view notes",
+        meta: "thinking log",
+        group: "navigate",
+        keywords: ["writing", "notes", "thinking"],
+        icon: <NotebookText />,
+        action: () => {
+          setHasStarted(false);
+          setChatOnTop(false);
+          router.push("/notes");
+        },
+      },
+      {
+        id: "view-contact",
+        title: "view contact",
+        meta: "links and email",
+        group: "navigate",
+        keywords: ["profile", "email", "linkedin", "github"],
+        icon: <Mail />,
+        action: () => {
+          setHasStarted(false);
+          setChatOnTop(false);
+          requestAnimationFrame(() => {
+            document.getElementById("contact")?.scrollIntoView({
+              behavior: reduceMotion ? "auto" : "smooth",
+              block: "center",
+            });
+          });
+        },
+      },
+      ...orderedProjects.map((project) => ({
+        id: `project-${project.slug ?? project.id}`,
+        title: `open ${project.title.toLowerCase()}`,
+        meta: getProjectDescriptor(project),
+        group: "work",
+        keywords: [project.title, project.description, project.studioLabel ?? "", project.date ?? ""],
+        icon: <FileText />,
+        action: () => openProjectFromCommand(project),
+      })),
+      ...(noteItems[0]
+        ? [
+            {
+              id: `note-${noteItems[0].id}`,
+              title: `open ${noteItems[0].title}`,
+              meta: noteItems[0].meta,
+              group: "notes",
+              keywords: [
+                noteItems[0].title,
+                "description" in noteItems[0] ? noteItems[0].description : "",
+                "writing",
+              ],
+              icon: <NotebookText />,
+              action: () => {
+                setHasStarted(false);
+                setChatOnTop(false);
+                router.push(noteItems[0].href);
+              },
+            },
+          ]
+        : []),
+      {
+        id: "copy-email",
+        title: "copy email",
+        meta: PERSONAL_INFO.email,
+        group: "contact",
+        keywords: ["contact", "mail", "reach"],
+        icon: <Mail />,
+        action: copyEmail,
+      },
+      {
+        id: "open-resume",
+        title: "open resume",
+        meta: "pdf",
+        group: "contact",
+        keywords: ["cv", "profile"],
+        icon: <FileText />,
+        action: () => {
+          setHasStarted(false);
+          setChatOnTop(false);
+          router.push(PERSONAL_INFO.resume);
+        },
+      },
+      {
+        id: "ask-portfolio",
+        title: "ask about this portfolio",
+        meta: "ai utility",
+        group: "ask",
+        keywords: ["ai", "assistant", "question", "portfolio"],
+        icon: <MessageCircle />,
+        action: () => void handleMessage("ask about this portfolio"),
+      },
+    ];
+  }, [copyEmail, featuredProjects, handleMessage, noteItems, openProjectFromCommand, reduceMotion, router]);
 
   return (
     <main
@@ -830,10 +1153,16 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           <HomeDocument
             activeSection={currentSection}
             noteItems={noteItems}
+            onOpenCommand={() => setIsCommandOpen(true)}
             projects={featuredProjects}
           />
         </div>
       </motion.div>
+      <HomeCommandPalette
+        isOpen={isCommandOpen}
+        items={commandItems}
+        onClose={() => setIsCommandOpen(false)}
+      />
       <AnimatePresence>
         {projectNotice && (
           <motion.div

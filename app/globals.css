@@ -420,6 +420,204 @@ body::after {
   font-weight: 400;
 }
 
+.command-trigger {
+  display: inline-grid;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: var(--md-shape-sm);
+  background: transparent;
+  color: var(--text-muted);
+  opacity: 0.72;
+  transform: translateY(1px);
+  transition:
+    background-color 160ms var(--motion-ease-standard),
+    color 160ms var(--motion-ease-standard),
+    opacity 160ms var(--motion-ease-standard),
+    transform 160ms var(--motion-ease-standard);
+}
+
+.command-trigger svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.75;
+}
+
+.command-trigger:hover,
+.command-trigger:focus-visible {
+  background: var(--state-row-focus);
+  color: var(--text-primary);
+  opacity: 1;
+  transform: translateY(1px) translateX(var(--signal-nudge));
+}
+
+.command-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  display: grid;
+  place-items: start center;
+  padding: clamp(72px, 12vh, 132px) 16px 32px;
+  background: color-mix(in srgb, var(--bg-base) 58%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.command-panel {
+  width: min(100%, 560px);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 8%, transparent);
+  border-radius: var(--md-shape-lg);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 92%, transparent), color-mix(in srgb, var(--bg-surface) 94%, transparent)),
+    var(--bg-surface);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 84%, transparent),
+    0 28px 80px -54px color-mix(in srgb, var(--text-primary) 50%, transparent);
+}
+
+.command-search {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-primary) 7%, transparent);
+}
+
+.command-search__icon {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  stroke-width: 1.75;
+}
+
+.command-search input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--type-row);
+  line-height: 1.4;
+}
+
+.command-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.command-search kbd {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 7px;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 7%, transparent);
+  border-radius: var(--md-shape-sm);
+  background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-meta);
+  font-weight: 400;
+}
+
+.command-list {
+  display: flex;
+  max-height: min(62vh, 480px);
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.command-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: 0;
+  border-radius: var(--md-shape-sm);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  padding: 8px;
+  transition:
+    background-color 140ms var(--motion-ease-standard),
+    color 140ms var(--motion-ease-standard),
+    transform 140ms var(--motion-ease-standard);
+}
+
+.command-row[data-active="true"],
+.command-row:hover,
+.command-row:focus-visible {
+  background: var(--state-row-focus);
+}
+
+.command-row[data-active="true"] {
+  transform: translateX(var(--signal-nudge));
+}
+
+.command-row__icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: var(--md-shape-sm);
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+}
+
+.command-row__icon svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.75;
+}
+
+.command-row__copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.command-row__title,
+.command-row__meta,
+.command-row__group {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.command-row__title {
+  font-size: var(--type-row);
+  line-height: 1.35;
+}
+
+.command-row__meta,
+.command-row__group {
+  color: var(--text-muted);
+  font-size: var(--type-meta);
+  line-height: 1.2;
+}
+
+.command-row__group {
+  justify-self: end;
+}
+
+.command-empty {
+  margin: 0;
+  padding: 24px 12px 28px;
+  color: var(--text-muted);
+  font-size: var(--type-row);
+  text-align: center;
+}
+
+.command-palette-open {
+  overflow: hidden;
+}
+
 .home-node {
   position: relative;
   max-width: 100%;
