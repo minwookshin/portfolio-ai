@@ -645,18 +645,16 @@ button.home-row {
   min-height: 24px;
   align-items: center;
   padding: 0 7px;
-  border: 1px solid color-mix(in srgb, var(--text-primary) 7%, white);
+  border: 1px solid #f4f4f6;
   border-radius: var(--md-shape-sm);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, white 96%, transparent),
-      color-mix(in srgb, var(--bg-element) 70%, white)
-    );
+  background: linear-gradient(180deg, #fff, #fafafa);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 88%, transparent),
-    inset 0 -1px 2px color-mix(in srgb, var(--text-primary) 5%, transparent),
-    0 1px 2px color-mix(in srgb, var(--text-primary) 5%, transparent);
+    inset 0 2px 4px 0 #fff,
+    inset 0 -4px 4px 0 hsla(0, 0%, 100%, 0.5),
+    inset 0 -4px 16px 0 #fff,
+    inset 0 4px 10px 0 hsla(240, 3%, 45%, 0.07),
+    0 4px 14px -10px rgba(53, 53, 79, 0.4),
+    0 11px 28px -10px rgba(53, 53, 79, 0.1);
   color: inherit;
   text-decoration: none;
   -webkit-backdrop-filter: blur(10px) saturate(1.08);
@@ -667,6 +665,33 @@ button.home-row {
     box-shadow var(--motion-duration-instant) var(--motion-ease-standard),
     color var(--motion-duration-instant) var(--motion-ease-standard),
     transform var(--motion-duration-instant) var(--motion-ease-standard);
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  .home-mention {
+    border-color: color(display-p3 0.9554 0.9554 0.9646);
+    background:
+      linear-gradient(
+        180deg,
+        color(display-p3 1 1 1),
+        color(display-p3 0.979 0.979 0.981)
+      );
+    box-shadow:
+      inset 0 2px 4px 0 color(display-p3 1 1 1),
+      inset 0 -4px 4px 0 color(display-p3 1 1 1 / 0.5),
+      inset 0 -4px 16px 0 color(display-p3 1 1 1),
+      inset 0 4px 10px 0 color(display-p3 0.4338 0.4338 0.4566 / 0.07),
+      0 4px 14px -10px color(display-p3 0.2085 0.2085 0.3025 / 0.4),
+      0 11px 28px -10px color(display-p3 0.2085 0.2085 0.3025 / 0.1);
+  }
+}
+
+.home-footer {
+  margin-top: 56px;
+  margin-left: 30px;
+  color: var(--text-muted);
+  font-size: var(--type-row);
+  line-height: var(--leading-body);
 }
 
 .home-doc .project-row-copy {
@@ -724,17 +749,14 @@ button.home-row {
   }
 
   .home-mention:hover {
-    border-color: color-mix(in srgb, var(--text-primary) 12%, white);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, white 100%, transparent),
-        color-mix(in srgb, var(--bg-element) 82%, white)
-      );
+    border-color: #ececf2;
     box-shadow:
-      inset 0 1px 0 color-mix(in srgb, white 92%, transparent),
-      inset 0 -1px 3px color-mix(in srgb, var(--text-primary) 7%, transparent),
-      0 2px 6px color-mix(in srgb, var(--text-primary) 7%, transparent);
+      inset 0 2px 4px 0 #fff,
+      inset 0 -4px 4px 0 hsla(0, 0%, 100%, 0.58),
+      inset 0 -4px 16px 0 #fff,
+      inset 0 4px 10px 0 hsla(240, 3%, 45%, 0.08),
+      0 5px 16px -10px rgba(53, 53, 79, 0.42),
+      0 13px 30px -10px rgba(53, 53, 79, 0.12);
     color: var(--text-primary);
     transform: translateY(-0.5px);
   }

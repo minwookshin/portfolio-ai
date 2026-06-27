@@ -615,6 +615,10 @@ function HomeDocument({
             <HomeMetaLink href={PERSONAL_INFO.resume}>resume</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
+
+        <motion.footer variants={landingRevealItem} className="home-footer">
+          © 2026 minwook shin.
+        </motion.footer>
       </motion.div>
     </motion.section>
   );
