@@ -656,7 +656,7 @@ button.home-row {
   overflow: hidden;
   padding: 0 7px;
   border: 1px solid #f4f4f6;
-  border-radius: 16px;
+  border-radius: var(--md-shape-lg);
   background:
     radial-gradient(
       circle at 50% 50%,
