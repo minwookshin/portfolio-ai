@@ -124,7 +124,7 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "outline rows",
-    description: "Notion-like document structure using small bullets, section circles, short metadata, and fixed-position text.",
+    description: "Notion-like document structure using small bullets, section circles, short metadata, and restrained 1-2px text nudges.",
     primitives: ["outline section", "outline row", "bullet cell", "metadata line", "section count"],
   },
   {
@@ -134,7 +134,7 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "quiet outline signals",
-    description: "Hover and focus feedback stay inside the bullet cell: internal links draw a small Material arrow, sections swap the dot for a caret, and notes keep a quieter dot state while row text remains fixed.",
+    description: "Hover and focus feedback starts inside the bullet cell, then gives nearby text a restrained nudge: internal links draw a small Material arrow, sections swap the dot for a caret, and notes keep a quieter dot state.",
     primitives: ["drawn Material arrow signal", "section caret replacement", "quiet note dot", "bullet cell"],
   },
   {
@@ -165,7 +165,7 @@ export const DESIGN_SYSTEM_COMPONENTS = [
 ] as const;
 
 export const DESIGN_SYSTEM_INTERACTION_RULES = [
-  "Keep hover movement inside the bullet cell; outline text should stay fixed and only become slightly clearer.",
+  "Keep hover movement tiny: signals move inside the bullet cell, and nearby text may nudge only 1-2px.",
   "Hide section counts once a section is open so the visible content is the proof.",
   "Use section carets only inside the bullet cell so caret and dot never overlap.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
