@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState, useEffect, useLayoutEffect, useRef } fr
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence, useAnimationControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls, useReducedMotion } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -36,13 +36,6 @@ type HomePageProps = {
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
 const LANDING_EXPLORE_DELAY = 0.3;
 const LANDING_ROW_BASE_DELAY = 0.4;
-const STUDY_ROW_SCROLL_OFFSETS: Array<"start 92%" | "start 68%" | "end 32%" | "end 8%"> = [
-  "start 92%",
-  "start 68%",
-  "end 32%",
-  "end 8%",
-];
-
 function unavailableFeedbackAnimation() {
   return {
     rotateX: [0, -7, 3, 0],
@@ -681,53 +674,25 @@ function buildNoteItems(posts: WritingPostMeta[]): StudyItem[] {
 
 function StudyTextRow({
   index,
-  isLast = false,
   item,
 }: {
   index: number;
-  isLast?: boolean;
   item: StudyItem;
 }) {
   const reduceMotion = useReducedMotion();
-  const rowRef = useRef<HTMLLIElement | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: rowRef,
-    offset: STUDY_ROW_SCROLL_OFFSETS,
-  });
-  const scrollOpacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [1, 1, 1, 1] : [0, 1, 1, 0]);
-  const scrollY = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], isLast ? [0, 0, 0, 0] : [10, 0, 0, -8]);
-  const scrollBlur = useTransform(scrollYProgress, (value) => {
-    if (isLast) return "blur(0px)";
-
-    const entryBlur = value < 0.22 ? 1 - value / 0.22 : 0;
-    const blur = entryBlur * 3;
-
-    return `blur(${blur.toFixed(2)}px)`;
-  });
 
   return (
     <motion.li
-      ref={rowRef}
       key={item.id}
       initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 8 }}
-      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 1, filter: "blur(0px)", y: 0 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
+      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
+      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
       transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row={item.kind === "writing" ? "writing" : "studies"}
       className="home-node group relative z-0 list-none hover:z-30 focus-within:z-30"
     >
-      <motion.div
-        className="block max-w-full transform-gpu"
-        style={
-          reduceMotion
-            ? undefined
-            : {
-                opacity: scrollOpacity,
-                filter: scrollBlur,
-                y: scrollY,
-                willChange: "opacity, filter, transform",
-              }
-        }
-      >
+      <div className="block max-w-full transform-gpu">
         <Link
           href={item.href}
           className="home-row home-row--link home-row--quiet-link micro-focus micro-focus-tight micro-pressable"

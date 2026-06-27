@@ -165,6 +165,8 @@
   --signal-draw-opacity-duration: 80ms;
   --signal-draw-duration: 140ms;
   --signal-draw-delay: 24ms;
+  --glass-chip-min-block: 26px;
+  --glass-chip-padding-inline: 9px;
 
   /* Motion timing scale. Keep these names in sync with lib/material/motion.ts. */
   --motion-duration-none: 0ms;
@@ -1007,10 +1009,10 @@ button.home-row {
 .home-mention {
   position: relative;
   display: inline-flex;
-  min-height: 24px;
+  min-height: var(--glass-chip-min-block);
   align-items: center;
   overflow: hidden;
-  padding: 0 7px;
+  padding: 0 var(--glass-chip-padding-inline);
   border: 1px solid #f4f4f6;
   border-radius: var(--md-shape-lg);
   background:
@@ -1028,6 +1030,7 @@ button.home-row {
     0 4px 14px -10px rgba(53, 53, 79, 0.4),
     0 11px 28px -10px rgba(53, 53, 79, 0.1);
   color: inherit;
+  line-height: 1.35;
   text-decoration: none;
   transition:
     background-color var(--motion-duration-instant) var(--motion-ease-standard),
@@ -2937,8 +2940,16 @@ button.home-row {
   width: fit-content;
   max-width: 100%;
   align-items: center;
-  padding: 2px 6px;
-  margin-left: -6px;
+  padding: 2px var(--glass-chip-padding-inline);
+  margin-left: calc(var(--glass-chip-padding-inline) * -1);
+  border-radius: var(--md-shape-sm);
+}
+
+.archive-back-link {
+  width: fit-content;
+  max-width: 100%;
+  padding: 2px var(--glass-chip-padding-inline);
+  margin-left: calc(var(--glass-chip-padding-inline) * -1);
   border-radius: var(--md-shape-sm);
 }
 
