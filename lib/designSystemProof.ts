@@ -134,8 +134,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "quiet outline signals",
-    description: "Hover and focus feedback starts inside the bullet cell, then gives nearby text a restrained nudge: internal links draw a small Material arrow, sections morph the dot into a short stroke while the caret draws, and notes keep a quieter dot state.",
-    primitives: ["drawn Material arrow signal", "section dot-to-stroke caret", "quiet note dot", "bullet cell"],
+    description: "Hover and focus feedback starts inside the bullet cell, then gives nearby text a restrained nudge: internal links and closed sections draw the same small Material arrow, section dots become a short leading stroke, and notes keep a quieter dot state.",
+    primitives: ["drawn Material arrow signal", "section dot-to-arrow signal", "quiet note dot", "bullet cell"],
   },
   {
     name: "detail outline",
@@ -167,10 +167,10 @@ export const DESIGN_SYSTEM_COMPONENTS = [
 export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Keep hover movement tiny: signals move inside the bullet cell, and nearby text may nudge only 1-2px.",
   "Hide section counts once a section is open so the visible content is the proof.",
-  "Keep open sections and open archive years on a stable filled dot; reserve drawn carets for closed expandable rows.",
-  "Use section carets only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
+  "Keep open sections and open archive years on a stable filled dot; reserve drawn arrows for closed expandable rows.",
+  "Use section arrows only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
-  "Use signal families consistently: internal links draw arrows, sections morph dots into short-stroke carets, notes keep dot-only feedback, and contact chips use lateral nudge plus cursor coupling.",
+  "Use signal families consistently: internal links and closed sections draw arrows, section dots become short strokes, notes keep dot-only feedback, and contact chips use lateral nudge plus cursor coupling.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",
@@ -201,7 +201,7 @@ export const DESIGN_SYSTEM_AI_CONTRACT = {
     "Do not invent metrics, employers, awards, repository links, or project outcomes.",
     "Do not create a separate visual system, large landing page, or marketing-heavy hero for proof pages.",
     "Do not add new dependencies for primitives that already exist in the codebase.",
-    "Do not use flashy gradients, decorative glass, or large motion that competes with the work; outline feedback should stay in dots, carets, and Material signals.",
+    "Do not use flashy gradients, decorative glass, or large motion that competes with the work; outline feedback should stay in dots, short strokes, and Material signals.",
     "Do not remove reduced-motion, keyboard, or focus-visible behavior.",
   ],
 } as const;

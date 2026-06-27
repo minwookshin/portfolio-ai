@@ -531,7 +531,7 @@ button.home-row {
   color: var(--text-muted);
   opacity: 0;
   pointer-events: none;
-  transform: scale(0.82);
+  transform: translateX(-2px) scale(0.82);
   visibility: hidden;
   transition:
     opacity 140ms var(--motion-ease-standard),
@@ -552,25 +552,6 @@ button.home-row {
     opacity 140ms var(--motion-ease-standard),
     transform 160ms var(--motion-ease-standard);
   visibility: hidden;
-}
-
-.site-caret-icon {
-  display: block;
-  width: 18px;
-  height: 18px;
-  color: currentColor;
-  overflow: visible;
-  transform: rotate(0deg);
-  transition: transform 220ms var(--motion-ease-standard);
-}
-
-.site-caret-icon .site-caret-stroke {
-  opacity: 0;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition:
-    opacity 80ms var(--motion-ease-standard),
-    stroke-dashoffset 140ms var(--motion-ease-standard);
 }
 
 .site-signal-icon {
@@ -595,28 +576,25 @@ button.home-row {
   transition-delay: 24ms;
 }
 
-.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-caret-icon {
-  transform: rotate(90deg);
-}
-
 .home-node--section > .home-row:focus-visible .home-bullet {
-  width: 5px;
+  width: 8px;
   height: 2px;
   border-color: transparent;
   border-radius: 2px;
   background: currentColor;
   opacity: 0.42;
-  transform: translateX(-4px) scaleX(1);
+  transform: translateX(1.5px) scaleX(1);
   visibility: visible;
 }
 
 .home-node--section > .home-row:focus-visible .home-caret {
-  opacity: 1;
-  transform: translateX(1px) scale(1);
+  opacity: 0.74;
+  transform: translateX(2px) scale(1);
   visibility: visible;
 }
 
-.home-node--section > .home-row:focus-visible .home-caret .site-caret-stroke {
+.home-node--section > .home-row:focus-visible .home-caret .site-signal-tail,
+.home-node--section > .home-row:focus-visible .home-caret .site-signal-head {
   opacity: 1;
   stroke-dashoffset: 0;
 }
@@ -859,27 +837,34 @@ button.home-row {
   .home-node--section > .home-row:focus-visible .home-bullet,
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-bullet,
   .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-bullet {
-    width: 5px;
+    width: 8px;
     height: 2px;
     border-color: transparent;
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(-4px) scaleX(1);
+    transform: translateX(1.5px) scaleX(1);
     visibility: visible;
   }
 
   .home-node--section > .home-row:hover .home-caret,
   .home-node--section > .home-row:focus-visible .home-caret {
-    opacity: 1;
-    transform: translateX(1px) scale(1);
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
     visibility: visible;
   }
 
-  .home-node--section > .home-row:hover .home-caret .site-caret-stroke,
-  .home-node--section > .home-row:focus-visible .home-caret .site-caret-stroke {
+  .home-node--section > .home-row:hover .home-caret .site-signal-tail,
+  .home-node--section > .home-row:hover .home-caret .site-signal-head,
+  .home-node--section > .home-row:focus-visible .home-caret .site-signal-tail,
+  .home-node--section > .home-row:focus-visible .home-caret .site-signal-head {
     opacity: 1;
     stroke-dashoffset: 0;
+  }
+
+  .home-node--section:not([open]) > .home-row:hover .home-label,
+  .home-node--section:not([open]) > .home-row:focus-visible .home-label {
+    transform: translateX(2px);
   }
 
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-bullet,
@@ -897,12 +882,14 @@ button.home-row {
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret,
   .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret {
     opacity: 0;
-    transform: scale(0.82);
+    transform: translateX(-2px) scale(0.82);
     visibility: hidden;
   }
 
-  .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret .site-caret-stroke,
-  .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret .site-caret-stroke {
+  .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret .site-signal-tail,
+  .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret .site-signal-head,
+  .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret .site-signal-tail,
+  .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret .site-signal-head {
     opacity: 0;
     stroke-dashoffset: 1;
   }
@@ -992,7 +979,8 @@ button.home-row {
     visibility: hidden;
   }
 
-  .home-node--section > .home-row .home-caret .site-caret-stroke {
+  .home-node--section > .home-row .home-caret .site-signal-tail,
+  .home-node--section > .home-row .home-caret .site-signal-head {
     opacity: 1;
     stroke-dashoffset: 0;
   }
@@ -1050,19 +1038,30 @@ button.home-row {
 
   .home-node--section > .home-row:active .home-bullet,
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
-    width: 5px;
+    width: 8px;
     height: 2px;
     border-color: transparent;
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(-4px) scaleX(1);
+    transform: translateX(1.5px) scaleX(1);
     visibility: visible;
   }
 
-  .home-node--section > .home-row:active .home-caret .site-caret-stroke {
+  .home-node--section > .home-row:active .home-caret {
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
+    visibility: visible;
+  }
+
+  .home-node--section > .home-row:active .home-caret .site-signal-tail,
+  .home-node--section > .home-row:active .home-caret .site-signal-head {
     opacity: 1;
     stroke-dashoffset: 0;
+  }
+
+  .home-node--section:not([open]) > .home-row:active .home-label {
+    transform: translateX(2px);
   }
 
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
@@ -1078,6 +1077,7 @@ button.home-row {
 
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-caret {
     opacity: 0;
+    transform: translateX(-2px) scale(0.82);
     visibility: hidden;
   }
 
@@ -2250,35 +2250,32 @@ button.home-row {
   color: var(--text-muted);
   opacity: 0;
   pointer-events: none;
-  transform: scale(0.82);
+  transform: translateX(-2px) scale(0.82);
   visibility: hidden;
   transition:
     opacity 140ms var(--motion-ease-standard),
     transform 180ms var(--motion-ease-standard);
 }
 
-.archive-year-details[open] > .archive-year .archive-caret .site-caret-icon {
-  transform: rotate(90deg);
-}
-
 .archive-year:focus-visible .archive-year-bullet {
-  width: 5px;
+  width: 8px;
   height: 2px;
   border-color: transparent;
   border-radius: 2px;
   background: currentColor;
   opacity: 0.42;
-  transform: translateX(-4px) scaleX(1);
+  transform: translateX(1.5px) scaleX(1);
   visibility: visible;
 }
 
 .archive-year:focus-visible .archive-caret {
-  opacity: 1;
-  transform: translateX(1px) scale(1);
+  opacity: 0.74;
+  transform: translateX(2px) scale(1);
   visibility: visible;
 }
 
-.archive-year:focus-visible .archive-caret .site-caret-stroke {
+.archive-year:focus-visible .archive-caret .site-signal-tail,
+.archive-year:focus-visible .archive-caret .site-signal-head {
   opacity: 1;
   stroke-dashoffset: 0;
 }
@@ -2296,13 +2293,8 @@ button.home-row {
 
 .archive-year-details[open] > .archive-year:focus-visible .archive-caret {
   opacity: 0;
-  transform: scale(0.82);
+  transform: translateX(-2px) scale(0.82);
   visibility: hidden;
-}
-
-.archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-caret-stroke {
-  opacity: 0;
-  stroke-dashoffset: 1;
 }
 
 .archive-row-bullet {
@@ -2484,25 +2476,27 @@ button.home-row {
   .archive-year:focus-visible .archive-year-bullet,
   .archive-year-details[open] > .archive-year:hover .archive-year-bullet,
   .archive-year-details[open] > .archive-year:focus-visible .archive-year-bullet {
-    width: 5px;
+    width: 8px;
     height: 2px;
     border-color: transparent;
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(-4px) scaleX(1);
+    transform: translateX(1.5px) scaleX(1);
     visibility: visible;
   }
 
   .archive-year:hover .archive-caret,
   .archive-year:focus-visible .archive-caret {
-    opacity: 1;
-    transform: translateX(1px) scale(1);
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
     visibility: visible;
   }
 
-  .archive-year:hover .archive-caret .site-caret-stroke,
-  .archive-year:focus-visible .archive-caret .site-caret-stroke {
+  .archive-year:hover .archive-caret .site-signal-tail,
+  .archive-year:hover .archive-caret .site-signal-head,
+  .archive-year:focus-visible .archive-caret .site-signal-tail,
+  .archive-year:focus-visible .archive-caret .site-signal-head {
     opacity: 1;
     stroke-dashoffset: 0;
   }
@@ -2522,12 +2516,14 @@ button.home-row {
   .archive-year-details[open] > .archive-year:hover .archive-caret,
   .archive-year-details[open] > .archive-year:focus-visible .archive-caret {
     opacity: 0;
-    transform: scale(0.82);
+    transform: translateX(-2px) scale(0.82);
     visibility: hidden;
   }
 
-  .archive-year-details[open] > .archive-year:hover .archive-caret .site-caret-stroke,
-  .archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-caret-stroke {
+  .archive-year-details[open] > .archive-year:hover .archive-caret .site-signal-tail,
+  .archive-year-details[open] > .archive-year:hover .archive-caret .site-signal-head,
+  .archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-tail,
+  .archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-head {
     opacity: 0;
     stroke-dashoffset: 1;
   }
@@ -2536,7 +2532,7 @@ button.home-row {
   .archive-year:focus-visible .archive-year-label,
   .archive-year:hover .archive-count,
   .archive-year:focus-visible .archive-count {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
 }
@@ -2579,24 +2575,32 @@ button.home-row {
     visibility: hidden;
   }
 
-  .archive-year .archive-caret .site-caret-stroke {
+  .archive-year .archive-caret .site-signal-tail,
+  .archive-year .archive-caret .site-signal-head {
     opacity: 1;
     stroke-dashoffset: 0;
   }
 
   .archive-year:active .archive-year-bullet,
   .archive-year-details[open] > .archive-year:active .archive-year-bullet {
-    width: 5px;
+    width: 8px;
     height: 2px;
     border-color: transparent;
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(-4px) scaleX(1);
+    transform: translateX(1.5px) scaleX(1);
     visibility: visible;
   }
 
-  .archive-year:active .archive-caret .site-caret-stroke {
+  .archive-year:active .archive-caret {
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
+    visibility: visible;
+  }
+
+  .archive-year:active .archive-caret .site-signal-tail,
+  .archive-year:active .archive-caret .site-signal-head {
     opacity: 1;
     stroke-dashoffset: 0;
   }
@@ -2614,12 +2618,13 @@ button.home-row {
 
   .archive-year-details[open] > .archive-year:active .archive-caret {
     opacity: 0;
+    transform: translateX(-2px) scale(0.82);
     visibility: hidden;
   }
 
   .archive-year:active .archive-year-label,
   .archive-year:active .archive-count {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .archive-row:not(.archive-row--quiet):active .archive-row-bullet {

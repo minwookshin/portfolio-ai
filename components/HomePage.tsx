@@ -10,7 +10,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
-import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
@@ -177,7 +176,7 @@ function HomeBulletCell({
       <span className={`home-bullet home-bullet--${bulletVariant}`} />
       {section && (
         <span className="home-caret" aria-hidden="true">
-          <MaterialChevronRightIcon className="site-caret-icon" />
+          <MaterialArrowForwardIcon className="site-signal-icon" />
         </span>
       )}
       {signal && !section && (

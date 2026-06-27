@@ -95,7 +95,7 @@ export default function ArchiveIndexPage({
                       <span className="archive-bullet-cell" aria-hidden="true">
                         <span className="archive-year-bullet" />
                         <span className="archive-caret">
-                          <MaterialChevronRightIcon className="site-caret-icon" />
+                          <MaterialArrowForwardIcon className="site-signal-icon" />
                         </span>
                       </span>
                       <span className="archive-year-label">{year}</span>
