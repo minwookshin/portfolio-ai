@@ -2242,6 +2242,10 @@ button.home-row {
   text-transform: lowercase !important;
 }
 
+.page-transition-shell {
+  min-height: 100dvh;
+}
+
 .archive-page-shell,
 .detail-page-shell {
   display: flex;

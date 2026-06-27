@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import CustomCursor from "@/components/CustomCursor";
+import PageTransition from "@/components/PageTransition";
 import StructuredData from "@/components/StructuredData";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, rootJsonLd } from "@/lib/seo";
 import "@carrot-kpi/switzer-font/latin.css";
@@ -94,7 +95,7 @@ export default function RootLayout({
       <body className={geistMono.variable}>
         <StructuredData data={rootJsonLd()} />
         <CustomCursor />
-        {children}
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );
