@@ -864,7 +864,7 @@ button.home-row {
 
 .site-signal-icon--down {
   opacity: 0;
-  transform: translateY(var(--signal-down-optical-y));
+  transform: translateY(var(--signal-down-optical-y)) rotate(90deg);
 }
 
 .home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon--right,
@@ -2953,6 +2953,12 @@ button.home-row {
   flex: 0 0 18px;
   color: currentColor;
   transform: rotate(180deg);
+}
+
+.site-back-icon .site-signal-tail,
+.site-back-icon .site-signal-head {
+  opacity: 1;
+  stroke-dashoffset: 0;
 }
 
 .archive-header {

@@ -1,5 +1,4 @@
 import type { ElementType, ReactNode } from "react";
-import MaterialArrowDownIcon from "@/components/MaterialArrowDownIcon";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 
 type OutlineSignalCellProps = {
@@ -25,7 +24,7 @@ export function OutlineSignalCell({
       {arrow && (
         <span className={arrowClassName}>
           {(arrow === "right" || arrow === "both") && <MaterialArrowForwardIcon className={rightArrowClassName} />}
-          {(arrow === "down" || arrow === "both") && <MaterialArrowDownIcon className={downArrowClassName} />}
+          {(arrow === "down" || arrow === "both") && <MaterialArrowForwardIcon className={downArrowClassName} />}
         </span>
       )}
     </span>

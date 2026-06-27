@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import AtlasProofCaseStudy from "@/components/AtlasProofCaseStudy";
-import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
+import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import { Project } from "./ProjectCard";
 import StudioVideoPlayer from "./StudioVideoPlayer";
@@ -300,7 +300,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           transition={reduceMotion ? tweens.none : springs.spatialFast}
           className="intro-contact-link micro-focus micro-pressable mb-[var(--space-4)] flex w-fit items-center gap-[var(--space-1)] text-[length:var(--type-0)]"
         >
-          <MaterialChevronRightIcon className="site-back-icon" />
+          <MaterialArrowForwardIcon className="site-back-icon" />
           <span>Back to projects</span>
         </motion.button>
       )}

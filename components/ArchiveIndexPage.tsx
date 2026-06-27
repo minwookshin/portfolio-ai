@@ -1,5 +1,5 @@
 import Link from "next/link";
-import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
+import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { OutlineSignalCell } from "@/components/Outline";
 
 export type ArchiveEntry = {
@@ -68,7 +68,7 @@ export default function ArchiveIndexPage({
       <article className="archive-page" data-archive-kind={archiveKind} aria-labelledby="archive-title">
           <nav className="archive-nav" aria-label="archive navigation">
             <Link href="/" className="archive-nav-link">
-              <MaterialChevronRightIcon className="site-back-icon" />
+              <MaterialArrowForwardIcon className="site-back-icon" />
               index
             </Link>
           </nav>
