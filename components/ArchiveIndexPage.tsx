@@ -1,5 +1,5 @@
 import Link from "next/link";
-import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
+import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 
 export type ArchiveEntry = {
@@ -64,9 +64,8 @@ export default function ArchiveIndexPage({
   return (
     <main className="site-lowercase archive-page-shell">
       <article className="archive-page" aria-labelledby="archive-title">
-        <LiquidGlassHoverScope>
           <nav className="archive-nav" aria-label="archive navigation">
-            <Link href="/" className="archive-nav-link" data-liquid-glass-row="true">
+            <Link href="/" className="archive-nav-link">
               <MaterialChevronRightIcon className="site-back-icon" />
               index
             </Link>
@@ -90,7 +89,6 @@ export default function ArchiveIndexPage({
                     <summary
                       aria-label={`${year}, ${yearEntries.length} ${itemLabel}`}
                       className="archive-year micro-focus micro-focus-tight"
-                      data-liquid-glass-row="true"
                     >
                       <span className="archive-bullet-cell" aria-hidden="true">
                         <span className="archive-year-bullet" />
@@ -108,10 +106,12 @@ export default function ArchiveIndexPage({
                           <Link
                             href={entry.href}
                             className="archive-row micro-focus micro-focus-tight"
-                            data-liquid-glass-row="true"
                           >
                             <span className="archive-bullet-cell" aria-hidden="true">
                               <span className="archive-row-bullet" />
+                              <span className="archive-row-signal">
+                                <MaterialArrowForwardIcon className="site-signal-icon" />
+                              </span>
                             </span>
                             <span className="archive-row-title">{entry.title}</span>
                             {entry.description && (
@@ -127,7 +127,6 @@ export default function ArchiveIndexPage({
               );
             })}
           </ol>
-        </LiquidGlassHoverScope>
       </article>
     </main>
   );

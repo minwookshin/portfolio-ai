@@ -18,7 +18,8 @@ export const DESIGN_SYSTEM_PROOF = {
     "components/HomePage.tsx",
     "components/ArchiveIndexPage.tsx",
     "components/CustomCursor.tsx",
-    "components/LiquidGlassHoverScope.tsx",
+    "components/MaterialArrowForwardIcon.tsx",
+    "components/MaterialChevronRightIcon.tsx",
     "components/ProjectDetailView.tsx",
     "components/LabStudyDetailView.tsx",
     "components/detail/CaseStudy.tsx",
@@ -128,9 +129,9 @@ export const DESIGN_SYSTEM_COMPONENTS = [
     primitives: ["archive year", "archive row", "archive count", "back to index link"],
   },
   {
-    name: "liquid glass hover",
-    description: "One absolute hover layer follows the active row; row text stays fixed while color and caret states clarify interaction.",
-    primitives: ["glass layer", "hover row measurement", "section caret"],
+    name: "quiet outline signals",
+    description: "Hover and focus feedback stay inside the bullet cell: dots clarify into Material signal icons while row text remains fixed.",
+    primitives: ["Material arrow signal", "section caret", "bullet cell", "quiet color state"],
   },
   {
     name: "detail outline",
@@ -160,7 +161,7 @@ export const DESIGN_SYSTEM_COMPONENTS = [
 ] as const;
 
 export const DESIGN_SYSTEM_INTERACTION_RULES = [
-  "Keep hover movement on the glass or control layer; outline text should stay fixed and only become slightly clearer.",
+  "Keep hover movement inside the bullet cell; outline text should stay fixed and only become slightly clearer.",
   "Hide section counts once a section is open so the visible content is the proof.",
   "Use section carets only inside the bullet cell so caret and dot never overlap.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
@@ -193,7 +194,7 @@ export const DESIGN_SYSTEM_AI_CONTRACT = {
     "Do not invent metrics, employers, awards, repository links, or project outcomes.",
     "Do not create a separate visual system, large landing page, or marketing-heavy hero for proof pages.",
     "Do not add new dependencies for primitives that already exist in the codebase.",
-    "Do not use flashy gradients, decorative glass, or large motion that competes with the work; liquid glass is reserved for row hover feedback.",
+    "Do not use flashy gradients, decorative glass, or large motion that competes with the work; outline feedback should stay in dots, carets, and Material signals.",
     "Do not remove reduced-motion, keyboard, or focus-visible behavior.",
   ],
 } as const;

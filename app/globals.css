@@ -346,74 +346,6 @@ body::after {
   text-align: left;
 }
 
-.liquid-glass-hover-scope {
-  position: relative;
-  width: 100%;
-  isolation: isolate;
-  perspective: 1400px;
-}
-
-.liquid-glass-hover {
-  position: absolute;
-  z-index: 0;
-  display: block;
-  overflow: hidden;
-  border: 1px solid #f4f4f6;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #fff, #fafafa);
-  box-shadow:
-    inset 0 2px 4px 0 #fff,
-    inset 0 -4px 4px 0 hsla(0, 0%, 100%, 0.5),
-    inset 0 -4px 16px 0 #fff,
-    inset 0 4px 10px 0 hsla(240, 3%, 45%, 0.07),
-    0 4px 14px -10px rgba(53, 53, 79, 0.4),
-    0 11px 28px -10px rgba(53, 53, 79, 0.1);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate3d(0, 0, 0);
-  transform-style: preserve-3d;
-  will-change: top, left, width, height, opacity, transform;
-}
-
-.liquid-glass-hover__highlight {
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  background: radial-gradient(
-    circle at 50% var(--liquid-glass-highlight-y, 50%),
-    rgba(255, 255, 255, 0.72),
-    transparent 58%
-  );
-  opacity: calc(var(--liquid-glass-highlight-opacity, 0) * 0.28);
-  pointer-events: none;
-  transform: translate3d(0, 0, 0);
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-@supports (color: color(display-p3 1 1 1)) {
-  .liquid-glass-hover {
-    border-color: color(display-p3 0.9554 0.9554 0.9646);
-    background:
-      linear-gradient(
-        180deg,
-        color(display-p3 1 1 1),
-        color(display-p3 0.979 0.979 0.981)
-      );
-    box-shadow:
-      inset 0 2px 4px 0 color(display-p3 1 1 1),
-      inset 0 -4px 4px 0 color(display-p3 1 1 1 / 0.5),
-      inset 0 -4px 16px 0 color(display-p3 1 1 1),
-      inset 0 4px 10px 0 color(display-p3 0.4338 0.4338 0.4566 / 0.07),
-      0 4px 14px -10px color(display-p3 0.2085 0.2085 0.3025 / 0.4),
-      0 11px 28px -10px color(display-p3 0.2085 0.2085 0.3025 / 0.1);
-  }
-}
-
-.liquid-glass-hover-scope [data-liquid-glass-row="true"] {
-  position: relative;
-  z-index: 1;
-}
-
 .home-doc-title-row {
   display: flex;
   align-items: center;
@@ -590,6 +522,22 @@ button.home-row {
   transition: opacity 140ms var(--motion-ease-standard);
 }
 
+.home-signal,
+.archive-row-signal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.68) rotate(-10deg);
+  transition:
+    opacity 140ms var(--motion-ease-standard),
+    transform 180ms var(--motion-ease-emphasized);
+  visibility: hidden;
+}
+
 .site-caret-icon {
   display: block;
   width: 18px;
@@ -599,17 +547,22 @@ button.home-row {
   transition: transform 220ms var(--motion-ease-standard);
 }
 
+.site-signal-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+}
+
 .home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-caret-icon {
   transform: rotate(90deg);
 }
 
-.home-node--section > .home-row[data-liquid-glass-active="true"] .home-bullet,
 .home-node--section > .home-row:focus-visible .home-bullet {
   opacity: 0;
   visibility: hidden;
 }
 
-.home-node--section > .home-row[data-liquid-glass-active="true"] .home-caret,
 .home-node--section > .home-row:focus-visible .home-caret {
   opacity: 1;
   visibility: visible;
@@ -683,7 +636,7 @@ button.home-row {
   padding-left: 0;
 }
 
-.home-doc .liquid-glass-hover-scope > .home-node--section + .home-node--section {
+.home-doc > .home-node--section + .home-node--section {
   margin-top: 4px;
 }
 
@@ -716,22 +669,44 @@ button.home-row {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .home-row:hover .home-bullet,
-  .home-row[data-liquid-glass-active="true"] .home-bullet {
-    opacity: 0.7;
-    transform: scale(1.32);
+  .home-row:not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-bullet {
+    opacity: 0.58;
+    transform: scale(1.12);
+  }
+
+  .home-row--link:hover .home-bullet,
+  .home-row--link:focus-visible .home-bullet,
+  .home-row--signal:hover .home-bullet,
+  .home-row--signal:focus-within .home-bullet {
+    opacity: 0;
+    transform: scale(0.42);
+  }
+
+  .home-row--link:hover .home-signal,
+  .home-row--link:focus-visible .home-signal,
+  .home-row--signal:hover .home-signal,
+  .home-row--signal:focus-within .home-signal {
+    opacity: 0.74;
+    transform: scale(1) rotate(0deg);
+    visibility: visible;
   }
 
   .home-node--section > .home-row:hover .home-bullet,
-  .home-node--section > .home-row[data-liquid-glass-active="true"] .home-bullet {
+  .home-node--section > .home-row:focus-visible .home-bullet {
     opacity: 0;
+    transform: scale(0.56);
     visibility: hidden;
   }
 
   .home-node--section > .home-row:hover .home-caret,
-  .home-node--section > .home-row[data-liquid-glass-active="true"] .home-caret {
+  .home-node--section > .home-row:focus-visible .home-caret {
     opacity: 1;
     visibility: visible;
+  }
+
+  .home-row--link:hover .home-meta,
+  .home-row--link:focus-visible .home-meta {
+    color: color-mix(in srgb, var(--text-primary) 62%, var(--text-muted));
   }
 
   .home-mention:hover {
@@ -752,10 +727,6 @@ button.home-row {
 }
 
 @media (hover: none), (pointer: coarse) {
-  .liquid-glass-hover {
-    display: none;
-  }
-
   .home-row {
     min-height: 44px;
     padding-top: 7px;
@@ -780,6 +751,19 @@ button.home-row {
   .home-row:active .home-bullet {
     opacity: 0.7;
     transform: scale(1.32);
+  }
+
+  .home-row--link:active .home-bullet,
+  .home-row--signal:active .home-bullet {
+    opacity: 0;
+    transform: scale(0.42);
+  }
+
+  .home-row--link:active .home-signal,
+  .home-row--signal:active .home-signal {
+    opacity: 0.74;
+    transform: scale(1) rotate(0deg);
+    visibility: visible;
   }
 
   .home-node--section > .home-row:active .home-bullet {
@@ -1930,13 +1914,11 @@ button.home-row {
   transform: rotate(90deg);
 }
 
-.archive-year[data-liquid-glass-active="true"] .archive-year-bullet,
 .archive-year:focus-visible .archive-year-bullet {
   opacity: 0;
   visibility: hidden;
 }
 
-.archive-year[data-liquid-glass-active="true"] .archive-caret,
 .archive-year:focus-visible .archive-caret {
   opacity: 1;
   visibility: visible;
@@ -2022,6 +2004,7 @@ button.home-row {
   min-width: 0;
   color: var(--text-primary);
   font-weight: 400;
+  transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .archive-row-meta {
@@ -2029,6 +2012,7 @@ button.home-row {
   font-size: var(--type-meta);
   font-variant-numeric: tabular-nums;
   line-height: inherit;
+  transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .archive-row-description {
@@ -2036,13 +2020,33 @@ button.home-row {
   color: var(--text-muted);
   font-size: var(--type-meta);
   line-height: inherit;
+  transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .archive-row:hover .archive-row-bullet,
-  .archive-row[data-liquid-glass-active="true"] .archive-row-bullet {
-    opacity: 0.7;
-    transform: scale(1.32);
+  .archive-row:focus-visible .archive-row-bullet {
+    opacity: 0;
+    transform: scale(0.42);
+  }
+
+  .archive-row:hover .archive-row-signal,
+  .archive-row:focus-visible .archive-row-signal {
+    opacity: 0.74;
+    transform: scale(1) rotate(0deg);
+    visibility: visible;
+  }
+
+  .archive-row:hover .archive-row-title,
+  .archive-row:focus-visible .archive-row-title {
+    color: color-mix(in srgb, var(--text-primary) 86%, var(--text-muted));
+  }
+
+  .archive-row:hover .archive-row-description,
+  .archive-row:focus-visible .archive-row-description,
+  .archive-row:hover .archive-row-meta,
+  .archive-row:focus-visible .archive-row-meta {
+    color: color-mix(in srgb, var(--text-primary) 62%, var(--text-muted));
   }
 
   .archive-year:hover .archive-year-bullet {
@@ -2081,8 +2085,14 @@ button.home-row {
   }
 
   .archive-row:active .archive-row-bullet {
-    opacity: 0.7;
-    transform: scale(1.32);
+    opacity: 0;
+    transform: scale(0.42);
+  }
+
+  .archive-row:active .archive-row-signal {
+    opacity: 0.74;
+    transform: scale(1) rotate(0deg);
+    visibility: visible;
   }
 }
 

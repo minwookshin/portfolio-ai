@@ -9,7 +9,6 @@ const INTERACTIVE_SELECTOR = [
   "summary",
   "label",
   ".cursor-pointer",
-  "[data-liquid-glass-row='true']",
   ".home-row",
   ".archive-row",
   ".archive-year",

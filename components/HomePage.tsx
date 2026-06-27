@@ -9,7 +9,7 @@ import type { Transition, Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
-import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
+import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 import type { Project } from "@/components/ProjectCard";
 import { ArrowUpRight } from "lucide-react";
@@ -161,7 +161,15 @@ function StudyMetaLine({
 
 type HomeBulletVariant = "leaf" | "note" | "section" | "system" | "work";
 
-function HomeBulletCell({ section = false, variant = "leaf" }: { section?: boolean; variant?: HomeBulletVariant }) {
+function HomeBulletCell({
+  section = false,
+  signal = false,
+  variant = "leaf",
+}: {
+  section?: boolean;
+  signal?: boolean;
+  variant?: HomeBulletVariant;
+}) {
   const bulletVariant = section ? "section" : variant;
 
   return (
@@ -172,15 +180,20 @@ function HomeBulletCell({ section = false, variant = "leaf" }: { section?: boole
           <MaterialChevronRightIcon className="site-caret-icon" />
         </span>
       )}
+      {signal && !section && (
+        <span className="home-signal" aria-hidden="true">
+          <MaterialArrowForwardIcon className="site-signal-icon" />
+        </span>
+      )}
     </span>
   );
 }
 
-function HomeLeafRow({ children }: { children: ReactNode }) {
+function HomeLeafRow({ children, signal = false }: { children: ReactNode; signal?: boolean }) {
   return (
     <div className="home-node">
-      <div className="home-row" data-liquid-glass-row="true">
-        <HomeBulletCell />
+      <div className={`home-row${signal ? " home-row--signal" : ""}`}>
+        <HomeBulletCell signal={signal} />
         <span className="home-label">{children}</span>
       </div>
     </div>
@@ -247,7 +260,7 @@ function HomeOutlineSection({
       open={isOpen}
       variants={landingRevealItem}
     >
-      <summary className="home-row home-row--summary micro-focus micro-focus-tight" data-liquid-glass-row="true">
+      <summary className="home-row home-row--summary micro-focus micro-focus-tight">
         <HomeBulletCell section />
         <span className="home-label">
           {title}
@@ -344,7 +357,7 @@ function ProjectTextRow({
     .join(" ");
   const rowText = (
     <>
-      <HomeBulletCell variant="work" />
+      <HomeBulletCell signal={!project.comingSoon} variant="work" />
       <span className="home-label project-row-copy">
         <span className={titleClass}>
           {project.title}
@@ -379,7 +392,6 @@ function ProjectTextRow({
           aria-label={`${project.title} is not ready yet`}
           animate={unavailableControls}
           className={`${rowClass} cursor-pointer`}
-          data-liquid-glass-row="true"
           onClick={playUnavailableFeedback}
           style={{
             transformOrigin: "50% 60%",
@@ -393,7 +405,6 @@ function ProjectTextRow({
         <Link
           href={getProjectPath(project)}
           className={rowClass}
-          data-liquid-glass-row="true"
         >
           {rowText}
         </Link>
@@ -483,9 +494,8 @@ function StudyTextRow({
         <Link
           href={item.href}
           className="home-row home-row--link micro-focus micro-focus-tight micro-pressable"
-          data-liquid-glass-row="true"
         >
-          <HomeBulletCell variant={item.kind === "lab" ? "system" : "note"} />
+          <HomeBulletCell signal variant={item.kind === "lab" ? "system" : "note"} />
           <span className="home-label project-row-copy">
             <span className="project-row-title-line--lateral font-normal">
               {item.title}
@@ -543,7 +553,6 @@ function HomeDocument({
       className="home-doc-shell"
     >
       <motion.div id="profile" variants={landingIntroVariants} className="home-doc scroll-mt-28">
-        <LiquidGlassHoverScope>
         <motion.div variants={landingRevealItem} className="home-doc-title-row">
           <h1 className="home-doc-title">
             Minwook Shin
@@ -571,7 +580,7 @@ function HomeDocument({
           title="selected work"
         >
           <WorkSection projects={projects} />
-          <HomeLeafRow>
+          <HomeLeafRow signal>
             <HomeMetaLink href="/work">all work</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
@@ -584,29 +593,28 @@ function HomeDocument({
           title="notes"
         >
           <OutlineListSection emptyLabel="notes are coming soon." items={noteItems} />
-          <HomeLeafRow>
+          <HomeLeafRow signal>
             <HomeMetaLink href="/notes">all notes</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
 
         <HomeOutlineSection count={5} defaultOpen title="contact">
-          <HomeLeafRow>
+          <HomeLeafRow signal>
             <HomeMetaLink href={PERSONAL_INFO.linkedin} external>linkedin.com/in/minwookshin</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow>
+          <HomeLeafRow signal>
             <HomeMetaLink href={PERSONAL_INFO.github} external>github.com/minwookshin</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow>
+          <HomeLeafRow signal>
             <HomeMetaLink href={PERSONAL_INFO.x} external>x.com/FakeMinwook</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow>
+          <HomeLeafRow signal>
             <HomeMetaLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow>
+          <HomeLeafRow signal>
             <HomeMetaLink href={PERSONAL_INFO.resume}>resume</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>
-        </LiquidGlassHoverScope>
       </motion.div>
     </motion.section>
   );
