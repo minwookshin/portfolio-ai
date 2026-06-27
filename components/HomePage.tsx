@@ -1068,19 +1068,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         },
       },
       {
-        id: "view-interactions",
-        title: "view interactions",
-        meta: "live systems",
-        group: "navigate",
-        keywords: ["systems", "interactions", "motion", "cursor", "command", "glass"],
-        icon: <Command />,
-        action: () => {
-          setHasStarted(false);
-          setChatOnTop(false);
-          router.push("/interactions");
-        },
-      },
-      {
         id: "view-contact",
         title: "view contact",
         meta: "links and email",

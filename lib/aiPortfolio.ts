@@ -108,7 +108,6 @@ export function generateLlmsTxt() {
     linkLine("Homepage", absoluteUrl("/"), "profile, contact, selected navigation"),
     linkLine("Work", absoluteUrl("/work"), "main project index"),
     linkLine("Interaction studies", absoluteUrl("/studies"), "motion, cursor, hover, route, and AI loop archive"),
-    linkLine("Live interaction OS", absoluteUrl("/interactions"), "dot-to-arrow, glass chips, command palette, cursor, route transition, and Atlas capacity proof"),
     linkLine("Notes", absoluteUrl("/notes"), "writing and practice notes"),
     linkLine("Hiring brief", absoluteUrl("/hiring.md"), "recruiter-facing role, availability, proof, and evaluation hints"),
     linkLine("Full portfolio summary", absoluteUrl("/portfolio.md"), "longer AI-readable briefing"),

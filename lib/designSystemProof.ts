@@ -5,7 +5,6 @@ export const DESIGN_SYSTEM_PATHS = {
   markdown: "/design-system.md",
   tokens: "/design-system/tokens.json",
   portfolioAi: "/work/portfolio-ai",
-  interactions: "/interactions",
 } as const;
 
 export const DESIGN_SYSTEM_PROOF = {
@@ -17,7 +16,6 @@ export const DESIGN_SYSTEM_PROOF = {
     "app/globals.css",
     "lib/material/motion.ts",
     "components/HomePage.tsx",
-    "components/InteractionsPage.tsx",
     "components/ArchiveIndexPage.tsx",
     "components/CustomCursor.tsx",
     "components/MaterialArrowForwardIcon.tsx",
@@ -176,11 +174,6 @@ export const DESIGN_SYSTEM_COMPONENTS = [
     name: "cards and surfaces",
     description: "Surfaces are reserved for media, code, native video playback, and functional controls; document structure relies on bullets and spacing.",
     primitives: ["media frame", "code block", "native video controls", "status block"],
-  },
-  {
-    name: "live interaction OS",
-    description: "A contained /interactions proof grid for the portfolio's dot, arrow, glass, cursor, command, route, and Atlas capacity systems.",
-    primitives: ["dot-to-arrow tile", "glass chip tile", "command lens tile", "cursor tile", "route transition tile", "capacity state tile"],
   },
   {
     name: "machine-readable proof blocks",

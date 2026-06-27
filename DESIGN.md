@@ -3,7 +3,7 @@
 ## Source of truth
 - Status: Active
 - Last refreshed: 2026-06-27
-- Primary product surfaces: portfolio homepage, command palette, work browsing, notes browsing, studies archive, live interactions proof grid, project detail pages, main-page profile/contact block.
+- Primary product surfaces: portfolio homepage, command palette, work browsing, notes browsing, studies archive, project detail pages, main-page profile/contact block.
 - Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/interactions/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/InteractionsPage.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Work & Co work/case-study references, Pentagram work/case-study references, Instrument homepage/work pattern, Fantasy homepage positioning, Metalab project-first work grid, Clay outcome/category work index, BASIC/DEPT case-study archive, Huge work index, NN/g UX portfolio and grid guidance, Awwwards project-page collection, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
 ## Brand
@@ -22,8 +22,8 @@
 - Key contexts of use: desktop portfolio review, mobile link click, recruiter/client scan, live conversation during outreach.
 
 ## Information architecture
-- Primary navigation: minimal header identity plus inline outline sections: `today`, `work`, `notes`, and `contact`; command palette acts as the OS-like utility/search layer. Archive routes (`/work`, `/notes`, `/studies`) extend the same outline language by year; `/interactions` is the live proof grid for the interaction system instead of another homepage section.
-- Core routes/screens: home, command palette, work archive, notes archive, studies archive, live interactions proof grid, work detail, study detail, note detail, design-system proof.
+- Primary navigation: minimal header identity plus inline outline sections: `today`, `work`, `notes`, and `contact`; command palette acts as the OS-like utility/search layer. Archive routes (`/work`, `/notes`, `/studies`) extend the same outline language by year. `/interactions` exists only as an unlinked local draft until the visual direction is ready, and production keeps it unavailable unless explicitly enabled.
+- Core routes/screens: home, command palette, work archive, notes archive, studies archive, work detail, study detail, note detail, design-system proof.
 - Content hierarchy: identity statement, expandable homepage outline, command palette utility actions, text-first work lists, contact chips, proof bento surfaces inside work details.
 
 ## Design principles
@@ -44,7 +44,7 @@
 
 ## Components
 - Existing components to reuse: `ChatInput` only as an optional command-triggered AI utility, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
-- New/changed components: editorial project rows, command palette, work preview system, Atlas proof bento case-study template, live interactions proof grid, studies text index, lab study detail view, sheet-style overlays.
+- New/changed components: editorial project rows, command palette, work preview system, Atlas proof bento case-study template, studies text index, lab study detail view, sheet-style overlays. The live interactions grid remains a draft-only surface.
 - Variants and states: work entries, studies entries, archived lab prototypes, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 

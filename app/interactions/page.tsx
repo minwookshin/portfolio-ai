@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import InteractionsPage from "@/components/InteractionsPage";
 import StructuredData from "@/components/StructuredData";
 import { absoluteUrl, collectionPageJsonLd } from "@/lib/seo";
 
 const description = "Live interaction systems behind Minwook Shin's outline operating-system portfolio.";
 const url = absoluteUrl("/interactions");
+const showDraftInteractions =
+  process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_SHOW_INTERACTIONS === "true";
 
 const interactionItems = [
   {
@@ -42,6 +45,10 @@ const interactionItems = [
 export const metadata: Metadata = {
   title: "interactions",
   description,
+  robots: {
+    index: false,
+    follow: false,
+  },
   alternates: {
     canonical: url,
   },
@@ -60,6 +67,10 @@ export const metadata: Metadata = {
 };
 
 export default function InteractionsRoute() {
+  if (!showDraftInteractions) {
+    notFound();
+  }
+
   return (
     <>
       <StructuredData

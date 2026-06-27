@@ -18,7 +18,6 @@ Case study: https://www.minwookshin.com/work/portfolio-ai
 - `/work` - work index
 - `/work/[slug]` - project case studies
 - `/studies` - interaction-study archive
-- `/interactions` - live interaction OS proof grid
 - `/api/chat` - streaming Gemini assistant endpoint
 - `/portfolio.md` - AI-readable portfolio summary
 - `/hiring.md` - recruiter-facing hiring brief with target roles, availability, proof points, and evaluation hints

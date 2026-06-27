@@ -45,12 +45,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: absoluteUrl("/interactions"),
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.88,
-    },
-    {
       url: absoluteUrl("/notes"),
       lastModified: now,
       changeFrequency: "weekly",
