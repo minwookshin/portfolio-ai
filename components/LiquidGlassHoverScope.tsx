@@ -36,6 +36,10 @@ const RADIUS_SPRING = { type: "spring", duration: 0.6, bounce: 0 } as const;
 const TILT_SPRING = { type: "spring", duration: 0.45, bounce: 0.06 } as const;
 const SHIFT_SPRING = { type: "spring", duration: 0.6, bounce: 0.15 } as const;
 
+function isTouchPointer(event: PointerEvent<HTMLElement>) {
+  return event.pointerType === "touch";
+}
+
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
@@ -180,6 +184,7 @@ export default function LiquidGlassHoverScope({
 
   const handlePointerOver = useCallback(
     (event: PointerEvent<HTMLDivElement>) => {
+      if (isTouchPointer(event)) return;
       const row = getRowFromTarget(event.target);
       if (!row || row === activeRowRef.current) return;
       activateRow(row);
@@ -190,6 +195,7 @@ export default function LiquidGlassHoverScope({
 
   const handlePointerMove = useCallback(
     (event: PointerEvent<HTMLDivElement>) => {
+      if (isTouchPointer(event)) return;
       const row = getRowFromTarget(event.target) ?? activeRowRef.current;
       if (!row) return;
       if (row !== activeRowRef.current) activateRow(row);

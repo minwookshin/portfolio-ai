@@ -751,9 +751,54 @@ button.home-row {
 
 }
 
-@media (pointer: coarse) {
+@media (hover: none), (pointer: coarse) {
+  .liquid-glass-hover {
+    display: none;
+  }
+
   .home-row {
-    min-height: 36px;
+    min-height: 44px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    touch-action: manipulation;
+  }
+
+  .home-bullet-cell {
+    height: 28px;
+  }
+
+  .home-node--section > .home-row .home-bullet {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .home-node--section > .home-row .home-caret {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .home-row:active .home-bullet {
+    opacity: 0.7;
+    transform: scale(1.32);
+  }
+
+  .home-node--section > .home-row:active .home-bullet {
+    opacity: 0;
+    transform: none;
+    visibility: hidden;
+  }
+
+  .home-row:has(.home-mention) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .home-mention {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding-right: 8px;
+    padding-left: 8px;
   }
 }
 
@@ -2010,6 +2055,35 @@ button.home-row {
     visibility: visible;
   }
 
+}
+
+@media (hover: none), (pointer: coarse) {
+  .archive-year,
+  .archive-row {
+    min-height: 44px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    touch-action: manipulation;
+  }
+
+  .archive-bullet-cell {
+    height: 28px;
+  }
+
+  .archive-year .archive-year-bullet {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .archive-year .archive-caret {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .archive-row:active .archive-row-bullet {
+    opacity: 0.7;
+    transform: scale(1.32);
+  }
 }
 
 @media (max-width: 720px) {
