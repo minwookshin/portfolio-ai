@@ -1,6 +1,5 @@
 import Link from "next/link";
 import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
-import MaterialArrowBackIcon from "@/components/MaterialArrowBackIcon";
 import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 
 export type ArchiveEntry = {
@@ -68,7 +67,7 @@ export default function ArchiveIndexPage({
         <LiquidGlassHoverScope>
           <nav className="archive-nav" aria-label="archive navigation">
             <Link href="/" className="archive-nav-link" data-liquid-glass-row="true">
-              <MaterialArrowBackIcon className="site-back-icon" />
+              <MaterialChevronRightIcon className="site-back-icon" />
               index
             </Link>
           </nav>

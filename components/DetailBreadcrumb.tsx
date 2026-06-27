@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import MaterialArrowBackIcon from "@/components/MaterialArrowBackIcon";
+import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 
 type DetailBreadcrumbProps = {
   className?: string;
@@ -28,7 +28,7 @@ export default function DetailBreadcrumb({
           aria-label={`back to ${sectionLabel}`}
           className="archive-back-link micro-focus micro-pressable min-w-0 shrink-0"
         >
-          <MaterialArrowBackIcon className="site-back-icon" />
+          <MaterialChevronRightIcon className="site-back-icon" />
           {sectionLabel}
         </Link>
         {trailing ? <span className="shrink-0 text-[var(--text-muted)]">{trailing}</span> : null}

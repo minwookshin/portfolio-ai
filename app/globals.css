@@ -1760,6 +1760,7 @@ button.home-row {
   height: 18px;
   flex: 0 0 18px;
   color: currentColor;
+  transform: rotate(180deg);
 }
 
 .archive-header {
