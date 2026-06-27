@@ -809,15 +809,6 @@ button.home-row {
 
 }
 
-.home-footer {
-  margin-top: auto;
-  margin-left: 0;
-  padding-top: clamp(160px, 20vh, 260px);
-  color: var(--text-muted);
-  font-size: var(--type-row);
-  line-height: var(--leading-body);
-}
-
 .home-doc .project-row-copy {
   display: inline;
   transform: none;
@@ -1007,10 +998,6 @@ button.home-row {
 
   .home-doc-title {
     font-size: var(--type-title-mobile);
-  }
-
-  .home-footer {
-    padding-top: 108px;
   }
 
   .home-row {
