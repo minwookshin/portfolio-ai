@@ -36,7 +36,7 @@
 - Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and no blue accent on the homepage; highlights use the site black.
 - Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, and text-list rhythm on index pages; wider media belongs inside detail pages.
-- Shape/radius/elevation: modest 8px radius; avoid nested cards and large glassmorphism on the homepage; contact chips may keep a small glass surface, but it should not become the page's main interaction.
+- Shape/radius/elevation: modest 8px radius; avoid nested cards and large glassmorphism on the homepage; contact chips may keep a small glass surface, and Command-K may use a thin glass shell plus one active-row glass lens, but glass should not become the page's main interaction.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
 - Imagery/iconography: project screenshots/videos are proof surfaces inside detail pages and hover previews; icons are supporting identity marks.
 - Outline signal grammar: outline rows use an 18px signal cell, 6px filled dots, 6px hollow section circles with a 1px border, and 6px open-section dots across home, archive, detail, and nested rows; link intent becomes a short 8px x 2px stroke plus the 16px Material arrow; hover dot scale stays at 1.08 or lower.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, useEffect, useRef } from "react";
+import { useCallback, useMemo, useState, useEffect, useLayoutEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -162,8 +162,11 @@ function HomeCommandPalette({
 }) {
   const reduceMotion = useReducedMotion();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const rowRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [query, setQuery] = useState("");
+  const [lensRect, setLensRect] = useState<{ height: number; left: number; top: number; width: number } | null>(null);
   const visibleItems = useMemo(() => {
     const normalizedQuery = normalizeCommandText(query);
     if (!normalizedQuery) return items;
@@ -174,6 +177,28 @@ function HomeCommandPalette({
         .some((value) => value.includes(normalizedQuery)),
     );
   }, [items, query]);
+  const clampedActiveIndex = visibleItems.length > 0 ? Math.min(activeIndex, visibleItems.length - 1) : 0;
+  const activeItem = visibleItems[clampedActiveIndex];
+
+  const updateLensRect = useCallback(() => {
+    const row = rowRefs.current[clampedActiveIndex];
+    const list = listRef.current;
+
+    if (!isOpen || !row || !list || visibleItems.length === 0) {
+      setLensRect(null);
+      return;
+    }
+
+    const rowRect = row.getBoundingClientRect();
+    const listRect = list.getBoundingClientRect();
+
+    setLensRect({
+      height: rowRect.height,
+      left: rowRect.left - listRect.left + list.scrollLeft,
+      top: rowRect.top - listRect.top + list.scrollTop,
+      width: rowRect.width,
+    });
+  }, [clampedActiveIndex, isOpen, visibleItems.length]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -181,6 +206,39 @@ function HomeCommandPalette({
     const frame = window.requestAnimationFrame(() => inputRef.current?.focus());
     return () => window.cancelAnimationFrame(frame);
   }, [isOpen]);
+
+  useEffect(() => {
+    rowRefs.current = rowRefs.current.slice(0, visibleItems.length);
+  }, [visibleItems.length]);
+
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+
+    const row = rowRefs.current[clampedActiveIndex];
+    row?.scrollIntoView({ block: "nearest" });
+    const frame = window.requestAnimationFrame(updateLensRect);
+    return () => window.cancelAnimationFrame(frame);
+  }, [clampedActiveIndex, isOpen, query, updateLensRect, visibleItems.length]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleResize = () => updateLensRect();
+    window.addEventListener("resize", handleResize);
+
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(handleResize);
+    if (observer && listRef.current) {
+      observer.observe(listRef.current);
+      rowRefs.current.forEach((row) => {
+        if (row) observer.observe(row);
+      });
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      observer?.disconnect();
+    };
+  }, [isOpen, updateLensRect, visibleItems.length]);
 
   const closePalette = useCallback(() => {
     setQuery("");
@@ -254,7 +312,6 @@ function HomeCommandPalette({
                     setActiveIndex((index) => Math.max(index - 1, 0));
                   } else if (event.key === "Enter") {
                     event.preventDefault();
-                    const activeItem = visibleItems[activeIndex];
                     if (activeItem) runCommand(activeItem);
                   }
                 }}
@@ -264,14 +321,36 @@ function HomeCommandPalette({
               <kbd aria-hidden="true">esc</kbd>
             </div>
 
-            <div className="command-list" role="listbox" aria-label="site commands">
+            <div ref={listRef} className="command-list" role="listbox" aria-label="site commands">
+              {visibleItems.length > 0 && (
+                <motion.div
+                  aria-hidden="true"
+                  className="command-list__lens"
+                  initial={false}
+                  animate={
+                    lensRect
+                      ? {
+                          height: lensRect.height,
+                          opacity: 1,
+                          width: lensRect.width,
+                          x: lensRect.left,
+                          y: lensRect.top,
+                        }
+                      : { opacity: 0 }
+                  }
+                  transition={reduceMotion ? tweens.none : springs.spatialFast}
+                />
+              )}
               {visibleItems.length > 0 ? (
                 visibleItems.map((item, index) => (
                   <button
                     key={item.id}
+                    ref={(element) => {
+                      rowRefs.current[index] = element;
+                    }}
                     type="button"
                     className="command-row micro-focus micro-focus-tight"
-                    data-active={index === activeIndex ? "true" : "false"}
+                    data-active={index === clampedActiveIndex ? "true" : "false"}
                     onClick={() => runCommand(item)}
                     onMouseEnter={() => setActiveIndex(index)}
                     role="option"
