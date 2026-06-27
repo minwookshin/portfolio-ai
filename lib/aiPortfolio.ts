@@ -152,6 +152,7 @@ export function generateLlmsTxt() {
     `- Email: ${PERSONAL_INFO.email}`,
     linkLine("LinkedIn", PERSONAL_INFO.linkedin),
     linkLine("GitHub", PERSONAL_INFO.github),
+    linkLine("X", PERSONAL_INFO.x),
     "",
     "## Optional",
     "- Use the full portfolio summary when a short context window is not enough.",
@@ -235,6 +236,7 @@ export function generatePortfolioMarkdown() {
     "## External profiles",
     linkLine("LinkedIn", PERSONAL_INFO.linkedin),
     linkLine("GitHub", PERSONAL_INFO.github),
+    linkLine("X", PERSONAL_INFO.x),
     linkLine("Resume PDF", resumeUrl),
     "",
     "## Suggested short recruiter summary",
@@ -289,6 +291,7 @@ export function generateHiringMarkdown() {
     `- Email: ${PERSONAL_INFO.email}`,
     linkLine("LinkedIn", PERSONAL_INFO.linkedin),
     linkLine("GitHub", PERSONAL_INFO.github),
+    linkLine("X", PERSONAL_INFO.x),
   ]);
 }
 
@@ -309,6 +312,7 @@ export function generateResumeJson() {
       website: absoluteUrl("/"),
       linkedin: PERSONAL_INFO.linkedin,
       github: PERSONAL_INFO.github,
+      x: PERSONAL_INFO.x,
       resume: resumeUrl,
       summary: PERSONAL_INFO.bio,
       availability: AVAILABILITY,

@@ -85,6 +85,12 @@ export default function StatusPage({ code, eyebrow, title, body, action }: Statu
             <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
               ,
             </span>
+            <StatusLink external href={PERSONAL_INFO.x}>
+              x
+            </StatusLink>
+            <span aria-hidden="true" className="mr-1.5 text-[var(--text-muted)]">
+              ,
+            </span>
             <StatusLink external href={PERSONAL_INFO.resume}>
               resume
             </StatusLink>

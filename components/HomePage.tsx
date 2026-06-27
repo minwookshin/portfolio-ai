@@ -588,12 +588,15 @@ function HomeDocument({
           </HomeLeafRow>
         </HomeOutlineSection>
 
-        <HomeOutlineSection count={4} defaultOpen title="contact">
+        <HomeOutlineSection count={5} defaultOpen title="contact">
           <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.linkedin} external>linkedin.com/in/minwookshin</HomeMetaLink>
           </HomeLeafRow>
           <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.github} external>github.com/minwookshin</HomeMetaLink>
+          </HomeLeafRow>
+          <HomeLeafRow>
+            <HomeMetaLink href={PERSONAL_INFO.x} external>x.com/FakeMinwook</HomeMetaLink>
           </HomeLeafRow>
           <HomeLeafRow>
             <HomeMetaLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</HomeMetaLink>
@@ -800,7 +803,9 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         <h3>Contact</h3>
         <p>
           Email <a href={`mailto:${PERSONAL_INFO.email}`} tabIndex={-1}>{PERSONAL_INFO.email}</a>,{" "}
-          <a href={PERSONAL_INFO.linkedin} tabIndex={-1}>LinkedIn</a>, <a href={PERSONAL_INFO.github} tabIndex={-1}>GitHub</a>.
+          <a href={PERSONAL_INFO.linkedin} tabIndex={-1}>LinkedIn</a>,{" "}
+          <a href={PERSONAL_INFO.github} tabIndex={-1}>GitHub</a>,{" "}
+          <a href={PERSONAL_INFO.x} tabIndex={-1}>X</a>.
         </p>
       </section>
 
