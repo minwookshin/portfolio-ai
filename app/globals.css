@@ -905,9 +905,9 @@ button.home-row {
     border-color: transparent;
     border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.24;
+    opacity: 0;
     transform: none;
-    visibility: visible;
+    visibility: hidden;
   }
 
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret,
@@ -1084,9 +1084,9 @@ button.home-row {
     border-color: transparent;
     border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.24;
+    opacity: 0;
     transform: none;
-    visibility: visible;
+    visibility: hidden;
   }
 
   .home-node--section > .home-row:active .home-caret {
@@ -1106,14 +1106,14 @@ button.home-row {
   }
 
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
-    width: 8px;
-    height: 2px;
+    width: 6px;
+    height: 6px;
     border-color: transparent;
-    border-radius: 2px;
+    border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.42;
-    transform: translateX(2px) scaleX(1);
-    visibility: visible;
+    opacity: 0;
+    transform: none;
+    visibility: hidden;
   }
 
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-caret {
@@ -2547,9 +2547,9 @@ button.home-row {
     border-color: transparent;
     border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.24;
+    opacity: 0;
     transform: none;
-    visibility: visible;
+    visibility: hidden;
   }
 
   .archive-year-details[open] > .archive-year:hover .archive-caret,
@@ -2649,9 +2649,9 @@ button.home-row {
     border-color: transparent;
     border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.24;
+    opacity: 0;
     transform: none;
-    visibility: visible;
+    visibility: hidden;
   }
 
   .archive-year-details[open] > .archive-year:active .archive-caret {

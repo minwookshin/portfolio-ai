@@ -168,7 +168,7 @@ export const DESIGN_SYSTEM_COMPONENTS = [
 export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Keep hover movement tiny and consistent: signals and nearby text use a 2px lateral nudge.",
   "Hide section counts once a section is open so the visible content is the proof.",
-  "Keep open sections and open archive years on a stable filled dot at rest; when interacted with, rotate the same side-facing Material arrow downward and keep the section dot quiet so the signal does not read like a new combined glyph.",
+  "Keep open sections and open archive years on a stable filled dot at rest; when interacted with, hide the dot and rotate the same side-facing Material arrow downward so the signal does not read like a combined glyph.",
   "Use section arrows only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
   "Use signal families consistently: internal links draw the side-facing Material arrow, open section rows rotate that same arrow downward, section dots stay quiet or become short strokes by state, notes keep dot-only feedback, and contact chips use lateral nudge plus cursor coupling.",
