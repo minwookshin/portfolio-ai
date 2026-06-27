@@ -82,10 +82,13 @@ describe("ProjectCaseStudyShell", () => {
   it("renders Atlas as a proof-led case study template", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("atlas")} />);
 
-    expect(screen.getByText("Prototype event contract")).toBeInTheDocument();
-    expect(screen.getByText("architecture sketch")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "atlas / 2026 / ai triage prototype system" })).toBeInTheDocument();
+    expect(screen.getByText("proof bento grid")).toBeInTheDocument();
+    expect(screen.getByLabelText("hospital load")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
+    expect(screen.getAllByText("event contract")).toHaveLength(2);
+    expect(screen.getByText("case-study sketch")).toBeInTheDocument();
     expect(screen.getByText("server.broadcast(event);")).toBeInTheDocument();
-    expect(screen.getByText("Operational views from the connected prototype")).toBeInTheDocument();
   });
 
   it("renders study detail navigation as a quiet back link", () => {

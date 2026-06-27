@@ -24,12 +24,12 @@
 ## Information architecture
 - Primary navigation: minimal header identity plus inline outline sections: `today`, `selected work`, `notes`, and `contact`. Archive routes (`/work`, `/notes`, `/studies`) extend the same outline language by year.
 - Core routes/screens: home, work archive, notes archive, studies archive, work detail, study detail, note detail, design-system proof, AI assistant input.
-- Content hierarchy: identity statement, expandable homepage outline, text-first selected content lists, contact chips, proof surfaces inside details.
+- Content hierarchy: identity statement, expandable homepage outline, text-first selected content lists, contact chips, proof bento surfaces inside selected-work details.
 
 ## Design principles
 - Principle 1: Let the main page read like an editorial index; proof visuals should support hover states and detail pages, not lead the homepage.
 - Principle 2: Use motion for spatial continuity, not spectacle.
-- Principle 3: Studies entries should make thinking tangible through small working interactions, short writing, and prototype proof, not long prose.
+- Principle 3: Studies entries and proof-led case studies should make thinking tangible through small working interactions, short writing, and prototype proof, not long prose.
 - Tradeoffs: preserve the existing assistant and case-study system while replacing the icon-field homepage with an editorial browsing model.
 
 ## Visual language
@@ -44,7 +44,7 @@
 
 ## Components
 - Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
-- New/changed components: editorial project rows, selected-work preview system, studies text index, small Lottie motion proof, lab study detail view, sheet-style overlays.
+- New/changed components: editorial project rows, selected-work preview system, Atlas proof bento case-study template, studies text index, small Lottie motion proof, lab study detail view, sheet-style overlays.
 - Variants and states: selected work, studies entries, archived lab prototypes, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 

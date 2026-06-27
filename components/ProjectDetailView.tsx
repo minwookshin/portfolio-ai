@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
+import AtlasProofCaseStudy from "@/components/AtlasProofCaseStudy";
 import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import { Project } from "./ProjectCard";
@@ -281,6 +282,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   const hero = isHeroSection(caseStudy.sections[0]) ? caseStudy.sections[0] : null;
   const bodyCaseStudy = hero ? { ...caseStudy, sections: caseStudy.sections.slice(1) } : caseStudy;
   const proof = hasBuilderProof(project) ? project.builder : undefined;
+  const isAtlas = hasBuilderProof(project) && project.slug === "atlas";
 
   return (
     <motion.div
@@ -302,9 +304,15 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           <span>Back to projects</span>
         </motion.button>
       )}
-      <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
-      {proof && <BuilderProofSummary proof={proof} />}
-      <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
+      {isAtlas ? (
+        <AtlasProofCaseStudy project={project} />
+      ) : (
+        <>
+          <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
+          {proof && <BuilderProofSummary proof={proof} />}
+          <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
+        </>
+      )}
     </motion.div>
   );
 }
