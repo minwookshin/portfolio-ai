@@ -343,6 +343,18 @@ body::after {
   .text-balance {
     text-wrap: balance;
   }
+
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
 }
 
 /* Plain stroke — a single subtle border (#222222 at 10%), no glass rim, blur, or
@@ -663,6 +675,7 @@ button.home-row {
 }
 
 .home-label {
+  display: block;
   min-width: 0;
   max-width: 100%;
   justify-self: start;
@@ -1000,6 +1013,20 @@ button.home-row {
     padding-top: 108px;
   }
 
+  .home-row {
+    min-height: 44px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .home-bullet-cell {
+    height: 28px;
+  }
+
+  .home-mention {
+    min-height: 44px;
+    align-items: center;
+  }
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -1285,6 +1312,7 @@ button.home-row {
   color: color-mix(in srgb, var(--text-primary) 68%, var(--text-muted));
   text-decoration-line: none;
   transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  overflow-wrap: anywhere;
 }
 
 [data-project-row="work"]:hover .project-row-title-line--lateral,
@@ -2847,6 +2875,11 @@ button.home-row {
     padding: 108px 24px 160px;
   }
 
+  .archive-nav-link,
+  .archive-back-link {
+    min-height: 44px;
+  }
+
   .archive-header {
     margin-bottom: 28px;
   }
@@ -2857,6 +2890,23 @@ button.home-row {
 
   .archive-description {
     font-size: var(--type-row);
+  }
+
+  .archive-year,
+  .archive-row {
+    min-height: 44px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .archive-bullet-cell {
+    height: 28px;
+  }
+
+  .lab-hold-action__reset {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
   }
 }
 
