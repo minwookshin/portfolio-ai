@@ -167,6 +167,7 @@ export const DESIGN_SYSTEM_COMPONENTS = [
 export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Keep hover movement tiny: signals move inside the bullet cell, and nearby text may nudge only 1-2px.",
   "Hide section counts once a section is open so the visible content is the proof.",
+  "Keep open sections and open archive years on a stable filled dot; reserve drawn carets for closed expandable rows.",
   "Use section carets only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
   "Use signal families consistently: internal links draw arrows, sections morph dots into short-stroke carets, notes keep dot-only feedback, and contact chips use lateral nudge plus cursor coupling.",
