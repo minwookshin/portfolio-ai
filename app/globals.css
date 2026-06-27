@@ -560,6 +560,8 @@ button.home-row {
   height: 16px;
   color: currentColor;
   overflow: visible;
+  transform: rotate(0deg);
+  transition: transform 180ms var(--motion-ease-standard);
 }
 
 .site-signal-tail,
@@ -583,7 +585,7 @@ button.home-row {
   border-radius: 2px;
   background: currentColor;
   opacity: 0.42;
-  transform: translateX(1.5px) scaleX(1);
+  transform: translateX(2px) scaleX(1);
   visibility: visible;
 }
 
@@ -597,6 +599,10 @@ button.home-row {
 .home-node--section > .home-row:focus-visible .home-caret .site-signal-head {
   opacity: 1;
   stroke-dashoffset: 0;
+}
+
+.home-node--section[open] > .home-row:focus-visible .home-caret .site-signal-icon {
+  transform: rotate(90deg);
 }
 
 .home-label {
@@ -760,17 +766,17 @@ button.home-row {
 @media (hover: hover) and (pointer: fine) {
   .home-row:not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-bullet {
     opacity: 0.58;
-    transform: translateX(1px) scale(1.06);
+    transform: translateX(2px) scale(1.06);
   }
 
   .home-row:not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-label {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-bullet,
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):focus-within .home-bullet {
     opacity: 0.6;
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-label,
@@ -786,7 +792,7 @@ button.home-row {
     height: 2px;
     border-radius: 2px;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
   }
 
   .home-row--link:not(.home-row--quiet-link):hover .home-signal,
@@ -820,17 +826,17 @@ button.home-row {
   .home-row--quiet-link:hover .home-bullet,
   .home-row--quiet-link:focus-visible .home-bullet {
     opacity: 0.72;
-    transform: translateX(1px) scale(1.08);
+    transform: translateX(2px) scale(1.08);
   }
 
   .home-row--quiet-link:hover .home-label,
   .home-row--quiet-link:focus-visible .home-label {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-doc .home-row--quiet-link:hover .project-row-copy,
   .home-doc .home-row--quiet-link:focus-visible .project-row-copy {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-node--section > .home-row:hover .home-bullet,
@@ -843,7 +849,7 @@ button.home-row {
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
@@ -869,29 +875,34 @@ button.home-row {
 
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-bullet,
   .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-bullet {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 2px;
     border-color: transparent;
-    border-radius: var(--md-shape-full);
+    border-radius: 2px;
     background: currentColor;
-    opacity: 0.68;
-    transform: none;
+    opacity: 0.42;
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret,
   .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret {
-    opacity: 0;
-    transform: translateX(-2px) scale(0.82);
-    visibility: hidden;
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
+    visibility: visible;
   }
 
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret .site-signal-tail,
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret .site-signal-head,
   .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret .site-signal-tail,
   .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret .site-signal-head {
-    opacity: 0;
-    stroke-dashoffset: 1;
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret .site-signal-icon,
+  .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret .site-signal-icon {
+    transform: rotate(90deg);
   }
 
   .home-row--link:hover .home-meta,
@@ -909,16 +920,16 @@ button.home-row {
       0 7px 18px -12px rgba(53, 53, 79, 0.46),
       0 14px 32px -14px rgba(53, 53, 79, 0.12);
     color: var(--text-primary);
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-row:has(.home-mention):focus-within .home-mention {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-row--signal:has(.home-mention):hover .home-mention,
   .home-row--signal:has(.home-mention):focus-within .home-mention {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 }
 
@@ -987,11 +998,11 @@ button.home-row {
 
   .home-row:active .home-bullet {
     opacity: 0.7;
-    transform: translateX(1px) scale(1.12);
+    transform: translateX(2px) scale(1.12);
   }
 
   .home-row:active .home-label {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-row--link:not(.home-row--quiet-link):active .home-bullet,
@@ -1000,7 +1011,7 @@ button.home-row {
     height: 2px;
     border-radius: 2px;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
   }
 
   .home-row--link:not(.home-row--quiet-link):active .home-signal,
@@ -1025,15 +1036,15 @@ button.home-row {
 
   .home-row--quiet-link:active .home-bullet {
     opacity: 0.72;
-    transform: translateX(1px) scale(1.08);
+    transform: translateX(2px) scale(1.08);
   }
 
   .home-row--quiet-link:active .home-label {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-doc .home-row--quiet-link:active .project-row-copy {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-node--section > .home-row:active .home-bullet,
@@ -1044,7 +1055,7 @@ button.home-row {
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
@@ -1065,20 +1076,24 @@ button.home-row {
   }
 
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 2px;
     border-color: transparent;
-    border-radius: var(--md-shape-full);
+    border-radius: 2px;
     background: currentColor;
-    opacity: 0.68;
-    transform: none;
+    opacity: 0.42;
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-caret {
-    opacity: 0;
-    transform: translateX(-2px) scale(0.82);
-    visibility: hidden;
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
+    visibility: visible;
+  }
+
+  .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-caret .site-signal-icon {
+    transform: rotate(90deg);
   }
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):active .home-label {
@@ -1086,11 +1101,11 @@ button.home-row {
   }
 
   .home-mention:active {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-row--signal:has(.home-mention):active .home-mention {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .home-row:has(.home-mention) {
@@ -1207,7 +1222,7 @@ button.home-row {
 
 .home-doc [data-project-row="writing"]:hover .home-row--quiet-link .project-row-copy,
 .home-doc [data-project-row="writing"]:focus-within .home-row--quiet-link .project-row-copy {
-  transform: translateX(1px);
+  transform: translateX(2px);
 }
 
 .project-row-title-line--lateral {
@@ -1780,7 +1795,7 @@ button.home-row {
     inset 0 1px 2px color-mix(in srgb, var(--text-primary) 8%, transparent),
     inset 0 -1px 0 color-mix(in srgb, white 70%, transparent);
   opacity: 0.86;
-  transform: translateX(1px);
+  transform: translateX(2px);
 }
 
 .micro-card {
@@ -2264,7 +2279,7 @@ button.home-row {
   border-radius: 2px;
   background: currentColor;
   opacity: 0.42;
-  transform: translateX(1.5px) scaleX(1);
+  transform: translateX(2px) scaleX(1);
   visibility: visible;
 }
 
@@ -2281,20 +2296,24 @@ button.home-row {
 }
 
 .archive-year-details[open] > .archive-year:focus-visible .archive-year-bullet {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 2px;
   border-color: transparent;
-  border-radius: var(--md-shape-full);
+  border-radius: 2px;
   background: currentColor;
-  opacity: 0.68;
-  transform: none;
+  opacity: 0.42;
+  transform: translateX(2px) scaleX(1);
   visibility: visible;
 }
 
 .archive-year-details[open] > .archive-year:focus-visible .archive-caret {
-  opacity: 0;
-  transform: translateX(-2px) scale(0.82);
-  visibility: hidden;
+  opacity: 0.74;
+  transform: translateX(2px) scale(1);
+  visibility: visible;
+}
+
+.archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-icon {
+  transform: rotate(90deg);
 }
 
 .archive-row-bullet {
@@ -2418,7 +2437,7 @@ button.home-row {
     height: 2px;
     border-radius: 2px;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
   }
 
   .archive-row:not(.archive-row--quiet):hover .archive-row-signal,
@@ -2439,7 +2458,7 @@ button.home-row {
   .archive-row--quiet:hover .archive-row-bullet,
   .archive-row--quiet:focus-visible .archive-row-bullet {
     opacity: 0.72;
-    transform: translateX(1px) scale(1.08);
+    transform: translateX(2px) scale(1.08);
   }
 
   .archive-row:not(.archive-row--quiet):hover .archive-row-title,
@@ -2457,7 +2476,7 @@ button.home-row {
   .archive-row--quiet:focus-visible .archive-row-description,
   .archive-row--quiet:hover .archive-row-meta,
   .archive-row--quiet:focus-visible .archive-row-meta {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 
   .archive-row:hover .archive-row-title,
@@ -2482,7 +2501,7 @@ button.home-row {
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
@@ -2503,29 +2522,34 @@ button.home-row {
 
   .archive-year-details[open] > .archive-year:hover .archive-year-bullet,
   .archive-year-details[open] > .archive-year:focus-visible .archive-year-bullet {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 2px;
     border-color: transparent;
-    border-radius: var(--md-shape-full);
+    border-radius: 2px;
     background: currentColor;
-    opacity: 0.68;
-    transform: none;
+    opacity: 0.42;
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
   .archive-year-details[open] > .archive-year:hover .archive-caret,
   .archive-year-details[open] > .archive-year:focus-visible .archive-caret {
-    opacity: 0;
-    transform: translateX(-2px) scale(0.82);
-    visibility: hidden;
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
+    visibility: visible;
   }
 
   .archive-year-details[open] > .archive-year:hover .archive-caret .site-signal-tail,
   .archive-year-details[open] > .archive-year:hover .archive-caret .site-signal-head,
   .archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-tail,
   .archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-head {
-    opacity: 0;
-    stroke-dashoffset: 1;
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .archive-year-details[open] > .archive-year:hover .archive-caret .site-signal-icon,
+  .archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-icon {
+    transform: rotate(90deg);
   }
 
   .archive-year:hover .archive-year-label,
@@ -2589,7 +2613,7 @@ button.home-row {
     border-radius: 2px;
     background: currentColor;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
@@ -2606,20 +2630,24 @@ button.home-row {
   }
 
   .archive-year-details[open] > .archive-year:active .archive-year-bullet {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 2px;
     border-color: transparent;
-    border-radius: var(--md-shape-full);
+    border-radius: 2px;
     background: currentColor;
-    opacity: 0.68;
-    transform: none;
+    opacity: 0.42;
+    transform: translateX(2px) scaleX(1);
     visibility: visible;
   }
 
   .archive-year-details[open] > .archive-year:active .archive-caret {
-    opacity: 0;
-    transform: translateX(-2px) scale(0.82);
-    visibility: hidden;
+    opacity: 0.74;
+    transform: translateX(2px) scale(1);
+    visibility: visible;
+  }
+
+  .archive-year-details[open] > .archive-year:active .archive-caret .site-signal-icon {
+    transform: rotate(90deg);
   }
 
   .archive-year:active .archive-year-label,
@@ -2632,7 +2660,7 @@ button.home-row {
     height: 2px;
     border-radius: 2px;
     opacity: 0.42;
-    transform: translateX(1.5px) scaleX(1);
+    transform: translateX(2px) scaleX(1);
   }
 
   .archive-row:not(.archive-row--quiet):active .archive-row-signal {
@@ -2655,13 +2683,13 @@ button.home-row {
 
   .archive-row--quiet:active .archive-row-bullet {
     opacity: 0.72;
-    transform: translateX(1px) scale(1.08);
+    transform: translateX(2px) scale(1.08);
   }
 
   .archive-row--quiet:active .archive-row-title,
   .archive-row--quiet:active .archive-row-description,
   .archive-row--quiet:active .archive-row-meta {
-    transform: translateX(1px);
+    transform: translateX(2px);
   }
 }
 
@@ -3095,7 +3123,7 @@ button.home-row {
 .lab-hold-action__reset:focus-visible {
   color: var(--text-primary);
   text-decoration-color: currentColor;
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
 
 .lab-hold-action__note {
@@ -3140,7 +3168,7 @@ button.home-row {
 }
 
 .lab-hover-row[data-active="true"] .project-row-copy {
-  transform: translateX(6px);
+  transform: translateX(2px);
 }
 
 .lab-hover-row[data-active="true"] .project-row-title-line--lateral,
