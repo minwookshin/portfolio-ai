@@ -39,7 +39,7 @@
 - Shape/radius/elevation: modest 8px radius; avoid nested cards and large glassmorphism on the homepage; contact chips may keep a small glass surface, but it should not become the page's main interaction.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
 - Imagery/iconography: project screenshots/videos are proof surfaces inside detail pages and hover previews; icons are supporting identity marks.
-- Outline signal grammar: outline rows use an 18px signal cell, 6px filled dots, 8px hollow archive/detail section dots, and the 9px homepage section dot; link intent becomes a short 8px x 2px stroke plus the Material arrow; open sections rest as a 6px filled dot, then hide that dot when the downward arrow appears on hover/focus/press.
+- Outline signal grammar: outline rows use an 18px signal cell, 6px filled dots, 6px hollow section circles with a 1px border, and 6px open-section dots across home, archive, detail, and nested rows; link intent becomes a short 8px x 2px stroke plus the 16px Material arrow; hover dot scale stays at 1.08 or lower.
 - Interaction tokens: `--signal-*` CSS variables own dot sizes, section strokes, arrow opacity, 2px lateral nudge, and 140ms stroke draw timing. New outline surfaces should use these tokens instead of raw pixel/opacity values.
 
 ## Components

@@ -28,6 +28,9 @@ describe("design system proof", () => {
     expect(DESIGN_SYSTEM_TOKENS.signals).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ role: "cell.inline", cssVariable: "--signal-cell-inline", value: "18px" }),
+        expect.objectContaining({ role: "dot.hollow", cssVariable: "--signal-dot-size-hollow", value: "6px" }),
+        expect.objectContaining({ role: "dot.border", cssVariable: "--signal-border-hollow", value: "1px" }),
+        expect.objectContaining({ role: "icon.arrow", cssVariable: "--signal-icon-size", value: "16px" }),
         expect.objectContaining({ role: "motion.nudge", cssVariable: "--signal-nudge", value: "2px" }),
         expect.objectContaining({ role: "motion.draw", cssVariable: "--signal-draw-duration", value: "140ms" }),
       ]),

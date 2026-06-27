@@ -141,13 +141,14 @@
   --signal-cell-inline: 18px;
   --signal-cell-block: 24px;
   --signal-dot-size: 6px;
-  --signal-dot-size-work: 7px;
-  --signal-dot-size-hollow: 8px;
-  --signal-dot-size-section: 9px;
+  --signal-dot-size-work: 6px;
+  --signal-dot-size-hollow: 6px;
+  --signal-dot-size-section: 6px;
   --signal-stroke-inline: 8px;
   --signal-stroke-block: 2px;
-  --signal-border-hollow: 1.25px;
-  --signal-border-section: 1.5px;
+  --signal-border-hollow: 1px;
+  --signal-border-section: 1px;
+  --signal-icon-size: 16px;
   --signal-opacity-rest: 0.42;
   --signal-opacity-note: 0.52;
   --signal-opacity-hover: 0.58;
@@ -160,7 +161,7 @@
   --signal-enter-scale: 0.82;
   --signal-hover-dot-scale: 1.06;
   --signal-quiet-dot-scale: 1.08;
-  --signal-down-optical-y: -0.5px;
+  --signal-down-optical-y: 0px;
   --signal-draw-opacity-duration: 80ms;
   --signal-draw-duration: 140ms;
   --signal-draw-delay: 24ms;
@@ -596,8 +597,8 @@ button.home-row {
 .site-signal-icon {
   display: block;
   grid-area: 1 / 1;
-  width: 16px;
-  height: 16px;
+  width: var(--signal-icon-size);
+  height: var(--signal-icon-size);
   color: currentColor;
   overflow: visible;
   transform: rotate(0deg);
@@ -1059,7 +1060,7 @@ button.home-row {
 
   .home-row:active .home-bullet {
     opacity: 0.7;
-    transform: translateX(var(--signal-nudge)) scale(1.12);
+    transform: translateX(var(--signal-nudge)) scale(var(--signal-hover-dot-scale));
   }
 
   .home-row:active .home-label {
