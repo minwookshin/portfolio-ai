@@ -11,8 +11,14 @@ export default function MaterialChevronRightIcon({ className = "" }: MaterialChe
       viewBox="0 0 24 24"
     >
       <path
-        d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-        fill="currentColor"
+        className="site-caret-stroke"
+        d="m9 6 6 6-6 6"
+        fill="none"
+        pathLength={1}
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
       />
     </svg>
   );

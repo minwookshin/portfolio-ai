@@ -559,8 +559,18 @@ button.home-row {
   width: 18px;
   height: 18px;
   color: currentColor;
+  overflow: visible;
   transform: rotate(0deg);
   transition: transform 220ms var(--motion-ease-standard);
+}
+
+.site-caret-icon .site-caret-stroke {
+  opacity: 0;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition:
+    opacity 80ms var(--motion-ease-standard),
+    stroke-dashoffset 140ms var(--motion-ease-standard);
 }
 
 .site-signal-icon {
@@ -590,15 +600,25 @@ button.home-row {
 }
 
 .home-node--section > .home-row:focus-visible .home-bullet {
-  opacity: 0;
-  transform: scale(0.62);
-  visibility: hidden;
+  width: 5px;
+  height: 2px;
+  border-color: transparent;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.42;
+  transform: translateX(-4px) scaleX(1);
+  visibility: visible;
 }
 
 .home-node--section > .home-row:focus-visible .home-caret {
   opacity: 1;
-  transform: scale(1);
+  transform: translateX(1px) scale(1);
   visibility: visible;
+}
+
+.home-node--section > .home-row:focus-visible .home-caret .site-caret-stroke {
+  opacity: 1;
+  stroke-dashoffset: 0;
 }
 
 .home-label {
@@ -831,10 +851,17 @@ button.home-row {
   }
 
   .home-node--section > .home-row:hover .home-bullet,
-  .home-node--section > .home-row:focus-visible .home-bullet {
-    opacity: 0;
-    transform: scale(0.62);
-    visibility: hidden;
+  .home-node--section > .home-row:focus-visible .home-bullet,
+  .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-bullet,
+  .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-bullet {
+    width: 5px;
+    height: 2px;
+    border-color: transparent;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.42;
+    transform: translateX(-4px) scaleX(1);
+    visibility: visible;
   }
 
   .home-node--section > .home-row:hover .home-caret,
@@ -842,6 +869,12 @@ button.home-row {
     opacity: 1;
     transform: translateX(1px) scale(1);
     visibility: visible;
+  }
+
+  .home-node--section > .home-row:hover .home-caret .site-caret-stroke,
+  .home-node--section > .home-row:focus-visible .home-caret .site-caret-stroke {
+    opacity: 1;
+    stroke-dashoffset: 0;
   }
 
   .home-row--link:hover .home-meta,
@@ -903,7 +936,8 @@ button.home-row {
     height: 28px;
   }
 
-  .home-node--section > .home-row .home-bullet {
+  .home-node--section > .home-row .home-bullet,
+  .home-node--section[open] > .home-row > .home-bullet-cell > .home-bullet {
     opacity: 0;
     visibility: hidden;
   }
@@ -911,6 +945,11 @@ button.home-row {
   .home-node--section > .home-row .home-caret {
     opacity: 1;
     visibility: visible;
+  }
+
+  .home-node--section > .home-row .home-caret .site-caret-stroke {
+    opacity: 1;
+    stroke-dashoffset: 0;
   }
 
   .home-row:active .home-bullet {
@@ -960,10 +999,21 @@ button.home-row {
     transform: translateX(1px);
   }
 
-  .home-node--section > .home-row:active .home-bullet {
-    opacity: 0;
-    transform: scale(0.62);
-    visibility: hidden;
+  .home-node--section > .home-row:active .home-bullet,
+  .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
+    width: 5px;
+    height: 2px;
+    border-color: transparent;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.42;
+    transform: translateX(-4px) scaleX(1);
+    visibility: visible;
+  }
+
+  .home-node--section > .home-row:active .home-caret .site-caret-stroke {
+    opacity: 1;
+    stroke-dashoffset: 0;
   }
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):active .home-label {
@@ -2142,15 +2192,25 @@ button.home-row {
 }
 
 .archive-year:focus-visible .archive-year-bullet {
-  opacity: 0;
-  transform: scale(0.62);
-  visibility: hidden;
+  width: 5px;
+  height: 2px;
+  border-color: transparent;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.42;
+  transform: translateX(-4px) scaleX(1);
+  visibility: visible;
 }
 
 .archive-year:focus-visible .archive-caret {
   opacity: 1;
-  transform: scale(1);
+  transform: translateX(1px) scale(1);
   visibility: visible;
+}
+
+.archive-year:focus-visible .archive-caret .site-caret-stroke {
+  opacity: 1;
+  stroke-dashoffset: 0;
 }
 
 .archive-row-bullet {
@@ -2328,10 +2388,18 @@ button.home-row {
     color: color-mix(in srgb, var(--text-primary) 62%, var(--text-muted));
   }
 
-  .archive-year:hover .archive-year-bullet {
-    opacity: 0;
-    transform: scale(0.62);
-    visibility: hidden;
+  .archive-year:hover .archive-year-bullet,
+  .archive-year:focus-visible .archive-year-bullet,
+  .archive-year-details[open] > .archive-year:hover .archive-year-bullet,
+  .archive-year-details[open] > .archive-year:focus-visible .archive-year-bullet {
+    width: 5px;
+    height: 2px;
+    border-color: transparent;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.42;
+    transform: translateX(-4px) scaleX(1);
+    visibility: visible;
   }
 
   .archive-year:hover .archive-caret,
@@ -2339,6 +2407,12 @@ button.home-row {
     opacity: 1;
     transform: translateX(1px) scale(1);
     visibility: visible;
+  }
+
+  .archive-year:hover .archive-caret .site-caret-stroke,
+  .archive-year:focus-visible .archive-caret .site-caret-stroke {
+    opacity: 1;
+    stroke-dashoffset: 0;
   }
 
   .archive-year:hover .archive-year-label,
@@ -2371,6 +2445,28 @@ button.home-row {
   .archive-year .archive-caret {
     opacity: 1;
     visibility: visible;
+  }
+
+  .archive-year .archive-caret .site-caret-stroke {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .archive-year:active .archive-year-bullet,
+  .archive-year-details[open] > .archive-year:active .archive-year-bullet {
+    width: 5px;
+    height: 2px;
+    border-color: transparent;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.42;
+    transform: translateX(-4px) scaleX(1);
+    visibility: visible;
+  }
+
+  .archive-year:active .archive-caret .site-caret-stroke {
+    opacity: 1;
+    stroke-dashoffset: 0;
   }
 
   .archive-year:active .archive-year-label,

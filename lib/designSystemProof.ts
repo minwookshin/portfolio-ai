@@ -134,8 +134,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "quiet outline signals",
-    description: "Hover and focus feedback starts inside the bullet cell, then gives nearby text a restrained nudge: internal links draw a small Material arrow, sections swap the dot for a caret, and notes keep a quieter dot state.",
-    primitives: ["drawn Material arrow signal", "section caret replacement", "quiet note dot", "bullet cell"],
+    description: "Hover and focus feedback starts inside the bullet cell, then gives nearby text a restrained nudge: internal links draw a small Material arrow, sections morph the dot into a short stroke while the caret draws, and notes keep a quieter dot state.",
+    primitives: ["drawn Material arrow signal", "section dot-to-stroke caret", "quiet note dot", "bullet cell"],
   },
   {
     name: "detail outline",
@@ -167,9 +167,9 @@ export const DESIGN_SYSTEM_COMPONENTS = [
 export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Keep hover movement tiny: signals move inside the bullet cell, and nearby text may nudge only 1-2px.",
   "Hide section counts once a section is open so the visible content is the proof.",
-  "Use section carets only inside the bullet cell so caret and dot never overlap.",
+  "Use section carets only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
-  "Use signal families consistently: internal links draw arrows, sections swap dots for carets, notes keep dot-only feedback, and contact chips use lift plus cursor coupling.",
+  "Use signal families consistently: internal links draw arrows, sections morph dots into short-stroke carets, notes keep dot-only feedback, and contact chips use lift plus cursor coupling.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",
