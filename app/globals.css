@@ -197,7 +197,6 @@
   /* DOM cursor: codex graphite. */
   --cursor-rest: rgba(28, 32, 40, 0.18);
   --cursor-interactive: rgba(28, 32, 40, 0.34);
-  --cursor-chip: rgba(28, 32, 40, 0.38);
   --cursor-pressed: rgba(28, 32, 40, 0.48);
 }
 
@@ -234,14 +233,6 @@
   height: 28px;
   margin: -14px 0 0 -14px;
   background: var(--cursor-interactive);
-  opacity: 1;
-}
-
-.dom-cursor.is-chip {
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
-  background: var(--cursor-chip);
   opacity: 1;
 }
 
@@ -843,7 +834,7 @@ button.home-row {
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-bullet,
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):focus-within .home-bullet {
     opacity: 0.6;
-    transform: translateX(var(--signal-nudge));
+    transform: none;
   }
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-label,
@@ -977,19 +968,19 @@ button.home-row {
       inset 0 -4px 4px 0 hsla(0, 0%, 100%, 0.5),
       inset 0 -4px 16px 0 #fff,
       inset 0 4px 10px 0 hsla(240, 3%, 45%, 0.07),
-      0 7px 18px -12px rgba(53, 53, 79, 0.46),
-      0 14px 32px -14px rgba(53, 53, 79, 0.12);
+      0 5px 16px -12px rgba(53, 53, 79, 0.42),
+      0 10px 26px -16px rgba(53, 53, 79, 0.1);
     color: var(--text-primary);
-    transform: translateX(var(--signal-nudge));
+    transform: none;
   }
 
   .home-row:has(.home-mention):focus-within .home-mention {
-    transform: translateX(var(--signal-nudge));
+    transform: none;
   }
 
   .home-row--signal:has(.home-mention):hover .home-mention,
   .home-row--signal:has(.home-mention):focus-within .home-mention {
-    transform: translateX(var(--signal-nudge));
+    transform: none;
   }
 }
 
@@ -1177,11 +1168,11 @@ button.home-row {
   }
 
   .home-mention:active {
-    transform: translateX(var(--signal-nudge));
+    transform: none;
   }
 
   .home-row--signal:has(.home-mention):active .home-mention {
-    transform: translateX(var(--signal-nudge));
+    transform: none;
   }
 
   .home-row:has(.home-mention) {
@@ -1976,7 +1967,7 @@ button.home-row {
     inset 0 1px 2px color-mix(in srgb, var(--text-primary) 8%, transparent),
     inset 0 -1px 0 color-mix(in srgb, white 70%, transparent);
   opacity: 0.86;
-  transform: translateX(var(--signal-nudge));
+  transform: none;
 }
 
 .micro-card {

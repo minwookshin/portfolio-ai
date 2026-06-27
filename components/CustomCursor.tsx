@@ -22,7 +22,7 @@ const INTERACTIVE_SELECTOR = [
   ".lab-loop-panel__control",
 ].join(",");
 
-const CHIP_SELECTOR = ".home-mention";
+const QUIET_INTERACTIVE_SELECTOR = ".home-mention";
 
 const NATIVE_CURSOR_SELECTOR = [
   "input:not([type='button']):not([type='submit']):not([type='reset'])",
@@ -72,7 +72,7 @@ export default function CustomCursor() {
 
     const setNativeMode = (isNative: boolean) => {
       cursor.classList.toggle("is-native", isNative);
-      if (isNative) cursor.classList.remove("is-interactive", "is-chip", "is-pressed");
+      if (isNative) cursor.classList.remove("is-interactive", "is-pressed");
     };
 
     const handleMove = (event: MouseEvent) => {
@@ -87,7 +87,7 @@ export default function CustomCursor() {
       const target = event.target;
       if (!(target instanceof Element)) {
         setNativeMode(false);
-        cursor.classList.remove("is-interactive", "is-chip");
+        cursor.classList.remove("is-interactive");
         return;
       }
 
@@ -95,14 +95,17 @@ export default function CustomCursor() {
       setNativeMode(isNative);
 
       if (!isNative) {
-        cursor.classList.toggle("is-interactive", Boolean(target.closest(INTERACTIVE_SELECTOR)));
-        cursor.classList.toggle("is-chip", Boolean(target.closest(CHIP_SELECTOR)));
+        const isQuietInteractive = Boolean(target.closest(QUIET_INTERACTIVE_SELECTOR));
+        cursor.classList.toggle(
+          "is-interactive",
+          !isQuietInteractive && Boolean(target.closest(INTERACTIVE_SELECTOR)),
+        );
       }
     };
 
     const hide = () => {
       visible = false;
-      cursor.classList.remove("is-visible", "is-interactive", "is-chip", "is-pressed", "is-native");
+      cursor.classList.remove("is-visible", "is-interactive", "is-pressed", "is-native");
     };
 
     const press = () => {
@@ -130,7 +133,7 @@ export default function CustomCursor() {
       enabled = false;
       visible = false;
       root.classList.remove("dom-cursor-enabled");
-      cursor.classList.remove("is-visible", "is-interactive", "is-chip", "is-pressed", "is-native");
+      cursor.classList.remove("is-visible", "is-interactive", "is-pressed", "is-native");
       cursor.style.transform = "translate3d(-100px, -100px, 0)";
       document.removeEventListener("mousemove", handleMove);
       document.removeEventListener("mousedown", press);

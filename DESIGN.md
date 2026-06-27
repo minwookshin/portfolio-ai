@@ -36,7 +36,7 @@
 - Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and no blue accent on the homepage; highlights use the site black.
 - Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, and text-list rhythm on index pages; wider media belongs inside detail pages.
-- Shape/radius/elevation: modest 8px radius; avoid nested cards and glassmorphism on the homepage; prefer flat ink and black hairline states over filled highlight slabs.
+- Shape/radius/elevation: modest 8px radius; avoid nested cards and large glassmorphism on the homepage; contact chips may keep a small glass surface, but it should not become the page's main interaction.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
 - Imagery/iconography: project screenshots/videos are proof surfaces inside detail pages and hover previews; icons are supporting identity marks.
 - Outline signal grammar: outline rows use an 18px signal cell, 6px filled dots, 8px hollow archive/detail section dots, and the 9px homepage section dot; link intent becomes a short 8px x 2px stroke plus the Material arrow; open sections rest as a 6px filled dot, then hide that dot when the downward arrow appears on hover/focus/press.
@@ -67,7 +67,7 @@
 - Success: project sheets open with clear context and dismiss controls; profile/contact details stay available on the main page.
 - Disabled: coming-soon Atlas announces unavailable state.
 - Offline/slow network, if applicable: image/video loading should degrade to static project text.
-- Hover/focus grammar: internal links draw the side-facing Material arrow; expandable sections use the same arrow family rotated downward when open; quiet note rows keep dot-only feedback; contact chips use the glass chip and cursor coupling instead of row arrows.
+- Hover/focus grammar: internal links draw the side-facing Material arrow; expandable sections use the same arrow family rotated downward when open; quiet note rows keep dot-only feedback; contact chips use glass-only hover with no cursor absorption. Rich video/live interaction belongs in detail proof bento surfaces, not the homepage index.
 
 ## Content voice
 - Tone: concise, editorial, concrete.
