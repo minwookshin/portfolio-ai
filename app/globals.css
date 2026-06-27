@@ -769,7 +769,7 @@ button.home-row {
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-bullet,
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):focus-within .home-bullet {
-    opacity: 0.52;
+    opacity: 0.6;
     transform: translateX(1px);
   }
 
