@@ -71,7 +71,7 @@
 
 ## Content voice
 - Tone: concise, editorial, concrete.
-- Terminology: design engineer, AI-native products, websites, prototypes, compact studio.
+- Terminology: design engineer, AI-native products, interfaces, prototypes, small systems, compact studio.
 - Microcopy rules: short labels; avoid explaining the UI inside the UI.
 
 ## Implementation constraints

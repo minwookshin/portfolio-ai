@@ -563,7 +563,7 @@ function HomeDocument({
 
         <motion.div variants={landingRevealItem}>
           <HomeLeafRow>
-            I design and build interfaces for AI-native products, from early idea to working software.
+            I make interfaces, prototypes, and small systems for AI-native products.
           </HomeLeafRow>
         </motion.div>
 
