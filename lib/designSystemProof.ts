@@ -145,8 +145,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "buttons and links",
-    description: "Plain text links, focus-visible outlines, press affordance, and color-first hover feedback.",
-    primitives: ["micro link", "lateral link", "focus ring", "pressable row"],
+    description: "Plain text links for reading flow, glass action chips for explicit click targets, focus-visible outlines, and quiet press feedback.",
+    primitives: ["micro link", "glass action chip", "lateral link", "focus ring", "pressable row"],
   },
   {
     name: "cards and surfaces",
@@ -164,6 +164,7 @@ export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Keep hover movement inside the bullet cell; outline text should stay fixed and only become slightly clearer.",
   "Hide section counts once a section is open so the visible content is the proof.",
   "Use section carets only inside the bullet cell so caret and dot never overlap.",
+  "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",

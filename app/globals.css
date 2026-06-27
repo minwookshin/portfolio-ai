@@ -641,16 +641,30 @@ button.home-row {
 }
 
 .home-mention {
-  display: inline;
-  padding: 0 4px;
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 7px;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 7%, white);
   border-radius: var(--md-shape-sm);
-  background: color-mix(in srgb, var(--text-primary) 5%, transparent);
-  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--text-primary) 6%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, white 96%, transparent),
+      color-mix(in srgb, var(--bg-element) 70%, white)
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 88%, transparent),
+    inset 0 -1px 2px color-mix(in srgb, var(--text-primary) 5%, transparent),
+    0 1px 2px color-mix(in srgb, var(--text-primary) 5%, transparent);
   color: inherit;
   text-decoration: none;
-  box-decoration-break: clone;
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+  backdrop-filter: blur(10px) saturate(1.08);
   transition:
     background-color var(--motion-duration-instant) var(--motion-ease-standard),
+    border-color var(--motion-duration-instant) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-instant) var(--motion-ease-standard),
     color var(--motion-duration-instant) var(--motion-ease-standard),
     transform var(--motion-duration-instant) var(--motion-ease-standard);
 }
@@ -710,8 +724,19 @@ button.home-row {
   }
 
   .home-mention:hover {
-    background: color-mix(in srgb, var(--text-primary) 9%, transparent);
+    border-color: color-mix(in srgb, var(--text-primary) 12%, white);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, white 100%, transparent),
+        color-mix(in srgb, var(--bg-element) 82%, white)
+      );
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, white 92%, transparent),
+      inset 0 -1px 3px color-mix(in srgb, var(--text-primary) 7%, transparent),
+      0 2px 6px color-mix(in srgb, var(--text-primary) 7%, transparent);
     color: var(--text-primary);
+    transform: translateY(-0.5px);
   }
 }
 
@@ -778,9 +803,7 @@ button.home-row {
   }
 
   .home-mention {
-    display: inline-flex;
     min-height: 44px;
-    align-items: center;
     padding-right: 8px;
     padding-left: 8px;
   }
@@ -1439,6 +1462,24 @@ button.home-row {
 
 .micro-pressable:not(:disabled):active {
   opacity: calc(1 - var(--md-state-press));
+}
+
+.home-mention.micro-pressable {
+  transition:
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-base) var(--motion-ease-standard),
+    color var(--motion-duration-base) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.home-mention.micro-pressable:not(:disabled):active {
+  box-shadow:
+    inset 0 1px 2px color-mix(in srgb, var(--text-primary) 8%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, white 70%, transparent);
+  opacity: 0.86;
+  transform: translateY(0);
 }
 
 .micro-card {
