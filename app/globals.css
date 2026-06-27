@@ -757,7 +757,7 @@ button.home-row {
 
 .home-footer {
   margin-top: auto;
-  margin-left: calc(18px + 12px);
+  margin-left: 0;
   padding-top: clamp(160px, 20vh, 260px);
   color: var(--text-muted);
   font-size: var(--type-row);
