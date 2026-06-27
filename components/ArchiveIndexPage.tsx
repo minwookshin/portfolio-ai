@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LiquidGlassHoverScope from "@/components/LiquidGlassHoverScope";
 import MaterialArrowBackIcon from "@/components/MaterialArrowBackIcon";
+import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 
 export type ArchiveEntry = {
   description?: string;
@@ -95,7 +96,7 @@ export default function ArchiveIndexPage({
                       <span className="archive-bullet-cell" aria-hidden="true">
                         <span className="archive-year-bullet" />
                         <span className="archive-caret">
-                          <span />
+                          <MaterialChevronRightIcon className="site-caret-icon" />
                         </span>
                       </span>
                       <span className="archive-year-label">{year}</span>

@@ -590,18 +590,17 @@ button.home-row {
   transition: opacity 140ms var(--motion-ease-standard);
 }
 
-.home-caret span {
+.site-caret-icon {
   display: block;
-  width: 7px;
-  height: 7px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(-45deg);
+  width: 18px;
+  height: 18px;
+  color: currentColor;
+  transform: rotate(0deg);
   transition: transform 220ms var(--motion-ease-standard);
 }
 
-.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret span {
-  transform: rotate(45deg) translate(-1px, -1px);
+.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-caret-icon {
+  transform: rotate(90deg);
 }
 
 .home-node--section > .home-row[data-liquid-glass-active="true"] .home-bullet,
@@ -1881,18 +1880,8 @@ button.home-row {
   transition: opacity 140ms var(--motion-ease-standard);
 }
 
-.archive-caret span {
-  display: block;
-  width: 7px;
-  height: 7px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(-45deg);
-  transition: transform 220ms var(--motion-ease-standard);
-}
-
-.archive-year-details[open] > .archive-year .archive-caret span {
-  transform: rotate(45deg) translate(-1px, -1px);
+.archive-year-details[open] > .archive-year .archive-caret .site-caret-icon {
+  transform: rotate(90deg);
 }
 
 .archive-year[data-liquid-glass-active="true"] .archive-year-bullet,
