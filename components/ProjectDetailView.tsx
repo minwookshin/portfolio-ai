@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
+import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import { Project } from "./ProjectCard";
 import StudioVideoPlayer from "./StudioVideoPlayer";
 import { CaseStudy } from "./detail/CaseStudy";
@@ -216,17 +217,7 @@ function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
 function DetailNote({ eyebrow, body }: { eyebrow: string; body: ReactNode }) {
   return (
     <section className="detail-outline-section detail-outline-section--compact">
-      <div className="detail-outline-row">
-        <span className="detail-outline-bullet-cell" aria-hidden="true">
-          <span className="detail-outline-bullet" />
-        </span>
-        <div className="detail-outline-row-copy">
-          <p className="detail-outline-row-line">
-            <span className="detail-outline-row-title">{eyebrow}</span>
-          </p>
-          <p className="detail-outline-row-body detail-outline-row-body--primary">{body}</p>
-        </div>
-      </div>
+      <DetailOutlineRow body={body} bodyClassName="detail-outline-row-body--primary" title={eyebrow} />
     </section>
   );
 }
@@ -238,26 +229,15 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
 
   return (
     <section className="detail-outline-section detail-outline-section--compact">
-      <div className="detail-outline-heading-row">
-        <span className="detail-outline-bullet-cell" aria-hidden="true">
-          <span className="detail-outline-bullet detail-outline-bullet--section" />
-        </span>
-        <h2 className="text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]">{title}</h2>
-      </div>
+      <DetailOutlineHeading heading={title} />
       <div className="detail-outline-list detail-outline-list--grid">
         {visibleItems.map((item) => (
-          <div key={`${title}-${item.label}`} className="detail-outline-row">
-            <span className="detail-outline-bullet-cell" aria-hidden="true">
-              <span className="detail-outline-bullet" />
-            </span>
-            <div className="detail-outline-row-copy">
-              <p className="detail-outline-row-line">
-                <span className="detail-outline-row-title">{item.value}</span>
-                <span className="detail-outline-row-meta">{item.label}</span>
-              </p>
-              {isVisibleBuilderValue(item.note) && <p className="detail-outline-row-body">{item.note}</p>}
-            </div>
-          </div>
+          <DetailOutlineRow
+            key={`${title}-${item.label}`}
+            body={isVisibleBuilderValue(item.note) ? item.note : undefined}
+            meta={item.label}
+            title={item.value}
+          />
         ))}
       </div>
     </section>

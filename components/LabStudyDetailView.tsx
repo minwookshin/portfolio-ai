@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
+import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import type { LabStudy, PortfolioProject } from "@/data/projects";
 import { motionEasings, tweens } from "@/lib/material/motion";
 
@@ -136,28 +137,11 @@ function StudyCodeBlock({
 }
 
 function StudySectionHead({ heading, meta }: { heading: string; meta?: string }) {
-  return (
-    <div className="detail-outline-heading-row">
-      <span className="detail-outline-bullet-cell" aria-hidden="true">
-        <span className="detail-outline-bullet detail-outline-bullet--section" />
-      </span>
-      <div className="detail-outline-heading-copy">
-        <h2 className="lab-study-section-heading">{heading}</h2>
-        {meta && <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{meta}</p>}
-      </div>
-    </div>
-  );
+  return <DetailOutlineHeading eyebrow={meta} heading={heading} headingClassName="lab-study-section-heading" />;
 }
 
 function StudyTextRow({ children }: { children: ReactNode }) {
-  return (
-    <div className="detail-outline-row">
-      <span className="detail-outline-bullet-cell" aria-hidden="true">
-        <span className="detail-outline-bullet" />
-      </span>
-      <p className="detail-outline-row-body">{children}</p>
-    </div>
-  );
+  return <DetailOutlineRow body={children} />;
 }
 
 function getStudyStory(study: LabStudy) {
@@ -202,23 +186,18 @@ function LabStudyRules({ rules }: { rules: LabStudy["rules"] }) {
       <StudySectionHead heading="rules I keep" />
       <div className="lab-study-rule-list detail-outline-list" aria-label="rules">
         {rules.map((rule) => (
-          <div key={rule.label} className="detail-outline-row">
-            <span className="detail-outline-bullet-cell" aria-hidden="true">
-              <span className="detail-outline-bullet" />
-            </span>
-            <div className="detail-outline-row-copy">
-              <p className="lab-study-rule-item">
-                <span className="lab-study-rule-label">{rule.label}</span>{" "}
-                <span className="lab-study-rule-value">{renderInlineStudyText(rule.value)}</span>
-                {rule.note && (
-                  <>
-                    {" "}
-                    <span className="lab-study-rule-note">{renderInlineStudyText(rule.note)}</span>
-                  </>
-                )}
-              </p>
-            </div>
-          </div>
+          <DetailOutlineRow key={rule.label}>
+            <p className="lab-study-rule-item">
+              <span className="lab-study-rule-label">{rule.label}</span>{" "}
+              <span className="lab-study-rule-value">{renderInlineStudyText(rule.value)}</span>
+              {rule.note && (
+                <>
+                  {" "}
+                  <span className="lab-study-rule-note">{renderInlineStudyText(rule.note)}</span>
+                </>
+              )}
+            </p>
+          </DetailOutlineRow>
         ))}
       </div>
     </section>

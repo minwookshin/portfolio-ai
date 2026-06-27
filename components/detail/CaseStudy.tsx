@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
+import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import StudioVideoPlayer from "@/components/StudioVideoPlayer";
 
 /**
@@ -64,7 +65,6 @@ const reveal = {
   transition: tweens.base,
 } as const;
 
-const eyebrowCls = "text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]";
 const h2Cls = "text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]";
 const sectionCls = "detail-outline-section";
 
@@ -80,17 +80,7 @@ const heroItem = {
 };
 
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
-  return (
-    <div className="detail-outline-heading-row">
-      <span className="detail-outline-bullet-cell" aria-hidden="true">
-        <span className="detail-outline-bullet detail-outline-bullet--section" />
-      </span>
-      <div className="detail-outline-heading-copy">
-        <h2 className={h2Cls}>{heading}</h2>
-        {eyebrow && <p className={eyebrowCls}>{eyebrow}</p>}
-      </div>
-    </div>
-  );
+  return <DetailOutlineHeading eyebrow={eyebrow} heading={heading} headingClassName={h2Cls} />;
 }
 
 function Dot() {
@@ -111,21 +101,9 @@ function DetailRow({
   title?: ReactNode;
 }) {
   return (
-    <div className={`detail-outline-row ${className}`}>
-      <span className="detail-outline-bullet-cell" aria-hidden="true">
-        <span className="detail-outline-bullet" />
-      </span>
-      <div className="detail-outline-row-copy">
-        {(title || meta) && (
-          <p className="detail-outline-row-line">
-            {title && <span className="detail-outline-row-title">{title}</span>}
-            {meta && <span className="detail-outline-row-meta">{meta}</span>}
-          </p>
-        )}
-        {body && <p className="detail-outline-row-body">{body}</p>}
-        {children}
-      </div>
-    </div>
+    <DetailOutlineRow body={body} className={className} meta={meta} title={title}>
+      {children}
+    </DetailOutlineRow>
   );
 }
 
@@ -477,7 +455,7 @@ function AskRow({
       {...getSectionMotion(reduceMotion)}
       className={className}
     >
-      {label && <p className={`${eyebrowCls} mb-[var(--space-1)]`}>{label}</p>}
+      {label && <p className="mb-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{label}</p>}
       <div className="flex flex-wrap gap-[var(--space-1)]">
         {prompts.map((q) => (
           <button

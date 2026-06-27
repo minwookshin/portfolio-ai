@@ -1,7 +1,6 @@
 import Link from "next/link";
-import MaterialArrowDownIcon from "@/components/MaterialArrowDownIcon";
-import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
+import { OutlineSignalCell } from "@/components/Outline";
 
 export type ArchiveEntry = {
   description?: string;
@@ -93,13 +92,12 @@ export default function ArchiveIndexPage({
                       aria-label={`${year}, ${yearEntries.length} ${itemLabel}`}
                       className="archive-year micro-focus micro-focus-tight"
                     >
-                      <span className="archive-bullet-cell" aria-hidden="true">
-                        <span className="archive-year-bullet" />
-                        <span className="archive-caret">
-                          <MaterialArrowForwardIcon className="site-signal-icon site-signal-icon--right" />
-                          <MaterialArrowDownIcon className="site-signal-icon site-signal-icon--down" />
-                        </span>
-                      </span>
+                      <OutlineSignalCell
+                        arrow="both"
+                        arrowClassName="archive-caret"
+                        cellClassName="archive-bullet-cell"
+                        dotClassName="archive-year-bullet"
+                      />
                       <span className="archive-year-label">{year}</span>
                       <span className="archive-count">{yearEntries.length}</span>
                     </summary>
@@ -111,14 +109,13 @@ export default function ArchiveIndexPage({
                             href={entry.href}
                             className={`archive-row${rowUsesSignal ? "" : " archive-row--quiet"} micro-focus micro-focus-tight`}
                           >
-                            <span className="archive-bullet-cell" aria-hidden="true">
-                              <span className="archive-row-bullet" />
-                              {rowUsesSignal && (
-                                <span className="archive-row-signal">
-                                  <MaterialArrowForwardIcon className="site-signal-icon" />
-                                </span>
-                              )}
-                            </span>
+                            <OutlineSignalCell
+                              arrow={rowUsesSignal ? "right" : undefined}
+                              arrowClassName="archive-row-signal"
+                              cellClassName="archive-bullet-cell"
+                              dotClassName="archive-row-bullet"
+                              rightArrowClassName="site-signal-icon"
+                            />
                             <span className="archive-row-title">{entry.title}</span>
                             {entry.description && (
                               <span className="archive-row-description">{entry.description}</span>
