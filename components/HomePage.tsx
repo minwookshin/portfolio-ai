@@ -709,7 +709,7 @@ function StudyTextRow({
             />
           </span>
         </Link>
-      </motion.div>
+      </div>
     </motion.li>
   );
 }
@@ -730,7 +730,6 @@ function OutlineListSection({ emptyLabel, items }: { emptyLabel: string; items: 
           <StudyTextRow
             key={item.id}
             index={index}
-            isLast={index === items.length - 1}
             item={item}
           />
         ))}
@@ -1066,6 +1065,19 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           setHasStarted(false);
           setChatOnTop(false);
           router.push("/notes");
+        },
+      },
+      {
+        id: "view-interactions",
+        title: "view interactions",
+        meta: "live systems",
+        group: "navigate",
+        keywords: ["systems", "interactions", "motion", "cursor", "command", "glass"],
+        icon: <Command />,
+        action: () => {
+          setHasStarted(false);
+          setChatOnTop(false);
+          router.push("/interactions");
         },
       },
       {
