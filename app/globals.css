@@ -850,6 +850,11 @@ button.home-row {
     transform: translateX(1px);
   }
 
+  .home-doc .home-row--quiet-link:hover .project-row-copy,
+  .home-doc .home-row--quiet-link:focus-visible .project-row-copy {
+    transform: translateX(1px);
+  }
+
   .home-node--section > .home-row:hover .home-bullet,
   .home-node--section > .home-row:focus-visible .home-bullet,
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-bullet,
@@ -892,16 +897,16 @@ button.home-row {
       0 7px 18px -12px rgba(53, 53, 79, 0.46),
       0 14px 32px -14px rgba(53, 53, 79, 0.12);
     color: var(--text-primary);
-    transform: translate(1px, -1px);
+    transform: translateX(1px);
   }
 
   .home-row:has(.home-mention):focus-within .home-mention {
-    transform: translate(1px, -1px);
+    transform: translateX(1px);
   }
 
   .home-row--signal:has(.home-mention):hover .home-mention,
   .home-row--signal:has(.home-mention):focus-within .home-mention {
-    transform: translate(1px, -1px);
+    transform: translateX(1px);
   }
 }
 
@@ -999,6 +1004,10 @@ button.home-row {
     transform: translateX(1px);
   }
 
+  .home-doc .home-row--quiet-link:active .project-row-copy {
+    transform: translateX(1px);
+  }
+
   .home-node--section > .home-row:active .home-bullet,
   .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
     width: 5px;
@@ -1021,11 +1030,11 @@ button.home-row {
   }
 
   .home-mention:active {
-    transform: translate(1px, -1px);
+    transform: translateX(1px);
   }
 
   .home-row--signal:has(.home-mention):active .home-mention {
-    transform: translate(1px, -1px);
+    transform: translateX(1px);
   }
 
   .home-row:has(.home-mention) {
@@ -1138,6 +1147,11 @@ button.home-row {
 [data-project-row="studies"]:hover .project-row-copy,
 [data-project-row="studies"]:focus-within .project-row-copy {
   transform: none;
+}
+
+.home-doc [data-project-row="writing"]:hover .home-row--quiet-link .project-row-copy,
+.home-doc [data-project-row="writing"]:focus-within .home-row--quiet-link .project-row-copy {
+  transform: translateX(1px);
 }
 
 .project-row-title-line--lateral {
@@ -1710,7 +1724,7 @@ button.home-row {
     inset 0 1px 2px color-mix(in srgb, var(--text-primary) 8%, transparent),
     inset 0 -1px 0 color-mix(in srgb, white 70%, transparent);
   opacity: 0.86;
-  transform: translateY(0);
+  transform: translateX(1px);
 }
 
 .micro-card {

@@ -475,7 +475,7 @@ function StudyTextRow({
       initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 8 }}
       animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 1, filter: "blur(0px)", y: 0 }}
       transition={reduceMotion ? tweens.none : landingRowTransition(index)}
-      data-project-row="studies"
+      data-project-row={item.kind === "writing" ? "writing" : "studies"}
       className="home-node group relative z-0 list-none hover:z-30 focus-within:z-30"
     >
       <motion.div

@@ -149,8 +149,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "buttons and links",
-    description: "Plain text links for reading flow, lifted glass action chips for explicit click targets, focus-visible outlines, and quiet press feedback.",
-    primitives: ["micro link", "lifted glass action chip", "lateral link", "focus ring", "pressable row"],
+    description: "Plain text links for reading flow, laterally nudged glass action chips for explicit click targets, focus-visible outlines, and quiet press feedback.",
+    primitives: ["micro link", "lateral glass action chip", "lateral link", "focus ring", "pressable row"],
   },
   {
     name: "cards and surfaces",
@@ -169,7 +169,7 @@ export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Hide section counts once a section is open so the visible content is the proof.",
   "Use section carets only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
-  "Use signal families consistently: internal links draw arrows, sections morph dots into short-stroke carets, notes keep dot-only feedback, and contact chips use lift plus cursor coupling.",
+  "Use signal families consistently: internal links draw arrows, sections morph dots into short-stroke carets, notes keep dot-only feedback, and contact chips use lateral nudge plus cursor coupling.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",
