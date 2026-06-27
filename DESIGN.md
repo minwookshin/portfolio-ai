@@ -2,8 +2,8 @@
 
 ## Source of truth
 - Status: Active
-- Last refreshed: 2026-06-26
-- Primary product surfaces: portfolio homepage, selected-work browsing, studies browsing, project detail sheets, main-page profile/contact block, AI assistant input.
+- Last refreshed: 2026-06-27
+- Primary product surfaces: portfolio homepage, selected-work browsing, notes browsing, studies browsing, project detail pages, main-page profile/contact block, AI assistant input.
 - Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Work & Co work/case-study references, Pentagram work/case-study references, Instrument homepage/work pattern, Fantasy homepage positioning, Metalab project-first work grid, Clay outcome/category work index, BASIC/DEPT case-study archive, Huge work index, NN/g UX portfolio and grid guidance, Awwwards project-page collection, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
 ## Brand
@@ -22,9 +22,9 @@
 - Key contexts of use: desktop portfolio review, mobile link click, recruiter/client scan, live conversation during outreach.
 
 ## Information architecture
-- Primary navigation: minimal header identity plus a single inline `work, studies` tab row on the homepage; fixed assistant controls at the bottom. Contact stays in the intro link group, not as a primary tab.
-- Core routes/screens: home, studies, project sheet, lab study detail, writing detail, main-page profile/contact block, chat overlay.
-- Content hierarchy: identity statement, inline homepage section switcher, text-first selected content list, fixed assistant entry.
+- Primary navigation: minimal header identity plus inline outline sections: `today`, `selected work`, `notes`, and `contact`. Archive routes (`/work`, `/notes`, `/studies`) extend the same outline language by year.
+- Core routes/screens: home, work archive, notes archive, studies archive, work detail, study detail, note detail, design-system proof, AI assistant input.
+- Content hierarchy: identity statement, expandable homepage outline, text-first selected content lists, contact chips, proof surfaces inside details.
 
 ## Design principles
 - Principle 1: Let the main page read like an editorial index; proof visuals should support hover states and detail pages, not lead the homepage.
@@ -39,6 +39,8 @@
 - Shape/radius/elevation: modest 8px radius; avoid nested cards and glassmorphism on the homepage; prefer flat ink and black hairline states over filled highlight slabs.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
 - Imagery/iconography: project screenshots/videos are proof surfaces inside detail pages and hover previews; icons are supporting identity marks.
+- Outline signal grammar: outline rows use an 18px signal cell, 6px filled dots, 8px hollow archive/detail section dots, and the 9px homepage section dot; link intent becomes a short 8px x 2px stroke plus the Material arrow; open sections rest as a 6px filled dot, then hide that dot when the downward arrow appears on hover/focus/press.
+- Interaction tokens: `--signal-*` CSS variables own dot sizes, section strokes, arrow opacity, 2px lateral nudge, and 140ms stroke draw timing. New outline surfaces should use these tokens instead of raw pixel/opacity values.
 
 ## Components
 - Existing components to reuse: `ChatInput`, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
@@ -65,6 +67,7 @@
 - Success: project sheets open with clear context and dismiss controls; profile/contact details stay available on the main page.
 - Disabled: coming-soon Atlas announces unavailable state.
 - Offline/slow network, if applicable: image/video loading should degrade to static project text.
+- Hover/focus grammar: internal links draw the side-facing Material arrow; expandable sections use the same arrow family rotated downward when open; quiet note rows keep dot-only feedback; contact chips use the glass chip and cursor coupling instead of row arrows.
 
 ## Content voice
 - Tone: concise, editorial, concrete.

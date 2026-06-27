@@ -150,9 +150,10 @@ export default function DesignSystemPage() {
               />
             </div>
             <div>
-              <p className={`${smallMuted} mb-[var(--space-2)]`}>motion</p>
+              <p className={`${smallMuted} mb-[var(--space-2)]`}>signals and motion</p>
               <TokenList
                 items={[
+                  ...DESIGN_SYSTEM_TOKENS.signals,
                   ...DESIGN_SYSTEM_TOKENS.motion.durations,
                   ...DESIGN_SYSTEM_TOKENS.motion.easing,
                 ]}
