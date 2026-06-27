@@ -88,7 +88,11 @@ export const DESIGN_SYSTEM_TOKENS = {
   ],
   elevation: [
     { role: "default", value: "none", usage: "the product relies on spacing, type, and hairlines instead of decorative shadows" },
-    { role: "cursor", value: "18px low-opacity multiply DOM circle", usage: "fine-pointer cursor affordance, not layout surface decoration" },
+    {
+      role: "cursor",
+      value: "18px low-opacity multiply DOM circle; 14px darker chip-coupled state",
+      usage: "fine-pointer cursor affordance, not layout surface decoration",
+    },
   ],
   motion: {
     durations: [
@@ -145,8 +149,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "buttons and links",
-    description: "Plain text links for reading flow, glass action chips for explicit click targets, focus-visible outlines, and quiet press feedback.",
-    primitives: ["micro link", "glass action chip", "lateral link", "focus ring", "pressable row"],
+    description: "Plain text links for reading flow, glass action chips for explicit click targets, tiny glint hover, focus-visible outlines, and quiet press feedback.",
+    primitives: ["micro link", "glass action chip", "chip glint", "lateral link", "focus ring", "pressable row"],
   },
   {
     name: "cards and surfaces",
@@ -165,6 +169,7 @@ export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Hide section counts once a section is open so the visible content is the proof.",
   "Use section carets only inside the bullet cell so caret and dot never overlap.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
+  "Use chip glint sparingly for explicit click targets; avoid applying it to outline rows or reading links.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",
