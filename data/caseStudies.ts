@@ -13,11 +13,11 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Team Atlas capstone - digital prototype system",
         title: "Atlas",
         subtitle:
-          "I built the connected prototype layer for Atlas: first-responder mobile, incident-command iPad, ER intake, and the local server that kept patient state moving across the demo.",
+          "A connected triage prototype system spanning first-responder mobile, incident-command iPad, ER intake, and the local server that kept patient state moving across the demo.",
         bullets: [
-          "My scope: first structure, early monochrome iteration, and digital prototype engineering",
-          "Team-owned final visual system, research story, and physical prototype",
-          "Three native app surfaces connected through a TypeScript/WebSocket triage server",
+          "My scope: early structure, monochrome interface pass, native app prototypes, and real-time system behavior",
+          "Team scope: final visual language, research narrative, service concept, and physical prototype",
+          "Prototype proof: three app surfaces connected through a TypeScript/WebSocket triage server",
         ],
         tags: ["SwiftUI", "TypeScript", "WebSocket", "Mapbox", "Prototype Systems"],
         image: "/projects/atlas/ic-quick-send-photo.png",
@@ -34,13 +34,47 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "stats",
         eyebrow: "Prototype proof",
-        heading: "The build behind the screens",
+        heading: "A working system, not a static case-study deck",
         items: [
           { value: "3", label: "Native app targets" },
           { value: "134", label: "Swift files" },
           { value: "7.1k", label: "Server code lines" },
           { value: "207", label: "Server tests passed" },
         ],
+      },
+      {
+        kind: "artifact",
+        eyebrow: "System artifact",
+        heading: "The demo needed one source of truth",
+        title: "Prototype event contract",
+        meta: "architecture sketch",
+        rows: [
+          {
+            label: "State",
+            value: "patients / responders / hospitals / assignments",
+            note: "The demo depended on a shared incident model instead of disconnected screen states.",
+          },
+          {
+            label: "Transport",
+            value: "REST setup + WebSocket updates",
+            note: "Initial scenario data could be seeded, then changes moved live between role-specific clients.",
+          },
+          {
+            label: "Clients",
+            value: "FR mobile / IC iPad / ER intake",
+            note: "Each surface stayed role-specific while reading from the same patient-state vocabulary.",
+          },
+        ],
+        code: [
+          "type TriageEvent =",
+          "  | { type: 'patient.updated'; patientId: string; patch: PatientPatch }",
+          "  | { type: 'patient.assigned'; patientId: string; hospitalId: string }",
+          "  | { type: 'capacity.changed'; hospitalId: string; availableBeds: number };",
+          "",
+          "server.broadcast(event);",
+        ].join("\n"),
+        caption:
+          "This is a case-study sketch of the prototype contract, not a pasted source excerpt. It explains the system shape behind the Atlas demo.",
       },
       {
         kind: "split",
@@ -77,12 +111,23 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "gallery",
         eyebrow: "Prototype surfaces",
-        heading: "The three apps I helped turn into a connected demo",
+        heading: "The three role-specific surfaces I helped connect",
         layout: "featured",
         images: [
           { src: "/projects/atlas/fr-map-photo.png", caption: "First-responder mobile map and patient context" },
           { src: "/projects/atlas/ic-quick-send-photo.png", caption: "Incident-command quick-send and map coordination" },
           { src: "/projects/atlas/er-patient-data-photo.png", caption: "Emergency receiving intake detail and patient status" },
+        ],
+      },
+      {
+        kind: "gallery",
+        eyebrow: "Interface proof",
+        heading: "Operational views from the connected prototype",
+        images: [
+          { src: "/projects/atlas/ic-map.png", caption: "Incident command map and operating context" },
+          { src: "/projects/atlas/ic-patient-detail.png", caption: "Patient detail state in the command surface" },
+          { src: "/projects/atlas/er-queue.png", caption: "Receiving queue and hospital intake preparation" },
+          { src: "/projects/atlas/fr-patient-update.png", caption: "Responder update flow on mobile" },
         ],
       },
       {

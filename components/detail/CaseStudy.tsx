@@ -45,6 +45,16 @@ export type DetailSection = ({
   | { kind: "gallery"; eyebrow?: string; heading?: string; layout?: "grid" | "featured"; images: { src: string; caption?: string }[] }
   | { kind: "video"; eyebrow?: string; heading?: string; src: string; poster?: string; aspect?: string }
   | { kind: "links"; items: { label: string; href: string }[] }
+  | {
+      kind: "artifact";
+      caption?: string;
+      code?: string;
+      eyebrow?: string;
+      heading: string;
+      meta?: string;
+      rows?: { label: string; note?: string; value: string }[];
+      title: string;
+    }
   | { kind: "outcome"; badge?: string; heading: string; body: string[] }) & {
   // Optional question capsules woven in right after this section, placed where
   // they make sense in the narrative and wired to the chat.
@@ -415,6 +425,42 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
               <DetailLink key={l.href} label={l.label} href={l.href} />
             ))}
           </div>
+        </motion.section>
+      );
+
+    case "artifact":
+      return (
+        <motion.section key={i} {...sectionMotion} className={sectionCls}>
+          <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
+          <div className="detail-artifact-surface">
+            <div className="detail-artifact-header">
+              <span>{section.title}</span>
+              {section.meta && <span>{section.meta}</span>}
+            </div>
+            {section.rows && section.rows.length > 0 && (
+              <div className="detail-artifact-list">
+                {section.rows.map((row) => (
+                  <div key={row.label} className="detail-artifact-row">
+                    <span>{row.label}</span>
+                    <span>{row.value}</span>
+                    {row.note && <p>{row.note}</p>}
+                  </div>
+                ))}
+              </div>
+            )}
+            {section.code && (
+              <pre className="detail-artifact-code">
+                <code>
+                  {section.code.split("\n").map((line, lineIndex) => (
+                    <span key={`${lineIndex}-${line}`} className="detail-artifact-code-line">
+                      {line || "\u00a0"}
+                    </span>
+                  ))}
+                </code>
+              </pre>
+            )}
+          </div>
+          {section.caption && <p className="detail-artifact-caption">{section.caption}</p>}
         </motion.section>
       );
 

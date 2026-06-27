@@ -79,6 +79,15 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("/ json")).toBeInTheDocument();
   });
 
+  it("renders Atlas as a proof-led case study template", () => {
+    render(<ProjectCaseStudyShell project={getWorkProject("atlas")} />);
+
+    expect(screen.getByText("Prototype event contract")).toBeInTheDocument();
+    expect(screen.getByText("architecture sketch")).toBeInTheDocument();
+    expect(screen.getByText("server.broadcast(event);")).toBeInTheDocument();
+    expect(screen.getByText("Operational views from the connected prototype")).toBeInTheDocument();
+  });
+
   it("renders study detail navigation as a quiet back link", () => {
     render(
       <ProjectCaseStudyShell
