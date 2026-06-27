@@ -523,6 +523,10 @@ button.home-row {
   opacity: 0.68;
 }
 
+.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon {
+  transform: rotate(90deg);
+}
+
 .home-caret {
   position: absolute;
   inset: 0;
@@ -599,10 +603,6 @@ button.home-row {
 .home-node--section > .home-row:focus-visible .home-caret .site-signal-head {
   opacity: 1;
   stroke-dashoffset: 0;
-}
-
-.home-node--section[open] > .home-row:focus-visible .home-caret .site-signal-icon {
-  transform: rotate(90deg);
 }
 
 .home-label {
@@ -900,11 +900,6 @@ button.home-row {
     stroke-dashoffset: 0;
   }
 
-  .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-caret .site-signal-icon,
-  .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-caret .site-signal-icon {
-    transform: rotate(90deg);
-  }
-
   .home-row--link:hover .home-meta,
   .home-row--link:focus-visible .home-meta {
     color: color-mix(in srgb, var(--text-primary) 62%, var(--text-muted));
@@ -1090,10 +1085,6 @@ button.home-row {
     opacity: 0.74;
     transform: translateX(2px) scale(1);
     visibility: visible;
-  }
-
-  .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-caret .site-signal-icon {
-    transform: rotate(90deg);
   }
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):active .home-label {
@@ -2257,6 +2248,10 @@ button.home-row {
   opacity: 0.68;
 }
 
+.archive-year-details[open] > .archive-year .archive-caret .site-signal-icon {
+  transform: rotate(90deg);
+}
+
 .archive-caret {
   position: absolute;
   inset: 0;
@@ -2310,10 +2305,6 @@ button.home-row {
   opacity: 0.74;
   transform: translateX(2px) scale(1);
   visibility: visible;
-}
-
-.archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-icon {
-  transform: rotate(90deg);
 }
 
 .archive-row-bullet {
@@ -2547,11 +2538,6 @@ button.home-row {
     stroke-dashoffset: 0;
   }
 
-  .archive-year-details[open] > .archive-year:hover .archive-caret .site-signal-icon,
-  .archive-year-details[open] > .archive-year:focus-visible .archive-caret .site-signal-icon {
-    transform: rotate(90deg);
-  }
-
   .archive-year:hover .archive-year-label,
   .archive-year:focus-visible .archive-year-label,
   .archive-year:hover .archive-count,
@@ -2644,10 +2630,6 @@ button.home-row {
     opacity: 0.74;
     transform: translateX(2px) scale(1);
     visibility: visible;
-  }
-
-  .archive-year-details[open] > .archive-year:active .archive-caret .site-signal-icon {
-    transform: rotate(90deg);
   }
 
   .archive-year:active .archive-year-label,
