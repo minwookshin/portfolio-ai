@@ -193,6 +193,12 @@
     0 18px 48px -42px color-mix(in srgb, var(--text-primary) 32%, transparent);
   --code-font-size: 13px;
   --code-line-height: 1.55;
+
+  /* DOM cursor: codex graphite. */
+  --cursor-rest: rgba(28, 32, 40, 0.18);
+  --cursor-interactive: rgba(28, 32, 40, 0.34);
+  --cursor-chip: rgba(28, 32, 40, 0.38);
+  --cursor-pressed: rgba(28, 32, 40, 0.48);
 }
 
 .dom-cursor {
@@ -205,7 +211,7 @@
   margin: -9px 0 0 -9px;
   border: 0;
   border-radius: 999px;
-  background: var(--text-muted);
+  background: var(--cursor-rest);
   mix-blend-mode: multiply;
   opacity: 0;
   pointer-events: none;
@@ -220,31 +226,31 @@
 }
 
 .dom-cursor.is-visible {
-  opacity: 0.42;
+  opacity: 1;
 }
 
 .dom-cursor.is-interactive {
   width: 28px;
   height: 28px;
   margin: -14px 0 0 -14px;
-  background: var(--text-primary);
-  opacity: 0.16;
+  background: var(--cursor-interactive);
+  opacity: 1;
 }
 
 .dom-cursor.is-chip {
   width: 14px;
   height: 14px;
   margin: -7px 0 0 -7px;
-  background: var(--text-primary);
-  opacity: 0.38;
+  background: var(--cursor-chip);
+  opacity: 1;
 }
 
 .dom-cursor.is-pressed {
   width: 12px;
   height: 12px;
   margin: -6px 0 0 -6px;
-  background: var(--text-primary);
-  opacity: 0.34;
+  background: var(--cursor-pressed);
+  opacity: 1;
 }
 
 .dom-cursor.is-native {
