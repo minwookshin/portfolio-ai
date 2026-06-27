@@ -12,21 +12,23 @@ export default function MaterialArrowDownIcon({ className = "" }: MaterialArrowD
     >
       <path
         className="site-signal-tail"
-        d="M12 5v14"
+        d="M5 12h14"
         fill="none"
         pathLength={1}
         stroke="currentColor"
         strokeLinecap="round"
+        transform="rotate(90 12 12)"
         strokeWidth="2"
       />
       <path
         className="site-signal-head"
-        d="m6 13 6 6 6-6"
+        d="m13 6 6 6-6 6"
         fill="none"
         pathLength={1}
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
+        transform="rotate(90 12 12)"
         strokeWidth="2"
       />
     </svg>

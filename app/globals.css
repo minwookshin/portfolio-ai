@@ -571,6 +571,7 @@ button.home-row {
 
 .site-signal-icon--down {
   opacity: 0;
+  transform: translateY(-0.5px);
 }
 
 .home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon--right,
