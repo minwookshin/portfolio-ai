@@ -523,10 +523,6 @@ button.home-row {
   opacity: 0.68;
 }
 
-.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon {
-  transform: rotate(90deg);
-}
-
 .home-caret {
   position: absolute;
   inset: 0;
@@ -560,6 +556,7 @@ button.home-row {
 
 .site-signal-icon {
   display: block;
+  grid-area: 1 / 1;
   width: 16px;
   height: 16px;
   color: currentColor;
@@ -567,7 +564,23 @@ button.home-row {
   transform: rotate(0deg);
   transform-box: view-box;
   transform-origin: 50% 50%;
-  transition: transform 180ms var(--motion-ease-standard);
+  transition:
+    opacity 140ms var(--motion-ease-standard),
+    transform 180ms var(--motion-ease-standard);
+}
+
+.site-signal-icon--down {
+  opacity: 0;
+}
+
+.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon--right,
+.archive-year-details[open] > .archive-year .archive-caret .site-signal-icon--right {
+  opacity: 0;
+}
+
+.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon--down,
+.archive-year-details[open] > .archive-year .archive-caret .site-signal-icon--down {
+  opacity: 1;
 }
 
 .site-signal-tail,
@@ -592,6 +605,17 @@ button.home-row {
   background: currentColor;
   opacity: 0.42;
   transform: translateX(2px) scaleX(1);
+  visibility: visible;
+}
+
+.home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-bullet {
+  width: 6px;
+  height: 6px;
+  border-color: transparent;
+  border-radius: var(--md-shape-full);
+  background: currentColor;
+  opacity: 0.24;
+  transform: none;
   visibility: visible;
 }
 
@@ -842,9 +866,7 @@ button.home-row {
   }
 
   .home-node--section > .home-row:hover .home-bullet,
-  .home-node--section > .home-row:focus-visible .home-bullet,
-  .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-bullet,
-  .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-bullet {
+  .home-node--section > .home-row:focus-visible .home-bullet {
     width: 8px;
     height: 2px;
     border-color: transparent;
@@ -877,13 +899,13 @@ button.home-row {
 
   .home-node--section[open] > .home-row:hover > .home-bullet-cell > .home-bullet,
   .home-node--section[open] > .home-row:focus-visible > .home-bullet-cell > .home-bullet {
-    width: 8px;
-    height: 2px;
+    width: 6px;
+    height: 6px;
     border-color: transparent;
-    border-radius: 2px;
+    border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.42;
-    transform: translateX(2px) scaleX(1);
+    opacity: 0.24;
+    transform: none;
     visibility: visible;
   }
 
@@ -1044,8 +1066,7 @@ button.home-row {
     transform: translateX(2px);
   }
 
-  .home-node--section > .home-row:active .home-bullet,
-  .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
+  .home-node--section > .home-row:active .home-bullet {
     width: 8px;
     height: 2px;
     border-color: transparent;
@@ -1053,6 +1074,17 @@ button.home-row {
     background: currentColor;
     opacity: 0.42;
     transform: translateX(2px) scaleX(1);
+    visibility: visible;
+  }
+
+  .home-node--section[open] > .home-row:active > .home-bullet-cell > .home-bullet {
+    width: 6px;
+    height: 6px;
+    border-color: transparent;
+    border-radius: var(--md-shape-full);
+    background: currentColor;
+    opacity: 0.24;
+    transform: none;
     visibility: visible;
   }
 
@@ -2250,10 +2282,6 @@ button.home-row {
   opacity: 0.68;
 }
 
-.archive-year-details[open] > .archive-year .archive-caret .site-signal-icon {
-  transform: rotate(90deg);
-}
-
 .archive-caret {
   position: absolute;
   inset: 0;
@@ -2293,13 +2321,13 @@ button.home-row {
 }
 
 .archive-year-details[open] > .archive-year:focus-visible .archive-year-bullet {
-  width: 8px;
-  height: 2px;
+  width: 6px;
+  height: 6px;
   border-color: transparent;
-  border-radius: 2px;
+  border-radius: var(--md-shape-full);
   background: currentColor;
-  opacity: 0.42;
-  transform: translateX(2px) scaleX(1);
+  opacity: 0.24;
+  transform: none;
   visibility: visible;
 }
 
@@ -2485,9 +2513,7 @@ button.home-row {
   }
 
   .archive-year:hover .archive-year-bullet,
-  .archive-year:focus-visible .archive-year-bullet,
-  .archive-year-details[open] > .archive-year:hover .archive-year-bullet,
-  .archive-year-details[open] > .archive-year:focus-visible .archive-year-bullet {
+  .archive-year:focus-visible .archive-year-bullet {
     width: 8px;
     height: 2px;
     border-color: transparent;
@@ -2515,13 +2541,13 @@ button.home-row {
 
   .archive-year-details[open] > .archive-year:hover .archive-year-bullet,
   .archive-year-details[open] > .archive-year:focus-visible .archive-year-bullet {
-    width: 8px;
-    height: 2px;
+    width: 6px;
+    height: 6px;
     border-color: transparent;
-    border-radius: 2px;
+    border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.42;
-    transform: translateX(2px) scaleX(1);
+    opacity: 0.24;
+    transform: none;
     visibility: visible;
   }
 
@@ -2593,8 +2619,7 @@ button.home-row {
     stroke-dashoffset: 0;
   }
 
-  .archive-year:active .archive-year-bullet,
-  .archive-year-details[open] > .archive-year:active .archive-year-bullet {
+  .archive-year:active .archive-year-bullet {
     width: 8px;
     height: 2px;
     border-color: transparent;
@@ -2618,13 +2643,13 @@ button.home-row {
   }
 
   .archive-year-details[open] > .archive-year:active .archive-year-bullet {
-    width: 8px;
-    height: 2px;
+    width: 6px;
+    height: 6px;
     border-color: transparent;
-    border-radius: 2px;
+    border-radius: var(--md-shape-full);
     background: currentColor;
-    opacity: 0.42;
-    transform: translateX(2px) scaleX(1);
+    opacity: 0.24;
+    transform: none;
     visibility: visible;
   }
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MaterialArrowDownIcon from "@/components/MaterialArrowDownIcon";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import MaterialChevronRightIcon from "@/components/MaterialChevronRightIcon";
 
@@ -95,7 +96,8 @@ export default function ArchiveIndexPage({
                       <span className="archive-bullet-cell" aria-hidden="true">
                         <span className="archive-year-bullet" />
                         <span className="archive-caret">
-                          <MaterialArrowForwardIcon className="site-signal-icon" />
+                          <MaterialArrowForwardIcon className="site-signal-icon site-signal-icon--right" />
+                          <MaterialArrowDownIcon className="site-signal-icon site-signal-icon--down" />
                         </span>
                       </span>
                       <span className="archive-year-label">{year}</span>
