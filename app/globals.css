@@ -573,9 +573,12 @@ button.home-row {
 
 .site-signal-tail,
 .site-signal-head {
-  stroke-dasharray: 18;
-  stroke-dashoffset: 18;
-  transition: stroke-dashoffset 140ms var(--motion-ease-standard);
+  opacity: 0;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition:
+    opacity 80ms var(--motion-ease-standard),
+    stroke-dashoffset 140ms var(--motion-ease-standard);
 }
 
 .site-signal-head {
@@ -587,12 +590,9 @@ button.home-row {
 }
 
 .home-node--section > .home-row:focus-visible .home-bullet {
-  width: 12px;
-  height: 12px;
-  border-color: currentColor;
-  background: transparent;
-  opacity: 0.38;
-  transform: scale(1);
+  opacity: 0;
+  transform: scale(0.62);
+  visibility: hidden;
 }
 
 .home-node--section > .home-row:focus-visible .home-caret {
@@ -759,6 +759,12 @@ button.home-row {
     transform: scale(1.12);
   }
 
+  .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-bullet,
+  .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):focus-within .home-bullet {
+    opacity: 0.52;
+    transform: none;
+  }
+
   .home-row--link:not(.home-row--quiet-link):hover .home-bullet,
   .home-row--link:not(.home-row--quiet-link):focus-visible .home-bullet,
   .home-row--signal:hover .home-bullet,
@@ -787,6 +793,7 @@ button.home-row {
   .home-row--signal:hover .site-signal-head,
   .home-row--signal:focus-within .site-signal-tail,
   .home-row--signal:focus-within .site-signal-head {
+    opacity: 1;
     stroke-dashoffset: 0;
   }
 
@@ -798,12 +805,9 @@ button.home-row {
 
   .home-node--section > .home-row:hover .home-bullet,
   .home-node--section > .home-row:focus-visible .home-bullet {
-    width: 12px;
-    height: 12px;
-    border-color: currentColor;
-    background: transparent;
-    opacity: 0.38;
-    transform: scale(1);
+    opacity: 0;
+    transform: scale(0.62);
+    visibility: hidden;
   }
 
   .home-node--section > .home-row:hover .home-caret,
@@ -898,6 +902,7 @@ button.home-row {
   .home-row--link:not(.home-row--quiet-link):active .site-signal-head,
   .home-row--signal:active .site-signal-tail,
   .home-row--signal:active .site-signal-head {
+    opacity: 1;
     stroke-dashoffset: 0;
   }
 
@@ -907,13 +912,9 @@ button.home-row {
   }
 
   .home-node--section > .home-row:active .home-bullet {
-    width: 12px;
-    height: 12px;
-    border-color: currentColor;
-    background: transparent;
-    opacity: 0.38;
-    transform: scale(1);
-    visibility: visible;
+    opacity: 0;
+    transform: scale(0.62);
+    visibility: hidden;
   }
 
   .home-row:has(.home-mention) {
@@ -2080,12 +2081,9 @@ button.home-row {
 }
 
 .archive-year:focus-visible .archive-year-bullet {
-  width: 12px;
-  height: 12px;
-  border-color: currentColor;
-  background: transparent;
-  opacity: 0.38;
-  transform: scale(1);
+  opacity: 0;
+  transform: scale(0.62);
+  visibility: hidden;
 }
 
 .archive-year:focus-visible .archive-caret {
@@ -2217,6 +2215,7 @@ button.home-row {
   .archive-row:not(.archive-row--quiet):hover .site-signal-head,
   .archive-row:not(.archive-row--quiet):focus-visible .site-signal-tail,
   .archive-row:not(.archive-row--quiet):focus-visible .site-signal-head {
+    opacity: 1;
     stroke-dashoffset: 0;
   }
 
@@ -2239,12 +2238,9 @@ button.home-row {
   }
 
   .archive-year:hover .archive-year-bullet {
-    width: 12px;
-    height: 12px;
-    border-color: currentColor;
-    background: transparent;
-    opacity: 0.38;
-    transform: scale(1);
+    opacity: 0;
+    transform: scale(0.62);
+    visibility: hidden;
   }
 
   .archive-year:hover .archive-caret {
@@ -2294,6 +2290,7 @@ button.home-row {
 
   .archive-row:not(.archive-row--quiet):active .site-signal-tail,
   .archive-row:not(.archive-row--quiet):active .site-signal-head {
+    opacity: 1;
     stroke-dashoffset: 0;
   }
 
