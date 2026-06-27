@@ -67,7 +67,7 @@
 - Success: project sheets open with clear context and dismiss controls; profile/contact details stay available on the main page.
 - Disabled: coming-soon Atlas announces unavailable state.
 - Offline/slow network, if applicable: image/video loading should degrade to static project text.
-- Hover/focus grammar: internal links draw the side-facing Material arrow; expandable sections use the same arrow family rotated downward when open; quiet note rows keep dot-only feedback; contact chips use glass-only hover with no cursor absorption. Rich video/live interaction belongs in detail proof bento surfaces, not the homepage index.
+- Hover/focus grammar: internal links draw the side-facing Material arrow; expandable sections use the same arrow family rotated downward when open; quiet note rows keep dot-only feedback; action/contact chips use glass hover plus cursor coupling. Rich video/live interaction belongs in detail proof bento surfaces, not the homepage index.
 
 ## Content voice
 - Tone: concise, editorial, concrete.

@@ -22,8 +22,6 @@ const INTERACTIVE_SELECTOR = [
   ".lab-loop-panel__control",
 ].join(",");
 
-const QUIET_INTERACTIVE_SELECTOR = ".home-mention";
-
 const NATIVE_CURSOR_SELECTOR = [
   "input:not([type='button']):not([type='submit']):not([type='reset'])",
   "textarea",
@@ -95,11 +93,7 @@ export default function CustomCursor() {
       setNativeMode(isNative);
 
       if (!isNative) {
-        const isQuietInteractive = Boolean(target.closest(QUIET_INTERACTIVE_SELECTOR));
-        cursor.classList.toggle(
-          "is-interactive",
-          !isQuietInteractive && Boolean(target.closest(INTERACTIVE_SELECTOR)),
-        );
+        cursor.classList.toggle("is-interactive", Boolean(target.closest(INTERACTIVE_SELECTOR)));
       }
     };
 

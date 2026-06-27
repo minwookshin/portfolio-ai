@@ -108,7 +108,7 @@ export const DESIGN_SYSTEM_TOKENS = {
     { role: "default", value: "none", usage: "the product relies on spacing, type, and hairlines instead of decorative shadows" },
     {
       role: "cursor",
-      value: "18px low-opacity multiply DOM circle; 28px only on non-chip interactive targets",
+      value: "18px low-opacity multiply DOM circle; 28px on interactive rows and glass action chips",
       usage: "fine-pointer cursor affordance, not layout surface decoration",
     },
   ],
