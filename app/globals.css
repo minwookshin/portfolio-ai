@@ -534,8 +534,8 @@ button.home-row {
   background: currentColor;
   opacity: 0.42;
   transition:
-    opacity 140ms var(--motion-ease-standard),
-    transform 140ms var(--motion-ease-standard),
+    opacity 160ms var(--motion-ease-standard),
+    transform 180ms var(--motion-ease-standard),
     width 220ms var(--motion-ease-standard),
     height 220ms var(--motion-ease-standard),
     background-color 220ms var(--motion-ease-standard),
@@ -717,17 +717,20 @@ button.home-row {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .home-row:hover .home-bullet {
-    opacity: 0.58;
-    transform: scale(1.08);
+  .home-row:hover .home-bullet,
+  .home-row[data-liquid-glass-active="true"] .home-bullet {
+    opacity: 0.7;
+    transform: scale(1.32);
   }
 
-  .home-node--section > .home-row:hover .home-bullet {
+  .home-node--section > .home-row:hover .home-bullet,
+  .home-node--section > .home-row[data-liquid-glass-active="true"] .home-bullet {
     opacity: 0;
     visibility: hidden;
   }
 
-  .home-node--section > .home-row:hover .home-caret {
+  .home-node--section > .home-row:hover .home-caret,
+  .home-node--section > .home-row[data-liquid-glass-active="true"] .home-caret {
     opacity: 1;
     visibility: visible;
   }
@@ -1913,8 +1916,8 @@ button.home-row {
   background: currentColor;
   opacity: 0.42;
   transition:
-    opacity 140ms var(--motion-ease-standard),
-    transform 140ms var(--motion-ease-standard);
+    opacity 160ms var(--motion-ease-standard),
+    transform 180ms var(--motion-ease-standard);
 }
 
 .archive-year-label {
@@ -2001,9 +2004,10 @@ button.home-row {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .archive-row:hover .archive-row-bullet {
-    opacity: 0.58;
-    transform: scale(1.08);
+  .archive-row:hover .archive-row-bullet,
+  .archive-row[data-liquid-glass-active="true"] .archive-row-bullet {
+    opacity: 0.7;
+    transform: scale(1.32);
   }
 
   .archive-year:hover .archive-year-bullet {
