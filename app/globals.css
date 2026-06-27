@@ -867,14 +867,16 @@ button.home-row {
   transform: translateY(var(--signal-down-optical-y)) rotate(90deg);
 }
 
-.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon--right,
 .archive-year-details[open] > .archive-year .archive-caret .site-signal-icon--right {
   opacity: 0;
 }
 
-.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon--down,
 .archive-year-details[open] > .archive-year .archive-caret .site-signal-icon--down {
   opacity: 1;
+}
+
+.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon--section {
+  transform: translateY(var(--signal-down-optical-y)) rotate(90deg);
 }
 
 .site-signal-tail,

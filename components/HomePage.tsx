@@ -414,8 +414,7 @@ function HomeBulletCell({
       <span className={`home-bullet home-bullet--${bulletVariant}`} />
       {section && (
         <span className="home-caret" aria-hidden="true">
-          <MaterialArrowForwardIcon className="site-signal-icon site-signal-icon--right" />
-          <MaterialArrowForwardIcon className="site-signal-icon site-signal-icon--down" />
+          <MaterialArrowForwardIcon className="site-signal-icon site-signal-icon--section" />
         </span>
       )}
       {signal && !section && (
