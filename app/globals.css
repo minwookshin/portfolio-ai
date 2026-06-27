@@ -523,10 +523,6 @@ button.home-row {
   opacity: 0.68;
 }
 
-.home-node--section[open] > .home-row > .home-bullet-cell > .home-caret .site-signal-icon {
-  transform: rotate(90deg);
-}
-
 .home-caret {
   position: absolute;
   inset: 0;
@@ -2248,10 +2244,6 @@ button.home-row {
   border-color: transparent;
   background: currentColor;
   opacity: 0.68;
-}
-
-.archive-year-details[open] > .archive-year .archive-caret .site-signal-icon {
-  transform: rotate(90deg);
 }
 
 .archive-caret {
