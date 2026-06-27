@@ -5,6 +5,7 @@ export const DESIGN_SYSTEM_PATHS = {
   markdown: "/design-system.md",
   tokens: "/design-system/tokens.json",
   portfolioAi: "/work/portfolio-ai",
+  interactions: "/interactions",
 } as const;
 
 export const DESIGN_SYSTEM_PROOF = {
@@ -16,6 +17,7 @@ export const DESIGN_SYSTEM_PROOF = {
     "app/globals.css",
     "lib/material/motion.ts",
     "components/HomePage.tsx",
+    "components/InteractionsPage.tsx",
     "components/ArchiveIndexPage.tsx",
     "components/CustomCursor.tsx",
     "components/MaterialArrowForwardIcon.tsx",
@@ -96,6 +98,8 @@ export const DESIGN_SYSTEM_TOKENS = {
     { role: "icon.arrow", cssVariable: "--signal-icon-size", value: "16px", usage: "Material arrow frame with optical centering" },
     { role: "stroke.inline", cssVariable: "--signal-stroke-inline", value: "8px", usage: "dot-to-stroke hover mark width before arrow intent" },
     { role: "stroke.block", cssVariable: "--signal-stroke-block", value: "2px", usage: "dot-to-stroke hover mark height before arrow intent" },
+    { role: "glassChip.block", cssVariable: "--glass-chip-min-block", value: "26px", usage: "compact glass chip height for all work, all notes, contact links, and interaction demos" },
+    { role: "glassChip.inline", cssVariable: "--glass-chip-padding-inline", value: "9px", usage: "horizontal spacing for compact glass chips and archive action links" },
     { role: "opacity.rest", cssVariable: "--signal-opacity-rest", value: "0.42", usage: "default filled dot and short stroke opacity" },
     { role: "opacity.open", cssVariable: "--signal-opacity-open", value: "0.68", usage: "resting open-section filled dot opacity" },
     { role: "opacity.arrow", cssVariable: "--signal-opacity-arrow", value: "0.74", usage: "Material arrow hover/focus/press opacity" },
@@ -172,6 +176,11 @@ export const DESIGN_SYSTEM_COMPONENTS = [
     name: "cards and surfaces",
     description: "Surfaces are reserved for media, code, native video playback, and functional controls; document structure relies on bullets and spacing.",
     primitives: ["media frame", "code block", "native video controls", "status block"],
+  },
+  {
+    name: "live interaction OS",
+    description: "A contained /interactions proof grid for the portfolio's dot, arrow, glass, cursor, command, route, and Atlas capacity systems.",
+    primitives: ["dot-to-arrow tile", "glass chip tile", "command lens tile", "cursor tile", "route transition tile", "capacity state tile"],
   },
   {
     name: "machine-readable proof blocks",

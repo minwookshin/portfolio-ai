@@ -14,10 +14,11 @@ Case study: https://www.minwookshin.com/work/portfolio-ai
 
 ## Main Surfaces
 
-- `/` - work, studies, contact, and AI intake
+- `/` - outline OS for work, notes, contact, and AI intake
 - `/work` - work index
 - `/work/[slug]` - project case studies
-- `/studies` - interaction studies, prototypes, and writing
+- `/studies` - interaction-study archive
+- `/interactions` - live interaction OS proof grid
 - `/api/chat` - streaming Gemini assistant endpoint
 - `/portfolio.md` - AI-readable portfolio summary
 - `/hiring.md` - recruiter-facing hiring brief with target roles, availability, proof points, and evaluation hints

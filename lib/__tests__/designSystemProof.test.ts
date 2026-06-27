@@ -13,6 +13,7 @@ describe("design system proof", () => {
       markdown: "/design-system.md",
       tokens: "/design-system/tokens.json",
       portfolioAi: "/work/portfolio-ai",
+      interactions: "/interactions",
     });
   });
 
@@ -35,7 +36,9 @@ describe("design system proof", () => {
         expect.objectContaining({ role: "motion.draw", cssVariable: "--signal-draw-duration", value: "140ms" }),
       ]),
     );
-    expect(DESIGN_SYSTEM_COMPONENTS.map((component) => component.name)).toContain("ai chat and recruiter intake");
+    expect(DESIGN_SYSTEM_COMPONENTS.map((component) => component.name)).toEqual(
+      expect.arrayContaining(["ai chat and recruiter intake", "live interaction OS"]),
+    );
   });
 
   it("generates an AI-readable markdown contract", () => {
