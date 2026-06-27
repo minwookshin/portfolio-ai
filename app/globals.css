@@ -336,7 +336,7 @@ body::after {
   width: 100%;
   max-width: 1180px;
   margin: 0 auto;
-  padding: 132px 32px 200px;
+  padding: 132px 32px;
   background: var(--bg-base);
 }
 
@@ -641,13 +641,21 @@ button.home-row {
 }
 
 .home-mention {
+  position: relative;
   display: inline-flex;
   min-height: 24px;
   align-items: center;
+  overflow: hidden;
   padding: 0 7px;
   border: 1px solid #f4f4f6;
-  border-radius: var(--md-shape-sm);
-  background: linear-gradient(180deg, #fff, #fafafa);
+  border-radius: 16px;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 255, 255, 0.2),
+      transparent 58%
+    ),
+    linear-gradient(180deg, #fff, #fafafa);
   box-shadow:
     inset 0 2px 4px 0 #fff,
     inset 0 -4px 4px 0 hsla(0, 0%, 100%, 0.5),
@@ -657,8 +665,6 @@ button.home-row {
     0 11px 28px -10px rgba(53, 53, 79, 0.1);
   color: inherit;
   text-decoration: none;
-  -webkit-backdrop-filter: blur(10px) saturate(1.08);
-  backdrop-filter: blur(10px) saturate(1.08);
   transition:
     background-color var(--motion-duration-instant) var(--motion-ease-standard),
     border-color var(--motion-duration-instant) var(--motion-ease-standard),
@@ -671,6 +677,11 @@ button.home-row {
   .home-mention {
     border-color: color(display-p3 0.9554 0.9554 0.9646);
     background:
+      radial-gradient(
+        circle at 50% 50%,
+        color(display-p3 1 1 1 / 0.2),
+        transparent 58%
+      ),
       linear-gradient(
         180deg,
         color(display-p3 1 1 1),
@@ -687,7 +698,7 @@ button.home-row {
 }
 
 .home-footer {
-  margin-top: 56px;
+  margin-top: 132px;
   margin-left: 30px;
   color: var(--text-muted);
   font-size: var(--type-row);
@@ -749,14 +760,7 @@ button.home-row {
   }
 
   .home-mention:hover {
-    border-color: #ececf2;
-    box-shadow:
-      inset 0 2px 4px 0 #fff,
-      inset 0 -4px 4px 0 hsla(0, 0%, 100%, 0.58),
-      inset 0 -4px 16px 0 #fff,
-      inset 0 4px 10px 0 hsla(240, 3%, 45%, 0.08),
-      0 5px 16px -10px rgba(53, 53, 79, 0.42),
-      0 13px 30px -10px rgba(53, 53, 79, 0.12);
+    border-color: #f4f4f6;
     color: var(--text-primary);
     transform: translateY(-0.5px);
   }
@@ -764,11 +768,15 @@ button.home-row {
 
 @media (max-width: 720px) {
   .home-doc-shell {
-    padding: 108px 24px 160px;
+    padding: 108px 24px;
   }
 
   .home-doc-title {
     font-size: var(--type-title-mobile);
+  }
+
+  .home-footer {
+    margin-top: 108px;
   }
 
 }

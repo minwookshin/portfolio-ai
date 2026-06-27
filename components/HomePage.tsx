@@ -617,7 +617,7 @@ function HomeDocument({
         </HomeOutlineSection>
 
         <motion.footer variants={landingRevealItem} className="home-footer">
-          © 2026 minwook shin.
+          © 2026 minwook shin
         </motion.footer>
       </motion.div>
     </motion.section>
