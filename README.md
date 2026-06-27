@@ -1,6 +1,6 @@
 # minwook shin
 
-AI-native portfolio and recruiter intake site for Minwook Shin. The site combines selected work, case studies, interaction studies, a Gemini-powered assistant, and public machine-readable proof routes.
+AI-native portfolio and recruiter intake site for Minwook Shin. The site combines work, case studies, interaction studies, a Gemini-powered assistant, and public machine-readable proof routes.
 
 Live: https://www.minwookshin.com
 Case study: https://www.minwookshin.com/work/portfolio-ai
@@ -14,8 +14,8 @@ Case study: https://www.minwookshin.com/work/portfolio-ai
 
 ## Main Surfaces
 
-- `/` - selected work, studies, contact, and AI intake
-- `/work` - selected work index
+- `/` - work, studies, contact, and AI intake
+- `/work` - work index
 - `/work/[slug]` - project case studies
 - `/studies` - interaction studies, prototypes, and writing
 - `/api/chat` - streaming Gemini assistant endpoint

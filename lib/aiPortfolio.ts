@@ -106,7 +106,7 @@ export function generateLlmsTxt() {
     "",
     "## Core URLs",
     linkLine("Homepage", absoluteUrl("/"), "profile, contact, selected navigation"),
-    linkLine("Selected work", absoluteUrl("/work"), "main project index"),
+    linkLine("Work", absoluteUrl("/work"), "main project index"),
     linkLine("Interaction systems", absoluteUrl("/studies"), "motion, cursor, hover, route, and AI loop studies"),
     linkLine("Notes", absoluteUrl("/notes"), "writing and practice notes"),
     linkLine("Hiring brief", absoluteUrl("/hiring.md"), "recruiter-facing role, availability, proof, and evaluation hints"),
@@ -216,7 +216,7 @@ export function generatePortfolioMarkdown() {
     ...getWorkMarkdownSlugs().map((slug) => `- Work Markdown: ${absoluteUrl(`/work/${slug}.md`)}`),
     ...getStudyMarkdownSlugs().map((slug) => `- Study Markdown: ${absoluteUrl(`/studies/${slug}.md`)}`),
     "",
-    "## Selected work",
+    "## Work",
     "### Project proof matrix",
     ...selectedWork.flatMap((project) => [
       `- ${project.title}: ${projectProofSignals(project).map((signal) => `${signal.label}=${signal.value}`).join("; ")}`,
@@ -284,7 +284,7 @@ export function generateHiringMarkdown() {
     `- Design system markdown: ${absoluteUrl(DESIGN_SYSTEM_PATHS.markdown)}`,
     `- Design tokens JSON: ${absoluteUrl(DESIGN_SYSTEM_PATHS.tokens)}`,
     "",
-    "## Selected work",
+    "## Work",
     ...selectedWork.slice(0, 6).flatMap((project) => projectSection(project, getProjectPath(project))),
     "",
     "## Contact",
@@ -568,7 +568,7 @@ function projectType(project: PortfolioProject) {
   if (project.comingSoon) return "in-preparation work";
   if (project.labStudy) return "interaction study";
   if (isLabProject(project)) return "prototype";
-  return "selected work";
+  return "work";
 }
 
 function studyType(project: PortfolioProject) {

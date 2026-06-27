@@ -91,7 +91,7 @@ export const DESIGN_SYSTEM_TOKENS = {
     { role: "cell.inline", cssVariable: "--signal-cell-inline", value: "18px", usage: "fixed bullet/caret cell width for home, archive, and detail outlines" },
     { role: "cell.block", cssVariable: "--signal-cell-block", value: "24px", usage: "resting bullet/caret cell height on fine pointers" },
     { role: "dot.default", cssVariable: "--signal-dot-size", value: "6px", usage: "default filled outline dot and open-section resting dot" },
-    { role: "dot.work", cssVariable: "--signal-dot-size-work", value: "6px", usage: "selected-work homepage row dot, kept aligned with the global signal dot" },
+    { role: "dot.work", cssVariable: "--signal-dot-size-work", value: "6px", usage: "work homepage row dot, kept aligned with the global signal dot" },
     { role: "dot.hollow", cssVariable: "--signal-dot-size-hollow", value: "6px", usage: "archive and detail section hollow dots" },
     { role: "dot.homeSection", cssVariable: "--signal-dot-size-section", value: "6px", usage: "homepage expandable section hollow dots" },
     { role: "dot.border", cssVariable: "--signal-border-hollow", value: "1px", usage: "hollow section circle border" },

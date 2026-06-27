@@ -11,7 +11,7 @@ import {
 } from "@/data/projects";
 import { absoluteUrl, collectionPageJsonLd, workCollectionItems } from "@/lib/seo";
 
-const description = "Selected work by Minwook Shin across AI-native products, interfaces, and working software.";
+const description = "Work by Minwook Shin across AI-native products, interfaces, and working software.";
 const url = absoluteUrl("/work");
 
 export const metadata: Metadata = {
@@ -75,7 +75,7 @@ export default function WorkPage() {
         data={collectionPageJsonLd({
           description,
           items: workCollectionItems(),
-          name: "Selected work by Minwook Shin",
+          name: "Work by Minwook Shin",
           url,
         })}
       />

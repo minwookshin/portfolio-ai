@@ -826,7 +826,7 @@ function HomeDocument({
           count={projects.length}
           defaultOpen={activeSection === "work"}
           sectionId="work"
-          title="selected work"
+          title="work"
         >
           <WorkSection projects={projects} />
           <HomeLeafRow signal>
@@ -1084,7 +1084,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         title: "view work",
         meta: "proof log",
         group: "navigate",
-        keywords: ["projects", "archive", "selected work"],
+        keywords: ["projects", "archive", "work"],
         icon: <Briefcase />,
         action: () => {
           setHasStarted(false);
