@@ -11,8 +11,21 @@ export default function MaterialArrowForwardIcon({ className = "" }: MaterialArr
       viewBox="0 0 24 24"
     >
       <path
-        d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
-        fill="currentColor"
+        className="site-signal-tail"
+        d="M5 12h14"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="2"
+      />
+      <path
+        className="site-signal-head"
+        d="m13 6 6 6-6 6"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
       />
     </svg>
   );

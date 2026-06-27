@@ -134,8 +134,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "quiet outline signals",
-    description: "Hover and focus feedback stay inside the bullet cell: dots clarify into Material signal icons while row text remains fixed.",
-    primitives: ["Material arrow signal", "section caret", "bullet cell", "quiet color state"],
+    description: "Hover and focus feedback stay inside the bullet cell: internal links draw a small Material arrow, sections bloom into a caret, and notes keep a quieter dot state while row text remains fixed.",
+    primitives: ["drawn Material arrow signal", "section dot bloom", "section caret", "quiet note dot", "bullet cell"],
   },
   {
     name: "detail outline",
@@ -149,8 +149,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "buttons and links",
-    description: "Plain text links for reading flow, glass action chips for explicit click targets, tiny glint hover, focus-visible outlines, and quiet press feedback.",
-    primitives: ["micro link", "glass action chip", "chip glint", "lateral link", "focus ring", "pressable row"],
+    description: "Plain text links for reading flow, lifted glass action chips for explicit click targets, focus-visible outlines, and quiet press feedback.",
+    primitives: ["micro link", "lifted glass action chip", "lateral link", "focus ring", "pressable row"],
   },
   {
     name: "cards and surfaces",
@@ -169,7 +169,7 @@ export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Hide section counts once a section is open so the visible content is the proof.",
   "Use section carets only inside the bullet cell so caret and dot never overlap.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
-  "Use chip glint sparingly for explicit click targets; avoid applying it to outline rows or reading links.",
+  "Use signal families consistently: internal links draw arrows, sections bloom into carets, notes keep dot-only feedback, and contact chips use lift plus cursor coupling.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",

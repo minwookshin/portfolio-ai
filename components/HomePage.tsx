@@ -493,9 +493,9 @@ function StudyTextRow({
       >
         <Link
           href={item.href}
-          className="home-row home-row--link micro-focus micro-focus-tight micro-pressable"
+          className="home-row home-row--link home-row--quiet-link micro-focus micro-focus-tight micro-pressable"
         >
-          <HomeBulletCell signal variant={item.kind === "lab" ? "system" : "note"} />
+          <HomeBulletCell variant={item.kind === "lab" ? "system" : "note"} />
           <span className="home-label project-row-copy">
             <span className="project-row-title-line--lateral font-normal">
               {item.title}
@@ -599,19 +599,19 @@ function HomeDocument({
         </HomeOutlineSection>
 
         <HomeOutlineSection count={5} defaultOpen title="contact">
-          <HomeLeafRow signal>
+          <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.linkedin} external>linkedin.com/in/minwookshin</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow signal>
+          <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.github} external>github.com/minwookshin</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow signal>
+          <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.x} external>x.com/FakeMinwook</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow signal>
+          <HomeLeafRow>
             <HomeMetaLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</HomeMetaLink>
           </HomeLeafRow>
-          <HomeLeafRow signal>
+          <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.resume}>resume</HomeMetaLink>
           </HomeLeafRow>
         </HomeOutlineSection>

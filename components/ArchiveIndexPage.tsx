@@ -60,10 +60,12 @@ export default function ArchiveIndexPage({
 }: ArchiveIndexPageProps) {
   const totalCount = sections.reduce((count, section) => count + section.entries.length, 0);
   const entries = sections.flatMap((section) => section.entries);
+  const archiveKind = itemLabel === "notes" ? "notes" : itemLabel === "systems" ? "systems" : "work";
+  const rowUsesSignal = archiveKind !== "notes";
 
   return (
     <main className="site-lowercase archive-page-shell">
-      <article className="archive-page" aria-labelledby="archive-title">
+      <article className="archive-page" data-archive-kind={archiveKind} aria-labelledby="archive-title">
           <nav className="archive-nav" aria-label="archive navigation">
             <Link href="/" className="archive-nav-link">
               <MaterialChevronRightIcon className="site-back-icon" />
@@ -105,13 +107,15 @@ export default function ArchiveIndexPage({
                         <li key={entry.id} className="archive-item">
                           <Link
                             href={entry.href}
-                            className="archive-row micro-focus micro-focus-tight"
+                            className={`archive-row${rowUsesSignal ? "" : " archive-row--quiet"} micro-focus micro-focus-tight`}
                           >
                             <span className="archive-bullet-cell" aria-hidden="true">
                               <span className="archive-row-bullet" />
-                              <span className="archive-row-signal">
-                                <MaterialArrowForwardIcon className="site-signal-icon" />
-                              </span>
+                              {rowUsesSignal && (
+                                <span className="archive-row-signal">
+                                  <MaterialArrowForwardIcon className="site-signal-icon" />
+                                </span>
+                              )}
                             </span>
                             <span className="archive-row-title">{entry.title}</span>
                             {entry.description && (
