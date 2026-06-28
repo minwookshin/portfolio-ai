@@ -77,17 +77,19 @@ function AtlasTile({
   caption,
   children,
   className = "",
+  id,
   label,
   title,
 }: {
   caption: string;
   children: React.ReactNode;
   className?: string;
+  id?: string;
   label?: string;
   title: string;
 }) {
   return (
-    <article className={`atlas-proof-tile ${className}`}>
+    <article id={id} className={`atlas-proof-tile ${className}`}>
       <div className="atlas-proof-tile__body">{children}</div>
       <div className="atlas-proof-tile__copy">
         <p className="atlas-proof-tile__title">
@@ -264,10 +266,11 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
         ))}
       </dl>
 
-      <section className="atlas-proof-section">
+      <section id="atlas-proof-bento" className="atlas-proof-section">
         <DetailOutlineHeading heading="proof bento grid" eyebrow={project.builder.status.label} />
         <div className="atlas-proof-grid">
           <AtlasTile
+            id="atlas-triage-map"
             title="triage map"
             label="incident command flow"
             caption="A screenshot sequence showing how field, command, and receiving surfaces shared the same emergency picture."
@@ -277,6 +280,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           </AtlasTile>
 
           <AtlasTile
+            id="atlas-capacity-state"
             title="capacity state"
             label="live interaction"
             caption="A small state model for hospital load, available beds, priority, and routing action."
@@ -286,6 +290,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           </AtlasTile>
 
           <AtlasTile
+            id="atlas-patient-detail"
             title="patient detail"
             label="scan density"
             caption="Dense patient data is grouped by role so responders and ER staff can scan different slices of the same state."
@@ -294,6 +299,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           </AtlasTile>
 
           <AtlasTile
+            id="atlas-event-contract"
             title="event contract"
             label="code artifact"
             caption="The prototype needed a shared vocabulary before the app surfaces could feel connected."
@@ -303,6 +309,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           </AtlasTile>
 
           <AtlasTile
+            id="atlas-motion-rule"
             title="motion rule"
             label="live interaction"
             caption="Emergency UI motion should confirm change, then get out of the way."
@@ -311,6 +318,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           </AtlasTile>
 
           <AtlasTile
+            id="atlas-decision-log"
             title="decision log"
             label="context"
             caption="The hiring-readable layer: role, constraint, decision, and result without turning the page into a long essay."
@@ -320,7 +328,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
         </div>
       </section>
 
-      <section className="detail-outline-section">
+      <section id="atlas-reflection" className="detail-outline-section">
         <DetailOutlineHeading heading="short reflection" />
         <div className="detail-outline-list">
           {ATLAS_REFLECTION.map((line) => (

@@ -37,6 +37,9 @@ export default function ChatInput({
 }: ChatInputProps) {
   const reduceMotion = useReducedMotion();
   const activeMotion = reduceMotion ? tweens.none : tweens.slow;
+  const inputRevealMotion = reduceMotion
+    ? tweens.none
+    : { type: "tween" as const, duration: 0.14, ease: [0.22, 1, 0.36, 1] as const };
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -140,8 +143,8 @@ export default function ChatInput({
       <motion.div
         className="fixed z-[80] inset-x-0 bottom-6 mx-auto w-full max-w-[700px] px-4 flex min-w-0 items-center justify-center gap-2"
         initial={false}
-        animate={{ opacity: introReady ? 1 : 0, y: reduceMotion ? 0 : introReady ? 0 : 36 }}
-        transition={activeMotion}
+        animate={{ opacity: introReady ? 1 : 0 }}
+        transition={inputRevealMotion}
         style={{ pointerEvents: introReady ? undefined : "none" }}
       >
         {/* Close (esc) - OUTSIDE the textbox, slides out from behind the bar */}

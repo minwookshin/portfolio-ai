@@ -50,8 +50,8 @@ export const DESIGN_SYSTEM_TOKENS = {
   ],
   typography: {
     families: [
-      { role: "sans", cssVariable: "--font-sans", value: "Switzer, Helvetica Neue, Arial, sans-serif" },
-      { role: "mono", cssVariable: "--font-mono", value: "Geist Mono, SF Mono, monospace" },
+      { role: "sans", cssVariable: "--font-sans", value: "Geist, Helvetica Neue, Arial, sans-serif", usage: "body copy, section titles, and primary reading text" },
+      { role: "mono", cssVariable: "--font-mono", value: "Geist Mono, SF Mono, monospace", usage: "metadata, command labels, and code/system artifacts" },
     ],
     scale: [
       { role: "caption", cssVariable: "--type--2", value: "0.64rem" },
@@ -59,6 +59,10 @@ export const DESIGN_SYSTEM_TOKENS = {
       { role: "body", cssVariable: "--type-0", value: "1rem" },
       { role: "bodyLarge", cssVariable: "--type-3", value: "1.125rem" },
       { role: "displaySmall", cssVariable: "--type-4", value: "1.25rem" },
+      { role: "roleSmall", cssVariable: "--type-small", value: "calc(var(--type-0) - 1px)" },
+      { role: "roleCaption", cssVariable: "--type-caption", value: "calc(var(--type-0) - 2px)" },
+      { role: "roleCaptionTight", cssVariable: "--type-caption-tight", value: "calc(var(--type-0) - 3px)" },
+      { role: "roleMicroTight", cssVariable: "--type-micro-tight", value: "calc(var(--type-0) - 4px)" },
     ],
     lineHeight: [
       { role: "body", cssVariable: "--leading-body", value: "1.55" },
@@ -96,8 +100,11 @@ export const DESIGN_SYSTEM_TOKENS = {
     { role: "icon.arrow", cssVariable: "--signal-icon-size", value: "16px", usage: "Material arrow frame with optical centering" },
     { role: "stroke.inline", cssVariable: "--signal-stroke-inline", value: "8px", usage: "dot-to-stroke hover mark width before arrow intent" },
     { role: "stroke.block", cssVariable: "--signal-stroke-block", value: "2px", usage: "dot-to-stroke hover mark height before arrow intent" },
-    { role: "glassChip.block", cssVariable: "--glass-chip-min-block", value: "26px", usage: "compact glass chip height for all work, all notes, contact links, and interaction demos" },
-    { role: "glassChip.inline", cssVariable: "--glass-chip-padding-inline", value: "9px", usage: "horizontal spacing for compact glass chips and archive action links" },
+    { role: "glassChip.block", cssVariable: "--glass-chip-min-block", value: "24px", usage: "compact action chip layout height so contact rows keep the outline rhythm" },
+    { role: "glassChip.visualBlock", cssVariable: "--glass-chip-visual-block", value: "36px", usage: "larger Nelson-style hover glass surface centered around action chip text" },
+    { role: "glassChip.inline", cssVariable: "--glass-chip-padding-inline", value: "12px", usage: "horizontal glass overhang around action text without shifting the resting text alignment" },
+    { role: "glassChip.radius", cssVariable: "--glass-chip-radius", value: "12px", usage: "keeps the larger glass chip precise instead of fully pill-shaped" },
+    { role: "glassChip.type", cssVariable: "--glass-chip-font-size", value: "inherit", usage: "keeps action chips optically aligned with homepage row text" },
     { role: "opacity.rest", cssVariable: "--signal-opacity-rest", value: "0.42", usage: "default filled dot and short stroke opacity" },
     { role: "opacity.open", cssVariable: "--signal-opacity-open", value: "0.68", usage: "resting open-section filled dot opacity" },
     { role: "opacity.arrow", cssVariable: "--signal-opacity-arrow", value: "0.74", usage: "Material arrow hover/focus/press opacity" },
@@ -152,8 +159,8 @@ export const DESIGN_SYSTEM_COMPONENTS = [
   },
   {
     name: "quiet outline signals",
-    description: "Hover and focus feedback starts inside the bullet cell, then gives nearby text a restrained 2px nudge: links use the small side-facing Material arrow, open sections switch to that same arrow rotated downward, section dots become a short leading stroke, and notes keep a quieter dot state.",
-    primitives: ["drawn Material arrow signal", "section dot-to-arrow signal", "quiet note dot", "bullet cell"],
+    description: "Hover and focus feedback starts inside the bullet cell, then gives nearby text a restrained 2px nudge: links and clickable note rows use the small side-facing Material arrow, open sections switch to that same arrow rotated downward, and section dots become a short leading stroke.",
+    primitives: ["drawn Material arrow signal", "section dot-to-arrow signal", "clickable note signal", "bullet cell"],
   },
   {
     name: "detail outline",
@@ -188,7 +195,8 @@ export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Keep open sections and open archive years on a stable filled dot at rest; when interacted with, hide the dot and rotate the same side-facing Material arrow downward so the signal does not read like a combined glyph.",
   "Use section arrows only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
-  "Use signal families consistently: internal links draw the side-facing Material arrow, open section rows rotate that same arrow downward, section dots stay quiet or become short strokes by state, notes keep dot-only feedback, and contact chips use lateral nudge plus cursor coupling.",
+  "Use Geist Mono for metadata, code/system artifacts, and Command-K small labels; keep homepage action chips, body copy, and section labels in Geist Sans.",
+  "Use signal families consistently: internal links and clickable note rows draw the side-facing Material arrow, open section rows rotate that same arrow downward, section dots stay quiet or become short strokes by state, and contact chips use lateral nudge plus cursor coupling.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",
   "Provide static image or text fallbacks for media previews and reduced-motion users.",

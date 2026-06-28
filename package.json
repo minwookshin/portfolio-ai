@@ -33,7 +33,6 @@
     "yaml": "2.9.0"
   },
   "dependencies": {
-    "@carrot-kpi/switzer-font": "^0.1.0",
     "@google/generative-ai": "^0.24.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",

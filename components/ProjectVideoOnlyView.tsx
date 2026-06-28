@@ -37,7 +37,7 @@ export default function ProjectVideoOnlyView({ project }: { project: PortfolioPr
         preload="metadata"
         poster={makeVideoPosterDataUrl(project.title)}
         className="studio-video-only-media"
-        videoClassName="h-full w-full object-contain"
+        videoClassName="block h-auto w-full object-contain"
       />
     </motion.section>
   );

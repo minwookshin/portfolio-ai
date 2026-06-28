@@ -2,7 +2,7 @@
 
 ## Source of truth
 - Status: Active
-- Last refreshed: 2026-06-27
+- Last refreshed: 2026-06-28
 - Primary product surfaces: portfolio homepage, command palette, work browsing, notes browsing, studies archive, project detail pages, main-page profile/contact block.
 - Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/interactions/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/InteractionsPage.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Work & Co work/case-study references, Pentagram work/case-study references, Instrument homepage/work pattern, Fantasy homepage positioning, Metalab project-first work grid, Clay outcome/category work index, BASIC/DEPT case-study archive, Huge work index, NN/g UX portfolio and grid guidance, Awwwards project-page collection, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
@@ -22,7 +22,7 @@
 - Key contexts of use: desktop portfolio review, mobile link click, recruiter/client scan, live conversation during outreach.
 
 ## Information architecture
-- Primary navigation: minimal header identity plus inline outline sections: `today`, `work`, `notes`, and `contact`; command palette acts as the OS-like utility/search layer. Archive routes (`/work`, `/notes`, `/studies`) extend the same outline language by year. `/interactions` exists only as an unlinked local draft until the visual direction is ready, and production keeps it unavailable unless explicitly enabled.
+- Primary navigation: minimal header identity plus inline outline sections: `today`, `work`, `notes`, and `contact`; Command-K acts as the global OS-like utility/search layer. Archive routes (`/work`, `/notes`, `/studies`) extend the same outline language by year. `/interactions` exists only as an unlinked local draft until the visual direction is ready, and production keeps it unavailable unless explicitly enabled.
 - Core routes/screens: home, command palette, work archive, notes archive, studies archive, work detail, study detail, note detail, design-system proof.
 - Content hierarchy: identity statement, expandable homepage outline, command palette utility actions, text-first work lists, contact chips, proof bento surfaces inside work details.
 
@@ -34,17 +34,17 @@
 
 ## Visual language
 - Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and no blue accent on the homepage; highlights use the site black.
-- Typography: system/Google Sans style, small editorial sizes, readable paragraph rhythm, no negative letter spacing.
+- Typography: Geist Sans for body, rows, section labels, and homepage action chips; Geist Mono only for metadata, command labels, and code/system artifacts. Keep small editorial sizes, readable paragraph rhythm, and no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, and text-list rhythm on index pages; wider media belongs inside detail pages.
 - Shape/radius/elevation: modest 8px radius; avoid nested cards and large glassmorphism on the homepage; contact chips may keep a small glass surface, and Command-K may use a thin glass shell plus one active-row glass lens, but glass should not become the page's main interaction.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
 - Imagery/iconography: project screenshots/videos are proof surfaces inside detail pages and hover previews; icons are supporting identity marks.
 - Outline signal grammar: outline rows use an 18px signal cell, 6px filled dots, 6px hollow section circles with a 1px border, and 6px open-section dots across home, archive, detail, and nested rows; link intent becomes a short 8px x 2px stroke plus the 16px Material arrow; hover dot scale stays at 1.08 or lower.
-- Interaction tokens: `--signal-*` CSS variables own dot sizes, section strokes, arrow opacity, 2px lateral nudge, and 140ms stroke draw timing. New outline surfaces should use these tokens instead of raw pixel/opacity values.
+- Interaction tokens: `--signal-*` CSS variables own dot sizes, section strokes, arrow opacity, 2px lateral nudge, and 140ms stroke draw timing. Type role tokens such as `--type-small`, `--type-caption`, and `--type-micro-tight` own small-text exceptions. New outline surfaces should use these tokens instead of raw pixel/opacity values.
 
 ## Components
 - Existing components to reuse: `ChatInput` only as an optional command-triggered AI utility, `ProjectDetailView`, material buttons/icons, project data in `data/projects.ts`.
-- New/changed components: editorial project rows, command palette, work preview system, Atlas proof bento case-study template, studies text index, lab study detail view, sheet-style overlays. The live interactions grid remains a draft-only surface.
+- New/changed components: editorial project rows, global Command-K palette, command row preview, copy utilities, Atlas artifact jump commands, tiny shortcuts overlay, work preview system, Atlas proof bento case-study template, studies text index, lab study detail view, sheet-style overlays. The live interactions grid remains a draft-only surface.
 - Variants and states: work entries, studies entries, archived lab prototypes, coming-soon project notice, profile/contact anchor state, chat-on-top state.
 - Token/component ownership: keep global CSS tokens in `app/globals.css`; avoid introducing a separate design-system layer.
 
@@ -67,7 +67,7 @@
 - Success: project sheets open with clear context and dismiss controls; profile/contact details stay available on the main page.
 - Disabled: coming-soon Atlas announces unavailable state.
 - Offline/slow network, if applicable: image/video loading should degrade to static project text.
-- Hover/focus grammar: internal links draw the side-facing Material arrow; expandable sections use the same arrow family rotated downward when open; quiet note rows keep dot-only feedback; action/contact chips use glass hover plus cursor coupling. Rich video/live interaction belongs in detail proof bento surfaces, not the homepage index.
+- Hover/focus grammar: internal links and clickable note rows draw the side-facing Material arrow; expandable sections use the same arrow family rotated downward when open; action/contact chips use glass hover plus cursor coupling. Command-K uses a thin glass shell, one active-row lens, context-aware commands, copy utilities, and small previews. Rich video/live interaction belongs in detail proof bento surfaces, not the homepage index.
 
 ## Content voice
 - Tone: concise, editorial, concrete.

@@ -1,17 +1,18 @@
 "use client";
 
-import { useCallback, useMemo, useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useAnimationControls, useReducedMotion } from "framer-motion";
-import type { Transition, Variants } from "framer-motion";
+import type { Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
+import { ASK_PORTFOLIO_EVENT, ASK_PORTFOLIO_STORAGE_KEY, openGlobalCommandPalette } from "@/components/GlobalCommandPalette";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import type { Project } from "@/components/ProjectCard";
-import { ArrowUpRight, Briefcase, Command, FileText, Mail, MessageCircle, NotebookText, Search } from "lucide-react";
+import { ArrowUpRight, Command } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -34,8 +35,7 @@ type HomePageProps = {
 };
 
 const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
-const LANDING_EXPLORE_DELAY = 0.3;
-const LANDING_ROW_BASE_DELAY = 0.4;
+const LANDING_EXPLORE_DELAY = 0.08;
 function unavailableFeedbackAnimation() {
   return {
     rotateX: [0, -7, 3, 0],
@@ -55,7 +55,7 @@ const landingPageVariants: Variants = {
   visible: {
     transition: {
       delayChildren: 0.02,
-      staggerChildren: 0.06,
+      staggerChildren: 0.025,
     },
   },
 };
@@ -65,7 +65,7 @@ const landingIntroVariants: Variants = {
   visible: {
     transition: {
       delayChildren: 0.02,
-      staggerChildren: 0.055,
+      staggerChildren: 0.025,
     },
   },
 };
@@ -75,7 +75,7 @@ const landingExploreVariants: Variants = {
   visible: {
     transition: {
       delayChildren: LANDING_EXPLORE_DELAY,
-      staggerChildren: 0.045,
+      staggerChildren: 0.018,
     },
   },
 };
@@ -83,30 +83,17 @@ const landingExploreVariants: Variants = {
 const landingRevealItem: Variants = {
   hidden: {
     opacity: 0,
-    filter: "blur(3px)",
-    y: 8,
+    y: 2,
   },
   visible: {
     opacity: 1,
-    filter: "blur(0px)",
     y: 0,
     transition: {
-      opacity: { type: "tween", duration: 0.42, ease: LANDING_EASE },
-      filter: { type: "tween", duration: 0.42, ease: LANDING_EASE },
-      y: { type: "spring", stiffness: 260, damping: 32, mass: 1.2 },
+      opacity: { type: "tween", duration: 0.16, ease: LANDING_EASE },
+      y: { type: "tween", duration: 0.18, ease: LANDING_EASE },
     },
   },
 };
-
-function landingRowTransition(index: number): Transition {
-  const delay = LANDING_ROW_BASE_DELAY + Math.min(index * 0.035, 0.18);
-
-  return {
-    opacity: { type: "tween", duration: 0.34, ease: LANDING_EASE, delay },
-    filter: { type: "tween", duration: 0.38, ease: LANDING_EASE, delay },
-    y: { ...springs.spatialDefault, delay },
-  };
-}
 
 type StudyItem =
   | {
@@ -128,244 +115,6 @@ type StudyItem =
       project: Project;
       title: string;
     };
-
-type HomeCommandItem = {
-  action: () => void;
-  group: string;
-  icon: ReactNode;
-  id: string;
-  keywords: string[];
-  meta: string;
-  title: string;
-};
-
-function normalizeCommandText(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-}
-
-function HomeCommandPalette({
-  isOpen,
-  items,
-  onClose,
-}: {
-  isOpen: boolean;
-  items: HomeCommandItem[];
-  onClose: () => void;
-}) {
-  const reduceMotion = useReducedMotion();
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const listRef = useRef<HTMLDivElement | null>(null);
-  const rowRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [query, setQuery] = useState("");
-  const [lensRect, setLensRect] = useState<{ height: number; left: number; top: number; width: number } | null>(null);
-  const visibleItems = useMemo(() => {
-    const normalizedQuery = normalizeCommandText(query);
-    if (!normalizedQuery) return items;
-
-    return items.filter((item) =>
-      [item.title, item.meta, item.group, ...item.keywords]
-        .map(normalizeCommandText)
-        .some((value) => value.includes(normalizedQuery)),
-    );
-  }, [items, query]);
-  const clampedActiveIndex = visibleItems.length > 0 ? Math.min(activeIndex, visibleItems.length - 1) : 0;
-  const activeItem = visibleItems[clampedActiveIndex];
-
-  const updateLensRect = useCallback(() => {
-    const row = rowRefs.current[clampedActiveIndex];
-    const list = listRef.current;
-
-    if (!isOpen || !row || !list || visibleItems.length === 0) {
-      setLensRect(null);
-      return;
-    }
-
-    const rowRect = row.getBoundingClientRect();
-    const listRect = list.getBoundingClientRect();
-
-    setLensRect({
-      height: rowRect.height,
-      left: rowRect.left - listRect.left + list.scrollLeft,
-      top: rowRect.top - listRect.top + list.scrollTop,
-      width: rowRect.width,
-    });
-  }, [clampedActiveIndex, isOpen, visibleItems.length]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const frame = window.requestAnimationFrame(() => inputRef.current?.focus());
-    return () => window.cancelAnimationFrame(frame);
-  }, [isOpen]);
-
-  useEffect(() => {
-    rowRefs.current = rowRefs.current.slice(0, visibleItems.length);
-  }, [visibleItems.length]);
-
-  useLayoutEffect(() => {
-    if (!isOpen) return;
-
-    const row = rowRefs.current[clampedActiveIndex];
-    row?.scrollIntoView({ block: "nearest" });
-    const frame = window.requestAnimationFrame(updateLensRect);
-    return () => window.cancelAnimationFrame(frame);
-  }, [clampedActiveIndex, isOpen, query, updateLensRect, visibleItems.length]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleResize = () => updateLensRect();
-    window.addEventListener("resize", handleResize);
-
-    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(handleResize);
-    if (observer && listRef.current) {
-      observer.observe(listRef.current);
-      rowRefs.current.forEach((row) => {
-        if (row) observer.observe(row);
-      });
-    }
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      observer?.disconnect();
-    };
-  }, [isOpen, updateLensRect, visibleItems.length]);
-
-  const closePalette = useCallback(() => {
-    setQuery("");
-    setActiveIndex(0);
-    onClose();
-  }, [onClose]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closePalette();
-      }
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    document.body.classList.add("command-palette-open");
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.classList.remove("command-palette-open");
-    };
-  }, [closePalette, isOpen]);
-
-  const runCommand = (item: HomeCommandItem) => {
-    item.action();
-    closePalette();
-  };
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          key="command-layer"
-          className="command-layer"
-          initial={reduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={reduceMotion ? tweens.none : tweens.base}
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) closePalette();
-          }}
-        >
-          <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-label="site command palette"
-            className="command-panel"
-            initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.985 }}
-            transition={reduceMotion ? tweens.none : springs.spatialFast}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <div className="command-search">
-              <Search className="command-search__icon" aria-hidden="true" />
-              <input
-                ref={inputRef}
-                value={query}
-                onChange={(event) => {
-                  setQuery(event.target.value);
-                  setActiveIndex(0);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "ArrowDown") {
-                    event.preventDefault();
-                    setActiveIndex((index) => Math.min(index + 1, Math.max(visibleItems.length - 1, 0)));
-                  } else if (event.key === "ArrowUp") {
-                    event.preventDefault();
-                    setActiveIndex((index) => Math.max(index - 1, 0));
-                  } else if (event.key === "Enter") {
-                    event.preventDefault();
-                    if (activeItem) runCommand(activeItem);
-                  }
-                }}
-                placeholder="search or run a command"
-                aria-label="search commands"
-              />
-              <kbd aria-hidden="true">esc</kbd>
-            </div>
-
-            <div ref={listRef} className="command-list" role="listbox" aria-label="site commands">
-              {visibleItems.length > 0 && (
-                <motion.div
-                  aria-hidden="true"
-                  className="command-list__lens"
-                  initial={false}
-                  animate={
-                    lensRect
-                      ? {
-                          height: lensRect.height,
-                          opacity: 1,
-                          width: lensRect.width,
-                          x: lensRect.left,
-                          y: lensRect.top,
-                        }
-                      : { opacity: 0 }
-                  }
-                  transition={reduceMotion ? tweens.none : springs.spatialFast}
-                />
-              )}
-              {visibleItems.length > 0 ? (
-                visibleItems.map((item, index) => (
-                  <button
-                    key={item.id}
-                    ref={(element) => {
-                      rowRefs.current[index] = element;
-                    }}
-                    type="button"
-                    className="command-row micro-focus micro-focus-tight"
-                    data-active={index === clampedActiveIndex ? "true" : "false"}
-                    onClick={() => runCommand(item)}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    role="option"
-                    aria-selected={index === activeIndex}
-                  >
-                    <span className="command-row__icon" aria-hidden="true">{item.icon}</span>
-                    <span className="command-row__copy">
-                      <span className="command-row__title">{item.title}</span>
-                      <span className="command-row__meta">{item.meta}</span>
-                    </span>
-                    <span className="command-row__group">{item.group}</span>
-                  </button>
-                ))
-              ) : (
-                <p className="command-empty">no command found</p>
-              )}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
 
 function StudyMetaLine({
   className = "",
@@ -567,11 +316,9 @@ function getProjectDescriptor(project: Project) {
 
 function ProjectTextRow({
   project,
-  index,
   list,
 }: {
   project: Project;
-  index: number;
   list: "work";
 }) {
   const reduceMotion = useReducedMotion();
@@ -607,11 +354,6 @@ function ProjectTextRow({
 
   return (
     <motion.li
-      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 10 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
-      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
-      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row={list}
       className="home-node group relative z-0 list-none hover:z-30 focus-within:z-30"
     >
@@ -647,11 +389,10 @@ function WorkSection({ projects }: { projects: PortfolioProject[] }) {
   return (
     <div className="relative">
       <ul className="home-list">
-        {projects.map((project, index) => (
+        {projects.map((project) => (
           <ProjectTextRow
             key={project.id}
             project={project}
-            index={index}
             list="work"
           />
         ))}
@@ -673,31 +414,22 @@ function buildNoteItems(posts: WritingPostMeta[]): StudyItem[] {
 }
 
 function StudyTextRow({
-  index,
   item,
 }: {
-  index: number;
   item: StudyItem;
 }) {
-  const reduceMotion = useReducedMotion();
-
   return (
     <motion.li
       key={item.id}
-      initial={reduceMotion ? false : { opacity: 0, filter: "blur(3px)", y: 8 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, filter: "blur(0px)", y: 0 }}
-      animate={reduceMotion ? { opacity: 1, filter: "blur(0px)", y: 0 } : undefined}
-      viewport={reduceMotion ? undefined : { once: true, margin: "-80px" }}
-      transition={reduceMotion ? tweens.none : landingRowTransition(index)}
       data-project-row={item.kind === "writing" ? "writing" : "studies"}
       className="home-node group relative z-0 list-none hover:z-30 focus-within:z-30"
     >
       <div className="block max-w-full transform-gpu">
         <Link
           href={item.href}
-          className="home-row home-row--link home-row--quiet-link micro-focus micro-focus-tight micro-pressable"
+          className="home-row home-row--link micro-focus micro-focus-tight micro-pressable"
         >
-          <HomeBulletCell variant={item.kind === "lab" ? "system" : "note"} />
+          <HomeBulletCell signal variant={item.kind === "lab" ? "system" : "note"} />
           <span className="home-label project-row-copy">
             <span className="project-row-title-line--lateral font-normal">
               {item.title}
@@ -726,10 +458,9 @@ function OutlineListSection({ emptyLabel, items }: { emptyLabel: string; items: 
   return (
     <div className="relative">
       <ul className="home-list">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <StudyTextRow
             key={item.id}
-            index={index}
             item={item}
           />
         ))}
@@ -758,8 +489,7 @@ function HomeDocument({
       <motion.div id="profile" variants={landingIntroVariants} className="home-doc scroll-mt-28">
         <motion.div variants={landingRevealItem} className="home-doc-title-row">
           <h1 className="home-doc-title">
-            Minwook Shin
-            <span> / design engineer</span>
+            minwook shin
           </h1>
           <button
             type="button"
@@ -848,23 +578,10 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   // Keep the landing motion quiet: the page simply settles in, with no separate
   // logo trace or position handoff.
   const [introReady, setIntroReady] = useState(false);
-  const [isCommandOpen, setIsCommandOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIntroReady(true), 80);
     return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setIsCommandOpen(true);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -969,6 +686,21 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     }
   }, [currentSection, hasStarted, messages]);
 
+  useEffect(() => {
+    const onAskFromCommand = () => {
+      void handleMessage("ask about this portfolio");
+    };
+
+    window.addEventListener(ASK_PORTFOLIO_EVENT, onAskFromCommand);
+
+    if (window.sessionStorage.getItem(ASK_PORTFOLIO_STORAGE_KEY) === "true") {
+      window.sessionStorage.removeItem(ASK_PORTFOLIO_STORAGE_KEY);
+      onAskFromCommand();
+    }
+
+    return () => window.removeEventListener(ASK_PORTFOLIO_EVENT, onAskFromCommand);
+  }, [handleMessage]);
+
   // Leave the chat view but KEEP the conversation history (reload clears it)
   const leaveChat = () => {
     setHasStarted(false);
@@ -994,31 +726,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
     });
   };
 
-  const openProjectFromCommand = useCallback((project: Project) => {
-    if (project.comingSoon) {
-      setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
-      return;
-    }
-
-    setHasStarted(false);
-    setChatOnTop(false);
-    router.push(isLabProject(project) ? getLabProjectPath(project) : getProjectPath(project));
-  }, [router]);
-
-  const copyEmail = useCallback(() => {
-    if (navigator.clipboard?.writeText) {
-      void navigator.clipboard
-        .writeText(PERSONAL_INFO.email)
-        .then(() => setProjectNotice("email copied"))
-        .catch(() => {
-          window.location.href = `mailto:${PERSONAL_INFO.email}`;
-        });
-      return;
-    }
-
-    window.location.href = `mailto:${PERSONAL_INFO.email}`;
-  }, []);
-
   const openProjectFromChat = (project: Project) => {
     if (project.comingSoon) {
       setProjectNotice(project.unavailableMessage ?? `${project.title} is not ready yet.`);
@@ -1032,122 +739,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         : getProjectPath(project);
     router.push(projectPath);
   };
-
-  const commandItems = useMemo<HomeCommandItem[]>(() => {
-    const openProjects = MAIN_PROJECTS.filter((project) => !project.comingSoon);
-    const orderedProjects = [
-      ...featuredProjects,
-      ...openProjects.filter((project) => !featuredProjects.some((featured) => featured.id === project.id)),
-    ].filter((project) => !project.comingSoon);
-
-    return [
-      {
-        id: "view-work",
-        title: "view work",
-        meta: "proof log",
-        group: "navigate",
-        keywords: ["projects", "archive", "work"],
-        icon: <Briefcase />,
-        action: () => {
-          setHasStarted(false);
-          setChatOnTop(false);
-          router.push("/work");
-        },
-      },
-      {
-        id: "view-notes",
-        title: "view notes",
-        meta: "thinking log",
-        group: "navigate",
-        keywords: ["writing", "notes", "thinking"],
-        icon: <NotebookText />,
-        action: () => {
-          setHasStarted(false);
-          setChatOnTop(false);
-          router.push("/notes");
-        },
-      },
-      {
-        id: "view-contact",
-        title: "view contact",
-        meta: "links and email",
-        group: "navigate",
-        keywords: ["profile", "email", "linkedin", "github"],
-        icon: <Mail />,
-        action: () => {
-          setHasStarted(false);
-          setChatOnTop(false);
-          requestAnimationFrame(() => {
-            document.getElementById("contact")?.scrollIntoView({
-              behavior: reduceMotion ? "auto" : "smooth",
-              block: "center",
-            });
-          });
-        },
-      },
-      ...orderedProjects.map((project) => ({
-        id: `project-${project.slug ?? project.id}`,
-        title: `open ${project.title.toLowerCase()}`,
-        meta: getProjectDescriptor(project),
-        group: "work",
-        keywords: [project.title, project.description, project.studioLabel ?? "", project.date ?? ""],
-        icon: <FileText />,
-        action: () => openProjectFromCommand(project),
-      })),
-      ...(noteItems[0]
-        ? [
-            {
-              id: `note-${noteItems[0].id}`,
-              title: `open ${noteItems[0].title}`,
-              meta: noteItems[0].meta,
-              group: "notes",
-              keywords: [
-                noteItems[0].title,
-                "description" in noteItems[0] ? noteItems[0].description : "",
-                "writing",
-              ],
-              icon: <NotebookText />,
-              action: () => {
-                setHasStarted(false);
-                setChatOnTop(false);
-                router.push(noteItems[0].href);
-              },
-            },
-          ]
-        : []),
-      {
-        id: "copy-email",
-        title: "copy email",
-        meta: PERSONAL_INFO.email,
-        group: "contact",
-        keywords: ["contact", "mail", "reach"],
-        icon: <Mail />,
-        action: copyEmail,
-      },
-      {
-        id: "open-resume",
-        title: "open resume",
-        meta: "pdf",
-        group: "contact",
-        keywords: ["cv", "profile"],
-        icon: <FileText />,
-        action: () => {
-          setHasStarted(false);
-          setChatOnTop(false);
-          router.push(PERSONAL_INFO.resume);
-        },
-      },
-      {
-        id: "ask-portfolio",
-        title: "ask about this portfolio",
-        meta: "ai utility",
-        group: "ask",
-        keywords: ["ai", "assistant", "question", "portfolio"],
-        icon: <MessageCircle />,
-        action: () => void handleMessage("ask about this portfolio"),
-      },
-    ];
-  }, [copyEmail, featuredProjects, handleMessage, noteItems, openProjectFromCommand, reduceMotion, router]);
 
   return (
     <main
@@ -1194,16 +785,11 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           <HomeDocument
             activeSection={currentSection}
             noteItems={noteItems}
-            onOpenCommand={() => setIsCommandOpen(true)}
+            onOpenCommand={openGlobalCommandPalette}
             projects={featuredProjects}
           />
         </div>
       </motion.div>
-      <HomeCommandPalette
-        isOpen={isCommandOpen}
-        items={commandItems}
-        onClose={() => setIsCommandOpen(false)}
-      />
       <AnimatePresence>
         {projectNotice && (
           <motion.div

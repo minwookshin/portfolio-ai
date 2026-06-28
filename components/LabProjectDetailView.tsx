@@ -84,7 +84,7 @@ export default function LabProjectDetailView({ project }: { project: PortfolioPr
           preload="metadata"
           poster={makeVideoPosterDataUrl(project.title)}
           className="studio-lab-detail-media"
-          videoClassName="h-full w-full object-contain"
+          videoClassName="block h-auto w-full object-contain"
         />
       ) : (
         <div className="studio-lab-detail-media">

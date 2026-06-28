@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import CustomCursor from "@/components/CustomCursor";
+import GlobalCommandPalette from "@/components/GlobalCommandPalette";
 import PageTransition from "@/components/PageTransition";
 import StructuredData from "@/components/StructuredData";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, rootJsonLd } from "@/lib/seo";
-import "@carrot-kpi/switzer-font/latin.css";
+import { getWritingPosts } from "@/lib/writing";
 import "./globals.css";
+
+const geistSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
@@ -16,8 +23,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} · Design Engineer / UX Engineer`,
-    template: "%s · Minwook Shin",
+    default: SITE_NAME,
+    template: "%s · minwook shin",
   },
   description: SITE_DESCRIPTION,
   keywords: [
@@ -65,13 +72,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE_URL,
-    title: `${SITE_NAME} · Design Engineer / UX Engineer`,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
     siteName: SITE_NAME,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} · Design Engineer / UX Engineer`,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
   },
 };
@@ -81,6 +88,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const writingPosts = getWritingPosts();
+
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
@@ -92,9 +101,10 @@ export default function RootLayout({
         <link rel="alternate" type="text/markdown" href="/design-system.md" title="AI-readable design system proof" />
         <link rel="alternate" type="application/json" href="/design-system/tokens.json" title="Design system tokens" />
       </head>
-      <body className={geistMono.variable}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <StructuredData data={rootJsonLd()} />
         <CustomCursor />
+        <GlobalCommandPalette writingPosts={writingPosts} />
         <PageTransition>{children}</PageTransition>
       </body>
     </html>

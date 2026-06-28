@@ -13,7 +13,7 @@ import type { PortfolioProject } from "@/data/projects";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 
 export const SITE_URL = "https://www.minwookshin.com";
-export const SITE_NAME = "Minwook Shin";
+export const SITE_NAME = "minwook shin";
 export const SITE_DESCRIPTION = PERSONAL_INFO.bio;
 export const PERSON_ID = `${SITE_URL}/#person`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
