@@ -320,14 +320,20 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
         <p>{ATLAS_INTRO.body}</p>
       </section>
 
-      <dl className="atlas-meta-block" aria-label="role, constraint, decision, and outcome">
-        {ATLAS_META.map((item) => (
-          <div key={item.label}>
-            <dt>{item.label}</dt>
-            <dd>{item.value}</dd>
-          </div>
-        ))}
-      </dl>
+      <section className="atlas-meta-surface" aria-labelledby="atlas-meta-title">
+        <div className="atlas-meta-surface__header">
+          <span id="atlas-meta-title">artifact profile</span>
+          <span>role / constraint / decision / outcome</span>
+        </div>
+        <dl className="atlas-meta-block" aria-label="role, constraint, decision, and outcome">
+          {ATLAS_META.map((item) => (
+            <div key={item.label}>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       <section id="atlas-proof-bento" className="atlas-proof-section">
         <DetailOutlineHeading heading="proof bento grid" eyebrow={project.builder.status.label} />

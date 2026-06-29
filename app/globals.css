@@ -2398,10 +2398,41 @@ button.home-mention {
   line-height: var(--leading-body);
 }
 
+.atlas-meta-surface {
+  overflow: hidden;
+  border: 1px solid var(--code-border);
+  border-radius: var(--code-radius);
+  background: var(--code-surface);
+  box-shadow: var(--code-shadow);
+}
+
+.atlas-meta-surface__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--code-border);
+  padding: 9px 12px;
+}
+
+.atlas-meta-surface__header span:first-child {
+  color: var(--text-primary);
+  font-size: var(--type-caption);
+  line-height: 1.2;
+}
+
+.atlas-meta-surface__header span:last-child {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption-tight);
+  line-height: 1.2;
+  text-align: right;
+}
+
 .atlas-meta-block {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 20px;
+  gap: 0;
   max-width: 100%;
   margin: 0;
 }
@@ -2411,6 +2442,16 @@ button.home-mention {
   grid-template-columns: var(--signal-cell-inline) minmax(0, 1fr);
   column-gap: 12px;
   align-items: baseline;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--code-border);
+}
+
+.atlas-meta-block > div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.atlas-meta-block > div:nth-child(odd) {
+  border-right: 1px solid var(--code-border);
 }
 
 .atlas-meta-block > div::before {
@@ -4586,6 +4627,28 @@ button.home-mention {
   .atlas-proof-grid,
   .atlas-patient-proof {
     grid-template-columns: 1fr;
+  }
+
+  .atlas-meta-surface__header {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .atlas-meta-surface__header span:last-child {
+    text-align: left;
+  }
+
+  .atlas-meta-block > div,
+  .atlas-meta-block > div:nth-last-child(-n + 2) {
+    border-bottom: 1px solid var(--code-border);
+  }
+
+  .atlas-meta-block > div:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .atlas-meta-block > div:last-child {
+    border-bottom: 0;
   }
 
   .atlas-proof-tile,
