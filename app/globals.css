@@ -950,6 +950,10 @@ button.home-row {
   opacity: var(--signal-opacity-strong);
 }
 
+.home-row--intro .home-bullet--leaf {
+  opacity: var(--signal-opacity-open);
+}
+
 .home-bullet--system {
   width: var(--signal-dot-size-hollow);
   height: var(--signal-dot-size-hollow);

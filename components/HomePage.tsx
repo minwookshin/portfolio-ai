@@ -174,10 +174,24 @@ function HomeBulletCell({
   );
 }
 
-function HomeLeafRow({ children, signal = false }: { children: ReactNode; signal?: boolean }) {
+function HomeLeafRow({
+  children,
+  intro = false,
+  signal = false,
+}: {
+  children: ReactNode;
+  intro?: boolean;
+  signal?: boolean;
+}) {
+  const rowClassName = [
+    "home-row",
+    intro ? "home-row--intro" : "",
+    signal ? "home-row--signal" : "",
+  ].filter(Boolean).join(" ");
+
   return (
     <div className="home-node">
-      <div className={`home-row${signal ? " home-row--signal" : ""}`}>
+      <div className={rowClassName}>
         <HomeBulletCell signal={signal} />
         <span className="home-label">{children}</span>
       </div>
@@ -567,7 +581,7 @@ function HomeDocument({
         </motion.div>
 
         <motion.div variants={landingRevealItem}>
-          <HomeLeafRow>
+          <HomeLeafRow intro>
             I make interfaces, prototypes, and small systems for AI-native products.
           </HomeLeafRow>
         </motion.div>
