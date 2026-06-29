@@ -23,7 +23,7 @@ interface ChatInputProps {
 
 
 const darkOutsideBtn =
-  `micro-focus micro-focus-tight micro-pressable group shrink-0 w-16 h-16 rounded-[var(--md-shape-sm)] bg-surface-container-high text-on-surface border border-outline-variant flex items-center justify-center relative`;
+  "chat-side-action micro-focus micro-focus-tight micro-pressable group shrink-0";
 
 export default function ChatInput({
   onSend,
@@ -141,7 +141,7 @@ export default function ChatInput({
       )}
 
       <motion.div
-        className="fixed z-[80] inset-x-0 bottom-6 mx-auto w-full max-w-[700px] px-4 flex min-w-0 items-center justify-center gap-2"
+        className="chat-composer-shell fixed z-[80] inset-x-0 bottom-6 mx-auto w-full max-w-[700px] px-4 flex min-w-0 items-center justify-center gap-2"
         initial={false}
         animate={{ opacity: introReady ? 1 : 0 }}
         transition={inputRevealMotion}
@@ -161,7 +161,7 @@ export default function ChatInput({
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={reduceMotion ? { opacity: 0, scale: 1, x: 0 } : { opacity: 0, scale: 0.96, x: 14 }}
               transition={activeMotion}
-              className="micro-focus micro-focus-tight micro-pressable group relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--md-shape-sm)] border border-outline-variant bg-surface-container-high text-[length:var(--type-micro)] font-normal lowercase text-on-surface hover:bg-outline-variant"
+              className="chat-side-action micro-focus micro-focus-tight micro-pressable group"
             >
               <span className="relative">esc</span>
             </motion.button>
@@ -175,7 +175,7 @@ export default function ChatInput({
           transition={activeMotion}
           style={{ maxWidth: "min(100%, calc(100vw - 176px))" }}
           onClick={() => { if (!expanded) setFocused(true); }}
-          className={`micro-field group relative flex h-16 min-w-0 items-center gap-1 rounded-[var(--md-shape-sm)] bg-surface-container-high pl-3 pr-2 text-on-surface ${expanded ? "" : "cursor-text"}`}
+          className={`chat-composer micro-field group relative flex h-14 min-w-0 items-center gap-1 pl-3 pr-2 ${expanded ? "" : "cursor-text"}`}
         >
           {/* Current project / profile icon, inside the textbox on the left */}
           {(connectorKind === "project" || connectorKind === "profile") && connectorSrc && (
@@ -186,7 +186,7 @@ export default function ChatInput({
               aria-label={connectorKind === "profile" ? "Profile" : "Current project"}
               whileTap={reduceMotion ? undefined : { scale: 0.97 }}
               transition={activeMotion}
-              className="micro-focus micro-focus-tight micro-pressable relative h-10 w-10 shrink-0 overflow-hidden rounded-[var(--md-shape-sm)] border border-outline-variant"
+              className="chat-composer__media micro-focus micro-focus-tight micro-pressable relative h-9 w-9 shrink-0 overflow-hidden"
             >
               <BlurImage
                 src={connectorSrc}
@@ -207,28 +207,28 @@ export default function ChatInput({
             onBlur={() => setFocused(false)}
             placeholder="ask me"
             aria-label="ask me"
-            className="relative z-10 flex-1 min-w-0 bg-transparent outline-none font-light text-on-surface placeholder:text-on-surface-variant text-[length:var(--type-row)] pl-3 pr-2"
+            className="chat-composer__input relative z-10 flex-1 min-w-0 bg-transparent outline-none pl-3 pr-2"
           />
 
           <IconButton
             aria-label={isListening ? "Stop listening" : "Start voice input"}
             selected={isListening}
             size="sm"
-            className="!w-12 !h-12"
+            className="chat-composer__action !h-10 !w-10"
             onClick={toggleListening}
           >
-            <Mic className="w-5 h-5" />
+            <Mic className="h-4 w-4" />
           </IconButton>
           {expanded && (
             <IconButton
               aria-label="Send"
               size="sm"
-              className="!w-12 !h-12"
+              className="chat-composer__action !h-10 !w-10"
               selected={!!input.trim()}
               disabled={!input.trim()}
               onClick={() => handleSubmit()}
             >
-              <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
+              <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
             </IconButton>
           )}
         </motion.div>

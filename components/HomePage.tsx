@@ -934,19 +934,19 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
                     <div
-                      className={`rounded-[var(--md-shape-sm)] px-4 py-3 ${
+                      className={`chat-bubble px-4 py-3 ${
                         isUser
-                          ? "bg-on-surface text-surface"
+                          ? "chat-bubble--user"
                           : isError
-                          ? "border border-outline-variant bg-surface-container text-on-surface-variant"
-                          : "bg-surface-container-high text-on-surface"
+                          ? "chat-bubble--error"
+                          : "chat-bubble--assistant"
                       }`}
                     >
                       {isUser ? (
                         <p className="text-[length:var(--type-row)] leading-relaxed whitespace-pre-wrap">{body}</p>
                       ) : (
                         <>
-                          <div className="micro-richtext prose prose-sm max-w-none text-[length:var(--type-row)] prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-[length:var(--type-row)] prose-h2:text-[length:var(--type-row)] prose-h3:text-[length:var(--type-row)] prose-p:my-2 prose-p:text-on-surface prose-p:text-[length:var(--type-row)] prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:rounded-[var(--md-shape-sm)] prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:font-mono prose-code:text-[length:var(--type-micro)] prose-code:text-on-surface prose-code:before:content-none prose-code:after:content-none prose-pre:my-2 prose-pre:overflow-x-auto prose-pre:rounded-[var(--md-shape-sm)] prose-pre:border prose-pre:border-outline-variant prose-pre:bg-surface-container-high prose-pre:p-3 prose-ul:my-2 prose-ul:text-[length:var(--type-row)] prose-ol:my-2 prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:font-normal prose-a:no-underline">
+                          <div className="chat-richtext micro-richtext prose prose-sm max-w-none text-[length:var(--type-row)] prose-headings:mt-3 prose-headings:mb-2 prose-headings:font-normal prose-headings:text-on-surface prose-h1:text-[length:var(--type-row)] prose-h2:text-[length:var(--type-row)] prose-h3:text-[length:var(--type-row)] prose-p:my-2 prose-p:text-on-surface prose-p:text-[length:var(--type-row)] prose-p:leading-[1.55] prose-strong:text-on-surface prose-strong:font-normal prose-code:rounded-[var(--md-shape-sm)] prose-code:bg-surface-container-high prose-code:px-2 prose-code:py-1 prose-code:font-mono prose-code:text-[length:var(--type-micro)] prose-code:text-on-surface prose-code:before:content-none prose-code:after:content-none prose-pre:my-2 prose-pre:overflow-x-auto prose-pre:rounded-[var(--md-shape-sm)] prose-pre:border prose-pre:border-outline-variant prose-pre:bg-surface-container-high prose-pre:p-3 prose-ul:my-2 prose-ul:text-[length:var(--type-row)] prose-ol:my-2 prose-li:my-1 prose-li:text-on-surface prose-li:leading-[1.55] prose-a:text-on-surface prose-a:font-normal prose-a:no-underline">
                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                               {body}
                             </ReactMarkdown>
@@ -975,7 +975,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                                 openProjectFromChat(target);
                               }
                             }}
-                            className="micro-focus micro-focus-tight micro-pressable mt-3 inline-flex items-center gap-2 rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-2 text-[length:var(--type-micro)] font-normal text-on-surface hover:bg-outline-variant"
+                            className="chat-inline-action micro-focus micro-focus-tight micro-pressable mt-3"
                           >
                               {target === "profile" ? "View profile" : target === "projects" ? "View work" : target.comingSoon ? `${target.title} is not ready yet` : `Open ${target.title}`}
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -995,7 +995,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                             transition={reduceMotion ? tweens.none : { ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
                             whileTap={reduceMotion ? undefined : { scale: 0.96 }}
                             onClick={() => handleMessage(f)}
-                            className="micro-focus micro-focus-tight micro-pressable inline-flex items-center rounded-[var(--md-shape-sm)] bg-surface-container-high px-3 py-2 text-[length:var(--type-micro)] font-normal text-on-surface hover:bg-outline-variant"
+                            className="chat-inline-action micro-focus micro-focus-tight micro-pressable"
                           >
                             {f}
                           </motion.button>
@@ -1014,7 +1014,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                   transition={reduceMotion ? tweens.none : springs.spatialFast}
                   className="flex justify-start"
                 >
-                  <div className="rounded-[var(--md-shape-sm)] bg-surface-container-high px-4 py-3">
+                  <div className="chat-bubble chat-bubble--assistant px-4 py-3">
                     <div className="flex items-center space-x-2">
                       {[0, 0.2, 0.4].map((d) => (
                         <motion.div
