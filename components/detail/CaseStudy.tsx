@@ -1,10 +1,10 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Copy } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { CopyFeedbackToast, useCopyFeedback } from "@/components/CopyFeedback";
+import { InlineCopyButton } from "@/components/CopyFeedback";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -229,7 +229,6 @@ function renderSection(
   section: DetailSection,
   i: number,
   reduceMotion: boolean,
-  copyText?: (value: string, label: string) => boolean | void | Promise<boolean | void>,
 ) {
   const sectionMotion = getSectionMotion(reduceMotion);
 
@@ -463,16 +462,15 @@ function renderSection(
               <span>{section.title}</span>
               <div className="detail-artifact-header-actions">
                 {section.meta && <span className="detail-artifact-header-meta">{section.meta}</span>}
-                {copyText && artifactCopyValue && (
-                  <button
-                    type="button"
+                {artifactCopyValue && (
+                  <InlineCopyButton
+                    value={artifactCopyValue}
+                    label={`${section.title} artifact`}
+                    ariaLabel={`copy ${section.title} artifact`}
                     className="detail-copy-action micro-focus micro-focus-tight micro-pressable"
-                    aria-label={`copy ${section.title} artifact`}
-                    onClick={() => void copyText(artifactCopyValue, "artifact")}
                   >
-                    <Copy aria-hidden="true" />
-                    <span>copy</span>
-                  </button>
+                    copy
+                  </InlineCopyButton>
                 )}
               </div>
             </div>
@@ -565,13 +563,12 @@ function AskRow({
 
 export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: string) => void }) {
   const reduceMotion = Boolean(useReducedMotion());
-  const { copyText, toast } = useCopyFeedback();
 
   return (
     <div className="case-study-sections detail-outline-stack">
       {data.sections.map((s, i) => (
         <div key={i}>
-          {renderSection(s, i, reduceMotion, copyText)}
+          {renderSection(s, i, reduceMotion)}
           {/* Questions woven in right where they make sense in the narrative */}
           {onAsk && s.ask && s.ask.length > 0 && <AskRow prompts={s.ask} onAsk={onAsk} className="mt-[var(--space-3)]" reduceMotion={reduceMotion} />}
         </div>
@@ -581,7 +578,6 @@ export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: st
       {onAsk && data.ask && data.ask.length > 0 && (
         <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="pt-[var(--space-1)]" reduceMotion={reduceMotion} />
       )}
-      <CopyFeedbackToast message={toast} />
     </div>
   );
 }

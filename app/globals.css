@@ -792,28 +792,6 @@ body::after {
   color: var(--text-muted);
 }
 
-.command-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 32px;
-  z-index: 99;
-  translate: -50% 0;
-  border: 1px solid #f4f4f6;
-  border-radius: var(--md-shape-lg);
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.22), transparent 58%),
-    linear-gradient(180deg, color-mix(in srgb, white 88%, transparent), color-mix(in srgb, #fafafa 82%, transparent));
-  box-shadow:
-    inset 0 2px 4px 0 #fff,
-    inset 0 -4px 10px 0 color-mix(in srgb, white 72%, transparent),
-    0 8px 24px -18px rgba(53, 53, 79, 0.24);
-  color: var(--text-primary);
-  font-size: var(--type-meta);
-  line-height: 1.2;
-  padding: 9px 12px;
-  pointer-events: none;
-}
-
 .command-palette-open {
   overflow: hidden;
 }
@@ -1199,6 +1177,16 @@ button.home-row {
     box-shadow var(--motion-duration-instant) var(--motion-ease-standard),
     opacity var(--motion-duration-fast) var(--motion-ease-standard);
   will-change: opacity;
+}
+
+.home-mention::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 24px);
+  height: max(100%, 24px);
+  transform: translate(-50%, -50%);
 }
 
 .home-mention--copy {
@@ -2222,6 +2210,7 @@ button.home-mention {
 
 .detail-copy-action {
   appearance: none;
+  position: relative;
   display: inline-flex;
   min-height: 24px;
   align-items: center;
@@ -2244,9 +2233,20 @@ button.home-mention {
 }
 
 .detail-copy-action:hover,
-.detail-copy-action:focus-visible {
+.detail-copy-action:focus-visible,
+.detail-copy-action[data-copied="true"] {
   border-color: color-mix(in srgb, var(--text-primary) 10%, var(--code-border));
   color: var(--text-primary);
+}
+
+.detail-copy-action::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 24px);
+  height: max(100%, 24px);
+  transform: translate(-50%, -50%);
 }
 
 .detail-copy-action--breadcrumb {
@@ -2448,8 +2448,17 @@ button.home-mention {
   padding: 10px 12px 12px;
 }
 
+.atlas-proof-tile__title-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .atlas-proof-tile__title {
   display: flex;
+  min-width: 0;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0 10px;
@@ -2457,6 +2466,40 @@ button.home-mention {
   color: var(--text-primary);
   font-size: var(--type-0);
   line-height: var(--leading-body);
+}
+
+.atlas-proof-tile__permalink {
+  appearance: none;
+  position: relative;
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: var(--md-shape-sm);
+  background: transparent;
+  color: var(--text-muted);
+  opacity: 0.54;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.atlas-proof-tile__permalink svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 1.8;
+}
+
+.atlas-proof-tile__permalink:hover,
+.atlas-proof-tile__permalink:focus-visible,
+.atlas-proof-tile__permalink[data-copied="true"] {
+  background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+  color: var(--text-primary);
+  opacity: 0.82;
 }
 
 .atlas-proof-tile__title span {

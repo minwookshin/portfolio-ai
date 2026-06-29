@@ -89,7 +89,9 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
     expect(screen.getAllByText("event contract")).toHaveLength(2);
     expect(screen.getByText("case-study sketch")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "copy capacity state section link" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "copy event contract artifact" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "copy event contract section link" })).toBeInTheDocument();
     expect(screen.getByText("server.broadcast(event);")).toBeInTheDocument();
   });
 

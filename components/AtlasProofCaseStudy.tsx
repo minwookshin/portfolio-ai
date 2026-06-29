@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Copy } from "lucide-react";
-import { CopyFeedbackToast, useCopyFeedback } from "@/components/CopyFeedback";
+import { InlineCopyButton } from "@/components/CopyFeedback";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import {
   ATLAS_DECISION_LOG,
@@ -75,6 +74,13 @@ function getCapacityState(load: number): CapacityState {
   };
 }
 
+function getHashLink(id: string) {
+  if (typeof window === "undefined") return "";
+  const url = new URL(window.location.href);
+  url.hash = id;
+  return url.toString();
+}
+
 function AtlasTile({
   caption,
   children,
@@ -94,10 +100,23 @@ function AtlasTile({
     <article id={id} className={`atlas-proof-tile ${className}`}>
       <div className="atlas-proof-tile__body">{children}</div>
       <div className="atlas-proof-tile__copy">
-        <p className="atlas-proof-tile__title">
-          {title}
-          {label && <span>{label}</span>}
-        </p>
+        <div className="atlas-proof-tile__title-row">
+          <p className="atlas-proof-tile__title">
+            {title}
+            {label && <span>{label}</span>}
+          </p>
+          {id && (
+            <InlineCopyButton
+              value={() => getHashLink(id)}
+              label={`${title} section link`}
+              ariaLabel={`copy ${title} section link`}
+              icon="link"
+              className="atlas-proof-tile__permalink micro-focus micro-focus-tight micro-pressable"
+            >
+              <span className="sr-only">copy section link</span>
+            </InlineCopyButton>
+          )}
+        </div>
         <p className="atlas-proof-tile__caption">{caption}</p>
       </div>
     </article>
@@ -210,26 +229,21 @@ function AtlasMotionRuleTile() {
   );
 }
 
-function AtlasCodeArtifact({
-  onCopy,
-}: {
-  onCopy: (value: string, label: string) => boolean | void | Promise<boolean | void>;
-}) {
+function AtlasCodeArtifact() {
   return (
     <div className="atlas-code-artifact">
       <div className="detail-artifact-header">
         <span>event contract</span>
         <div className="detail-artifact-header-actions">
           <span className="detail-artifact-header-meta">case-study sketch</span>
-          <button
-            type="button"
+          <InlineCopyButton
+            value={ATLAS_EVENT_CONTRACT}
+            label="event contract artifact"
+            ariaLabel="copy event contract artifact"
             className="detail-copy-action micro-focus micro-focus-tight micro-pressable"
-            aria-label="copy event contract artifact"
-            onClick={() => void onCopy(ATLAS_EVENT_CONTRACT, "artifact")}
           >
-            <Copy aria-hidden="true" />
-            <span>copy</span>
-          </button>
+            copy
+          </InlineCopyButton>
         </div>
       </div>
       <pre className="detail-artifact-code">
@@ -260,7 +274,6 @@ function AtlasDecisionLog() {
 
 export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProps) {
   const reduceMotion = useReducedMotion();
-  const { copyText, toast } = useCopyFeedback();
 
   return (
     <motion.article
@@ -323,7 +336,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             caption="The prototype needed a shared vocabulary before the app surfaces could feel connected."
             className="atlas-proof-tile--code"
           >
-            <AtlasCodeArtifact onCopy={copyText} />
+            <AtlasCodeArtifact />
           </AtlasTile>
 
           <AtlasTile
@@ -354,7 +367,6 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           ))}
         </div>
       </section>
-      <CopyFeedbackToast message={toast} />
     </motion.article>
   );
 }

@@ -1,11 +1,25 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { springs, tweens } from "@/lib/material/motion";
+import { Check, Copy, Link as LinkIcon } from "lucide-react";
 
 type CopyTextOptions = {
   notify?: boolean;
+};
+
+type CopyValue = string | (() => string | null | undefined);
+
+type InlineCopyButtonProps = {
+  ariaLabel?: string;
+  children?: ReactNode;
+  className: string;
+  copyText?: (value: string, label: string, options?: CopyTextOptions) => boolean | void | Promise<boolean | void>;
+  icon?: "copy" | "link";
+  label: string;
+  onUnavailable?: () => void;
+  resetMs?: number;
+  value: CopyValue;
 };
 
 export function useCopyFeedback() {
@@ -42,25 +56,78 @@ export function useCopyFeedback() {
   return { copyText, notify, toast };
 }
 
-export function CopyFeedbackToast({ message }: { message: string | null }) {
-  const reduceMotion = useReducedMotion();
+async function writeClipboard(value: string) {
+  if (!navigator.clipboard?.writeText) return false;
+
+  try {
+    await navigator.clipboard.writeText(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function resolveCopyValue(value: CopyValue) {
+  return typeof value === "function" ? value() : value;
+}
+
+export function InlineCopyButton({
+  ariaLabel,
+  children = "copy",
+  className,
+  copyText,
+  icon = "copy",
+  label,
+  onUnavailable,
+  resetMs = 1200,
+  value,
+}: InlineCopyButtonProps) {
+  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+  const [liveMessage, setLiveMessage] = useState("");
+  const Icon = state === "copied" ? Check : icon === "link" ? LinkIcon : Copy;
+
+  useEffect(() => {
+    if (state === "idle") return;
+    const timer = window.setTimeout(() => {
+      setState("idle");
+      setLiveMessage("");
+    }, resetMs);
+    return () => window.clearTimeout(timer);
+  }, [resetMs, state]);
+
+  const onClick = async () => {
+    const targetValue = resolveCopyValue(value);
+
+    if (!targetValue) {
+      setState("failed");
+      setLiveMessage(`${label} copy unavailable`);
+      onUnavailable?.();
+      return;
+    }
+
+    const copyResult = copyText
+      ? await copyText(targetValue, label, { notify: false })
+      : await writeClipboard(targetValue);
+    const didCopy = copyResult !== false;
+
+    setState(didCopy ? "copied" : "failed");
+    setLiveMessage(didCopy ? `${label} copied` : `${label} copy unavailable`);
+    if (!didCopy) onUnavailable?.();
+  };
 
   return (
-    <AnimatePresence>
-      {message && (
-        <motion.div
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
-          className="command-toast"
-          initial={reduceMotion ? false : { opacity: 0, y: 6, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.98 }}
-          transition={reduceMotion ? tweens.none : springs.spatialFast}
-        >
-          {message}
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <button
+      type="button"
+      className={className}
+      aria-label={ariaLabel ?? `copy ${label}`}
+      data-copied={state === "copied" ? "true" : undefined}
+      onClick={onClick}
+    >
+      <Icon aria-hidden="true" />
+      {children && <span>{children}</span>}
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {liveMessage}
+      </span>
+    </button>
   );
 }
