@@ -947,7 +947,7 @@ button.home-row {
 .home-bullet--work {
   width: var(--signal-dot-size-work);
   height: var(--signal-dot-size-work);
-  opacity: var(--signal-opacity-strong);
+  opacity: var(--signal-opacity-rest);
 }
 
 .home-row--intro .home-bullet--leaf {
@@ -965,7 +965,7 @@ button.home-row {
 .home-bullet--note {
   width: var(--signal-dot-size);
   height: var(--signal-dot-size);
-  opacity: var(--signal-opacity-note);
+  opacity: var(--signal-opacity-rest);
 }
 
 .home-bullet--section {
