@@ -82,22 +82,46 @@ function getHashLink(id: string) {
 }
 
 function AtlasTile({
+  artifactType,
   caption,
   children,
   className = "",
   id,
+  isSelected = false,
   label,
+  onSelect,
   title,
 }: {
+  artifactType: "code" | "context" | "live" | "scan" | "sequence";
   caption: string;
   children: React.ReactNode;
   className?: string;
   id?: string;
+  isSelected?: boolean;
   label?: string;
+  onSelect?: (id: string) => void;
   title: string;
 }) {
+  const selectTile = () => {
+    if (id) onSelect?.(id);
+  };
+
   return (
-    <article id={id} className={`atlas-proof-tile ${className}`}>
+    <article
+      id={id}
+      tabIndex={id ? 0 : undefined}
+      className={`atlas-proof-tile ${className}`}
+      data-selected={isSelected ? "true" : undefined}
+      aria-label={`${title} proof tile${isSelected ? ", selected" : ""}`}
+      onClick={selectTile}
+      onFocusCapture={selectTile}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectTile();
+        }
+      }}
+    >
       <div className="atlas-proof-tile__body">{children}</div>
       <div className="atlas-proof-tile__copy">
         <div className="atlas-proof-tile__title-row">
@@ -105,19 +129,26 @@ function AtlasTile({
             {title}
             {label && <span>{label}</span>}
           </p>
-          {id && (
+          <span className="atlas-proof-tile__type">{artifactType}</span>
+        </div>
+        <p className="atlas-proof-tile__caption">{caption}</p>
+        {id && isSelected && (
+          <div className="atlas-proof-tile__actions">
+            <span>selected</span>
             <InlineCopyButton
               value={() => getHashLink(id)}
               label={`${title} section link`}
               ariaLabel={`copy ${title} section link`}
               icon="link"
-              className="atlas-proof-tile__permalink micro-focus micro-focus-tight micro-pressable"
+              className="atlas-proof-tile__action micro-focus micro-focus-tight micro-pressable"
             >
-              <span className="sr-only">copy section link</span>
+              copy link
             </InlineCopyButton>
-          )}
-        </div>
-        <p className="atlas-proof-tile__caption">{caption}</p>
+            <a className="atlas-proof-tile__action micro-focus micro-focus-tight" href={`#${id}`}>
+              open
+            </a>
+          </div>
+        )}
       </div>
     </article>
   );
@@ -274,6 +305,7 @@ function AtlasDecisionLog() {
 
 export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProps) {
   const reduceMotion = useReducedMotion();
+  const [selectedTileId, setSelectedTileId] = useState("atlas-triage-map");
 
   return (
     <motion.article
@@ -304,8 +336,11 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             id="atlas-triage-map"
             title="triage map"
             label="incident command flow"
+            artifactType="sequence"
             caption="A screenshot sequence showing how field, command, and receiving surfaces shared the same emergency picture."
             className="atlas-proof-tile--wide"
+            isSelected={selectedTileId === "atlas-triage-map"}
+            onSelect={setSelectedTileId}
           >
             <AtlasImageSequence images={ATLAS_TRIAGE_SEQUENCE} />
           </AtlasTile>
@@ -314,8 +349,11 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             id="atlas-capacity-state"
             title="capacity state"
             label="live interaction"
+            artifactType="live"
             caption="A small state model for hospital load, available beds, priority, and routing action."
             className="atlas-proof-tile--live"
+            isSelected={selectedTileId === "atlas-capacity-state"}
+            onSelect={setSelectedTileId}
           >
             <AtlasCapacityTile />
           </AtlasTile>
@@ -324,7 +362,10 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             id="atlas-patient-detail"
             title="patient detail"
             label="scan density"
+            artifactType="scan"
             caption="Dense patient data is grouped by role so responders and ER staff can scan different slices of the same state."
+            isSelected={selectedTileId === "atlas-patient-detail"}
+            onSelect={setSelectedTileId}
           >
             <AtlasPatientDetail />
           </AtlasTile>
@@ -333,8 +374,11 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             id="atlas-event-contract"
             title="event contract"
             label="code artifact"
+            artifactType="code"
             caption="The prototype needed a shared vocabulary before the app surfaces could feel connected."
             className="atlas-proof-tile--code"
+            isSelected={selectedTileId === "atlas-event-contract"}
+            onSelect={setSelectedTileId}
           >
             <AtlasCodeArtifact />
           </AtlasTile>
@@ -343,7 +387,10 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             id="atlas-motion-rule"
             title="motion rule"
             label="live interaction"
+            artifactType="live"
             caption="Emergency UI motion should confirm change, then get out of the way."
+            isSelected={selectedTileId === "atlas-motion-rule"}
+            onSelect={setSelectedTileId}
           >
             <AtlasMotionRuleTile />
           </AtlasTile>
@@ -352,7 +399,10 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             id="atlas-decision-log"
             title="decision log"
             label="context"
+            artifactType="context"
             caption="The hiring-readable layer: role, constraint, decision, and result without turning the page into a long essay."
+            isSelected={selectedTileId === "atlas-decision-log"}
+            onSelect={setSelectedTileId}
           >
             <AtlasDecisionLog />
           </AtlasTile>
