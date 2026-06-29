@@ -22,6 +22,7 @@ import {
 } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
+import { ATLAS_DECISION_LOG, ATLAS_EVENT_CONTRACT } from "@/data/atlasProof";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -100,7 +101,17 @@ function getCommandLink(path: string) {
   return absoluteUrl(path);
 }
 
-function atlasJumpCommands(jumpToId: (id: string, href: string) => void): CommandItem[] {
+function getAtlasDecisionLogCopy() {
+  return ATLAS_DECISION_LOG.map((item) => `${item.label}: ${item.value}`).join("\n");
+}
+
+function atlasContextCommands({
+  copyText,
+  jumpToId,
+}: {
+  copyText: BuildCommandItemsOptions["copyText"];
+  jumpToId: (id: string, href: string) => void;
+}): CommandItem[] {
   return [
     {
       id: "atlas-proof-bento",
@@ -159,6 +170,34 @@ function atlasJumpCommands(jumpToId: (id: string, href: string) => void): Comman
       action: () => jumpToId("atlas-event-contract", "/work/atlas#atlas-event-contract"),
     },
     {
+      id: "atlas-patient-detail",
+      title: "jump to patient detail",
+      meta: "scan density",
+      group: "atlas",
+      keywords: ["atlas", "patient", "detail", "scan", "density"],
+      icon: <Hash />,
+      preview: {
+        title: "patient detail",
+        meta: "scan density",
+        body: "Moves to the dense patient data proof tile.",
+      },
+      action: () => jumpToId("atlas-patient-detail", "/work/atlas#atlas-patient-detail"),
+    },
+    {
+      id: "atlas-motion-rule",
+      title: "jump to motion rule",
+      meta: "live interaction",
+      group: "atlas",
+      keywords: ["atlas", "motion", "rule", "interaction", "state"],
+      icon: <Hash />,
+      preview: {
+        title: "motion rule",
+        meta: "live interaction",
+        body: "Moves to the proof tile for restrained emergency UI motion.",
+      },
+      action: () => jumpToId("atlas-motion-rule", "/work/atlas#atlas-motion-rule"),
+    },
+    {
       id: "atlas-decision-log",
       title: "jump to decision log",
       meta: "role / constraint / result",
@@ -171,6 +210,62 @@ function atlasJumpCommands(jumpToId: (id: string, href: string) => void): Comman
         body: "The short hiring-readable layer for role, constraint, decision, and result.",
       },
       action: () => jumpToId("atlas-decision-log", "/work/atlas#atlas-decision-log"),
+    },
+    {
+      id: "atlas-reflection",
+      title: "jump to reflection",
+      meta: "next iteration",
+      group: "atlas",
+      keywords: ["atlas", "reflection", "next", "iteration", "learned"],
+      icon: <Hash />,
+      preview: {
+        title: "short reflection",
+        meta: "next iteration",
+        body: "Moves to the note about making the next system log inspectable.",
+      },
+      action: () => jumpToId("atlas-reflection", "/work/atlas#atlas-reflection"),
+    },
+    {
+      id: "copy-atlas-event-contract",
+      title: "copy event contract",
+      meta: "atlas code artifact",
+      group: "copy",
+      keywords: ["atlas", "copy", "event", "contract", "code", "artifact"],
+      icon: <Copy />,
+      preview: {
+        title: "event contract",
+        meta: "atlas code artifact",
+        body: "Copies the case-study sketch contract shown in the Atlas code tile.",
+      },
+      action: () => void copyText(ATLAS_EVENT_CONTRACT, "event contract"),
+    },
+    {
+      id: "copy-atlas-decision-log",
+      title: "copy decision log",
+      meta: "atlas context",
+      group: "copy",
+      keywords: ["atlas", "copy", "decision", "log", "context"],
+      icon: <Copy />,
+      preview: {
+        title: "decision log",
+        meta: "atlas context",
+        body: "Copies the short decision log as label/value lines.",
+      },
+      action: () => void copyText(getAtlasDecisionLogCopy(), "decision log"),
+    },
+    {
+      id: "copy-atlas-capacity-link",
+      title: "copy capacity state link",
+      meta: "atlas section",
+      group: "copy",
+      keywords: ["atlas", "copy", "capacity", "state", "link", "section"],
+      icon: <LinkIcon />,
+      preview: {
+        title: "capacity state link",
+        meta: "atlas section",
+        body: getCommandLink("/work/atlas#atlas-capacity-state"),
+      },
+      action: () => void copyText(getCommandLink("/work/atlas#atlas-capacity-state"), "capacity state link"),
     },
   ];
 }
@@ -198,7 +293,7 @@ export function buildCommandItems({
     ? `${currentProject.title}: ${currentProject.builder.oneLiner || currentProject.fullDescription || currentProject.description}`
     : "minwook shin makes interfaces, prototypes, and small systems for AI-native products.";
   const contextCommands: CommandItem[] = [
-    ...(currentProject?.slug === "atlas" ? atlasJumpCommands(jumpToId) : []),
+    ...(currentProject?.slug === "atlas" ? atlasContextCommands({ copyText, jumpToId }) : []),
     ...(pathname !== "/"
       ? [
           {
