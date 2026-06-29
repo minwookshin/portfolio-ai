@@ -142,7 +142,7 @@
   --md-state-press: 0.1;
 
   /* Homepage outline layout: final-pass numbers, intentionally modest. */
-  --home-title-gap-inline: 3px;
+  --home-title-gap-inline: 5px;
   --home-title-padding-block-end: 16px;
   --home-list-gap: 4px;
   --home-row-column-gap: 12px;
@@ -159,7 +159,9 @@
   --home-title-font-size: var(--type-title);
   --home-title-mobile-font-size: var(--type-title-mobile);
   --home-row-font-size: var(--type-row);
-  --home-meta-font-size: var(--type-meta);
+  --home-meta-font-size: 11.5px;
+  --home-meta-color: color-mix(in srgb, var(--text-muted) 76%, var(--bg-base));
+  --home-meta-hover-color: color-mix(in srgb, var(--text-primary) 56%, var(--text-muted));
 
   /* Outline signal grammar */
   --signal-cell-inline: 18px;
@@ -449,16 +451,16 @@ body::after {
 .command-trigger {
   position: relative;
   display: inline-grid;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex: 0 0 auto;
   place-items: center;
   border: 0;
   border-radius: var(--md-shape-sm);
   background: transparent;
   color: var(--text-muted);
-  opacity: 0.52;
-  transform: translateY(0.5px);
+  opacity: 0.46;
+  transform: translateY(1px);
   transition:
     background-color 160ms var(--motion-ease-standard),
     color 160ms var(--motion-ease-standard),
@@ -473,17 +475,17 @@ body::after {
 }
 
 .command-trigger svg {
-  width: 13px;
-  height: 13px;
-  stroke-width: 1.75;
+  width: 12px;
+  height: 12px;
+  stroke-width: 1.8;
 }
 
 .command-trigger:hover,
 .command-trigger:focus-visible {
-  background: var(--state-row-focus);
+  background: color-mix(in srgb, var(--text-primary) 3.5%, transparent);
   color: var(--text-primary);
-  opacity: 0.86;
-  transform: translateY(0.5px) translateX(var(--signal-nudge));
+  opacity: 0.74;
+  transform: translateY(1px) translateX(var(--signal-nudge));
 }
 
 .command-layer {
@@ -1327,6 +1329,7 @@ button.home-row {
   max-width: 100%;
   justify-self: start;
   color: var(--text-primary);
+  text-wrap: pretty;
   transform: translateX(0);
   transition:
     color 160ms var(--motion-ease-standard),
@@ -1334,12 +1337,13 @@ button.home-row {
 }
 
 .home-meta {
-  padding-left: 8px;
-  color: color-mix(in srgb, var(--text-muted) 72%, var(--bg-base));
+  padding-left: 7px;
+  color: var(--home-meta-color);
   font-family: var(--font-mono);
   font-size: var(--home-meta-font-size);
   font-variant-numeric: tabular-nums;
   line-height: inherit;
+  text-wrap: pretty;
 }
 
 .home-meta.study-meta-row {
@@ -1663,7 +1667,7 @@ button.home-mention {
 
   .home-row--link:hover .home-meta,
   .home-row--link:focus-visible .home-meta {
-    color: color-mix(in srgb, var(--text-primary) 62%, var(--text-muted));
+    color: var(--home-meta-hover-color);
   }
 
   .home-mention:hover,
@@ -1706,6 +1710,22 @@ button.home-mention {
 
   .home-doc-title {
     font-size: var(--home-title-mobile-font-size);
+  }
+
+  .home-row {
+    --home-row-line-height: 1.56;
+  }
+
+  .home-row--intro .home-label {
+    max-width: 33ch;
+  }
+
+  .home-doc [data-project-row] .home-meta {
+    padding-left: 6px;
+  }
+
+  .home-doc [data-project-row="writing"] .home-meta {
+    display: inline-block;
   }
 
   .home-row {
@@ -2012,7 +2032,7 @@ button.home-mention {
   color: color-mix(in srgb, var(--text-primary) 68%, var(--text-muted));
   text-decoration-line: none;
   transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 [data-project-row="work"]:hover .project-row-title-line--lateral,
@@ -2059,7 +2079,7 @@ button.home-mention {
 .study-meta-detail {
   min-width: 0;
   color: var(--text-muted);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 

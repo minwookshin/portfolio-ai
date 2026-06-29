@@ -2,7 +2,7 @@
 
 ## Source of truth
 - Status: Active
-- Last refreshed: 2026-06-28
+- Last refreshed: 2026-06-29
 - Primary product surfaces: portfolio homepage, command palette, work browsing, notes browsing, studies archive, project detail pages, main-page profile/contact block.
 - Evidence reviewed: `app/page.tsx`, `app/studies/page.tsx`, `app/interactions/page.tsx`, `app/globals.css`, `components/HomePage.tsx`, `components/InteractionsPage.tsx`, `components/ChatInput.tsx`, `components/ProjectDetailView.tsx`, `components/LabStudyDetailView.tsx`, `components/detail/CaseStudy.tsx`, `data/projects.ts`, `public/projects/**`, Work & Co work/case-study references, Pentagram work/case-study references, Instrument homepage/work pattern, Fantasy homepage positioning, Metalab project-first work grid, Clay outcome/category work index, BASIC/DEPT case-study archive, Huge work index, NN/g UX portfolio and grid guidance, Awwwards project-page collection, Marvin Schwaibold reference site, Google UX portfolio guidance, Vercel design engineer role language.
 
@@ -34,7 +34,7 @@
 
 ## Visual language
 - Color: monochrome light canvas, near-black primary text, restrained gray secondary copy, and no blue accent on the homepage; highlights use the site black.
-- Typography: Geist Sans for body, rows, section labels, and homepage action chips; Geist Mono only for metadata, command labels, and code/system artifacts. Keep small editorial sizes, readable paragraph rhythm, and no negative letter spacing.
+- Typography: Geist Sans for body, rows, section labels, and homepage action chips; Geist Mono only for metadata, command labels, and code/system artifacts. Homepage metadata stays slightly smaller and quieter than row text so project titles remain the scan anchor. Keep small editorial sizes, readable paragraph rhythm, and no negative letter spacing.
 - Spacing/layout rhythm: generous top/bottom whitespace, constrained text columns, and text-list rhythm on index pages; wider media belongs inside detail pages.
 - Shape/radius/elevation: modest 8px radius; avoid nested cards and large glassmorphism on the homepage; contact chips may keep a small glass surface, and Command-K may use a thin glass shell plus one active-row glass lens, but glass should not become the page's main interaction.
 - Motion: slow Apple-like easing, bottom-sheet travel, subtle carousel/card hover; Lottie is reserved for small studies proof assets, not hero or navigation motion.
@@ -61,7 +61,7 @@
 - Touch/hover differences: hover polish is additive; tap/click remains direct.
 
 ## Interaction states
-- Loading: existing intro and chat streaming states stay subtle.
+- Loading: homepage cold-load uses a quiet document boot: near-opacity-only reveal, about 1-2px of y travel, and a very short stagger so the page feels like a document becoming available rather than a staged animation.
 - Empty: home still shows work without chat.
 - Error: chat retains existing error message.
 - Success: project sheets open with clear context and dismiss controls; profile/contact details stay available on the main page.
@@ -82,5 +82,4 @@
 - Test/screenshot expectations: run unit tests, production build, and browser checks on localhost after major changes.
 
 ## Open questions
-- [ ] Should the final live version keep the current intro animation, or move directly into the editorial page? / Minwook / affects first impression.
 - [ ] Which four projects should be permanently treated as homepage work? / Minwook / affects homepage hierarchy.

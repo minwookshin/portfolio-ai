@@ -36,11 +36,11 @@ type HomePageProps = {
 };
 
 const DOCUMENT_BOOT_EASE = [0.22, 1, 0.36, 1] as const;
-const DOCUMENT_BOOT_DELAY = 0.04;
-const DOCUMENT_BOOT_STAGGER = 0.018;
-const DOCUMENT_BOOT_Y = 2;
-const DOCUMENT_BOOT_OPACITY_DURATION = 0.18;
-const DOCUMENT_BOOT_Y_DURATION = 0.2;
+const DOCUMENT_BOOT_DELAY = 0.02;
+const DOCUMENT_BOOT_STAGGER = 0.012;
+const DOCUMENT_BOOT_Y = 1.5;
+const DOCUMENT_BOOT_OPACITY_DURATION = 0.16;
+const DOCUMENT_BOOT_Y_DURATION = 0.18;
 
 function unavailableFeedbackAnimation() {
   return {
