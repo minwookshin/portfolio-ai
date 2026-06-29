@@ -17,9 +17,9 @@ type CapacityState = {
 };
 
 const commandRows = [
-  { label: "open work", meta: "proof log", group: "navigate" },
-  { label: "open interactions", meta: "live systems", group: "navigate" },
-  { label: "ask about this portfolio", meta: "ai utility", group: "ask" },
+  { label: "open atlas", meta: "artifact viewer", group: "navigate" },
+  { label: "jump to proof bento", meta: "atlas section", group: "atlas" },
+  { label: "copy event contract", meta: "code artifact", group: "copy" },
 ] as const;
 
 const motionStates = [
@@ -319,9 +319,19 @@ export default function InteractionsPage() {
         </nav>
 
         <header className="interaction-os__header">
-          <h1>interactions, 7 systems</h1>
-          <p>live proofs for the small state language that makes this portfolio feel like an outline operating system.</p>
+          <h1>interactions, draft system proof</h1>
+          <p>private live proofs for the small state language that makes this portfolio feel like an outline operating system.</p>
         </header>
+
+        <section className="detail-outline-section interaction-os__rules">
+          <DetailOutlineHeading heading="release path" eyebrow="not public yet" />
+          <div className="detail-outline-list detail-outline-list--grid">
+            <DetailOutlineRow title="baseline" meta="locked" body="Home owns the outline grammar: dot, arrow, chip, cursor, and document boot." />
+            <DetailOutlineRow title="artifact" meta="atlas first" body="Atlas proves the richer case-study template before the pattern is copied elsewhere." />
+            <DetailOutlineRow title="interaction" meta="later" body="This page becomes public only after the demos feel like system evidence, not a playground." />
+            <DetailOutlineRow title="command" meta="control layer" body="Command-K carries contextual utilities so the homepage stays quiet." />
+          </div>
+        </section>
 
         <section className="detail-outline-section interaction-os__rules">
           <DetailOutlineHeading heading="home state grammar" eyebrow="locked baseline" />
