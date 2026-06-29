@@ -339,15 +339,6 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                 )}
               </div>
 
-              {activeItem?.preview && (
-                <div className="command-preview" aria-live="polite">
-                  <div>
-                    <span>{activeItem.preview.meta ?? activeItem.group}</span>
-                    <strong>{activeItem.preview.title}</strong>
-                  </div>
-                  <p>{activeItem.preview.body}</p>
-                </div>
-              )}
             </motion.div>
           </motion.div>
         )}

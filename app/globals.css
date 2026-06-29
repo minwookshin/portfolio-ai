@@ -708,55 +708,6 @@ body::after {
   text-align: center;
 }
 
-.command-preview {
-  display: grid;
-  gap: 7px;
-  margin: 7px 8px 2px 33px;
-  padding: 3px 2px 1px;
-  border-top: 0;
-  color: var(--text-muted);
-}
-
-.command-preview > div {
-  display: flex;
-  min-width: 0;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.command-preview span,
-.command-preview strong,
-.command-preview p {
-  margin: 0;
-}
-
-.command-preview span {
-  flex: 0 0 auto;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: var(--type-meta);
-  font-weight: 400;
-  line-height: 1.2;
-}
-
-.command-preview strong {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--text-primary);
-  font-size: var(--type-row);
-  font-weight: 400;
-  line-height: 1.25;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.command-preview p {
-  max-width: 62ch;
-  color: var(--text-muted);
-  font-size: var(--type-meta);
-  line-height: 1.45;
-}
-
 .shortcuts-layer {
   position: fixed;
   inset: 0;

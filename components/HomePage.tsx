@@ -200,6 +200,8 @@ function HomeMetaLink({
   href: string;
   onCopy?: (value: string, label: string, options?: { notify?: boolean }) => boolean | void | Promise<boolean | void>;
 }) {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const pointerActivatedRef = useRef(false);
   const [copied, setCopied] = useState(false);
   const [liveMessage, setLiveMessage] = useState("");
   const className = "home-mention micro-focus micro-focus-tight micro-pressable";
@@ -214,8 +216,12 @@ function HomeMetaLink({
     return (
       <button
         type="button"
+        ref={buttonRef}
         className={`${className} home-mention--copy`}
         aria-label={`copy ${copyLabel ?? children}`}
+        onPointerDown={() => {
+          pointerActivatedRef.current = true;
+        }}
         onClick={async () => {
           const didCopy = await onCopy?.(copyValue, copyLabel ?? children, { notify: false });
           if (didCopy) {
@@ -225,6 +231,12 @@ function HomeMetaLink({
               setCopied(true);
               setLiveMessage(`${copyLabel ?? children} copied`);
             }, 0);
+            if (pointerActivatedRef.current) {
+              window.setTimeout(() => {
+                buttonRef.current?.blur();
+                pointerActivatedRef.current = false;
+              }, 650);
+            }
           } else if (href.startsWith("mailto:")) {
             window.location.href = href;
           }
