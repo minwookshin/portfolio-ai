@@ -657,7 +657,7 @@ body::after {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
+  grid-template-columns: 28px minmax(0, 1fr) minmax(34px, auto);
   align-items: center;
   gap: 10px;
   width: 100%;
@@ -717,7 +717,7 @@ body::after {
 
 .command-row__title,
 .command-row__meta,
-.command-row__group {
+.command-row__hint {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -729,7 +729,7 @@ body::after {
 }
 
 .command-row__meta,
-.command-row__group {
+.command-row__hint {
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: var(--type-meta);
@@ -737,8 +737,20 @@ body::after {
   line-height: 1.2;
 }
 
-.command-row__group {
+.command-row__hint {
   justify-self: end;
+  opacity: 0;
+  transform: translateX(-2px);
+  transition:
+    opacity 120ms var(--motion-ease-standard),
+    transform 140ms var(--motion-ease-standard);
+}
+
+.command-row[data-active="true"] .command-row__hint,
+.command-row:hover .command-row__hint,
+.command-row:focus-visible .command-row__hint {
+  opacity: 0.62;
+  transform: translateX(0);
 }
 
 .command-empty {

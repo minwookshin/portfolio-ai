@@ -4,6 +4,27 @@ import { getProjectBySlug } from "@/data/projects";
 import { buildCommandItems } from "@/components/commandPaletteItems";
 
 describe("command palette items", () => {
+  it("prioritizes home commands as a minimal control layer", () => {
+    const items = buildCommandItems({
+      askAboutPortfolio: vi.fn(),
+      contextLabel: "index",
+      copyText: vi.fn(),
+      currentProject: null,
+      jumpToId: vi.fn(),
+      openShortcuts: vi.fn(),
+      pathname: "/",
+      push: vi.fn(),
+      writingPosts: [],
+    });
+
+    expect(items.slice(0, 4).map((item) => item.id)).toEqual([
+      "view-work",
+      "view-notes",
+      "copy-email",
+      "ask-portfolio",
+    ]);
+  });
+
   it("adds Atlas artifact commands on the Atlas page", () => {
     const atlas = getProjectBySlug("atlas");
     const copyText = vi.fn();
@@ -33,6 +54,13 @@ describe("command palette items", () => {
       "copy-atlas-decision-log",
       "copy-atlas-capacity-link",
     ]));
+    expect(items.slice(0, 5).map((item) => item.id)).toEqual([
+      "atlas-proof-bento",
+      "atlas-capacity-state",
+      "copy-project-link",
+      "copy-atlas-decision-log",
+      "copy-atlas-capacity-link",
+    ]);
 
     items.find((item) => item.id === "copy-atlas-event-contract")?.action();
 

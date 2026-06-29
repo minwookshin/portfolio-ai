@@ -105,6 +105,10 @@ function getAtlasDecisionLogCopy() {
   return ATLAS_DECISION_LOG.map((item) => `${item.label}: ${item.value}`).join("\n");
 }
 
+function getProjectCommandId(project: PortfolioProject) {
+  return `project-${project.slug ?? project.id}`;
+}
+
 function atlasContextCommands({
   copyText,
   jumpToId,
@@ -270,6 +274,99 @@ function atlasContextCommands({
   ];
 }
 
+function prioritizeCommandItems(items: CommandItem[], preferredIds: string[]) {
+  const order = new Map(preferredIds.filter(Boolean).map((id, index) => [id, index]));
+
+  return items
+    .map((item, index) => ({
+      index,
+      item,
+      priority: order.get(item.id) ?? Number.MAX_SAFE_INTEGER,
+    }))
+    .sort((a, b) => a.priority - b.priority || a.index - b.index)
+    .map(({ item }) => item);
+}
+
+function getPreferredCommandIds({
+  currentProject,
+  latestNote,
+  orderedProjects,
+  pathname,
+}: {
+  currentProject: PortfolioProject | null;
+  latestNote?: WritingPostMeta;
+  orderedProjects: PortfolioProject[];
+  pathname: string;
+}) {
+  if (pathname === "/") {
+    return [
+      "view-work",
+      "view-notes",
+      "copy-email",
+      "ask-portfolio",
+      "jump-today",
+      "jump-contact",
+      "copy-current-link",
+    ];
+  }
+
+  if (pathname === "/work") {
+    return [
+      ...orderedProjects.slice(0, 4).map(getProjectCommandId),
+      "copy-current-link",
+      "jump-work-2026",
+      "jump-work-2025",
+      "view-index",
+    ];
+  }
+
+  if (pathname === "/notes") {
+    return [
+      latestNote ? `note-${latestNote.slug}` : "",
+      "copy-current-link",
+      "view-index",
+      "view-work",
+    ];
+  }
+
+  if (currentProject?.slug === "atlas") {
+    return [
+      "atlas-proof-bento",
+      "atlas-capacity-state",
+      "copy-project-link",
+      "copy-atlas-decision-log",
+      "copy-atlas-capacity-link",
+      "view-work",
+      "view-index",
+    ];
+  }
+
+  if (currentProject) {
+    return [
+      "copy-project-link",
+      "copy-project-summary",
+      "view-work",
+      "view-index",
+    ];
+  }
+
+  if (pathname.startsWith("/interactions")) {
+    return [
+      "copy-current-link",
+      "view-index",
+      "show-shortcuts",
+      "view-work",
+    ];
+  }
+
+  return [
+    "view-index",
+    "copy-current-link",
+    "view-work",
+    "view-notes",
+  ];
+}
+
 export function buildCommandItems({
   askAboutPortfolio,
   contextLabel,
@@ -418,7 +515,7 @@ export function buildCommandItems({
         ]),
   ];
 
-  return [
+  const commandItems: CommandItem[] = [
     ...contextCommands,
     {
       id: "view-work",
@@ -449,7 +546,7 @@ export function buildCommandItems({
       action: () => push("/notes"),
     },
     ...orderedProjects.map((project) => ({
-      id: `project-${project.slug ?? project.id}`,
+      id: getProjectCommandId(project),
       title: `open ${project.title.toLowerCase()}`,
       meta: projectDescriptor(project),
       group: "work",
@@ -571,4 +668,11 @@ export function buildCommandItems({
       action: openShortcuts,
     },
   ];
+
+  return prioritizeCommandItems(commandItems, getPreferredCommandIds({
+    currentProject,
+    latestNote,
+    orderedProjects,
+    pathname,
+  }));
 }

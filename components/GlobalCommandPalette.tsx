@@ -34,6 +34,14 @@ function isTypingTarget(target: EventTarget | null) {
   return tagName === "input" || tagName === "textarea" || target.isContentEditable;
 }
 
+function getCommandActionHint(item: CommandItem) {
+  if (item.group === "copy") return "copy";
+  if (item.id.startsWith("jump-") || item.group === "atlas") return "jump";
+  if (item.id === "ask-portfolio") return "ask";
+  if (item.id === "show-shortcuts") return "show";
+  return "open";
+}
+
 export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPaletteProps) {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
@@ -242,7 +250,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={reduceMotion ? tweens.none : tweens.base}
+            transition={reduceMotion ? tweens.none : tweens.fast}
             onMouseDown={(event) => {
               if (event.target === event.currentTarget) closePalette();
             }}
@@ -252,13 +260,26 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
               aria-modal="true"
               aria-label="site command palette"
               className="command-panel"
-              initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.985 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 6, scale: 0.992 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.985 }}
-              transition={reduceMotion ? tweens.none : springs.spatialFast}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 4, scale: 0.994 }}
+              transition={reduceMotion ? tweens.none : tweens.fast}
               onMouseDown={(event) => event.stopPropagation()}
             >
-              <div className="command-search">
+              <motion.div
+                className="command-search"
+                initial={reduceMotion ? false : { opacity: 0, y: -2 }}
+                animate={
+                  reduceMotion
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 1, y: 0, transition: { ...tweens.fast, delay: 0.02 } }
+                }
+                exit={
+                  reduceMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, y: -1, transition: { ...tweens.instant, delay: 0.04 } }
+                }
+              >
                 <Search className="command-search__icon" aria-hidden="true" />
                 <input
                   ref={inputRef}
@@ -297,9 +318,25 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                     esc
                   </button>
                 )}
-              </div>
+              </motion.div>
 
-              <div ref={listRef} className="command-list" role="listbox" aria-label="site commands">
+              <motion.div
+                ref={listRef}
+                className="command-list"
+                role="listbox"
+                aria-label="site commands"
+                initial={reduceMotion ? false : { opacity: 0, y: 3 }}
+                animate={
+                  reduceMotion
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 1, y: 0, transition: { ...tweens.fast, delay: 0.08 } }
+                }
+                exit={
+                  reduceMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, y: -2, transition: tweens.instant }
+                }
+              >
                 {visibleItems.length > 0 && (
                   <motion.div
                     aria-hidden="true"
@@ -332,20 +369,22 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                       onClick={() => runCommand(item)}
                       onMouseEnter={() => setActiveIndex(index)}
                       role="option"
-                      aria-selected={index === activeIndex}
+                      aria-selected={index === clampedActiveIndex}
                     >
                       <span className="command-row__icon" aria-hidden="true">{item.icon}</span>
                       <span className="command-row__copy">
                         <span className="command-row__title">{item.title}</span>
                         <span className="command-row__meta">{item.meta}</span>
                       </span>
-                      <span className="command-row__group">{item.group}</span>
+                      <span className="command-row__hint" aria-hidden="true">
+                        {getCommandActionHint(item)}
+                      </span>
                     </button>
                   ))
                 ) : (
-                  <p className="command-empty">no command found</p>
+                  <p className="command-empty">no command</p>
                 )}
-              </div>
+              </motion.div>
 
             </motion.div>
           </motion.div>
