@@ -34,8 +34,13 @@ type HomePageProps = {
   writingPosts: WritingPostMeta[];
 };
 
-const LANDING_EASE = [0.22, 1, 0.36, 1] as const;
-const LANDING_EXPLORE_DELAY = 0.08;
+const DOCUMENT_BOOT_EASE = [0.22, 1, 0.36, 1] as const;
+const DOCUMENT_BOOT_DELAY = 0.04;
+const DOCUMENT_BOOT_STAGGER = 0.018;
+const DOCUMENT_BOOT_Y = 2;
+const DOCUMENT_BOOT_OPACITY_DURATION = 0.18;
+const DOCUMENT_BOOT_Y_DURATION = 0.2;
+
 function unavailableFeedbackAnimation() {
   return {
     rotateX: [0, -7, 3, 0],
@@ -45,7 +50,7 @@ function unavailableFeedbackAnimation() {
     y: [0, -1, 0],
     transition: {
       duration: 0.34,
-      ease: LANDING_EASE,
+      ease: DOCUMENT_BOOT_EASE,
     },
   };
 }
@@ -54,8 +59,8 @@ const landingPageVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
-      delayChildren: 0.02,
-      staggerChildren: 0.025,
+      delayChildren: 0,
+      staggerChildren: 0,
     },
   },
 };
@@ -64,8 +69,8 @@ const landingIntroVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
-      delayChildren: 0.02,
-      staggerChildren: 0.025,
+      delayChildren: DOCUMENT_BOOT_DELAY,
+      staggerChildren: DOCUMENT_BOOT_STAGGER,
     },
   },
 };
@@ -74,8 +79,8 @@ const landingExploreVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
-      delayChildren: LANDING_EXPLORE_DELAY,
-      staggerChildren: 0.018,
+      delayChildren: 0,
+      staggerChildren: 0,
     },
   },
 };
@@ -83,14 +88,14 @@ const landingExploreVariants: Variants = {
 const landingRevealItem: Variants = {
   hidden: {
     opacity: 0,
-    y: 2,
+    y: DOCUMENT_BOOT_Y,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      opacity: { type: "tween", duration: 0.16, ease: LANDING_EASE },
-      y: { type: "tween", duration: 0.18, ease: LANDING_EASE },
+      opacity: { type: "tween", duration: DOCUMENT_BOOT_OPACITY_DURATION, ease: DOCUMENT_BOOT_EASE },
+      y: { type: "tween", duration: DOCUMENT_BOOT_Y_DURATION, ease: DOCUMENT_BOOT_EASE },
     },
   },
 };
