@@ -1,9 +1,10 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Copy } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { CopyFeedbackToast, useCopyFeedback } from "@/components/CopyFeedback";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -65,6 +66,8 @@ export interface CaseStudyData {
   sections: DetailSection[];
   ask?: string[]; // outro follow-up prompts, wired to chat
 }
+
+type ArtifactSection = Extract<DetailSection, { kind: "artifact" }>;
 
 // Detail pages should feel closer to the homepage: quiet, fast, and mostly
 // editorial. Section reveals are intentionally small so reading stays calm.
@@ -141,6 +144,22 @@ function getLinkMeta(label: string, href: string) {
   return isExternalHref(href) ? "external" : "internal";
 }
 
+function getArtifactCopyValue(section: ArtifactSection) {
+  if (section.code) return section.code;
+
+  const rows = section.rows?.map((row) => {
+    const note = row.note ? ` — ${row.note}` : "";
+    return `${row.label}: ${row.value}${note}`;
+  }) ?? [];
+
+  return [
+    section.title,
+    section.meta,
+    ...rows,
+    section.caption,
+  ].filter(Boolean).join("\n");
+}
+
 function DetailLink({ label, href }: { label: string; href: string }) {
   const external = isExternalHref(href);
   const document = isDocumentHref(href);
@@ -206,7 +225,12 @@ function getSectionMotion(reduceMotion: boolean) {
     : reveal;
 }
 
-function renderSection(section: DetailSection, i: number, reduceMotion: boolean) {
+function renderSection(
+  section: DetailSection,
+  i: number,
+  reduceMotion: boolean,
+  copyText?: (value: string, label: string) => boolean | void | Promise<boolean | void>,
+) {
   const sectionMotion = getSectionMotion(reduceMotion);
 
   switch (section.kind) {
@@ -428,14 +452,29 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
         </motion.section>
       );
 
-    case "artifact":
+    case "artifact": {
+      const artifactCopyValue = getArtifactCopyValue(section);
+
       return (
         <motion.section key={i} {...sectionMotion} className={sectionCls}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
           <div className="detail-artifact-surface">
             <div className="detail-artifact-header">
               <span>{section.title}</span>
-              {section.meta && <span>{section.meta}</span>}
+              <div className="detail-artifact-header-actions">
+                {section.meta && <span className="detail-artifact-header-meta">{section.meta}</span>}
+                {copyText && artifactCopyValue && (
+                  <button
+                    type="button"
+                    className="detail-copy-action micro-focus micro-focus-tight micro-pressable"
+                    aria-label={`copy ${section.title} artifact`}
+                    onClick={() => void copyText(artifactCopyValue, "artifact")}
+                  >
+                    <Copy aria-hidden="true" />
+                    <span>copy</span>
+                  </button>
+                )}
+              </div>
             </div>
             {section.rows && section.rows.length > 0 && (
               <div className="detail-artifact-list">
@@ -463,6 +502,7 @@ function renderSection(section: DetailSection, i: number, reduceMotion: boolean)
           {section.caption && <p className="detail-artifact-caption">{section.caption}</p>}
         </motion.section>
       );
+    }
 
     case "outcome":
       return (
@@ -525,12 +565,13 @@ function AskRow({
 
 export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: string) => void }) {
   const reduceMotion = Boolean(useReducedMotion());
+  const { copyText, toast } = useCopyFeedback();
 
   return (
     <div className="case-study-sections detail-outline-stack">
       {data.sections.map((s, i) => (
         <div key={i}>
-          {renderSection(s, i, reduceMotion)}
+          {renderSection(s, i, reduceMotion, copyText)}
           {/* Questions woven in right where they make sense in the narrative */}
           {onAsk && s.ask && s.ask.length > 0 && <AskRow prompts={s.ask} onAsk={onAsk} className="mt-[var(--space-3)]" reduceMotion={reduceMotion} />}
         </div>
@@ -540,6 +581,7 @@ export function CaseStudy({ data, onAsk }: { data: CaseStudyData; onAsk?: (q: st
       {onAsk && data.ask && data.ask.length > 0 && (
         <AskRow prompts={data.ask} onAsk={onAsk} label="Keep exploring" className="pt-[var(--space-1)]" reduceMotion={reduceMotion} />
       )}
+      <CopyFeedbackToast message={toast} />
     </div>
   );
 }

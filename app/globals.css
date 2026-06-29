@@ -1247,6 +1247,22 @@ button.home-row {
   will-change: opacity;
 }
 
+.home-mention--copy {
+  gap: 5px;
+}
+
+.home-mention-copy-icon {
+  width: 13px;
+  height: 13px;
+  color: var(--text-muted);
+  opacity: 0.58;
+  stroke-width: 1.8;
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
 button.home-mention {
   appearance: none;
   cursor: pointer;
@@ -1434,6 +1450,13 @@ button.home-mention {
   .home-mention:focus-visible {
     color: var(--text-primary);
     transform: none;
+  }
+
+  .home-mention:hover .home-mention-copy-icon,
+  .home-mention:focus-visible .home-mention-copy-icon {
+    color: var(--text-primary);
+    opacity: 0.72;
+    transform: translateX(1px);
   }
 
   .home-mention:hover::before,
@@ -2222,11 +2245,61 @@ button.home-mention {
   line-height: 1.2;
 }
 
-.detail-artifact-header span:last-child {
+.detail-artifact-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.detail-artifact-header-meta {
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: calc(var(--code-font-size) - 1px);
   text-transform: none !important;
+}
+
+.detail-copy-action {
+  appearance: none;
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--code-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, white 74%, transparent);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--type-caption);
+  line-height: 1;
+  padding: 4px 7px;
+  text-transform: none !important;
+}
+
+.detail-copy-action svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 1.8;
+}
+
+.detail-copy-action:hover,
+.detail-copy-action:focus-visible {
+  border-color: color-mix(in srgb, var(--text-primary) 10%, var(--code-border));
+  color: var(--text-primary);
+}
+
+.detail-copy-action--breadcrumb {
+  min-height: 28px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 3px 0;
+}
+
+.detail-copy-action--breadcrumb:hover,
+.detail-copy-action--breadcrumb:focus-visible {
+  border-color: transparent;
+  background: transparent;
 }
 
 .detail-artifact-list {

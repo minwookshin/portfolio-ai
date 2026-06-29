@@ -9,10 +9,11 @@ import type { Variants } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import ChatInput from "@/components/ChatInput";
+import { CopyFeedbackToast, useCopyFeedback } from "@/components/CopyFeedback";
 import { ASK_PORTFOLIO_EVENT, ASK_PORTFOLIO_STORAGE_KEY, openGlobalCommandPalette } from "@/components/GlobalCommandPalette";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import type { Project } from "@/components/ProjectCard";
-import { ArrowUpRight, Command } from "lucide-react";
+import { ArrowUpRight, Command, Copy } from "lucide-react";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -186,14 +187,39 @@ function HomeLeafRow({ children, signal = false }: { children: ReactNode; signal
 
 function HomeMetaLink({
   children,
+  copyLabel,
+  copyValue,
   external = false,
   href,
+  onCopy,
 }: {
   children: string;
+  copyLabel?: string;
+  copyValue?: string;
   external?: boolean;
   href: string;
+  onCopy?: (value: string, label: string) => boolean | void | Promise<boolean | void>;
 }) {
   const className = "home-mention micro-focus micro-focus-tight micro-pressable";
+
+  if (copyValue) {
+    return (
+      <button
+        type="button"
+        className={`${className} home-mention--copy`}
+        aria-label={`copy ${copyLabel ?? children}`}
+        onClick={async () => {
+          const copied = await onCopy?.(copyValue, copyLabel ?? children);
+          if (copied === false && href.startsWith("mailto:")) {
+            window.location.href = href;
+          }
+        }}
+      >
+        <span>{children}</span>
+        <Copy className="home-mention-copy-icon" aria-hidden="true" />
+      </button>
+    );
+  }
 
   if (external || href.startsWith("mailto:")) {
     return (
@@ -476,11 +502,13 @@ function OutlineListSection({ emptyLabel, items }: { emptyLabel: string; items: 
 
 function HomeDocument({
   activeSection,
+  onCopy,
   noteItems,
   onOpenCommand,
   projects,
 }: {
   activeSection: HomeTab;
+  onCopy: (value: string, label: string) => boolean | void | Promise<boolean | void>;
   noteItems: StudyItem[];
   onOpenCommand: () => void;
   projects: PortfolioProject[];
@@ -555,7 +583,14 @@ function HomeDocument({
             <HomeMetaLink href={PERSONAL_INFO.x} external>x.com/FakeMinwook</HomeMetaLink>
           </HomeLeafRow>
           <HomeLeafRow>
-            <HomeMetaLink href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</HomeMetaLink>
+            <HomeMetaLink
+              copyLabel="email"
+              copyValue={PERSONAL_INFO.email}
+              href={`mailto:${PERSONAL_INFO.email}`}
+              onCopy={onCopy}
+            >
+              {PERSONAL_INFO.email}
+            </HomeMetaLink>
           </HomeLeafRow>
           <HomeLeafRow>
             <HomeMetaLink href={PERSONAL_INFO.resume}>resume</HomeMetaLink>
@@ -580,6 +615,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
   // behind it so that view is in focus again.
   const [chatOnTop, setChatOnTop] = useState(false);
   const [projectNotice, setProjectNotice] = useState<string | null>(null);
+  const { copyText, toast: copyToast } = useCopyFeedback();
   // Keep the landing motion quiet: the page simply settles in, with no separate
   // logo trace or position handoff.
   const [introReady, setIntroReady] = useState(false);
@@ -790,6 +826,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           <HomeDocument
             activeSection={currentSection}
             noteItems={noteItems}
+            onCopy={copyText}
             onOpenCommand={openGlobalCommandPalette}
             projects={featuredProjects}
           />
@@ -960,6 +997,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
           introReady={introReady}
         />
       )}
+      <CopyFeedbackToast message={copyToast} />
     </main>
   );
 }

@@ -34,6 +34,7 @@ describe("ProjectCaseStudyShell", () => {
 
     const nav = screen.getByRole("navigation", { name: "Sentinel navigation" });
     expect(within(nav).getByRole("link", { name: "back to work" })).toHaveAttribute("href", "/work");
+    expect(within(nav).getByRole("button", { name: "copy Sentinel page link" })).toBeInTheDocument();
     expect(within(nav).queryByRole("link", { name: "minwook shin" })).not.toBeInTheDocument();
     expect(within(nav).queryByText("Sentinel")).not.toBeInTheDocument();
     expect(screen.getByText("ownership")).toBeInTheDocument();
@@ -88,6 +89,7 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
     expect(screen.getAllByText("event contract")).toHaveLength(2);
     expect(screen.getByText("case-study sketch")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "copy event contract artifact" })).toBeInTheDocument();
     expect(screen.getByText("server.broadcast(event);")).toBeInTheDocument();
   });
 

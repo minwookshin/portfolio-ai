@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { usePathname, useRouter } from "next/navigation";
 import { Command, Search } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { CopyFeedbackToast, useCopyFeedback } from "@/components/CopyFeedback";
 import type { CommandItem } from "@/components/commandPaletteItems";
 import {
   buildCommandItems,
@@ -44,35 +45,11 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
   const [isOpen, setIsOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [toast, setToast] = useState<string | null>(null);
   const [lensRect, setLensRect] = useState<{ height: number; left: number; top: number; width: number } | null>(null);
+  const { copyText, toast } = useCopyFeedback();
 
   const currentProject = useMemo(() => getCurrentProject(pathname), [pathname]);
   const contextLabel = getCurrentContext(pathname, currentProject);
-
-  const notify = useCallback((message: string) => {
-    setToast(message);
-  }, []);
-
-  useEffect(() => {
-    if (!toast) return;
-    const timer = window.setTimeout(() => setToast(null), 1800);
-    return () => window.clearTimeout(timer);
-  }, [toast]);
-
-  const copyText = useCallback(async (value: string, label: string) => {
-    if (!navigator.clipboard?.writeText) {
-      notify("copy unavailable");
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(value);
-      notify(`${label} copied`);
-    } catch {
-      notify("copy failed");
-    }
-  }, [notify]);
 
   const push = useCallback((href: string) => {
     router.push(href);
@@ -407,19 +384,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {toast && (
-          <motion.div
-            className="command-toast"
-            initial={reduceMotion ? false : { opacity: 0, y: 6, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.98 }}
-            transition={reduceMotion ? tweens.none : springs.spatialFast}
-          >
-            {toast}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <CopyFeedbackToast message={toast} />
     </>
   );
 }

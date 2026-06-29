@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { Copy } from "lucide-react";
+import { CopyFeedbackToast, useCopyFeedback } from "@/components/CopyFeedback";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import {
   ATLAS_DECISION_LOG,
@@ -208,12 +210,27 @@ function AtlasMotionRuleTile() {
   );
 }
 
-function AtlasCodeArtifact() {
+function AtlasCodeArtifact({
+  onCopy,
+}: {
+  onCopy: (value: string, label: string) => boolean | void | Promise<boolean | void>;
+}) {
   return (
     <div className="atlas-code-artifact">
       <div className="detail-artifact-header">
         <span>event contract</span>
-        <span>case-study sketch</span>
+        <div className="detail-artifact-header-actions">
+          <span className="detail-artifact-header-meta">case-study sketch</span>
+          <button
+            type="button"
+            className="detail-copy-action micro-focus micro-focus-tight micro-pressable"
+            aria-label="copy event contract artifact"
+            onClick={() => void onCopy(ATLAS_EVENT_CONTRACT, "artifact")}
+          >
+            <Copy aria-hidden="true" />
+            <span>copy</span>
+          </button>
+        </div>
       </div>
       <pre className="detail-artifact-code">
         <code>
@@ -243,6 +260,7 @@ function AtlasDecisionLog() {
 
 export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProps) {
   const reduceMotion = useReducedMotion();
+  const { copyText, toast } = useCopyFeedback();
 
   return (
     <motion.article
@@ -305,7 +323,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             caption="The prototype needed a shared vocabulary before the app surfaces could feel connected."
             className="atlas-proof-tile--code"
           >
-            <AtlasCodeArtifact />
+            <AtlasCodeArtifact onCopy={copyText} />
           </AtlasTile>
 
           <AtlasTile
@@ -336,6 +354,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           ))}
         </div>
       </section>
+      <CopyFeedbackToast message={toast} />
     </motion.article>
   );
 }
