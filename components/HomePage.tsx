@@ -234,9 +234,6 @@ function HomeMetaLink({
           {copied ? <Check /> : <Copy />}
         </span>
         <span>{children}</span>
-        <span className="home-mention-copy-state" aria-hidden="true" data-visible={copied ? "true" : "false"}>
-          copied
-        </span>
         <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
           {liveMessage}
         </span>

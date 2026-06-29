@@ -1251,7 +1251,7 @@ button.home-row {
 }
 
 .home-mention--copy {
-  gap: 5px;
+  gap: 7px;
 }
 
 .home-mention-copy-icon {
@@ -1271,25 +1271,6 @@ button.home-row {
   width: 13px;
   height: 13px;
   stroke-width: 1.8;
-}
-
-.home-mention-copy-state {
-  display: inline-flex;
-  max-width: 0;
-  overflow: hidden;
-  color: var(--text-muted);
-  font-size: var(--type-meta);
-  line-height: 1.2;
-  opacity: 0;
-  white-space: nowrap;
-  transition:
-    max-width 180ms var(--motion-ease-standard),
-    opacity 140ms var(--motion-ease-standard);
-}
-
-.home-mention-copy-state[data-visible="true"] {
-  max-width: 54px;
-  opacity: 0.72;
 }
 
 button.home-mention {
