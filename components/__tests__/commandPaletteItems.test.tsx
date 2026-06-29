@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { ATLAS_EVENT_CONTRACT } from "@/data/atlasProof";
 import { getProjectBySlug } from "@/data/projects";
-import { buildCommandItems } from "@/components/commandPaletteItems";
+import {
+  buildCommandItems,
+  getCommandSearchPlaceholder,
+  getCurrentContext,
+} from "@/components/commandPaletteItems";
+import type { WritingPostMeta } from "@/lib/writingTypes";
 
 describe("command palette items", () => {
   it("prioritizes home commands as a minimal control layer", () => {
@@ -22,6 +27,47 @@ describe("command palette items", () => {
       "view-notes",
       "copy-email",
       "ask-portfolio",
+    ]);
+    expect(items.filter((item) => item.defaultVisible).map((item) => item.id)).toEqual([
+      "view-work",
+      "view-notes",
+      "copy-email",
+      "ask-portfolio",
+      "jump-today",
+      "jump-contact",
+      "copy-current-link",
+    ]);
+  });
+
+  it("recognizes note detail pages as note context", () => {
+    const writingPosts: WritingPostMeta[] = [
+      {
+        date: "2026-06-03",
+        description: "A short note about code and design.",
+        relatedWork: [],
+        slug: "learned-to-code-first",
+        title: "i learned to code first",
+      },
+    ];
+    const items = buildCommandItems({
+      askAboutPortfolio: vi.fn(),
+      contextLabel: "note",
+      copyText: vi.fn(),
+      currentProject: null,
+      jumpToId: vi.fn(),
+      openShortcuts: vi.fn(),
+      pathname: "/notes/learned-to-code-first",
+      push: vi.fn(),
+      writingPosts,
+    });
+
+    expect(getCurrentContext("/notes/learned-to-code-first", null, writingPosts)).toBe("note");
+    expect(getCommandSearchPlaceholder("/notes/learned-to-code-first", null, writingPosts)).toBe("search note commands");
+    expect(items.filter((item) => item.defaultVisible).map((item) => item.id)).toEqual([
+      "copy-current-link",
+      "view-notes",
+      "view-index",
+      "view-work",
     ]);
   });
 

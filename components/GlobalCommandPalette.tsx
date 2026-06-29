@@ -8,6 +8,7 @@ import { useCopyFeedback } from "@/components/CopyFeedback";
 import type { CommandItem } from "@/components/commandPaletteItems";
 import {
   buildCommandItems,
+  getCommandSearchPlaceholder,
   getCurrentContext,
   getCurrentProject,
   normalizeCommandText,
@@ -57,7 +58,14 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
   const { copyText, toast } = useCopyFeedback();
 
   const currentProject = useMemo(() => getCurrentProject(pathname), [pathname]);
-  const contextLabel = getCurrentContext(pathname, currentProject);
+  const contextLabel = useMemo(
+    () => getCurrentContext(pathname, currentProject, writingPosts),
+    [currentProject, pathname, writingPosts],
+  );
+  const commandPlaceholder = useMemo(
+    () => getCommandSearchPlaceholder(pathname, currentProject, writingPosts),
+    [currentProject, pathname, writingPosts],
+  );
 
   const push = useCallback((href: string) => {
     router.push(href);
@@ -101,7 +109,10 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
 
   const visibleItems = useMemo(() => {
     const normalizedQuery = normalizeCommandText(query);
-    if (!normalizedQuery) return items;
+    if (!normalizedQuery) {
+      const contextualItems = items.filter((item) => item.defaultVisible);
+      return contextualItems.length > 0 ? contextualItems : items.slice(0, 7);
+    }
 
     return items.filter((item) =>
       [item.title, item.meta, item.group, ...item.keywords]
@@ -300,7 +311,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                       if (activeItem) runCommand(activeItem);
                     }
                   }}
-                  placeholder={`search ${contextLabel} commands`}
+                  placeholder={commandPlaceholder}
                   aria-label="search commands"
                 />
                 {toast ? (

@@ -35,6 +35,7 @@ export type CommandPreview = {
 
 export type CommandItem = {
   action: () => void;
+  defaultVisible?: boolean;
   group: string;
   icon: ReactNode;
   id: string;
@@ -66,14 +67,41 @@ export function getCurrentProject(pathname: string) {
   return getProjectBySlug(decodeURIComponent(match[1])) ?? null;
 }
 
-export function getCurrentContext(pathname: string, project: PortfolioProject | null) {
+function getCurrentNote(pathname: string, writingPosts: WritingPostMeta[]) {
+  const match = pathname.match(/^\/(?:notes|writing)\/([^/?#]+)/);
+  if (!match?.[1]) return null;
+  const slug = decodeURIComponent(match[1]);
+  return writingPosts.find((post) => post.slug === slug) ?? null;
+}
+
+export function getCurrentContext(
+  pathname: string,
+  project: PortfolioProject | null,
+  writingPosts: WritingPostMeta[] = [],
+) {
   if (pathname === "/") return "index";
   if (pathname === "/work") return "work";
   if (pathname === "/notes") return "notes";
+  if (pathname === "/writing") return "writing";
   if (pathname === "/studies") return "studies";
   if (project) return project.title.toLowerCase();
+  const note = getCurrentNote(pathname, writingPosts);
+  if (note) return "note";
+  if (pathname.startsWith("/lab")) return "lab";
   if (pathname.startsWith("/interactions")) return "interactions";
+  if (pathname.startsWith("/design-system")) return "design system";
   return "portfolio";
+}
+
+export function getCommandSearchPlaceholder(
+  pathname: string,
+  project: PortfolioProject | null,
+  writingPosts: WritingPostMeta[] = [],
+) {
+  const note = getCurrentNote(pathname, writingPosts);
+  if (project) return `search ${project.title.toLowerCase()} commands`;
+  if (note) return "search note commands";
+  return `search ${getCurrentContext(pathname, project, writingPosts)} commands`;
 }
 
 function projectDescriptor(project: PortfolioProject) {
@@ -275,7 +303,9 @@ function atlasContextCommands({
 }
 
 function prioritizeCommandItems(items: CommandItem[], preferredIds: string[]) {
-  const order = new Map(preferredIds.filter(Boolean).map((id, index) => [id, index]));
+  const preferred = preferredIds.filter(Boolean);
+  const order = new Map(preferred.map((id, index) => [id, index]));
+  const defaultVisible = new Set(preferred);
 
   return items
     .map((item, index) => ({
@@ -284,7 +314,10 @@ function prioritizeCommandItems(items: CommandItem[], preferredIds: string[]) {
       priority: order.get(item.id) ?? Number.MAX_SAFE_INTEGER,
     }))
     .sort((a, b) => a.priority - b.priority || a.index - b.index)
-    .map(({ item }) => item);
+    .map(({ item }) => ({
+      ...item,
+      defaultVisible: defaultVisible.has(item.id),
+    }));
 }
 
 function getPreferredCommandIds({
@@ -324,6 +357,15 @@ function getPreferredCommandIds({
     return [
       latestNote ? `note-${latestNote.slug}` : "",
       "copy-current-link",
+      "view-index",
+      "view-work",
+    ];
+  }
+
+  if (pathname.startsWith("/notes/") || pathname.startsWith("/writing/")) {
+    return [
+      "copy-current-link",
+      "view-notes",
       "view-index",
       "view-work",
     ];
