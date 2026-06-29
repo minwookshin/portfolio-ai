@@ -287,7 +287,15 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                     {toast}
                   </span>
                 ) : (
-                  <kbd aria-hidden="true">esc</kbd>
+                  <button
+                    type="button"
+                    className="command-search__escape micro-focus micro-focus-tight micro-pressable"
+                    aria-label="close command palette"
+                    aria-keyshortcuts="Escape"
+                    onClick={closePalette}
+                  >
+                    esc
+                  </button>
                 )}
               </div>
 
