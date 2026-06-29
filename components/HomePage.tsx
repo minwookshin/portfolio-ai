@@ -886,7 +886,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? { opacity: 0, y: 0, scale: 1 } : { opacity: 0, y: 8, scale: 0.98 }}
             transition={reduceMotion ? tweens.none : springs.spatialFast}
-            className="fixed left-1/2 bottom-32 z-[76] -translate-x-1/2 rounded-[var(--md-shape-sm)] border border-on-surface/10 bg-surface/90 px-4 py-2 text-[length:var(--type-micro)] text-on-surface shadow-sm backdrop-blur-md"
+            className="chat-notice fixed left-1/2 bottom-32 z-[76] -translate-x-1/2"
           >
             {projectNotice}
           </motion.div>
@@ -907,8 +907,8 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={reduceMotion ? tweens.none : tweens.base}
-            className={`fixed left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 overflow-y-auto ${reduceMotion ? "" : "scroll-smooth"} ${chatOnTop ? "z-[72]" : "z-[35]"}`}
+            transition={reduceMotion ? tweens.none : tweens.fast}
+            className={`chat-thread fixed left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 overflow-y-auto ${reduceMotion ? "" : "scroll-smooth"} ${chatOnTop ? "z-[72]" : "z-[35]"}`}
             style={{
               bottom: 96,
               maxHeight: "calc(100dvh - 180px)",
@@ -927,9 +927,9 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                 return (
                   <motion.div
                     key={msg.id}
-                    initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                    initial={reduceMotion ? false : { opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={reduceMotion ? tweens.none : springs.spatialFast}
+                    transition={reduceMotion ? tweens.none : tweens.fast}
                     className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                   >
                     <div className={`flex max-w-[85%] flex-col gap-2 ${isUser ? "items-end" : "items-start"}`}>
@@ -954,9 +954,9 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                           {target && (
                             <motion.button
                               type="button"
-                              initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+                              initial={reduceMotion ? false : { opacity: 0, y: 2 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={reduceMotion ? tweens.none : { ...springs.spatialFast, delay: 0.15 }}
+                              transition={reduceMotion ? tweens.none : { ...tweens.fast, delay: 0.08 }}
                             onClick={() => {
                               setChatOnTop(false);
                               if (target === "profile") {
@@ -990,9 +990,9 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                           <motion.button
                             key={f}
                             type="button"
-                            initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                            initial={reduceMotion ? false : { opacity: 0, y: 2 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={reduceMotion ? tweens.none : { ...springs.spatialFast, delay: 0.1 + fi * 0.06 }}
+                            transition={reduceMotion ? tweens.none : { ...tweens.fast, delay: 0.05 + fi * 0.025 }}
                             whileTap={reduceMotion ? undefined : { scale: 0.96 }}
                             onClick={() => handleMessage(f)}
                             className="chat-inline-action micro-focus micro-focus-tight micro-pressable"
@@ -1009,9 +1009,9 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
 
               {isStreaming && (
                 <motion.div
-                  initial={reduceMotion ? false : { opacity: 0, y: 18, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={reduceMotion ? tweens.none : springs.spatialFast}
+                  initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={reduceMotion ? tweens.none : tweens.fast}
                   className="flex justify-start"
                 >
                   <div className="chat-bubble chat-bubble--assistant px-4 py-3">
@@ -1021,7 +1021,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
                           key={d}
                           animate={reduceMotion ? { opacity: 1 } : { opacity: [0.3, 1, 0.3] }}
                           transition={reduceMotion ? tweens.none : { duration: motionDurations.ambient, repeat: Infinity, delay: d }}
-                          className="h-1.5 w-1.5 rounded-full bg-on-surface"
+                          className="chat-stream-dot h-1.5 w-1.5 rounded-full"
                         />
                       ))}
                     </div>

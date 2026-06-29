@@ -36,7 +36,8 @@ export default function ChatInput({
   introReady = true,
 }: ChatInputProps) {
   const reduceMotion = useReducedMotion();
-  const activeMotion = reduceMotion ? tweens.none : tweens.slow;
+  const isChatComposer = connectorKind === "chat";
+  const activeMotion = reduceMotion ? tweens.none : isChatComposer ? tweens.fast : tweens.slow;
   const inputRevealMotion = reduceMotion
     ? tweens.none
     : { type: "tween" as const, duration: 0.14, ease: [0.22, 1, 0.36, 1] as const };
@@ -49,7 +50,7 @@ export default function ChatInput({
 
   // The bar sits collapsed as a compact field until the user taps it; it expands
   // into the full composer while focused, typing, or dictating.
-  const expanded = focused || input.length > 0 || isListening;
+  const expanded = isChatComposer || focused || input.length > 0 || isListening;
   useEffect(() => {
     if (focused) inputRef.current?.focus();
   }, [focused]);
@@ -137,13 +138,17 @@ export default function ChatInput({
   return (
     <>
       {hasStarted && (
-        <div className="fixed bottom-0 left-0 w-full h-24 sm:h-32 bg-gradient-to-t from-surface via-surface to-transparent pointer-events-none z-40" />
+        <div className="chat-bottom-fade fixed bottom-0 left-0 w-full h-24 sm:h-32 pointer-events-none z-40" />
       )}
 
       <motion.div
         className="chat-composer-shell fixed z-[80] inset-x-0 bottom-6 mx-auto w-full max-w-[700px] px-4 flex min-w-0 items-center justify-center gap-2"
-        initial={false}
-        animate={{ opacity: introReady ? 1 : 0 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 6, scale: 0.992 }}
+        animate={{
+          opacity: introReady ? 1 : 0,
+          y: introReady ? 0 : 6,
+          scale: introReady ? 1 : 0.992,
+        }}
         transition={inputRevealMotion}
         style={{ pointerEvents: introReady ? undefined : "none" }}
       >
@@ -171,9 +176,9 @@ export default function ChatInput({
         <motion.div
           layout={reduceMotion ? false : "position"}
           initial={false}
-          animate={{ width: expanded ? 520 : (connectorKind === "project" || connectorKind === "profile") && connectorSrc ? 260 : 240 }}
+          animate={{ width: isChatComposer ? 560 : expanded ? 520 : (connectorKind === "project" || connectorKind === "profile") && connectorSrc ? 260 : 240 }}
           transition={activeMotion}
-          style={{ maxWidth: "min(100%, calc(100vw - 176px))" }}
+          style={{ maxWidth: isChatComposer ? "min(100%, calc(100vw - 32px))" : "min(100%, calc(100vw - 176px))" }}
           onClick={() => { if (!expanded) setFocused(true); }}
           className={`chat-composer micro-field group relative flex h-14 min-w-0 items-center gap-1 pl-3 pr-2 ${expanded ? "" : "cursor-text"}`}
         >
@@ -205,8 +210,8 @@ export default function ChatInput({
             onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
             onFocus={() => { setFocused(true); onFocusInput?.(); }}
             onBlur={() => setFocused(false)}
-            placeholder="ask me"
-            aria-label="ask me"
+            placeholder={isChatComposer ? "ask about this portfolio" : "ask me"}
+            aria-label={isChatComposer ? "ask about this portfolio" : "ask me"}
             className="chat-composer__input relative z-10 flex-1 min-w-0 bg-transparent outline-none pl-3 pr-2"
           />
 
