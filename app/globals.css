@@ -494,31 +494,30 @@ body::after {
   place-items: start center;
   padding: clamp(72px, 12vh, 132px) 16px 32px;
   background:
-    radial-gradient(circle at 50% 12%, color-mix(in srgb, white 34%, transparent), transparent 34%),
-    color-mix(in srgb, var(--bg-base) 58%, transparent);
-  backdrop-filter: blur(12px) saturate(1.08);
+    radial-gradient(circle at 50% 12%, color-mix(in srgb, white 38%, transparent), transparent 36%),
+    color-mix(in srgb, var(--bg-base) 46%, transparent);
+  backdrop-filter: blur(10px) saturate(1.04);
 }
 
 .command-panel {
   width: min(100%, 560px);
   overflow: hidden;
-  padding: 8px;
-  border: 1px solid #f4f4f6;
-  border-radius: var(--md-shape-lg);
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--text-primary) 5%, transparent);
+  border-radius: 18px;
   background:
-    radial-gradient(circle at 18% 0%, color-mix(in srgb, white 86%, transparent), transparent 48%),
+    radial-gradient(circle at 24% 0%, color-mix(in srgb, white 68%, transparent), transparent 46%),
     linear-gradient(
       180deg,
-      color-mix(in srgb, white 76%, transparent),
-      color-mix(in srgb, var(--bg-surface) 70%, transparent)
+      color-mix(in srgb, white 54%, transparent),
+      color-mix(in srgb, var(--bg-surface) 42%, transparent)
     );
-  backdrop-filter: blur(24px) saturate(1.16);
+  backdrop-filter: blur(22px) saturate(1.08);
   box-shadow:
-    inset 0 2px 4px 0 #fff,
-    inset 0 -8px 18px 0 color-mix(in srgb, white 76%, transparent),
-    inset 0 8px 18px 0 color-mix(in srgb, var(--text-primary) 4%, transparent),
-    0 22px 64px -42px rgba(53, 53, 79, 0.42),
-    0 8px 24px -16px rgba(53, 53, 79, 0.14);
+    inset 0 1px 0 color-mix(in srgb, white 70%, transparent),
+    inset 0 -10px 24px 0 color-mix(in srgb, white 46%, transparent),
+    0 20px 62px -48px rgba(53, 53, 79, 0.34),
+    0 8px 22px -18px rgba(53, 53, 79, 0.12);
 }
 
 .command-search {
@@ -526,19 +525,13 @@ body::after {
   grid-template-columns: 22px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
-  min-height: 42px;
+  min-height: 38px;
   overflow: hidden;
-  padding: 9px 10px 9px 12px;
-  border: 1px solid #f4f4f6;
-  border-radius: var(--md-shape-lg);
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.24), transparent 58%),
-    linear-gradient(180deg, color-mix(in srgb, white 88%, transparent), color-mix(in srgb, #fafafa 82%, transparent));
-  box-shadow:
-    inset 0 2px 4px 0 #fff,
-    inset 0 -4px 10px 0 color-mix(in srgb, white 72%, transparent),
-    inset 0 4px 10px 0 rgba(53, 53, 79, 0.05),
-    0 8px 24px -18px rgba(53, 53, 79, 0.24);
+  padding: 5px 8px 8px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .command-search__icon {
@@ -578,14 +571,24 @@ body::after {
   font-variant-numeric: tabular-nums;
 }
 
+.command-search__status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  color: color-mix(in srgb, var(--text-primary) 68%, var(--text-muted));
+  font-size: var(--type-meta);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 .command-list {
   position: relative;
   display: flex;
   max-height: min(62vh, 480px);
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   overflow-y: auto;
-  padding: 6px 0 0;
+  padding: 4px 0 0;
 }
 
 .command-list__lens {
@@ -613,17 +616,17 @@ body::after {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   width: 100%;
   border: 0;
-  border-radius: var(--md-shape-sm);
+  border-radius: 12px;
   background: transparent;
   color: var(--text-primary);
   font: inherit;
   text-align: left;
-  padding: 8px 9px;
+  padding: 8px 10px;
   transition:
     color 140ms var(--motion-ease-standard),
     transform 140ms var(--motion-ease-standard);
@@ -641,8 +644,8 @@ body::after {
 
 .command-row__icon {
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   place-items: center;
   border-radius: var(--md-shape-sm);
   color: var(--text-muted);
@@ -661,7 +664,7 @@ body::after {
 .command-row[data-active="true"] .command-row__icon,
 .command-row:hover .command-row__icon,
 .command-row:focus-visible .command-row__icon {
-  background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+  background: transparent;
   color: var(--text-primary);
 }
 
@@ -708,9 +711,9 @@ body::after {
 .command-preview {
   display: grid;
   gap: 7px;
-  margin-top: 6px;
-  padding: 10px 11px 11px;
-  border-top: 1px solid color-mix(in srgb, var(--text-primary) 6%, transparent);
+  margin: 7px 8px 2px 33px;
+  padding: 3px 2px 1px;
+  border-top: 0;
   color: var(--text-muted);
 }
 
@@ -1252,15 +1255,41 @@ button.home-row {
 }
 
 .home-mention-copy-icon {
+  display: inline-grid;
   width: 13px;
   height: 13px;
+  place-items: center;
   color: var(--text-muted);
   opacity: 0.58;
-  stroke-width: 1.8;
   transition:
     color var(--motion-duration-fast) var(--motion-ease-standard),
     opacity var(--motion-duration-fast) var(--motion-ease-standard),
     transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.home-mention-copy-icon svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 1.8;
+}
+
+.home-mention-copy-state {
+  display: inline-flex;
+  max-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--type-meta);
+  line-height: 1.2;
+  opacity: 0;
+  white-space: nowrap;
+  transition:
+    max-width 180ms var(--motion-ease-standard),
+    opacity 140ms var(--motion-ease-standard);
+}
+
+.home-mention-copy-state[data-visible="true"] {
+  max-width: 54px;
+  opacity: 0.72;
 }
 
 button.home-mention {

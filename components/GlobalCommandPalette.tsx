@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { usePathname, useRouter } from "next/navigation";
 import { Command, Search } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { CopyFeedbackToast, useCopyFeedback } from "@/components/CopyFeedback";
+import { useCopyFeedback } from "@/components/CopyFeedback";
 import type { CommandItem } from "@/components/commandPaletteItems";
 import {
   buildCommandItems,
@@ -227,7 +227,9 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
 
   const runCommand = (item: CommandItem) => {
     item.action();
-    closePalette();
+    if (item.group !== "copy") {
+      closePalette();
+    }
   };
 
   return (
@@ -280,7 +282,13 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                   placeholder={`search ${contextLabel} commands`}
                   aria-label="search commands"
                 />
-                <kbd aria-hidden="true">esc</kbd>
+                {toast ? (
+                  <span className="command-search__status" role="status" aria-live="polite" aria-atomic="true">
+                    {toast}
+                  </span>
+                ) : (
+                  <kbd aria-hidden="true">esc</kbd>
+                )}
               </div>
 
               <div ref={listRef} className="command-list" role="listbox" aria-label="site commands">
@@ -384,7 +392,6 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
         )}
       </AnimatePresence>
 
-      <CopyFeedbackToast message={toast} />
     </>
   );
 }

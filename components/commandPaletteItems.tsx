@@ -46,7 +46,7 @@ export type CommandItem = {
 type BuildCommandItemsOptions = {
   askAboutPortfolio: () => void;
   contextLabel: string;
-  copyText: (value: string, label: string) => boolean | void | Promise<boolean | void>;
+  copyText: (value: string, label: string, options?: { notify?: boolean }) => boolean | void | Promise<boolean | void>;
   currentProject: PortfolioProject | null;
   jumpToId: (id: string, href: string) => void;
   openShortcuts: () => void;

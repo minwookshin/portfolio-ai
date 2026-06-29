@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { springs, tweens } from "@/lib/material/motion";
 
+type CopyTextOptions = {
+  notify?: boolean;
+};
+
 export function useCopyFeedback() {
   const [toast, setToast] = useState<string | null>(null);
 
@@ -17,18 +21,20 @@ export function useCopyFeedback() {
     return () => window.clearTimeout(timer);
   }, [toast]);
 
-  const copyText = useCallback(async (value: string, label: string) => {
+  const copyText = useCallback(async (value: string, label: string, options: CopyTextOptions = {}) => {
+    const shouldNotify = options.notify ?? true;
+
     if (!navigator.clipboard?.writeText) {
-      notify("copy unavailable");
+      if (shouldNotify) notify("copy unavailable");
       return false;
     }
 
     try {
       await navigator.clipboard.writeText(value);
-      notify(`${label} copied`);
+      if (shouldNotify) notify(`${label} copied`);
       return true;
     } catch {
-      notify("copy failed");
+      if (shouldNotify) notify("copy failed");
       return false;
     }
   }, [notify]);
