@@ -225,9 +225,9 @@
   --code-line-height: 1.55;
 
   /* DOM cursor: codex graphite. */
-  --cursor-rest: rgba(28, 32, 40, 0.18);
-  --cursor-interactive: rgba(28, 32, 40, 0.34);
-  --cursor-pressed: rgba(28, 32, 40, 0.48);
+  --cursor-rest: rgba(28, 32, 40, 0.16);
+  --cursor-interactive: rgba(28, 32, 40, 0.30);
+  --cursor-pressed: rgba(28, 32, 40, 0.43);
 }
 
 .dom-cursor {
