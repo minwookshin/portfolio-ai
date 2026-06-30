@@ -160,7 +160,7 @@
   --home-title-mobile-font-size: var(--type-title-mobile);
   --home-row-font-size: var(--type-row);
   --home-meta-font-size: 11.5px;
-  --home-meta-color: color-mix(in srgb, var(--text-muted) 76%, var(--bg-base));
+  --home-meta-color: color-mix(in srgb, var(--text-muted) 90%, var(--bg-base));
   --home-meta-hover-color: color-mix(in srgb, var(--text-primary) 56%, var(--text-muted));
 
   /* Outline signal grammar */
@@ -175,11 +175,11 @@
   --signal-border-hollow: 1px;
   --signal-border-section: 1px;
   --signal-icon-size: 16px;
-  --signal-opacity-rest: 0.42;
+  --signal-opacity-rest: 0.48;
   --signal-opacity-note: 0.52;
   --signal-opacity-hover: 0.58;
   --signal-opacity-hollow: 0.62;
-  --signal-opacity-section: 0.48;
+  --signal-opacity-section: 0.54;
   --signal-opacity-open: 0.68;
   --signal-opacity-strong: 0.72;
   --signal-opacity-arrow: 0.74;
@@ -451,8 +451,8 @@ body::after {
 .command-trigger {
   position: relative;
   display: inline-grid;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   flex: 0 0 auto;
   place-items: center;
   border: 0;
@@ -474,8 +474,8 @@ body::after {
 }
 
 .command-trigger svg {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   stroke-width: 1.8;
 }
 
