@@ -66,24 +66,25 @@ export default function ArchiveIndexPage({
     <main className="site-lowercase archive-page-shell">
       <article className="archive-page" data-archive-kind={archiveKind} aria-labelledby="archive-title">
           <nav className="archive-nav" aria-label="archive navigation">
-            <Link href="/" className="archive-nav-link">
-              <OutlineSignalCell
-                arrow="right"
-                arrowClassName="archive-index-signal"
-                cellClassName="archive-bullet-cell"
-                dotClassName="archive-index-bullet"
-                rightArrowClassName="site-signal-icon"
-              />
-              <span className="archive-nav-label">index</span>
+            <Link href="/" className="archive-root-link">
+              minwook shin
             </Link>
           </nav>
 
           <header className="archive-header">
-            <h1 id="archive-title" className="archive-title" aria-label={`${title}, ${totalCount} ${itemLabel}`}>
-              {title}
-              <span aria-hidden="true"> · {totalCount}</span>
-            </h1>
-            <p className="archive-description">{description}</p>
+            <div className="archive-section-row">
+              <OutlineSignalCell
+                cellClassName="archive-bullet-cell"
+                dotClassName="archive-section-bullet"
+              />
+              <div className="archive-section-copy">
+                <h1 id="archive-title" className="archive-title">
+                  {title}
+                  <span className="sr-only">, {totalCount} {itemLabel}</span>
+                </h1>
+                {description && <p className="archive-description">{description}</p>}
+              </div>
+            </div>
           </header>
 
           <ol className="archive-year-list">

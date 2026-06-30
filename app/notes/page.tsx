@@ -63,7 +63,7 @@ export default function NotesPage() {
         })}
       />
       <ArchiveIndexPage
-        description="notes from building this practice."
+        description=""
         itemLabel="notes"
         sections={sections}
         title="notes"

@@ -103,7 +103,7 @@ export default function WorkPage() {
         })}
       />
       <ArchiveIndexPage
-        description="selected product systems."
+        description=""
         itemLabel="projects"
         sections={sections}
         title="work"

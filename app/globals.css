@@ -4154,6 +4154,14 @@ button.home-mention {
   line-height: var(--leading-body);
 }
 
+.archive-page > .archive-nav {
+  margin-bottom: 0;
+  padding: 0 0 var(--home-title-padding-block-end);
+  color: var(--text-primary);
+  font-size: var(--home-title-font-size);
+  line-height: 1.3;
+}
+
 .archive-nav a,
 .archive-back-link {
   display: inline-flex;
@@ -4166,6 +4174,27 @@ button.home-mention {
   transition:
     color var(--motion-duration-fast) var(--motion-ease-standard),
     opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.archive-nav .archive-root-link {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  color: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: inherit;
+  text-decoration: none;
+  transition:
+    color 160ms var(--motion-ease-standard),
+    opacity 160ms var(--motion-ease-standard);
+}
+
+.archive-nav .archive-root-link:hover,
+.archive-nav .archive-root-link:focus-visible {
+  color: color-mix(in srgb, var(--text-primary) 86%, var(--text-muted));
 }
 
 .archive-nav-link {
@@ -4193,45 +4222,6 @@ button.home-mention {
   color: var(--text-primary);
 }
 
-.archive-index-bullet {
-  display: inline-block;
-  width: var(--signal-dot-size-hollow);
-  height: var(--signal-dot-size-hollow);
-  border: var(--signal-border-hollow) solid currentColor;
-  border-radius: var(--md-shape-full);
-  opacity: var(--signal-opacity-hollow);
-  transition:
-    opacity 140ms var(--motion-ease-standard),
-    transform 180ms var(--motion-ease-standard),
-    width 220ms var(--motion-ease-standard),
-    height 220ms var(--motion-ease-standard),
-    background-color 220ms var(--motion-ease-standard),
-    border-color 220ms var(--motion-ease-standard),
-    border-radius 220ms var(--motion-ease-standard);
-}
-
-.archive-index-signal {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: var(--text-muted);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(calc(var(--signal-nudge) * -1)) scale(var(--signal-enter-scale));
-  visibility: hidden;
-  transition:
-    opacity 140ms var(--motion-ease-standard),
-    transform 180ms var(--motion-ease-standard);
-}
-
-.archive-nav-label {
-  transform: translateX(0);
-  transition:
-    color 140ms var(--motion-ease-standard),
-    transform 160ms var(--motion-ease-standard);
-}
-
 .site-back-icon {
   width: 18px;
   height: 18px;
@@ -4248,16 +4238,42 @@ button.home-mention {
 
 .archive-header {
   max-width: 620px;
-  margin-bottom: 20px;
+  margin-bottom: var(--home-section-gap);
+}
+
+.archive-section-row {
+  display: grid;
+  grid-template-columns: var(--signal-cell-inline) minmax(0, 1fr);
+  column-gap: var(--home-row-column-gap);
+  align-items: center;
+  width: 100%;
+  padding: var(--home-row-padding-block) var(--home-row-padding-inline-end) var(--home-row-padding-block) 0;
+  color: inherit;
+  font-size: var(--home-row-font-size);
+  line-height: var(--home-row-line-height);
+}
+
+.archive-section-bullet {
+  display: block;
+  width: var(--signal-dot-size);
+  height: var(--signal-dot-size);
+  flex-shrink: 0;
+  border-radius: var(--md-shape-full);
+  background: currentColor;
+  opacity: var(--signal-opacity-open);
+}
+
+.archive-section-copy {
+  min-width: 0;
 }
 
 .archive-title {
   margin: 0;
   color: var(--text-primary);
-  font-size: var(--type-row);
+  font-size: inherit;
   font-weight: 400;
   letter-spacing: 0;
-  line-height: var(--home-row-line-height);
+  line-height: inherit;
 }
 
 .archive-title span {
@@ -4278,7 +4294,7 @@ button.home-mention {
   display: grid;
   gap: 22px;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 var(--home-children-indent);
   list-style: none;
 }
 
@@ -4527,38 +4543,6 @@ button.home-mention {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .archive-nav-link:hover .archive-index-bullet,
-  .archive-nav-link:focus-visible .archive-index-bullet {
-    width: var(--signal-stroke-inline);
-    height: var(--signal-stroke-block);
-    border-color: transparent;
-    border-radius: 2px;
-    background: currentColor;
-    opacity: var(--signal-opacity-rest);
-    transform: translateX(var(--signal-nudge)) scaleX(1);
-    visibility: visible;
-  }
-
-  .archive-nav-link:hover .archive-index-signal,
-  .archive-nav-link:focus-visible .archive-index-signal {
-    opacity: var(--signal-opacity-arrow);
-    transform: translateX(var(--signal-nudge)) scale(1);
-    visibility: visible;
-  }
-
-  .archive-nav-link:hover .archive-index-signal .site-signal-tail,
-  .archive-nav-link:hover .archive-index-signal .site-signal-head,
-  .archive-nav-link:focus-visible .archive-index-signal .site-signal-tail,
-  .archive-nav-link:focus-visible .archive-index-signal .site-signal-head {
-    opacity: 1;
-    stroke-dashoffset: 0;
-  }
-
-  .archive-nav-link:hover .archive-nav-label,
-  .archive-nav-link:focus-visible .archive-nav-label {
-    transform: translateX(var(--signal-nudge));
-  }
-
   .archive-row:not(.archive-row--quiet):hover .archive-row-bullet,
   .archive-row:not(.archive-row--quiet):focus-visible .archive-row-bullet {
     width: var(--signal-stroke-inline);
@@ -4696,33 +4680,6 @@ button.home-mention {
     touch-action: manipulation;
   }
 
-  .archive-nav-link:active .archive-index-bullet {
-    width: var(--signal-stroke-inline);
-    height: var(--signal-stroke-block);
-    border-color: transparent;
-    border-radius: 2px;
-    background: currentColor;
-    opacity: var(--signal-opacity-rest);
-    transform: translateX(var(--signal-nudge)) scaleX(1);
-    visibility: visible;
-  }
-
-  .archive-nav-link:active .archive-index-signal {
-    opacity: var(--signal-opacity-arrow);
-    transform: translateX(var(--signal-nudge)) scale(1);
-    visibility: visible;
-  }
-
-  .archive-nav-link:active .archive-index-signal .site-signal-tail,
-  .archive-nav-link:active .archive-index-signal .site-signal-head {
-    opacity: 1;
-    stroke-dashoffset: 0;
-  }
-
-  .archive-nav-link:active .archive-nav-label {
-    transform: translateX(var(--signal-nudge));
-  }
-
   .archive-bullet-cell {
     height: 28px;
   }
@@ -4853,15 +4810,15 @@ button.home-mention {
   }
 
   .archive-header {
-    margin-bottom: 28px;
+    margin-bottom: var(--home-section-gap);
   }
 
-  .archive-title {
-    font-size: var(--type-title-mobile);
+  .archive-page > .archive-nav {
+    font-size: var(--home-title-mobile-font-size);
   }
 
   .archive-description {
-    font-size: var(--type-row);
+    font-size: var(--type-meta);
   }
 
   .archive-year,
