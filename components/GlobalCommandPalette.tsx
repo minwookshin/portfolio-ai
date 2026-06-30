@@ -537,9 +537,6 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                     : { opacity: 0, y: -2, transition: tweens.instant }
                 }
               >
-                <p className="command-list__group-label">
-                  {query.trim() ? "results" : "suggested"}
-                </p>
                 {visibleItems.length > 0 && (
                   <motion.div
                     aria-hidden="true"

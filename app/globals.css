@@ -688,16 +688,6 @@ body::after {
   padding: 4px 0 0;
 }
 
-.command-list__group-label {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  padding: 7px 8px 5px;
-  color: var(--text-muted);
-  font-size: var(--type-caption);
-  line-height: 1.2;
-}
-
 .command-list__lens {
   position: absolute;
   top: 0;
