@@ -103,7 +103,7 @@ export default function WorkPage() {
         })}
       />
       <ArchiveIndexPage
-        description="selected product systems, AI-native interfaces, and working prototypes. organized by year."
+        description="selected product systems."
         itemLabel="projects"
         sections={sections}
         title="work"

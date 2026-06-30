@@ -79,9 +79,9 @@ export default function ArchiveIndexPage({
           </nav>
 
           <header className="archive-header">
-            <h1 id="archive-title" className="archive-title">
+            <h1 id="archive-title" className="archive-title" aria-label={`${title}, ${totalCount} ${itemLabel}`}>
               {title}
-              <span>, {totalCount} {itemLabel}</span>
+              <span aria-hidden="true"> · {totalCount}</span>
             </h1>
             <p className="archive-description">{description}</p>
           </header>
