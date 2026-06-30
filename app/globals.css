@@ -747,13 +747,13 @@ body::after {
   transition:
     opacity 180ms var(--motion-ease-standard),
     transform 220ms var(--motion-ease-standard);
+  transition-delay: 0ms;
 }
 
-.command-row[data-active="true"] .command-row__hint,
-.command-row:hover .command-row__hint,
-.command-row:focus-visible .command-row__hint {
+.command-row[data-active="true"] .command-row__hint {
   opacity: 0.62;
   transform: translateX(0);
+  transition-delay: 150ms;
 }
 
 .command-empty {

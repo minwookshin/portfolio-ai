@@ -24,6 +24,7 @@ export const tweens = {
   instant: { type: "tween", duration: motionDurations.instant, ease: motionEasings.standard },
   fast: { type: "tween", duration: motionDurations.fast, ease: motionEasings.standard },
   base: { type: "tween", duration: motionDurations.base, ease: motionEasings.standard },
+  commandLens: { type: "tween", duration: 0.2, ease: motionEasings.standard },
   slow: { type: "tween", duration: motionDurations.slow, ease: motionEasings.standard },
   slower: { type: "tween", duration: motionDurations.slower, ease: motionEasings.standard },
   extended: { type: "tween", duration: motionDurations.extended, ease: motionEasings.standard },
@@ -34,7 +35,6 @@ export const tweens = {
 export const springs = {
   spatialDefault: { type: "spring", stiffness: 240, damping: 30, mass: 1.5 },
   spatialFast: { type: "spring", stiffness: 320, damping: 28, mass: 1.3 },
-  commandLens: { type: "spring", stiffness: 250, damping: 34, mass: 1.35 },
   pressMorph: { type: "spring", stiffness: 380, damping: 26, mass: 1.4 },
   // Sticky/weighted with a gentle settle — for detail reveals.
   genOvershoot: { type: "spring", stiffness: 230, damping: 26, mass: 1.4 },

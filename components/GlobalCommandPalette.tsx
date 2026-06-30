@@ -364,7 +364,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                           }
                         : { opacity: 0 }
                     }
-                    transition={reduceMotion ? tweens.none : springs.commandLens}
+                    transition={reduceMotion ? tweens.none : tweens.commandLens}
                   />
                 )}
                 {visibleItems.length > 0 ? (
