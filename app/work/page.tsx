@@ -14,6 +14,22 @@ import { absoluteUrl, collectionPageJsonLd, workCollectionItems } from "@/lib/se
 const description = "Work by Minwook Shin across AI-native products, interfaces, and working software.";
 const url = absoluteUrl("/work");
 
+const WORK_ARCHIVE_ORDER = [
+  "atlas",
+  "sentinel",
+  "portfolio-ai",
+  "flux",
+  "caret",
+  "mindline",
+  "capexplorer",
+  "tomo",
+  "nameme",
+] as const;
+
+const WORK_ARCHIVE_ORDER_INDEX: ReadonlyMap<string, number> = new Map(
+  WORK_ARCHIVE_ORDER.map((slug, index) => [slug, index]),
+);
+
 export const metadata: Metadata = {
   title: "work",
   description,
@@ -47,8 +63,15 @@ function getProofMeta(project: (typeof MAIN_PROJECTS)[number]) {
 
 function getWorkEntries(): ArchiveEntry[] {
   return MAIN_PROJECTS
-    .filter((project) => !project.comingSoon && isWorkArchiveProject(project))
-    .map((project) => ({
+    .map((project, index) => ({ index, project }))
+    .filter(({ project }) => !project.comingSoon && isWorkArchiveProject(project))
+    .sort((projectA, projectB) => {
+      const orderA = WORK_ARCHIVE_ORDER_INDEX.get(projectA.project.slug) ?? Number.MAX_SAFE_INTEGER;
+      const orderB = WORK_ARCHIVE_ORDER_INDEX.get(projectB.project.slug) ?? Number.MAX_SAFE_INTEGER;
+
+      return orderA - orderB || projectA.index - projectB.index;
+    })
+    .map(({ project }) => ({
       description: project.studioLabel,
       href: getProjectPath(project),
       id: project.id,
