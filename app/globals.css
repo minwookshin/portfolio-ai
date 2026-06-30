@@ -3,14 +3,14 @@
   color-scheme: light;
   --theme-light-bg: #FAFAFA;
   --theme-light-surface: #FFFFFF;
-  --theme-light-element: #F5F5F7;
-  --theme-light-ink: #18181B;
-  --theme-light-muted: #4A4A52;
-  --theme-light-faint: #67676D;
-  --theme-light-dim: #C8C8CD;
-  --theme-light-rule: rgba(24, 24, 27, 0.08);
-  --theme-light-tint: rgba(24, 24, 27, 0.05);
-  --theme-light-row-focus: rgba(24, 24, 27, 0.06);
+  --theme-light-element: #F4F4F5;
+  --theme-light-ink: #1C1E22;
+  --theme-light-muted: #4C4F56;
+  --theme-light-faint: #70737A;
+  --theme-light-dim: #C3C6CC;
+  --theme-light-rule: rgba(28, 30, 34, 0.08);
+  --theme-light-tint: rgba(28, 30, 34, 0.05);
+  --theme-light-row-focus: rgba(28, 30, 34, 0.06);
 
   --theme-dark-bg: #0F0F10;
   --theme-dark-surface: #18181B;
