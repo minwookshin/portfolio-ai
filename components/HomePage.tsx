@@ -10,6 +10,7 @@ import { openGlobalCommandPalette } from "@/components/GlobalCommandPalette";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import type { Project } from "@/components/ProjectCard";
 import { Check, Command, Copy } from "lucide-react";
+import { glassLensTransition } from "@/lib/material/motion";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 import {
@@ -377,13 +378,7 @@ function ContactLensList({
         className="home-contact-lens"
         initial={false}
         animate={lens}
-        transition={reduceMotion ? { duration: 0 } : {
-          opacity: { duration: 0.16, ease: DOCUMENT_BOOT_EASE },
-          width: { type: "spring", duration: 0.34, bounce: 0.04 },
-          height: { type: "spring", duration: 0.34, bounce: 0.04 },
-          x: { type: "spring", duration: 0.38, bounce: 0.06 },
-          y: { type: "spring", duration: 0.38, bounce: 0.06 },
-        }}
+        transition={reduceMotion ? { duration: 0 } : glassLensTransition}
       />
       <HomeLeafRow>
         <HomeMetaLink href={PERSONAL_INFO.linkedin} external sharedGlass>linkedin.com/in/minwookshin</HomeMetaLink>

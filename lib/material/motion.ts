@@ -43,3 +43,11 @@ export const springs = {
   // bottom pill morph, the name rise, and the detail/profile expand.
   island: { type: "spring", stiffness: 190, damping: 19, mass: 1.3 },
 } satisfies Record<string, Transition>;
+
+export const glassLensTransition = {
+  opacity: { duration: 0.16, ease: motionEasings.standard },
+  width: { type: "spring", duration: 0.34, bounce: 0.04 },
+  height: { type: "spring", duration: 0.34, bounce: 0.04 },
+  x: { type: "spring", duration: 0.38, bounce: 0.06 },
+  y: { type: "spring", duration: 0.38, bounce: 0.06 },
+} satisfies Transition;

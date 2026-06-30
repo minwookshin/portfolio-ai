@@ -13,7 +13,7 @@ import {
   getCurrentProject,
   normalizeCommandText,
 } from "@/components/commandPaletteItems";
-import { springs, tweens } from "@/lib/material/motion";
+import { glassLensTransition, springs, tweens } from "@/lib/material/motion";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 
 const OPEN_COMMAND_EVENT = "portfolio-command:open";
@@ -556,7 +556,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                           }
                         : { opacity: 0 }
                     }
-                    transition={reduceMotion ? tweens.none : tweens.commandLens}
+                    transition={reduceMotion ? tweens.none : glassLensTransition}
                   />
                 )}
                 {visibleItems.length > 0 ? (
