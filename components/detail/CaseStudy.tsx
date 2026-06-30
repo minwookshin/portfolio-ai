@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { InlineCopyButton } from "@/components/CopyFeedback";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
@@ -66,8 +65,6 @@ export interface CaseStudyData {
   sections: DetailSection[];
   ask?: string[]; // outro follow-up prompts, wired to chat
 }
-
-type ArtifactSection = Extract<DetailSection, { kind: "artifact" }>;
 
 // Detail pages should feel closer to the homepage: quiet, fast, and mostly
 // editorial. Section reveals are intentionally small so reading stays calm.
@@ -142,22 +139,6 @@ function getLinkMeta(label: string, href: string) {
   if (href.startsWith("/")) return "page";
 
   return isExternalHref(href) ? "external" : "internal";
-}
-
-function getArtifactCopyValue(section: ArtifactSection) {
-  if (section.code) return section.code;
-
-  const rows = section.rows?.map((row) => {
-    const note = row.note ? ` — ${row.note}` : "";
-    return `${row.label}: ${row.value}${note}`;
-  }) ?? [];
-
-  return [
-    section.title,
-    section.meta,
-    ...rows,
-    section.caption,
-  ].filter(Boolean).join("\n");
 }
 
 function DetailLink({ label, href }: { label: string; href: string }) {
@@ -452,8 +433,6 @@ function renderSection(
       );
 
     case "artifact": {
-      const artifactCopyValue = getArtifactCopyValue(section);
-
       return (
         <motion.section key={i} {...sectionMotion} className={sectionCls}>
           <SectionHead eyebrow={section.eyebrow} heading={section.heading} />
@@ -462,16 +441,6 @@ function renderSection(
               <span>{section.title}</span>
               <div className="detail-artifact-header-actions">
                 {section.meta && <span className="detail-artifact-header-meta">{section.meta}</span>}
-                {artifactCopyValue && (
-                  <InlineCopyButton
-                    value={artifactCopyValue}
-                    label={`${section.title} artifact`}
-                    ariaLabel={`copy ${section.title} artifact`}
-                    className="detail-copy-action micro-focus micro-focus-tight micro-pressable"
-                  >
-                    copy
-                  </InlineCopyButton>
-                )}
               </div>
             </div>
             {section.rows && section.rows.length > 0 && (

@@ -22,7 +22,6 @@ import {
 } from "@/data/projects";
 import type { PortfolioProject } from "@/data/projects";
 import { PERSONAL_INFO } from "@/data/personal";
-import { ATLAS_DECISION_LOG, ATLAS_EVENT_CONTRACT } from "@/data/atlasProof";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -129,19 +128,13 @@ function getCommandLink(path: string) {
   return absoluteUrl(path);
 }
 
-function getAtlasDecisionLogCopy() {
-  return ATLAS_DECISION_LOG.map((item) => `${item.label}: ${item.value}`).join("\n");
-}
-
 function getProjectCommandId(project: PortfolioProject) {
   return `project-${project.slug ?? project.id}`;
 }
 
 function atlasContextCommands({
-  copyText,
   jumpToId,
 }: {
-  copyText: BuildCommandItemsOptions["copyText"];
   jumpToId: (id: string, href: string) => void;
 }): CommandItem[] {
   return [
@@ -257,48 +250,6 @@ function atlasContextCommands({
       },
       action: () => jumpToId("atlas-reflection", "/work/atlas#atlas-reflection"),
     },
-    {
-      id: "copy-atlas-event-contract",
-      title: "copy event contract",
-      meta: "atlas code artifact",
-      group: "copy",
-      keywords: ["atlas", "copy", "event", "contract", "code", "artifact"],
-      icon: <Copy />,
-      preview: {
-        title: "event contract",
-        meta: "atlas code artifact",
-        body: "Copies the case-study sketch contract shown in the Atlas code tile.",
-      },
-      action: () => void copyText(ATLAS_EVENT_CONTRACT, "event contract"),
-    },
-    {
-      id: "copy-atlas-decision-log",
-      title: "copy decision log",
-      meta: "atlas context",
-      group: "copy",
-      keywords: ["atlas", "copy", "decision", "log", "context"],
-      icon: <Copy />,
-      preview: {
-        title: "decision log",
-        meta: "atlas context",
-        body: "Copies the short decision log as label/value lines.",
-      },
-      action: () => void copyText(getAtlasDecisionLogCopy(), "decision log"),
-    },
-    {
-      id: "copy-atlas-capacity-link",
-      title: "copy capacity state link",
-      meta: "atlas section",
-      group: "copy",
-      keywords: ["atlas", "copy", "capacity", "state", "link", "section"],
-      icon: <LinkIcon />,
-      preview: {
-        title: "capacity state link",
-        meta: "atlas section",
-        body: getCommandLink("/work/atlas#atlas-capacity-state"),
-      },
-      action: () => void copyText(getCommandLink("/work/atlas#atlas-capacity-state"), "capacity state link"),
-    },
   ];
 }
 
@@ -375,9 +326,8 @@ function getPreferredCommandIds({
     return [
       "atlas-proof-bento",
       "atlas-capacity-state",
-      "copy-project-link",
-      "copy-atlas-decision-log",
-      "copy-atlas-capacity-link",
+      "atlas-event-contract",
+      "atlas-decision-log",
       "view-work",
       "view-index",
     ];
@@ -385,10 +335,10 @@ function getPreferredCommandIds({
 
   if (currentProject) {
     return [
-      "copy-project-link",
-      "copy-project-summary",
       "view-work",
       "view-index",
+      "view-notes",
+      "ask-portfolio",
     ];
   }
 
@@ -428,11 +378,8 @@ export function buildCommandItems({
   ];
   const latestNote = writingPosts[0];
   const currentUrl = getCommandLink(pathname);
-  const currentSummary = currentProject
-    ? `${currentProject.title}: ${currentProject.builder.oneLiner || currentProject.fullDescription || currentProject.description}`
-    : "minwook shin makes interfaces, prototypes, and small systems for AI-native products.";
   const contextCommands: CommandItem[] = [
-    ...(currentProject?.slug === "atlas" ? atlasContextCommands({ copyText, jumpToId }) : []),
+    ...(currentProject?.slug === "atlas" ? atlasContextCommands({ jumpToId }) : []),
     ...(pathname !== "/"
       ? [
           {
@@ -512,34 +459,8 @@ export function buildCommandItems({
           },
         ]
       : []),
-    ...(currentProject
+    ...(!currentProject
       ? [
-          {
-            id: "copy-project-link",
-            title: `copy ${currentProject.title.toLowerCase()} link`,
-            meta: "current page",
-            group: "copy",
-            keywords: ["copy", currentProject.title, "link", "url"],
-            icon: <Copy />,
-            preview: projectPreview(currentProject),
-            action: () => void copyText(currentUrl, "project link"),
-          },
-          {
-            id: "copy-project-summary",
-            title: `copy ${currentProject.title.toLowerCase()} summary`,
-            meta: "one line",
-            group: "copy",
-            keywords: ["copy", currentProject.title, "summary", "one liner"],
-            icon: <Copy />,
-            preview: {
-              title: "project summary",
-              meta: currentProject.title.toLowerCase(),
-              body: currentSummary,
-            },
-            action: () => void copyText(currentSummary, "project summary"),
-          },
-        ]
-      : [
           {
             id: "copy-current-link",
             title: "copy current link",
@@ -554,7 +475,8 @@ export function buildCommandItems({
             },
             action: () => void copyText(currentUrl, "link"),
           },
-        ]),
+        ]
+      : []),
   ];
 
   const commandItems: CommandItem[] = [
@@ -589,7 +511,7 @@ export function buildCommandItems({
     },
     ...orderedProjects.map((project) => ({
       id: getProjectCommandId(project),
-      title: `open ${project.title.toLowerCase()}`,
+      title: project.title.toLowerCase(),
       meta: projectDescriptor(project),
       group: "work",
       keywords: [project.title, project.description, project.studioLabel ?? "", project.date ?? ""],
@@ -601,7 +523,7 @@ export function buildCommandItems({
       ? [
           {
             id: `note-${latestNote.slug}`,
-            title: `open ${latestNote.title}`,
+            title: latestNote.title,
             meta: formatWritingDate(latestNote.date),
             group: "notes",
             keywords: [latestNote.title, latestNote.description, "writing", "notes"],
@@ -669,7 +591,7 @@ export function buildCommandItems({
     },
     {
       id: "open-resume",
-      title: "open resume",
+      title: "resume",
       meta: "pdf",
       group: "contact",
       keywords: ["cv", "profile", "resume"],

@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { InlineCopyButton } from "@/components/CopyFeedback";
 import DetailBreadcrumb from "@/components/DetailBreadcrumb";
 import LabProjectDetailView from "@/components/LabProjectDetailView";
 import ProjectDetailView from "@/components/ProjectDetailView";
@@ -37,17 +36,6 @@ export default function ProjectCaseStudyShell({
         currentLabel={project.title}
         sectionHref={baseHref}
         sectionLabel={sectionLabel}
-        trailing={(
-          <InlineCopyButton
-            value={() => (typeof window === "undefined" ? "" : window.location.href)}
-            label={`${project.title} page link`}
-            ariaLabel={`copy ${project.title} page link`}
-            icon="link"
-              className="detail-copy-action detail-copy-action--breadcrumb micro-focus micro-focus-tight micro-pressable"
-          >
-            copy link
-          </InlineCopyButton>
-        )}
       />
       {mode === "video-only" ? (
         <ProjectVideoOnlyView project={project} />
