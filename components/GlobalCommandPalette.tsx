@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Command, MessageCircle, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Command, Search } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCopyFeedback } from "@/components/CopyFeedback";
 import type { CommandItem } from "@/components/commandPaletteItems";
@@ -117,17 +117,17 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     router.push(href);
   }, [pathname, reduceMotion, router]);
 
-  const openAskMode = useCallback((prefill = "") => {
+  const openAskMode = useCallback(() => {
     setIsOpen(true);
     setMode("ask");
     setQuery("");
     setActiveIndex(0);
     setLensRect(null);
-    setAskInput(prefill);
+    setAskInput("");
   }, []);
 
   const askAboutPortfolio = useCallback(() => {
-    openAskMode("ask about this portfolio");
+    openAskMode();
   }, [openAskMode]);
 
   const openShortcuts = useCallback(() => setIsShortcutsOpen(true), []);
@@ -573,12 +573,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                   }
                   exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -2, transition: tweens.instant }}
                 >
-                  {askMessages.length === 0 ? (
-                    <div className="command-ask__empty">
-                      <MessageCircle aria-hidden="true" />
-                      <span>ask as one command, not a separate layer.</span>
-                    </div>
-                  ) : (
+                  {askMessages.length > 0 && (
                     askMessages.map((message) => (
                       <div
                         key={message.id}
