@@ -1,5 +1,4 @@
 import Link from "next/link";
-import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { OutlineSignalCell } from "@/components/Outline";
 
 export type ArchiveEntry = {
@@ -68,8 +67,14 @@ export default function ArchiveIndexPage({
       <article className="archive-page" data-archive-kind={archiveKind} aria-labelledby="archive-title">
           <nav className="archive-nav" aria-label="archive navigation">
             <Link href="/" className="archive-nav-link">
-              <MaterialArrowForwardIcon className="site-back-icon" />
-              index
+              <OutlineSignalCell
+                arrow="right"
+                arrowClassName="archive-index-signal"
+                cellClassName="archive-bullet-cell"
+                dotClassName="archive-index-bullet"
+                rightArrowClassName="site-signal-icon"
+              />
+              <span className="archive-nav-label">index</span>
             </Link>
           </nav>
 

@@ -4173,8 +4173,8 @@ button.home-mention {
   width: fit-content;
   max-width: 100%;
   align-items: center;
-  padding: 2px var(--glass-chip-padding-inline);
-  margin-left: calc(var(--glass-chip-padding-inline) * -1);
+  gap: 7px;
+  padding: 2px 8px 2px 0;
   border-radius: var(--md-shape-sm);
 }
 
@@ -4191,6 +4191,45 @@ button.home-mention {
 .archive-back-link:hover,
 .archive-back-link:focus-visible {
   color: var(--text-primary);
+}
+
+.archive-index-bullet {
+  display: inline-block;
+  width: var(--signal-dot-size-hollow);
+  height: var(--signal-dot-size-hollow);
+  border: var(--signal-border-hollow) solid currentColor;
+  border-radius: var(--md-shape-full);
+  opacity: var(--signal-opacity-hollow);
+  transition:
+    opacity 140ms var(--motion-ease-standard),
+    transform 180ms var(--motion-ease-standard),
+    width 220ms var(--motion-ease-standard),
+    height 220ms var(--motion-ease-standard),
+    background-color 220ms var(--motion-ease-standard),
+    border-color 220ms var(--motion-ease-standard),
+    border-radius 220ms var(--motion-ease-standard);
+}
+
+.archive-index-signal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(calc(var(--signal-nudge) * -1)) scale(var(--signal-enter-scale));
+  visibility: hidden;
+  transition:
+    opacity 140ms var(--motion-ease-standard),
+    transform 180ms var(--motion-ease-standard);
+}
+
+.archive-nav-label {
+  transform: translateX(0);
+  transition:
+    color 140ms var(--motion-ease-standard),
+    transform 160ms var(--motion-ease-standard);
 }
 
 .site-back-icon {
@@ -4488,6 +4527,38 @@ button.home-mention {
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .archive-nav-link:hover .archive-index-bullet,
+  .archive-nav-link:focus-visible .archive-index-bullet {
+    width: var(--signal-stroke-inline);
+    height: var(--signal-stroke-block);
+    border-color: transparent;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: var(--signal-opacity-rest);
+    transform: translateX(var(--signal-nudge)) scaleX(1);
+    visibility: visible;
+  }
+
+  .archive-nav-link:hover .archive-index-signal,
+  .archive-nav-link:focus-visible .archive-index-signal {
+    opacity: var(--signal-opacity-arrow);
+    transform: translateX(var(--signal-nudge)) scale(1);
+    visibility: visible;
+  }
+
+  .archive-nav-link:hover .archive-index-signal .site-signal-tail,
+  .archive-nav-link:hover .archive-index-signal .site-signal-head,
+  .archive-nav-link:focus-visible .archive-index-signal .site-signal-tail,
+  .archive-nav-link:focus-visible .archive-index-signal .site-signal-head {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .archive-nav-link:hover .archive-nav-label,
+  .archive-nav-link:focus-visible .archive-nav-label {
+    transform: translateX(var(--signal-nudge));
+  }
+
   .archive-row:not(.archive-row--quiet):hover .archive-row-bullet,
   .archive-row:not(.archive-row--quiet):focus-visible .archive-row-bullet {
     width: var(--signal-stroke-inline);
@@ -4618,6 +4689,38 @@ button.home-mention {
     padding-top: 7px;
     padding-bottom: 7px;
     touch-action: manipulation;
+  }
+
+  .archive-nav-link {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  .archive-nav-link:active .archive-index-bullet {
+    width: var(--signal-stroke-inline);
+    height: var(--signal-stroke-block);
+    border-color: transparent;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: var(--signal-opacity-rest);
+    transform: translateX(var(--signal-nudge)) scaleX(1);
+    visibility: visible;
+  }
+
+  .archive-nav-link:active .archive-index-signal {
+    opacity: var(--signal-opacity-arrow);
+    transform: translateX(var(--signal-nudge)) scale(1);
+    visibility: visible;
+  }
+
+  .archive-nav-link:active .archive-index-signal .site-signal-tail,
+  .archive-nav-link:active .archive-index-signal .site-signal-head {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .archive-nav-link:active .archive-nav-label {
+    transform: translateX(var(--signal-nudge));
   }
 
   .archive-bullet-cell {
