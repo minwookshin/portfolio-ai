@@ -199,6 +199,7 @@ function HomeMetaLink({
   external = false,
   href,
   onCopy,
+  sharedGlass = false,
 }: {
   children: string;
   copyLabel?: string;
@@ -206,12 +207,20 @@ function HomeMetaLink({
   external?: boolean;
   href: string;
   onCopy?: (value: string, label: string, options?: { notify?: boolean }) => boolean | void | Promise<boolean | void>;
+  sharedGlass?: boolean;
 }) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const pointerActivatedRef = useRef(false);
   const [copied, setCopied] = useState(false);
   const [liveMessage, setLiveMessage] = useState("");
-  const className = "home-mention micro-focus micro-focus-tight micro-pressable";
+  const className = [
+    "home-mention",
+    sharedGlass ? "home-mention--shared-glass" : "",
+    "micro-focus",
+    "micro-focus-tight",
+    "micro-pressable",
+  ].filter(Boolean).join(" ");
+  const sharedGlassProps = sharedGlass ? { "data-contact-lens-target": "" } : {};
 
   useEffect(() => {
     if (!copied) return;
@@ -225,6 +234,7 @@ function HomeMetaLink({
         type="button"
         ref={buttonRef}
         className={`${className} home-mention--copy`}
+        {...sharedGlassProps}
         aria-label={`copy ${copyLabel ?? children}`}
         onPointerDown={() => {
           pointerActivatedRef.current = true;
@@ -267,6 +277,7 @@ function HomeMetaLink({
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
         className={className}
+        {...sharedGlassProps}
       >
         {children}
       </a>
@@ -277,9 +288,127 @@ function HomeMetaLink({
     <Link
       href={href}
       className={className}
+      {...sharedGlassProps}
     >
       {children}
     </Link>
+  );
+}
+
+const CONTACT_LENS_HEIGHT = 36;
+const CONTACT_LENS_PADDING_X = 12;
+
+type ContactLensState = {
+  height: number;
+  opacity: number;
+  width: number;
+  x: number;
+  y: number;
+};
+
+function ContactLensList({
+  onCopy,
+}: {
+  onCopy: (value: string, label: string, options?: { notify?: boolean }) => boolean | void | Promise<boolean | void>;
+}) {
+  const reduceMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const hideTimerRef = useRef<number | null>(null);
+  const [lens, setLens] = useState<ContactLensState>({
+    height: CONTACT_LENS_HEIGHT,
+    opacity: 0,
+    width: 0,
+    x: 0,
+    y: 0,
+  });
+
+  const clearHideTimer = useCallback(() => {
+    if (hideTimerRef.current === null) return;
+    window.clearTimeout(hideTimerRef.current);
+    hideTimerRef.current = null;
+  }, []);
+
+  const scheduleHide = useCallback(() => {
+    clearHideTimer();
+    hideTimerRef.current = window.setTimeout(() => {
+      setLens((current) => ({ ...current, opacity: 0 }));
+      hideTimerRef.current = null;
+    }, 220);
+  }, [clearHideTimer]);
+
+  const activateLens = useCallback((target: EventTarget | null) => {
+    const container = containerRef.current;
+    if (!container || !(target instanceof Element)) return;
+
+    const item = target.closest<HTMLElement>("[data-contact-lens-target]");
+    if (!item || !container.contains(item)) return;
+
+    clearHideTimer();
+
+    const itemRect = item.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const width = Math.max(itemRect.width + CONTACT_LENS_PADDING_X * 2, CONTACT_LENS_HEIGHT);
+    const height = CONTACT_LENS_HEIGHT;
+
+    setLens({
+      height,
+      opacity: 1,
+      width,
+      x: itemRect.left - containerRect.left - CONTACT_LENS_PADDING_X,
+      y: itemRect.top - containerRect.top + (itemRect.height - height) / 2,
+    });
+  }, [clearHideTimer]);
+
+  useEffect(() => () => clearHideTimer(), [clearHideTimer]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="home-contact-lens-list"
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) scheduleHide();
+      }}
+      onFocusCapture={(event) => activateLens(event.target)}
+      onPointerLeave={scheduleHide}
+      onPointerOver={(event) => activateLens(event.target)}
+    >
+      <motion.span
+        aria-hidden="true"
+        className="home-contact-lens"
+        initial={false}
+        animate={lens}
+        transition={reduceMotion ? { duration: 0 } : {
+          opacity: { duration: 0.16, ease: DOCUMENT_BOOT_EASE },
+          width: { type: "spring", duration: 0.34, bounce: 0.04 },
+          height: { type: "spring", duration: 0.34, bounce: 0.04 },
+          x: { type: "spring", duration: 0.38, bounce: 0.06 },
+          y: { type: "spring", duration: 0.38, bounce: 0.06 },
+        }}
+      />
+      <HomeLeafRow>
+        <HomeMetaLink href={PERSONAL_INFO.linkedin} external sharedGlass>linkedin.com/in/minwookshin</HomeMetaLink>
+      </HomeLeafRow>
+      <HomeLeafRow>
+        <HomeMetaLink href={PERSONAL_INFO.github} external sharedGlass>github.com/minwookshin</HomeMetaLink>
+      </HomeLeafRow>
+      <HomeLeafRow>
+        <HomeMetaLink href={PERSONAL_INFO.x} external sharedGlass>x.com/FakeMinwook</HomeMetaLink>
+      </HomeLeafRow>
+      <HomeLeafRow>
+        <HomeMetaLink
+          copyLabel="email"
+          copyValue={PERSONAL_INFO.email}
+          href={`mailto:${PERSONAL_INFO.email}`}
+          onCopy={onCopy}
+          sharedGlass
+        >
+          {PERSONAL_INFO.email}
+        </HomeMetaLink>
+      </HomeLeafRow>
+      <HomeLeafRow>
+        <HomeMetaLink href={PERSONAL_INFO.resume} sharedGlass>resume</HomeMetaLink>
+      </HomeLeafRow>
+    </div>
   );
 }
 
@@ -557,28 +686,7 @@ function HomeDocument({
         </HomeOutlineSection>
 
         <HomeOutlineSection count={5} defaultOpen sectionId="contact" title="contact">
-          <HomeLeafRow>
-            <HomeMetaLink href={PERSONAL_INFO.linkedin} external>linkedin.com/in/minwookshin</HomeMetaLink>
-          </HomeLeafRow>
-          <HomeLeafRow>
-            <HomeMetaLink href={PERSONAL_INFO.github} external>github.com/minwookshin</HomeMetaLink>
-          </HomeLeafRow>
-          <HomeLeafRow>
-            <HomeMetaLink href={PERSONAL_INFO.x} external>x.com/FakeMinwook</HomeMetaLink>
-          </HomeLeafRow>
-          <HomeLeafRow>
-            <HomeMetaLink
-              copyLabel="email"
-              copyValue={PERSONAL_INFO.email}
-              href={`mailto:${PERSONAL_INFO.email}`}
-              onCopy={onCopy}
-            >
-              {PERSONAL_INFO.email}
-            </HomeMetaLink>
-          </HomeLeafRow>
-          <HomeLeafRow>
-            <HomeMetaLink href={PERSONAL_INFO.resume}>resume</HomeMetaLink>
-          </HomeLeafRow>
+          <ContactLensList onCopy={onCopy} />
         </HomeOutlineSection>
 
       </motion.div>
