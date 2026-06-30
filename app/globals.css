@@ -4162,6 +4162,12 @@ button.home-mention {
   line-height: 1.3;
 }
 
+.archive-root-row {
+  display: flex;
+  align-items: center;
+  gap: var(--home-title-gap-inline);
+}
+
 .archive-nav a,
 .archive-back-link {
   display: inline-flex;

@@ -5,11 +5,11 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
 import type { Variants } from "framer-motion";
+import CommandTriggerButton from "@/components/CommandTriggerButton";
 import { useCopyFeedback } from "@/components/CopyFeedback";
-import { openGlobalCommandPalette } from "@/components/GlobalCommandPalette";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import type { Project } from "@/components/ProjectCard";
-import { Check, Command, Copy } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { glassLensTransition } from "@/lib/material/motion";
 import { formatWritingDate } from "@/lib/writingDisplay";
 import type { WritingPostMeta } from "@/lib/writingTypes";
@@ -610,13 +610,11 @@ function HomeDocument({
   activeSection,
   onCopy,
   noteItems,
-  onOpenCommand,
   projects,
 }: {
   activeSection: HomeTab;
   onCopy: (value: string, label: string, options?: { notify?: boolean }) => boolean | void | Promise<boolean | void>;
   noteItems: StudyItem[];
-  onOpenCommand: () => void;
   projects: PortfolioProject[];
 }) {
   return (
@@ -630,14 +628,7 @@ function HomeDocument({
           <h1 className="home-doc-title">
             minwook shin
           </h1>
-          <button
-            type="button"
-            className="command-trigger micro-focus micro-focus-tight micro-pressable"
-            aria-label="Open command palette"
-            onClick={onOpenCommand}
-          >
-            <Command aria-hidden="true" />
-          </button>
+          <CommandTriggerButton />
         </motion.div>
 
         <motion.div variants={landingRevealItem}>
@@ -745,7 +736,6 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
             activeSection={currentSection}
             noteItems={noteItems}
             onCopy={copyText}
-            onOpenCommand={openGlobalCommandPalette}
             projects={featuredProjects}
           />
         </div>
