@@ -380,16 +380,16 @@ function ContactLensList({
         animate={lens}
         transition={reduceMotion ? { duration: 0 } : glassLensTransition}
       />
-      <HomeLeafRow>
+      <HomeLeafRow signal>
         <HomeMetaLink href={PERSONAL_INFO.linkedin} external sharedGlass>linkedin.com/in/minwookshin</HomeMetaLink>
       </HomeLeafRow>
-      <HomeLeafRow>
+      <HomeLeafRow signal>
         <HomeMetaLink href={PERSONAL_INFO.github} external sharedGlass>github.com/minwookshin</HomeMetaLink>
       </HomeLeafRow>
-      <HomeLeafRow>
+      <HomeLeafRow signal>
         <HomeMetaLink href={PERSONAL_INFO.x} external sharedGlass>x.com/FakeMinwook</HomeMetaLink>
       </HomeLeafRow>
-      <HomeLeafRow>
+      <HomeLeafRow signal>
         <HomeMetaLink
           copyLabel="email"
           copyValue={PERSONAL_INFO.email}
@@ -400,7 +400,7 @@ function ContactLensList({
           {PERSONAL_INFO.email}
         </HomeMetaLink>
       </HomeLeafRow>
-      <HomeLeafRow>
+      <HomeLeafRow signal>
         <HomeMetaLink href={PERSONAL_INFO.resume} sharedGlass>resume</HomeMetaLink>
       </HomeLeafRow>
     </div>
