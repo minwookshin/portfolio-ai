@@ -33,6 +33,12 @@ type CommandChatMessage = {
   status?: "error";
 };
 
+type CommandChatTurn = {
+  assistants: CommandChatMessage[];
+  id: string;
+  user?: CommandChatMessage;
+};
+
 export function openGlobalCommandPalette() {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new Event(OPEN_COMMAND_EVENT));
@@ -70,6 +76,26 @@ function formatCommandAssistantMessage(content: string) {
   }
 
   return body;
+}
+
+function getCommandChatTurns(messages: CommandChatMessage[]) {
+  const turns: CommandChatTurn[] = [];
+
+  for (const message of messages) {
+    if (message.role === "user") {
+      turns.push({ assistants: [], id: message.id, user: message });
+      continue;
+    }
+
+    const latestTurn = turns[turns.length - 1];
+    if (latestTurn) {
+      latestTurn.assistants.push(message);
+    } else {
+      turns.push({ assistants: [message], id: message.id });
+    }
+  }
+
+  return turns.reverse();
 }
 
 export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPaletteProps) {
@@ -157,6 +183,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
         .some((value) => value.includes(normalizedQuery)),
     );
   }, [items, query]);
+  const askTurns = useMemo(() => getCommandChatTurns(askMessages), [askMessages]);
   const clampedActiveIndex = visibleItems.length > 0 ? Math.min(activeIndex, visibleItems.length - 1) : 0;
   const activeItem = visibleItems[clampedActiveIndex];
 
@@ -258,7 +285,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
   useEffect(() => {
     if (mode !== "ask" || !askThreadRef.current) return;
     askThreadRef.current.scrollTo({
-      top: askThreadRef.current.scrollHeight,
+      top: 0,
       behavior: reduceMotion ? "auto" : "smooth",
     });
   }, [askMessages, isAsking, mode, reduceMotion]);
@@ -573,19 +600,38 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                   }
                   exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -2, transition: tweens.instant }}
                 >
-                  {askMessages.length > 0 && (
-                    askMessages.map((message) => (
-                      <div
-                        key={message.id}
-                        className={`command-ask__message command-ask__message--${message.role}${
-                          message.status === "error" ? " command-ask__message--error" : ""
-                        }`}
-                      >
-                        {message.role === "assistant" ? formatCommandAssistantMessage(message.content) || " " : message.content}
-                      </div>
-                    ))
-                  )}
-                  {isAsking && (
+                  {askTurns.map((turn, turnIndex) => (
+                    <div className="command-ask__turn" key={turn.id}>
+                      {turn.user && (
+                        <div className="command-ask__message command-ask__message--user">
+                          {turn.user.content}
+                        </div>
+                      )}
+                      {turn.assistants.map((message) => {
+                        const body = formatCommandAssistantMessage(message.content);
+                        if (!body && message.status !== "error") return null;
+
+                        return (
+                          <div
+                            key={message.id}
+                            className={`command-ask__message command-ask__message--assistant${
+                              message.status === "error" ? " command-ask__message--error" : ""
+                            }`}
+                          >
+                            {body || message.content || " "}
+                          </div>
+                        );
+                      })}
+                      {isAsking && turnIndex === 0 && (
+                        <div className="command-ask__typing" aria-label="portfolio answer loading">
+                          <span />
+                          <span />
+                          <span />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {isAsking && askTurns.length === 0 && (
                     <div className="command-ask__typing" aria-label="portfolio answer loading">
                       <span />
                       <span />
