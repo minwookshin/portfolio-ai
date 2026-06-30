@@ -672,8 +672,8 @@ body::after {
   text-align: left;
   padding: 10px 12px;
   transition:
-    color 140ms var(--motion-ease-standard),
-    transform 140ms var(--motion-ease-standard);
+    color 180ms var(--motion-ease-standard),
+    transform 200ms var(--motion-ease-standard);
 }
 
 .command-row[data-active="true"],
@@ -743,10 +743,10 @@ body::after {
 .command-row__hint {
   justify-self: end;
   opacity: 0;
-  transform: translateX(-2px);
+  transform: translateX(-5px);
   transition:
-    opacity 120ms var(--motion-ease-standard),
-    transform 140ms var(--motion-ease-standard);
+    opacity 180ms var(--motion-ease-standard),
+    transform 220ms var(--motion-ease-standard);
 }
 
 .command-row[data-active="true"] .command-row__hint,
