@@ -233,13 +233,13 @@
 }
 
 ::selection {
-  color: #8A5A3C;
-  background-color: transparent;
+  color: var(--text-primary);
+  background-color: rgba(55, 60, 70, 0.10);
 }
 
 ::-moz-selection {
-  color: #8A5A3C;
-  background-color: transparent;
+  color: var(--text-primary);
+  background-color: rgba(55, 60, 70, 0.10);
 }
 
 .dom-cursor {
