@@ -51,7 +51,7 @@ export const DESIGN_SYSTEM_TOKENS = {
   typography: {
     families: [
       { role: "sans", cssVariable: "--font-sans", value: "Geist, Helvetica Neue, Arial, sans-serif", usage: "body copy, section titles, and primary reading text" },
-      { role: "mono", cssVariable: "--font-mono", value: "Geist Mono, SF Mono, monospace", usage: "metadata, command labels, and code/system artifacts" },
+      { role: "mono", cssVariable: "--font-mono", value: "Geist Mono, SF Mono, monospace", usage: "code/system artifacts, Command-K keycaps, and technical shortcut labels" },
     ],
     scale: [
       { role: "caption", cssVariable: "--type--2", value: "0.64rem" },
@@ -195,7 +195,7 @@ export const DESIGN_SYSTEM_INTERACTION_RULES = [
   "Keep open sections and open archive years on a stable filled dot at rest; when interacted with, hide the dot and rotate the same side-facing Material arrow downward so the signal does not read like a combined glyph.",
   "Use section arrows only inside the bullet cell, with the dot reduced to a short leading stroke so the two signals read as one mark.",
   "Reserve glass treatment for explicit action chips and controls, not full outline rows.",
-  "Use Geist Mono for metadata, code/system artifacts, and Command-K small labels; keep homepage action chips, body copy, and section labels in Geist Sans.",
+  "Use Geist Sans for reading metadata across home, archives, and detail outlines; reserve Geist Mono for code/system artifacts, Command-K keycaps, and technical shortcut labels.",
   "Use signal families consistently: internal links and clickable note rows draw the side-facing Material arrow, open section rows rotate that same arrow downward, section dots stay quiet or become short strokes by state, and contact chips use lateral nudge plus cursor coupling.",
   "Use 180ms to 300ms transitions for hover, focus, and press feedback; reserve longer reveal timing for page entry or scroll entry.",
   "Use blur only as a brief entry bridge, not as a permanent decorative layer.",

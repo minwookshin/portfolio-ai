@@ -1280,7 +1280,7 @@ button.home-row {
 .home-meta {
   padding-left: 7px;
   color: var(--home-meta-color);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--home-meta-font-size);
   font-variant-numeric: tabular-nums;
   line-height: inherit;
@@ -2035,7 +2035,7 @@ button.home-mention {
 }
 
 .project-row-meta {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   transition: color 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -2047,7 +2047,7 @@ button.home-mention {
   align-items: baseline;
   max-width: 100%;
   color: var(--text-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 
@@ -2159,7 +2159,7 @@ button.home-mention {
 
 .studio-detail-link-meta {
   color: var(--text-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--type-caption);
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
@@ -2230,7 +2230,7 @@ button.home-mention {
 
 .studio-detail-proof-strip dt {
   color: var(--text-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--type-caption);
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
@@ -2391,7 +2391,7 @@ button.home-mention {
 
 .detail-outline-row-meta {
   color: var(--text-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--type-caption);
   font-variant-numeric: tabular-nums;
   line-height: inherit;
@@ -4476,7 +4476,7 @@ button.home-mention {
 
 .archive-row-meta {
   color: var(--text-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--type-meta);
   font-variant-numeric: tabular-nums;
   line-height: inherit;
@@ -4489,7 +4489,7 @@ button.home-mention {
 .archive-row-description {
   display: inline;
   color: var(--text-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--type-meta);
   font-variant-numeric: tabular-nums;
   line-height: inherit;
