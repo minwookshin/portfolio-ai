@@ -446,11 +446,9 @@ function HomeOutlineSection({
 }
 
 function getProjectDescriptor(project: Project) {
-  const descriptor = project.comingSoon
-    ? project.unavailableMessage ?? "Coming soon."
-    : project.studioLabel ?? project.description;
-
-  return [project.date, descriptor].filter(Boolean).join(" · ");
+  return project.comingSoon
+    ? [project.date, project.unavailableMessage ?? "Coming soon."].filter(Boolean).join(" · ")
+    : project.date ?? "";
 }
 
 function ProjectTextRow({
@@ -644,7 +642,7 @@ function HomeDocument({
 
         <motion.div variants={landingRevealItem}>
           <HomeLeafRow intro>
-            I make interfaces, prototypes, and small systems for AI-native products.
+            I design and build interfaces for AI native products.
           </HomeLeafRow>
         </motion.div>
 

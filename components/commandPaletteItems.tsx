@@ -557,9 +557,9 @@ export function buildCommandItems({
       preview: {
         title: "short bio",
         meta: "copy utility",
-        body: "Minwook Shin makes interfaces, prototypes, and small systems for AI-native products.",
+        body: "Minwook Shin designs and builds interfaces for AI native products.",
       },
-      action: () => void copyText("Minwook Shin makes interfaces, prototypes, and small systems for AI-native products.", "bio"),
+      action: () => void copyText("Minwook Shin designs and builds interfaces for AI native products.", "bio"),
     },
     {
       id: "copy-portfolio-link",
