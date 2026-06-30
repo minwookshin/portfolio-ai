@@ -97,7 +97,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     date: "2025",
     image: "/projects/sentinel/hero.png",
     icon: "/projects/sentinellogo.png",
-    studioLabel: "48-hour native iOS MVP",
+    studioLabel: "iOS weather MVP",
     themeColor: "#F59E0B",
     overview: "From Idea to Native iOS App in 48 Hours. Sentinel is a predictive home maintenance app that helps homeowners move from gut feeling to data-driven decision making, preventing invisible risks before they become $200,000 disasters.",
     builder: {
@@ -185,7 +185,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     date: "2026",
     image: "/projects/atlas/ic-quick-send-photo.png",
     icon: "/projects/atlas/logo.png",
-    studioLabel: "AI triage prototype system",
+    studioLabel: "AI triage system",
     overview:
       "Atlas coordinates field triage, incident command, and hospital intake through three connected prototype apps and a shared patient-state server.",
     builder: {

@@ -455,7 +455,7 @@ function getProjectDescriptor(project: Project) {
     ? project.unavailableMessage ?? "Coming soon."
     : project.studioLabel ?? project.description;
 
-  return [project.date, descriptor].filter(Boolean).join(" / ");
+  return [project.date, descriptor].filter(Boolean).join(" · ");
 }
 
 function ProjectTextRow({
@@ -654,9 +654,9 @@ function HomeDocument({
         </motion.div>
 
         <HomeOutlineSection count={3} defaultOpen title="today">
-          <HomeLeafRow>still editing this website</HomeLeafRow>
-          <HomeLeafRow>building product interfaces that work as proof, not just presentation</HomeLeafRow>
-          <HomeLeafRow>keeping motion, code, and AI behavior in the same design system</HomeLeafRow>
+          <HomeLeafRow>editing this website</HomeLeafRow>
+          <HomeLeafRow>building proof-led product interfaces</HomeLeafRow>
+          <HomeLeafRow>keeping motion, code, and AI behavior in one system</HomeLeafRow>
         </HomeOutlineSection>
 
         <HomeOutlineSection
