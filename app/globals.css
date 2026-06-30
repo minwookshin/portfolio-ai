@@ -232,6 +232,16 @@
   --cursor-pressed: rgba(28, 32, 40, 0.22);
 }
 
+::selection {
+  color: #8A5A3C;
+  background-color: transparent;
+}
+
+::-moz-selection {
+  color: #8A5A3C;
+  background-color: transparent;
+}
+
 .dom-cursor {
   position: fixed;
   top: 0;
