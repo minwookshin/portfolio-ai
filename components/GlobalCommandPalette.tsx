@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Command, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Command, MessageCircle, Search } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCopyFeedback } from "@/components/CopyFeedback";
 import type { CommandItem } from "@/components/commandPaletteItems";
@@ -17,11 +17,20 @@ import { springs, tweens } from "@/lib/material/motion";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 
 const OPEN_COMMAND_EVENT = "portfolio-command:open";
-const ASK_PORTFOLIO_EVENT = "portfolio-command:ask";
-const ASK_PORTFOLIO_STORAGE_KEY = "portfolio-command-ask";
+const FOLLOWUP_SENTINEL = "<<<FOLLOWUPS>>>";
+const SHOW_SENTINEL = "<<<SHOW>>>";
 
 type GlobalCommandPaletteProps = {
   writingPosts: WritingPostMeta[];
+};
+
+type CommandMode = "commands" | "ask";
+
+type CommandChatMessage = {
+  content: string;
+  id: string;
+  role: "user" | "assistant";
+  status?: "error";
 };
 
 export function openGlobalCommandPalette() {
@@ -43,17 +52,42 @@ function getCommandActionHint(item: CommandItem) {
   return "enter";
 }
 
+function formatCommandAssistantMessage(content: string) {
+  let cut = content.length;
+  for (const sentinel of [SHOW_SENTINEL, FOLLOWUP_SENTINEL]) {
+    const index = content.indexOf(sentinel);
+    if (index !== -1) cut = Math.min(cut, index);
+  }
+
+  let body = content.slice(0, cut).trimEnd();
+  for (const sentinel of [SHOW_SENTINEL, FOLLOWUP_SENTINEL]) {
+    for (let length = sentinel.length - 1; length > 0; length--) {
+      if (body.endsWith(sentinel.slice(0, length))) {
+        body = body.slice(0, -length).trimEnd();
+        break;
+      }
+    }
+  }
+
+  return body;
+}
+
 export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPaletteProps) {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
   const reduceMotion = useReducedMotion();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const askThreadRef = useRef<HTMLDivElement | null>(null);
   const rowRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [mode, setMode] = useState<CommandMode>("commands");
   const [query, setQuery] = useState("");
+  const [askInput, setAskInput] = useState("");
+  const [askMessages, setAskMessages] = useState<CommandChatMessage[]>([]);
+  const [isAsking, setIsAsking] = useState(false);
   const [lensRect, setLensRect] = useState<{ height: number; left: number; top: number; width: number } | null>(null);
   const { copyText, toast } = useCopyFeedback();
 
@@ -83,15 +117,18 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     router.push(href);
   }, [pathname, reduceMotion, router]);
 
-  const askAboutPortfolio = useCallback(() => {
-    if (pathname === "/") {
-      window.dispatchEvent(new Event(ASK_PORTFOLIO_EVENT));
-      return;
-    }
+  const openAskMode = useCallback((prefill = "") => {
+    setIsOpen(true);
+    setMode("ask");
+    setQuery("");
+    setActiveIndex(0);
+    setLensRect(null);
+    setAskInput(prefill);
+  }, []);
 
-    window.sessionStorage.setItem(ASK_PORTFOLIO_STORAGE_KEY, "true");
-    router.push("/");
-  }, [pathname, router]);
+  const askAboutPortfolio = useCallback(() => {
+    openAskMode("ask about this portfolio");
+  }, [openAskMode]);
 
   const openShortcuts = useCallback(() => setIsShortcutsOpen(true), []);
 
@@ -125,7 +162,9 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
 
   const closePalette = useCallback(() => {
     setQuery("");
+    setAskInput("");
     setActiveIndex(0);
+    setMode("commands");
     setIsOpen(false);
   }, []);
 
@@ -133,7 +172,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     const row = rowRefs.current[clampedActiveIndex];
     const list = listRef.current;
 
-    if (!isOpen || !row || !list || visibleItems.length === 0) {
+    if (!isOpen || mode !== "commands" || !row || !list || visibleItems.length === 0) {
       setLensRect(null);
       return;
     }
@@ -147,13 +186,14 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
       top: rowRect.top - listRect.top + list.scrollTop,
       width: rowRect.width,
     });
-  }, [clampedActiveIndex, isOpen, visibleItems.length]);
+  }, [clampedActiveIndex, isOpen, mode, visibleItems.length]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
         setIsOpen(true);
+        setMode("commands");
         return;
       }
 
@@ -162,7 +202,10 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
         setIsShortcutsOpen(true);
       }
     };
-    const onOpenCommand = () => setIsOpen(true);
+    const onOpenCommand = () => {
+      setIsOpen(true);
+      setMode("commands");
+    };
 
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener(OPEN_COMMAND_EVENT, onOpenCommand);
@@ -177,23 +220,23 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
 
     const frame = window.requestAnimationFrame(() => inputRef.current?.focus());
     return () => window.cancelAnimationFrame(frame);
-  }, [isOpen]);
+  }, [isOpen, mode]);
 
   useEffect(() => {
     rowRefs.current = rowRefs.current.slice(0, visibleItems.length);
   }, [visibleItems.length]);
 
   useLayoutEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || mode !== "commands") return;
 
     const row = rowRefs.current[clampedActiveIndex];
     row?.scrollIntoView({ block: "nearest" });
     const frame = window.requestAnimationFrame(updateLensRect);
     return () => window.cancelAnimationFrame(frame);
-  }, [clampedActiveIndex, isOpen, query, updateLensRect, visibleItems.length]);
+  }, [clampedActiveIndex, isOpen, mode, query, updateLensRect, visibleItems.length]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || mode !== "commands") return;
 
     const handleResize = () => updateLensRect();
     window.addEventListener("resize", handleResize);
@@ -210,7 +253,15 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
       window.removeEventListener("resize", handleResize);
       observer?.disconnect();
     };
-  }, [isOpen, updateLensRect, visibleItems.length]);
+  }, [isOpen, mode, updateLensRect, visibleItems.length]);
+
+  useEffect(() => {
+    if (mode !== "ask" || !askThreadRef.current) return;
+    askThreadRef.current.scrollTo({
+      top: askThreadRef.current.scrollHeight,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  }, [askMessages, isAsking, mode, reduceMotion]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -244,12 +295,83 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [isShortcutsOpen]);
 
+  const submitAsk = useCallback(async (message = askInput) => {
+    const trimmed = message.trim();
+    if (!trimmed || isAsking) return;
+
+    const messageIdSeed = `${Date.now()}-${trimmed.length}`;
+    const userMsg: CommandChatMessage = { id: `ask-user-${messageIdSeed}`, role: "user", content: trimmed };
+    const assistantId = `ask-assistant-${messageIdSeed}`;
+    const nextMessages = [...askMessages, userMsg];
+
+    setAskInput("");
+    setAskMessages(nextMessages);
+    setIsAsking(true);
+
+    const updateAssistantMessage = (content: string) => {
+      setAskMessages((prev) =>
+        prev.map((msg) => (msg.id === assistantId ? { ...msg, content } : msg)),
+      );
+    };
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: nextMessages, context: contextLabel }),
+      });
+
+      if (!res.ok) throw new Error("API error");
+      if (!res.body) throw new Error("No response body");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      setAskMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
+
+      const readStream = async (currentText: string): Promise<void> => {
+        const { done, value } = await reader.read();
+        if (done) {
+          const tail = decoder.decode();
+          if (tail) updateAssistantMessage(`${currentText}${tail}`);
+          return;
+        }
+
+        const nextText = `${currentText}${decoder.decode(value, { stream: true })}`;
+        updateAssistantMessage(nextText);
+        return readStream(nextText);
+      };
+
+      await readStream("");
+    } catch (error) {
+      console.error("Command ask error:", error);
+      const errorMessage: CommandChatMessage = {
+        id: assistantId,
+        role: "assistant",
+        content: "i could not reach the ai demo. try again in a moment.",
+        status: "error",
+      };
+      setAskMessages((prev) =>
+        prev.some((msg) => msg.id === assistantId)
+          ? prev.map((msg) => (msg.id === assistantId ? errorMessage : msg))
+          : [...prev, errorMessage],
+      );
+    } finally {
+      setIsAsking(false);
+    }
+  }, [askInput, askMessages, contextLabel, isAsking]);
+
   const runCommand = (item: CommandItem) => {
     item.action();
+    if (item.id === "ask-portfolio") {
+      return;
+    }
     if (item.group !== "copy") {
       closePalette();
     }
   };
+
+  const showCommandList = mode === "commands";
 
   return (
     <>
@@ -291,15 +413,41 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                     : { opacity: 0, y: -1, transition: { ...tweens.instant, delay: 0.04 } }
                 }
               >
-                <Search className="command-search__icon" aria-hidden="true" />
+                {mode === "ask" ? (
+                  <button
+                    type="button"
+                    className="command-search__back micro-focus micro-focus-tight micro-pressable"
+                    aria-label="back to commands"
+                    onClick={() => {
+                      setMode("commands");
+                      setAskInput("");
+                    }}
+                  >
+                    <ArrowLeft aria-hidden="true" />
+                  </button>
+                ) : (
+                  <Search className="command-search__icon" aria-hidden="true" />
+                )}
                 <input
                   ref={inputRef}
-                  value={query}
+                  value={mode === "ask" ? askInput : query}
                   onChange={(event) => {
-                    setQuery(event.target.value);
-                    setActiveIndex(0);
+                    if (mode === "ask") {
+                      setAskInput(event.target.value);
+                    } else {
+                      setQuery(event.target.value);
+                      setActiveIndex(0);
+                    }
                   }}
                   onKeyDown={(event) => {
+                    if (mode === "ask") {
+                      if (event.key === "Enter" && !event.shiftKey) {
+                        event.preventDefault();
+                        void submitAsk();
+                      }
+                      return;
+                    }
+
                     if (event.key === "ArrowDown") {
                       event.preventDefault();
                       setActiveIndex((index) => Math.min(index + 1, Math.max(visibleItems.length - 1, 0)));
@@ -311,14 +459,26 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                       if (activeItem) runCommand(activeItem);
                     }
                   }}
-                  placeholder={commandPlaceholder}
-                  aria-label="search commands"
+                  placeholder={mode === "ask" ? "ask about this portfolio" : commandPlaceholder}
+                  aria-label={mode === "ask" ? "ask about this portfolio" : "search commands"}
                 />
-                {toast ? (
-                  <span className="command-search__status" role="status" aria-live="polite" aria-atomic="true">
-                    {toast}
-                  </span>
-                ) : (
+                <span className="command-search__controls">
+                  {mode === "ask" && (
+                    <button
+                      type="button"
+                      className="command-search__send micro-focus micro-focus-tight micro-pressable"
+                      aria-label="send portfolio question"
+                      disabled={!askInput.trim() || isAsking}
+                      onClick={() => void submitAsk()}
+                    >
+                      <ArrowRight aria-hidden="true" />
+                    </button>
+                  )}
+                  {toast && mode === "commands" ? (
+                    <span className="command-search__status" role="status" aria-live="polite" aria-atomic="true">
+                      {toast}
+                    </span>
+                  ) : (
                   <button
                     type="button"
                     className="command-search__escape micro-focus micro-focus-tight micro-pressable"
@@ -328,10 +488,12 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                   >
                     esc
                   </button>
-                )}
+                  )}
+                </span>
               </motion.div>
 
-              <motion.div
+              {showCommandList ? (
+                <motion.div
                 ref={listRef}
                 className="command-list"
                 role="listbox"
@@ -399,6 +561,44 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                   <p className="command-empty">no command</p>
                 )}
               </motion.div>
+              ) : (
+                <motion.div
+                  ref={askThreadRef}
+                  className="command-ask"
+                  initial={reduceMotion ? false : { opacity: 0, y: 3 }}
+                  animate={
+                    reduceMotion
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 1, y: 0, transition: { ...tweens.fast, delay: 0.06 } }
+                  }
+                  exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -2, transition: tweens.instant }}
+                >
+                  {askMessages.length === 0 ? (
+                    <div className="command-ask__empty">
+                      <MessageCircle aria-hidden="true" />
+                      <span>ask as one command, not a separate layer.</span>
+                    </div>
+                  ) : (
+                    askMessages.map((message) => (
+                      <div
+                        key={message.id}
+                        className={`command-ask__message command-ask__message--${message.role}${
+                          message.status === "error" ? " command-ask__message--error" : ""
+                        }`}
+                      >
+                        {message.role === "assistant" ? formatCommandAssistantMessage(message.content) || " " : message.content}
+                      </div>
+                    ))
+                  )}
+                  {isAsking && (
+                    <div className="command-ask__typing" aria-label="portfolio answer loading">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                  )}
+                </motion.div>
+              )}
 
             </motion.div>
           </motion.div>
@@ -447,5 +647,3 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     </>
   );
 }
-
-export { ASK_PORTFOLIO_EVENT, ASK_PORTFOLIO_STORAGE_KEY };
