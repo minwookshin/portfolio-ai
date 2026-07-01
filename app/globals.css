@@ -431,24 +431,19 @@ body::after {
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: none;
+  max-width: 1180px;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: 104px 32px;
-  background: var(--document-canvas);
+  padding: 132px 32px;
+  background: var(--bg-base);
 }
 
 .home-doc {
   display: flex;
-  min-height: calc(100dvh - 208px);
+  min-height: calc(100dvh - 264px);
   flex-direction: column;
   width: 100%;
   max-width: 720px;
-  padding: 28px 30px;
-  border: 1px solid var(--document-paper-border);
-  border-radius: 8px;
-  background: var(--document-paper);
-  box-shadow: var(--document-paper-shadow);
   text-align: left;
 }
 
@@ -1770,12 +1765,11 @@ button.home-mention {
 
 @media (max-width: 720px) {
   .home-doc-shell {
-    padding: 84px 16px;
+    padding: 108px 24px;
   }
 
   .home-doc {
-    min-height: calc(100dvh - 168px);
-    padding: 24px 22px;
+    min-height: calc(100dvh - 216px);
   }
 
   .site-masthead {
@@ -4974,19 +4968,14 @@ button.atlas-state-dot {
   align-items: center;
   width: 100%;
   min-height: 100dvh;
-  padding: 104px 32px 200px;
-  background: var(--document-canvas);
+  padding: 132px 32px 200px;
+  background: var(--bg-base);
   color: var(--text-primary);
 }
 
 .archive-page {
   width: 100%;
   max-width: 720px;
-  padding: 28px 30px;
-  border: 1px solid var(--document-paper-border);
-  border-radius: 8px;
-  background: var(--document-paper);
-  box-shadow: var(--document-paper-shadow);
 }
 
 .archive-document-content {
@@ -5650,10 +5639,9 @@ button.atlas-state-dot {
 @media (max-width: 720px) {
   .archive-page-shell,
   .detail-page-shell {
-    padding: 84px 16px 160px;
+    padding: 108px 24px 160px;
   }
 
-  .archive-page,
   .project-readable,
   .article-readable,
   .interaction-os {
