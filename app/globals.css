@@ -11,6 +11,12 @@
   --theme-light-rule: rgba(28, 30, 34, 0.08);
   --theme-light-tint: rgba(28, 30, 34, 0.05);
   --theme-light-row-focus: rgba(28, 30, 34, 0.06);
+  --document-canvas: #F4F5F6;
+  --document-paper: color-mix(in srgb, #FFFFFF 94%, var(--theme-light-bg));
+  --document-paper-border: color-mix(in srgb, var(--theme-light-ink) 5%, transparent);
+  --document-paper-shadow:
+    0 1px 0 color-mix(in srgb, #FFFFFF 82%, transparent) inset,
+    0 28px 72px -56px color-mix(in srgb, var(--theme-light-ink) 26%, transparent);
 
   --theme-dark-bg: #0F0F10;
   --theme-dark-surface: #18181B;
@@ -425,19 +431,24 @@ body::after {
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: 1180px;
+  max-width: none;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: 132px 32px;
-  background: var(--bg-base);
+  padding: 104px 32px;
+  background: var(--document-canvas);
 }
 
 .home-doc {
   display: flex;
-  min-height: calc(100dvh - 264px);
+  min-height: calc(100dvh - 208px);
   flex-direction: column;
   width: 100%;
   max-width: 720px;
+  padding: 28px 30px;
+  border: 1px solid var(--document-paper-border);
+  border-radius: 8px;
+  background: var(--document-paper);
+  box-shadow: var(--document-paper-shadow);
   text-align: left;
 }
 
@@ -1759,11 +1770,12 @@ button.home-mention {
 
 @media (max-width: 720px) {
   .home-doc-shell {
-    padding: 108px 24px;
+    padding: 84px 16px;
   }
 
   .home-doc {
-    min-height: calc(100dvh - 216px);
+    min-height: calc(100dvh - 168px);
+    padding: 24px 22px;
   }
 
   .site-masthead {
@@ -4962,14 +4974,19 @@ button.atlas-state-dot {
   align-items: center;
   width: 100%;
   min-height: 100dvh;
-  padding: 132px 32px 200px;
-  background: var(--bg-base);
+  padding: 104px 32px 200px;
+  background: var(--document-canvas);
   color: var(--text-primary);
 }
 
 .archive-page {
   width: 100%;
   max-width: 720px;
+  padding: 28px 30px;
+  border: 1px solid var(--document-paper-border);
+  border-radius: 8px;
+  background: var(--document-paper);
+  box-shadow: var(--document-paper-shadow);
 }
 
 .archive-document-content {
@@ -5633,7 +5650,14 @@ button.atlas-state-dot {
 @media (max-width: 720px) {
   .archive-page-shell,
   .detail-page-shell {
-    padding: 108px 24px 160px;
+    padding: 84px 16px 160px;
+  }
+
+  .archive-page,
+  .project-readable,
+  .article-readable,
+  .interaction-os {
+    padding: 24px 22px;
   }
 
   .archive-nav-link,
@@ -5740,7 +5764,22 @@ button.atlas-state-dot {
 }
 
 .project-readable {
+  width: 100%;
   max-width: var(--measure);
+  padding: 28px 30px;
+  border: 1px solid var(--document-paper-border);
+  border-radius: 8px;
+  background: var(--document-paper);
+  box-shadow: var(--document-paper-shadow);
+}
+
+.article-readable,
+.interaction-os {
+  padding: 28px 30px;
+  border: 1px solid var(--document-paper-border);
+  border-radius: 8px;
+  background: var(--document-paper);
+  box-shadow: var(--document-paper-shadow);
 }
 
 .project-readable :is(p, li, figcaption) {
