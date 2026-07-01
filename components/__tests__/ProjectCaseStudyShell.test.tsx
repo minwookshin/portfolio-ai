@@ -37,11 +37,10 @@ describe("ProjectCaseStudyShell", () => {
     expect(within(nav).queryByRole("button", { name: "copy Sentinel page link" })).not.toBeInTheDocument();
     expect(within(nav).queryByRole("link", { name: "minwook shin" })).not.toBeInTheDocument();
     expect(within(nav).queryByText("Sentinel")).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "sentinel / 2025 / native ios risk system" })).toBeInTheDocument();
-    expect(screen.getByText("proof bento grid")).toBeInTheDocument();
+    expect(screen.getByText("ownership")).toBeInTheDocument();
+    expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
+    expect(screen.getByText("build path")).toBeInTheDocument();
     expectNativeVideo("Sentinel demo");
-    expect(screen.getByRole("button", { name: "set Sentinel risk to urgent" })).toBeInTheDocument();
-    expect(screen.getAllByText("risk contract")).toHaveLength(1);
   });
 
   it("does not duplicate video-only demos in proof links", () => {
@@ -71,25 +70,14 @@ describe("ProjectCaseStudyShell", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("portfolio-ai")} />);
 
     expect(screen.queryByRole("link", { name: /try live site/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "portfolio ai / 2025 / ai native website system" })).toBeInTheDocument();
+    expect(screen.getByText("public repo / live site")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /video/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "advance portfolio command route" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Design system proof" })).toHaveAttribute("href", "/design-system");
     expect(screen.getByRole("link", { name: "Design system markdown" })).toHaveAttribute("href", "/design-system.md");
     expect(screen.getByRole("link", { name: "Design tokens JSON" })).toHaveAttribute("href", "/design-system/tokens.json");
     expect(screen.getByText("/ page")).toBeInTheDocument();
     expect(screen.getByText("/ markdown")).toBeInTheDocument();
     expect(screen.getByText("/ json")).toBeInTheDocument();
-  });
-
-  it("renders Mindline as a reasoning-led artifact case", () => {
-    render(<ProjectCaseStudyShell project={getWorkProject("mindline")} />);
-
-    expect(screen.getByRole("heading", { name: "mindline / 2025 / behavioral ai product concept" })).toBeInTheDocument();
-    expect(screen.getByText("proof bento grid")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "advance Mindline intervention loop" })).toBeInTheDocument();
-    expect(screen.getAllByText("reasoning model")).toHaveLength(1);
-    expect(screen.getByText("case-study sketch of the product logic, not a production model.")).toBeInTheDocument();
   });
 
   it("renders Atlas as a proof-led case study template", () => {

@@ -6,7 +6,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import AtlasProofCaseStudy from "@/components/AtlasProofCaseStudy";
-import ProjectArtifactCaseStudy, { hasProjectArtifactCase } from "@/components/ProjectArtifactCaseStudy";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import { Project } from "./ProjectCard";
@@ -284,7 +283,6 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   const bodyCaseStudy = hero ? { ...caseStudy, sections: caseStudy.sections.slice(1) } : caseStudy;
   const proof = hasBuilderProof(project) ? project.builder : undefined;
   const isAtlas = hasBuilderProof(project) && project.slug === "atlas";
-  const isProjectArtifactCase = hasBuilderProof(project) && hasProjectArtifactCase(project.slug);
 
   return (
     <motion.div
@@ -308,8 +306,6 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
       )}
       {isAtlas ? (
         <AtlasProofCaseStudy project={project} />
-      ) : isProjectArtifactCase ? (
-        <ProjectArtifactCaseStudy project={project} />
       ) : (
         <>
           <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
