@@ -86,6 +86,8 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByRole("heading", { name: "atlas / 2026 / ai triage prototype system" })).toBeInTheDocument();
     expect(screen.getByText("proof bento grid")).toBeInTheDocument();
     expect(screen.getByLabelText("hospital load")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "toggle Atlas rail" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "assign selected hospital" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
     expect(screen.getAllByText("event contract")).toHaveLength(2);
     expect(screen.getByText("case-study sketch")).toBeInTheDocument();
