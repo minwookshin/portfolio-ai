@@ -2784,6 +2784,10 @@ button.home-mention {
   grid-column: span 4;
 }
 
+.atlas-proof-tile--patient-row {
+  grid-column: span 3;
+}
+
 .atlas-proof-tile--patient {
   grid-column: span 5;
 }
@@ -3197,6 +3201,41 @@ button.home-mention {
   color: var(--text-primary);
 }
 
+.atlas-state-rail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.atlas-state-rail--controls {
+  justify-content: flex-start;
+}
+
+.atlas-state-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border: 0;
+  border-radius: var(--md-shape-full);
+  background: var(--text-primary);
+  opacity: 0.22;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+button.atlas-state-dot {
+  cursor: pointer;
+}
+
+.atlas-state-dot:hover,
+.atlas-state-dot:focus-visible,
+.atlas-state-dot[data-active="true"] {
+  opacity: 0.62;
+  transform: scale(1.08);
+}
+
 @keyframes atlas-spin {
   to {
     transform: rotate(1turn);
@@ -3270,6 +3309,28 @@ button.home-mention {
   accent-color: var(--text-primary);
 }
 
+.atlas-progress-control {
+  width: fit-content;
+  border: 1px solid var(--code-border);
+  border-radius: var(--md-shape-sm);
+  background: var(--bg-surface);
+  padding: 6px 8px;
+  color: var(--text-primary);
+  font-size: var(--type-caption);
+  line-height: 1.2;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.atlas-progress-control:hover,
+.atlas-progress-control:focus-visible {
+  border-color: color-mix(in srgb, var(--text-primary) 14%, var(--code-border));
+  background: var(--code-inline-surface);
+  transform: translateX(var(--signal-nudge));
+}
+
 .atlas-live-list {
   display: grid;
   gap: 7px;
@@ -3304,6 +3365,138 @@ button.home-mention {
   overflow: hidden;
   min-width: 0;
   background: var(--code-surface);
+}
+
+.atlas-code-artifact__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  border-bottom: 1px solid var(--code-border);
+  padding: 8px;
+}
+
+.atlas-code-artifact__tabs button {
+  border: 1px solid transparent;
+  border-radius: var(--md-shape-sm);
+  background: transparent;
+  padding: 4px 7px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: calc(var(--code-font-size) - 1px);
+  line-height: 1.2;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.atlas-code-artifact__tabs button:hover,
+.atlas-code-artifact__tabs button:focus-visible,
+.atlas-code-artifact__tabs button[data-active="true"] {
+  border-color: var(--code-border);
+  background: var(--code-inline-surface);
+  color: var(--text-primary);
+}
+
+.atlas-code-artifact__note {
+  margin: 0;
+  border-top: 1px solid var(--code-border);
+  padding: 8px 10px 10px;
+  color: var(--text-muted);
+  font-size: var(--type-caption);
+  line-height: var(--leading-body);
+}
+
+.atlas-patient-row-demo {
+  display: grid;
+  align-content: center;
+  gap: var(--space-1);
+  min-height: 100%;
+}
+
+.atlas-patient-row-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 112px;
+  border: 1px solid var(--code-border);
+  border-radius: var(--md-shape-sm);
+  background: var(--bg-surface);
+  padding: 12px;
+  color: var(--text-primary);
+  text-align: left;
+  transition:
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.atlas-patient-row-card:hover,
+.atlas-patient-row-card:focus-visible,
+.atlas-patient-row-demo[data-state="assigned"] .atlas-patient-row-card,
+.atlas-patient-row-demo[data-state="received"] .atlas-patient-row-card {
+  border-color: color-mix(in srgb, var(--text-primary) 16%, var(--code-border));
+  background: color-mix(in srgb, var(--text-primary) 2%, var(--bg-surface));
+  transform: translateX(var(--signal-nudge));
+}
+
+.atlas-patient-row-card__matrix {
+  display: grid;
+  grid-template-columns: repeat(2, 4px);
+  gap: 4px;
+}
+
+.atlas-patient-row-card__matrix span {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--md-shape-full);
+  background: var(--text-primary);
+  opacity: 0.28;
+}
+
+.atlas-patient-row-card__body {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.atlas-patient-row-card__main,
+.atlas-patient-row-card__meta {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.atlas-patient-row-card__main strong,
+.atlas-patient-row-card__main em,
+.atlas-patient-row-card__meta span,
+.atlas-patient-row-card__note,
+.atlas-patient-row-card__triage {
+  font-size: var(--type-caption);
+  line-height: 1.25;
+}
+
+.atlas-patient-row-card__main strong {
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.atlas-patient-row-card__main em,
+.atlas-patient-row-card__meta,
+.atlas-patient-row-card__note {
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+.atlas-patient-row-card__triage {
+  border: 1px solid var(--code-border);
+  border-radius: var(--md-shape-full);
+  background: var(--code-inline-surface);
+  padding: 3px 7px;
+  color: var(--text-primary);
 }
 
 .atlas-motion-rule__panel {
@@ -5233,6 +5426,7 @@ button.home-mention {
   .atlas-proof-tile--live,
   .atlas-proof-tile--rail,
   .atlas-proof-tile--assign,
+  .atlas-proof-tile--patient-row,
   .atlas-proof-tile--patient,
   .atlas-proof-tile--code,
   .atlas-proof-tile--motion,

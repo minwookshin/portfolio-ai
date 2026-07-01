@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import {
   ATLAS_DECISION_LOG,
-  ATLAS_EVENT_CONTRACT,
+  ATLAS_EVENT_CONTRACTS,
   ATLAS_INTRO,
   ATLAS_META,
   ATLAS_PATIENT_IMAGES,
@@ -94,6 +94,36 @@ const assignmentStateCopy: Record<AssignmentState, { button: string; status: str
     status: "hospital assigned",
   },
 };
+
+const capacitySteps = [
+  { label: "receiving", load: 42 },
+  { label: "strained", load: 66 },
+  { label: "divert", load: 88 },
+] as const;
+
+const patientRowStates = [
+  {
+    label: "queued",
+    sector: "sector b",
+    triage: "red",
+    vitals: "hr 124 / spo2 91",
+    note: "field report pending",
+  },
+  {
+    label: "assigned",
+    sector: "grady",
+    triage: "red",
+    vitals: "hr 118 / spo2 93",
+    note: "transport route sent",
+  },
+  {
+    label: "received",
+    sector: "er bay 04",
+    triage: "orange",
+    vitals: "hr 104 / spo2 96",
+    note: "intake confirmed",
+  },
+] as const;
 
 function getCapacityState(load: number): CapacityState {
   if (load >= 82) {
@@ -250,6 +280,7 @@ function AtlasAssignControlTile() {
   const [selectedHospital, setSelectedHospital] = useState<(typeof assignmentHospitals)[number]["id"]>("grady");
   const [assignmentState, setAssignmentState] = useState<AssignmentState>("ready");
   const copy = assignmentStateCopy[assignmentState];
+  const assignmentSteps: AssignmentState[] = ["ready", "assigning", "sent"];
 
   useEffect(() => {
     if (assignmentState === "assigning") {
@@ -300,6 +331,16 @@ function AtlasAssignControlTile() {
         {assignmentState === "assigning" && <span className="atlas-assign__spinner" aria-hidden="true" />}
         {copy.button}
       </button>
+      <div className="atlas-state-rail" aria-label="assignment states">
+        {assignmentSteps.map((step) => (
+          <span
+            key={step}
+            className="atlas-state-dot"
+            data-active={assignmentState === step ? "true" : undefined}
+            aria-label={step}
+          />
+        ))}
+      </div>
       <p className="atlas-assign__status" aria-live="polite">
         {copy.status}
       </p>
@@ -308,29 +349,39 @@ function AtlasAssignControlTile() {
 }
 
 function AtlasCapacityTile() {
-  const [load, setLoad] = useState(66);
-  const state = useMemo(() => getCapacityState(load), [load]);
+  const [stepIndex, setStepIndex] = useState(1);
+  const step = capacitySteps[stepIndex] ?? capacitySteps[0];
+  const state = useMemo(() => getCapacityState(step.load), [step.load]);
 
   return (
     <div className="atlas-capacity" data-tone={state.tone}>
       <div className="atlas-capacity__readout">
         <span>{state.label}</span>
-        <output aria-live="polite">{load}% load</output>
+        <output aria-live="polite">{step.load}% load</output>
       </div>
       <div className="atlas-capacity__meter" aria-hidden="true">
-        <span style={{ width: `${load}%` }} />
+        <span style={{ width: `${step.load}%` }} />
       </div>
-      <label className="atlas-capacity__slider">
-        <span>hospital load</span>
-        <input
-          type="range"
-          min="24"
-          max="94"
-          value={load}
-          aria-label="hospital load"
-          onChange={(event) => setLoad(Number(event.target.value))}
-        />
-      </label>
+      <div className="atlas-state-rail atlas-state-rail--controls" aria-label="hospital load states">
+        {capacitySteps.map((item, index) => (
+          <button
+            key={item.label}
+            type="button"
+            className="atlas-state-dot micro-focus micro-pressable"
+            data-active={index === stepIndex ? "true" : undefined}
+            aria-label={`set hospital load to ${item.label}`}
+            onClick={() => setStepIndex(index)}
+          />
+        ))}
+      </div>
+      <button
+        type="button"
+        className="atlas-progress-control micro-focus micro-pressable"
+        aria-label="advance hospital load"
+        onClick={() => setStepIndex((index) => (index + 1) % capacitySteps.length)}
+      >
+        advance load
+      </button>
       <dl className="atlas-live-list">
         <div>
           <dt>beds</dt>
@@ -345,6 +396,55 @@ function AtlasCapacityTile() {
           <dd>{state.action}</dd>
         </div>
       </dl>
+    </div>
+  );
+}
+
+function AtlasPatientRowTile() {
+  const [patientIndex, setPatientIndex] = useState(0);
+  const patient = patientRowStates[patientIndex] ?? patientRowStates[0];
+
+  return (
+    <div className="atlas-patient-row-demo" data-state={patient.label}>
+      <button
+        type="button"
+        className="atlas-patient-row-card micro-focus micro-pressable"
+        aria-label="advance patient row state"
+        onClick={() => setPatientIndex((index) => (index + 1) % patientRowStates.length)}
+      >
+        <span className="atlas-patient-row-card__matrix" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+        </span>
+        <span className="atlas-patient-row-card__body">
+          <span className="atlas-patient-row-card__main">
+            <strong>patient 18</strong>
+            <em>{patient.label}</em>
+          </span>
+          <span className="atlas-patient-row-card__meta">
+            <span>{patient.sector}</span>
+            <span>{patient.vitals}</span>
+          </span>
+          <span className="atlas-patient-row-card__note">{patient.note}</span>
+        </span>
+        <span className="atlas-patient-row-card__triage">{patient.triage}</span>
+      </button>
+      <div className="atlas-state-rail atlas-state-rail--controls" aria-label="patient row states">
+        {patientRowStates.map((item, index) => (
+          <button
+            key={item.label}
+            type="button"
+            className="atlas-state-dot micro-focus micro-pressable"
+            data-active={index === patientIndex ? "true" : undefined}
+            aria-label={`set patient row to ${item.label}`}
+            onClick={() => setPatientIndex(index)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -386,6 +486,9 @@ function AtlasMotionRuleTile() {
 }
 
 function AtlasCodeArtifact() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeContract = ATLAS_EVENT_CONTRACTS[activeIndex] ?? ATLAS_EVENT_CONTRACTS[0];
+
   return (
     <div className="atlas-code-artifact">
       <div className="detail-artifact-header">
@@ -394,15 +497,29 @@ function AtlasCodeArtifact() {
           <span className="detail-artifact-header-meta">case-study sketch</span>
         </div>
       </div>
+      <div className="atlas-code-artifact__tabs" aria-label="event contract variants">
+        {ATLAS_EVENT_CONTRACTS.map((contract, index) => (
+          <button
+            key={contract.label}
+            type="button"
+            className="micro-focus micro-pressable"
+            data-active={index === activeIndex ? "true" : undefined}
+            onClick={() => setActiveIndex(index)}
+          >
+            {contract.label}
+          </button>
+        ))}
+      </div>
       <pre className="detail-artifact-code">
         <code>
-          {ATLAS_EVENT_CONTRACT.split("\n").map((line, lineIndex) => (
+          {activeContract.code.split("\n").map((line, lineIndex) => (
             <span key={`${lineIndex}-${line}`} className="detail-artifact-code-line">
               {line || "\u00a0"}
             </span>
           ))}
         </code>
       </pre>
+      <p className="atlas-code-artifact__note">{activeContract.note}</p>
     </div>
   );
 }
@@ -496,6 +613,17 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             className="atlas-proof-tile--assign"
           >
             <AtlasAssignControlTile />
+          </AtlasTile>
+
+          <AtlasTile
+            id="atlas-patient-row"
+            title="patient row"
+            label="live state"
+            artifactType="live"
+            caption="one row carries triage, location, vitals, and confirmation."
+            className="atlas-proof-tile--patient-row"
+          >
+            <AtlasPatientRowTile />
           </AtlasTile>
 
           <AtlasTile

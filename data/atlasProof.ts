@@ -58,14 +58,57 @@ export const ATLAS_PATIENT_IMAGES: AtlasImageItem[] = [
   },
 ];
 
-export const ATLAS_EVENT_CONTRACT = [
-  "type TriageEvent =",
-  "  | { type: 'patient.updated'; patientId: string; patch: PatientPatch }",
-  "  | { type: 'patient.assigned'; patientId: string; hospitalId: string }",
-  "  | { type: 'capacity.changed'; hospitalId: string; availableBeds: number };",
-  "",
-  "server.broadcast(event);",
-].join("\n");
+export type AtlasEventContract = {
+  label: string;
+  note: string;
+  code: string;
+};
+
+export const ATLAS_EVENT_CONTRACTS: AtlasEventContract[] = [
+  {
+    label: "patient.updated",
+    note: "field edits stay small so every surface can patch the same patient row.",
+    code: [
+      "type PatientUpdated = {",
+      "  type: 'patient.updated';",
+      "  patientId: string;",
+      "  patch: PatientPatch;",
+      "};",
+      "",
+      "server.broadcast(event);",
+    ].join("\n"),
+  },
+  {
+    label: "patient.assigned",
+    note: "assignment is a first-class event, not a hidden button side effect.",
+    code: [
+      "type PatientAssigned = {",
+      "  type: 'patient.assigned';",
+      "  patientId: string;",
+      "  hospitalId: string;",
+      "  etaMinutes: number;",
+      "};",
+      "",
+      "server.broadcast(event);",
+    ].join("\n"),
+  },
+  {
+    label: "capacity.changed",
+    note: "hospital load changes routing without making the operator parse a dashboard.",
+    code: [
+      "type CapacityChanged = {",
+      "  type: 'capacity.changed';",
+      "  hospitalId: string;",
+      "  availableBeds: number;",
+      "  state: 'receiving' | 'strained' | 'divert';",
+      "};",
+      "",
+      "server.broadcast(event);",
+    ].join("\n"),
+  },
+] as const;
+
+export const ATLAS_EVENT_CONTRACT = ATLAS_EVENT_CONTRACTS[0].code;
 
 export const ATLAS_DECISION_LOG: AtlasDecisionItem[] = [
   { label: "state model", value: "patients, responders, hospitals, assignments" },

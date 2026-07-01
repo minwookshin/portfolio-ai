@@ -85,13 +85,16 @@ describe("ProjectCaseStudyShell", () => {
 
     expect(screen.getByRole("heading", { name: "atlas / 2026 / ai triage prototype system" })).toBeInTheDocument();
     expect(screen.getByText("proof bento grid")).toBeInTheDocument();
-    expect(screen.getByLabelText("hospital load")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "advance hospital load" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "toggle Atlas rail" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "assign selected hospital" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "advance patient row state" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
     expect(screen.getAllByText("event contract")).toHaveLength(2);
     expect(screen.getByText("case-study sketch")).toBeInTheDocument();
     expect(screen.getByLabelText("triage map proof tile")).toBeInTheDocument();
+    expect(screen.getByLabelText("patient row proof tile")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "patient.assigned" })).toBeInTheDocument();
     expect(screen.queryByLabelText("triage map proof tile, selected")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "copy capacity state section link" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "copy event contract artifact" })).not.toBeInTheDocument();
