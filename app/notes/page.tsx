@@ -36,7 +36,6 @@ function getYearFromDate(date: string) {
 export default function NotesPage() {
   const writingPosts = getWritingPosts();
   const noteEntries: ArchiveEntry[] = writingPosts.map((post) => ({
-    description: post.description,
     href: `/notes/${post.slug}`,
     id: `note-${post.slug}`,
     meta: formatWritingDate(post.date),
