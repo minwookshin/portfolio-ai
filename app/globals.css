@@ -2660,6 +2660,105 @@ button.home-mention {
   gap: var(--space-2);
 }
 
+.detail-gallery-slider {
+  display: grid;
+  max-width: min(100%, 420px);
+  gap: var(--space-1);
+}
+
+.detail-gallery-slider__viewport {
+  overflow: hidden;
+  border: 1px solid var(--code-border);
+  border-radius: var(--md-shape-sm);
+  background: var(--code-surface);
+  box-shadow: var(--code-shadow);
+}
+
+.detail-gallery-slider__track {
+  display: flex;
+  will-change: transform;
+  transition: transform 260ms var(--motion-ease-standard);
+}
+
+.detail-gallery-slider__slide {
+  display: grid;
+  min-width: 100%;
+  place-items: center;
+  margin: 0;
+  padding: var(--space-2);
+}
+
+.detail-gallery-slider__media {
+  overflow: hidden;
+  width: min(100%, 310px);
+  border: 1px solid var(--code-border);
+  border-radius: var(--md-shape-sm);
+  background: var(--bg-base);
+}
+
+.detail-gallery-slider__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.detail-gallery-slider__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  max-width: 420px;
+}
+
+.detail-gallery-slider__caption,
+.detail-gallery-slider__count {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--type-caption);
+  line-height: 1.2;
+}
+
+.detail-gallery-slider__controls {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-gallery-slider__button {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: var(--md-shape-full);
+  color: var(--text-muted);
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.detail-gallery-slider__button:hover,
+.detail-gallery-slider__button:focus-visible {
+  color: var(--text-primary);
+  transform: translateX(var(--signal-nudge));
+}
+
+.detail-gallery-slider__arrow {
+  width: 15px;
+  height: 15px;
+}
+
+.detail-gallery-slider__arrow--prev {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detail-gallery-slider__track,
+  .detail-gallery-slider__button {
+    transition: none;
+  }
+}
+
 .detail-artifact-surface {
   overflow: hidden;
   max-width: min(100%, 720px);

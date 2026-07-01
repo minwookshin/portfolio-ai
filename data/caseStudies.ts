@@ -229,6 +229,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "gallery",
         eyebrow: "Screens",
         heading: "Risk, alerts, actions",
+        layout: "slider",
         images: [
           { src: "/projects/sentinel/historical-timeline.png", caption: "Historical risk timeline" },
           { src: "/projects/sentinel/weather-alerts.png", caption: "Weather alerts" },

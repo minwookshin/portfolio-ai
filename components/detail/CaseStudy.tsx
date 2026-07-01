@@ -3,11 +3,13 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { tweens } from "@/lib/material/motion";
 import { isVisibleBuilderValue } from "@/data/projects";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
+import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import StudioVideoPlayer from "@/components/StudioVideoPlayer";
 
 /**
@@ -42,7 +44,7 @@ export type DetailSection = ({
   | { kind: "features"; eyebrow?: string; heading: string; items: { title: string; description: string; image?: string }[] }
   | { kind: "flow"; eyebrow?: string; heading: string; steps: { title: string; body: string; tag?: string }[]; note?: string }
   | { kind: "quote"; text: string; attribution?: string }
-  | { kind: "gallery"; eyebrow?: string; heading?: string; layout?: "grid" | "featured"; images: { src: string; caption?: string }[] }
+  | { kind: "gallery"; eyebrow?: string; heading?: string; layout?: "grid" | "featured" | "slider"; images: { src: string; caption?: string }[] }
   | { kind: "video"; eyebrow?: string; heading?: string; src: string; poster?: string; aspect?: string }
   | { kind: "links"; items: { label: string; href: string }[] }
   | {
@@ -195,6 +197,72 @@ function ProjectImage({ src, alt, style }: { src: string; alt: string; style?: "
   return (
     <div className="studio-detail-media detail-outline-media overflow-hidden">
       <img src={src} alt={alt} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
+    </div>
+  );
+}
+
+function GallerySlider({
+  images,
+  label,
+}: {
+  images: { src: string; caption?: string }[];
+  label: string;
+}) {
+  const [active, setActive] = useState(0);
+  const lastIndex = Math.max(images.length - 1, 0);
+  const activeImage = images[active];
+
+  function go(delta: number) {
+    setActive((current) => {
+      if (lastIndex === 0) return current;
+      return (current + delta + images.length) % images.length;
+    });
+  }
+
+  return (
+    <div className="detail-gallery-slider" aria-label={label}>
+      <div className="detail-gallery-slider__viewport">
+        <div
+          className="detail-gallery-slider__track"
+          style={{ transform: `translateX(-${active * 100}%)` }}
+        >
+          {images.map((img) => (
+            <figure key={img.src} className="detail-gallery-slider__slide">
+              <div className="detail-gallery-slider__media">
+                <img src={img.src} alt={img.caption ?? ""} draggable={false} loading="lazy" decoding="async" />
+              </div>
+            </figure>
+          ))}
+        </div>
+      </div>
+      <div className="detail-gallery-slider__footer">
+        <p className="detail-gallery-slider__caption" aria-live="polite">
+          {activeImage?.caption ?? `${active + 1} / ${images.length}`}
+        </p>
+        {images.length > 1 && (
+          <div className="detail-gallery-slider__controls" aria-label={`${label} controls`}>
+            <button
+              type="button"
+              className="detail-gallery-slider__button micro-focus micro-focus-tight micro-pressable"
+              onClick={() => go(-1)}
+              aria-label="previous screen"
+            >
+              <MaterialArrowForwardIcon className="detail-gallery-slider__arrow detail-gallery-slider__arrow--prev" />
+            </button>
+            <span className="detail-gallery-slider__count" aria-hidden="true">
+              {active + 1} / {images.length}
+            </span>
+            <button
+              type="button"
+              className="detail-gallery-slider__button micro-focus micro-focus-tight micro-pressable"
+              onClick={() => go(1)}
+              aria-label="next screen"
+            >
+              <MaterialArrowForwardIcon className="detail-gallery-slider__arrow" />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -385,17 +453,21 @@ function renderSection(
       return (
         <motion.section key={i} {...sectionMotion} className={sectionCls}>
           {(section.eyebrow || section.heading) && <SectionHead eyebrow={section.eyebrow} heading={section.heading ?? ""} />}
-          <div className={`detail-outline-media-grid ${section.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
-            {section.images.map((img, gi) => (
-              <figure
-                key={gi}
-                className={`detail-outline-figure overflow-hidden ${section.layout === "featured" && gi === 0 ? "sm:col-span-2" : ""}`}
-              >
-                <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
-                {img.caption && <figcaption className="py-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{img.caption}</figcaption>}
-              </figure>
-            ))}
-          </div>
+          {section.layout === "slider" ? (
+            <GallerySlider images={section.images} label={section.heading ?? "project screens"} />
+          ) : (
+            <div className={`detail-outline-media-grid ${section.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
+              {section.images.map((img, gi) => (
+                <figure
+                  key={gi}
+                  className={`detail-outline-figure overflow-hidden ${section.layout === "featured" && gi === 0 ? "sm:col-span-2" : ""}`}
+                >
+                  <img src={img.src} alt={img.caption ?? ""} className="w-full h-auto object-cover" draggable={false} loading="lazy" decoding="async" />
+                  {img.caption && <figcaption className="py-[var(--space-1)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">{img.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          )}
         </motion.section>
       );
 

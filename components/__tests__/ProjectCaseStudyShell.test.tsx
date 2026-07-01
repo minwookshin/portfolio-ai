@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import ProjectCaseStudyShell from "@/components/ProjectCaseStudyShell";
 import { getProjectBySlug, isLabStudyProject } from "@/data/projects";
 
@@ -42,6 +43,18 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
     expect(screen.queryByText("build path")).not.toBeInTheDocument();
     expectNativeVideo("Sentinel demo");
+  });
+
+  it("renders Sentinel screens as a compact slider", async () => {
+    const user = userEvent.setup();
+    render(<ProjectCaseStudyShell project={getWorkProject("sentinel")} />);
+
+    expect(screen.getByLabelText("Risk, alerts, actions")).toBeInTheDocument();
+    expect(screen.getByText("Historical risk timeline")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "next screen" }));
+
+    expect(screen.getByText("Weather alerts")).toBeInTheDocument();
   });
 
   it("does not duplicate video-only demos in detail links", () => {
