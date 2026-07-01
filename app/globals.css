@@ -154,6 +154,8 @@
   --home-row-padding-inline-end: 8px;
   --home-row-line-height: 1.62;
   --home-section-gap: 4px;
+  --home-section-pause: 6px;
+  --home-children-pause: 2px;
   --home-children-indent: 26px;
   --home-focus-bar-offset-inline: -14px;
   --home-focus-bar-width: 2px;
@@ -1411,11 +1413,11 @@ button.home-row {
 .home-children {
   position: relative;
   margin-left: var(--home-children-indent);
-  padding-left: 0;
+  padding: var(--home-children-pause) 0 0;
 }
 
-.home-doc > .home-node--section + .home-node--section {
-  margin-top: var(--home-section-gap);
+.home-document-content > .home-node + .home-node {
+  margin-top: var(--home-section-pause);
 }
 
 .home-mention {
