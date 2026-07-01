@@ -106,22 +106,22 @@ const patientRowStates = [
     label: "queued",
     sector: "sector b",
     triage: "red",
-    vitals: "hr 124 / spo2 91",
-    note: "field report pending",
+    vitals: "hr 124 · spo2 91",
+    note: "field update",
   },
   {
     label: "assigned",
     sector: "grady",
     triage: "red",
-    vitals: "hr 118 / spo2 93",
-    note: "transport route sent",
+    vitals: "hr 118 · spo2 93",
+    note: "route sent",
   },
   {
     label: "received",
     sector: "er bay 04",
     triage: "orange",
-    vitals: "hr 104 / spo2 96",
-    note: "intake confirmed",
+    vitals: "hr 104 · spo2 96",
+    note: "intake ok",
   },
 ] as const;
 
@@ -224,7 +224,7 @@ function AtlasPatientDetail() {
     <div className="atlas-patient-proof">
       {ATLAS_PATIENT_IMAGES.map((image) => (
         <figure key={image.src}>
-          <img src={image.src} alt={image.alt} draggable={false} loading="lazy" decoding="async" />
+          <img src={image.src} alt={image.alt} draggable={false} loading="eager" decoding="async" />
           <figcaption>{image.label}</figcaption>
         </figure>
       ))}
@@ -585,7 +585,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           <AtlasTile
             id="atlas-capacity-state"
             title="capacity state"
-            label="live interaction"
+            label="routing state"
             artifactType="live"
             caption="hospital load changes beds, priority, and routing action."
             className="atlas-proof-tile--live"
@@ -596,7 +596,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           <AtlasTile
             id="atlas-incident-rail"
             title="incident rail"
-            label="xcode interaction"
+            label="xcode rail"
             artifactType="live"
             caption="the iPad rail widens first; labels arrive a beat later."
             className="atlas-proof-tile--rail"
@@ -607,7 +607,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           <AtlasTile
             id="atlas-assign-control"
             title="assign control"
-            label="button state"
+            label="assignment state"
             artifactType="live"
             caption="hospital choice, confirm, and sent feedback stay in one control loop."
             className="atlas-proof-tile--assign"
@@ -618,7 +618,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           <AtlasTile
             id="atlas-patient-row"
             title="patient row"
-            label="live state"
+            label="row contract"
             artifactType="live"
             caption="one row carries triage, location, vitals, and confirmation."
             className="atlas-proof-tile--patient-row"
@@ -651,7 +651,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
           <AtlasTile
             id="atlas-motion-rule"
             title="motion rule"
-            label="live interaction"
+            label="motion grammar"
             artifactType="live"
             caption="confirm change, then get out of the way."
             className="atlas-proof-tile--motion"
