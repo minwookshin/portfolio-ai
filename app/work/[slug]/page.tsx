@@ -94,7 +94,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
       className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
       <StructuredData data={projectJsonLd(project, `/work/${project.slug}`)} />
-      <div className={`w-full ${project.slug === "atlas" ? "max-w-[920px]" : "max-w-[720px]"}`}>
+      <div className="w-full max-w-[720px]">
         <ProjectCaseStudyShell
           mode={videoOnly ? "video-only" : "case-study"}
           project={project}
