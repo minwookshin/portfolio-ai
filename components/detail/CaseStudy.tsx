@@ -64,6 +64,7 @@ export type DetailSection = ({
 export interface CaseStudyData {
   sections: DetailSection[];
   ask?: string[]; // outro follow-up prompts, wired to chat
+  authored?: boolean;
 }
 
 // Detail pages should feel closer to the homepage: quiet, fast, and mostly
@@ -90,7 +91,7 @@ const heroItem = {
 };
 
 function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }) {
-  return <DetailOutlineHeading eyebrow={eyebrow} heading={heading} headingClassName={h2Cls} />;
+  return <DetailOutlineHeading eyebrow={eyebrow} heading={heading} headingClassName={h2Cls} signal="none" />;
 }
 
 function DetailRow({

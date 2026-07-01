@@ -176,7 +176,7 @@ function AtlasTile({
     <article
       id={id}
       className={`atlas-proof-tile ${className}`}
-      aria-label={`${title} proof tile`}
+      aria-label={`${title} tile`}
     >
       <div className="atlas-proof-tile__body">{children}</div>
       <div className="atlas-proof-tile__copy">
@@ -569,7 +569,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
       </section>
 
       <section id="atlas-proof-bento" className="atlas-proof-section">
-        <DetailOutlineHeading heading="proof bento grid" eyebrow={project.builder.status.label} />
+        <DetailOutlineHeading heading="artifact grid" eyebrow={project.builder.status.label} signal="none" />
         <div className="atlas-proof-grid">
           <AtlasTile
             id="atlas-triage-map"
@@ -673,7 +673,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
       </section>
 
       <section id="atlas-reflection" className="detail-outline-section">
-        <DetailOutlineHeading heading="short reflection" />
+        <DetailOutlineHeading heading="short reflection" signal="none" />
         <div className="detail-outline-list">
           {ATLAS_REFLECTION.map((line) => (
             <DetailOutlineRow key={line} body={line} signal="none" />

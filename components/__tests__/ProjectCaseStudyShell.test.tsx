@@ -40,15 +40,15 @@ describe("ProjectCaseStudyShell", () => {
     expect(within(nav).getByText("Sentinel")).toBeInTheDocument();
     expect(screen.getByText("ownership")).toBeInTheDocument();
     expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
-    expect(screen.getByText("build path")).toBeInTheDocument();
+    expect(screen.queryByText("build path")).not.toBeInTheDocument();
     expectNativeVideo("Sentinel demo");
   });
 
-  it("does not duplicate video-only demos in proof links", () => {
+  it("does not duplicate video-only demos in detail links", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("caret")} />);
 
     expect(screen.queryByRole("link", { name: /watch demo/i })).not.toBeInTheDocument();
-    expect(screen.getByText("links")).toBeInTheDocument();
+    expect(screen.getByText("public")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/minwookshin/caret");
     expect(screen.getByText("/ source")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
@@ -67,13 +67,13 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.queryByText("build path")).not.toBeInTheDocument();
   });
 
-  it("renders Portfolio AI proof links as working public routes", () => {
+  it("renders Portfolio AI links as working public routes", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("portfolio-ai")} />);
 
     expect(screen.queryByRole("link", { name: /try live site/i })).not.toBeInTheDocument();
     expect(screen.getByText("public repo / live site")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /video/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Design system proof" })).toHaveAttribute("href", "/design-system");
+    expect(screen.getByRole("link", { name: "Design system" })).toHaveAttribute("href", "/design-system");
     expect(screen.getByRole("link", { name: "Design system markdown" })).toHaveAttribute("href", "/design-system.md");
     expect(screen.getByRole("link", { name: "Design tokens JSON" })).toHaveAttribute("href", "/design-system/tokens.json");
     expect(screen.getByText("/ page")).toBeInTheDocument();
@@ -81,11 +81,11 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("/ json")).toBeInTheDocument();
   });
 
-  it("renders Atlas as a proof-led case study template", () => {
+  it("renders Atlas as an artifact-led case study template", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("atlas")} />);
 
     expect(screen.getByRole("heading", { name: "atlas / 2026 / ai triage prototype system" })).toBeInTheDocument();
-    expect(screen.getByText("proof bento grid")).toBeInTheDocument();
+    expect(screen.getByText("artifact grid")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance hospital load" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "toggle Atlas rail" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "assign selected hospital" })).toBeInTheDocument();
@@ -93,10 +93,10 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
     expect(screen.getAllByText("event contract")).toHaveLength(2);
     expect(screen.getByText("case-study sketch")).toBeInTheDocument();
-    expect(screen.getByLabelText("triage map proof tile")).toBeInTheDocument();
-    expect(screen.getByLabelText("patient row proof tile")).toBeInTheDocument();
+    expect(screen.getByLabelText("triage map tile")).toBeInTheDocument();
+    expect(screen.getByLabelText("patient row tile")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "patient.assigned" })).toBeInTheDocument();
-    expect(screen.queryByLabelText("triage map proof tile, selected")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("triage map tile, selected")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "copy capacity state section link" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "copy event contract artifact" })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "open" })).not.toBeInTheDocument();

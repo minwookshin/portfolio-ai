@@ -17,7 +17,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         bullets: [
           "My scope: early structure, monochrome interface pass, native app prototypes, and real-time system behavior",
           "Team scope: final visual language, research narrative, service concept, and physical prototype",
-          "Prototype proof: three app surfaces connected through a TypeScript/WebSocket triage server",
+          "Three app surfaces connected through a TypeScript/WebSocket triage server",
         ],
         tags: ["SwiftUI", "TypeScript", "WebSocket", "Mapbox", "Prototype Systems"],
         image: "/projects/atlas/ic-quick-send-photo.png",
@@ -33,7 +33,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "stats",
-        eyebrow: "Prototype proof",
+        eyebrow: "Build evidence",
         heading: "A working system, not a static case-study deck",
         items: [
           { value: "3", label: "Native app targets" },
@@ -121,7 +121,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "gallery",
-        eyebrow: "Interface proof",
+        eyebrow: "Interface surfaces",
         heading: "Operational views from the connected prototype",
         images: [
           { src: "/projects/atlas/ic-map.png", caption: "Incident command map and operating context" },
@@ -195,7 +195,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "stats",
-        eyebrow: "Proof",
+        eyebrow: "Build",
         heading: "Built fast, shipped real",
         items: [
           { value: "48h", label: "Hackathon build" },
@@ -240,7 +240,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Outcome",
         heading: "Outcome",
         body: [
-          "Sentinel is a shipped log: native prototype, clear loop, public proof.",
+          "Sentinel is a shipped log: native prototype, clear loop, public trace.",
           "Next: make the risk model inspectable without turning the app into analytics software.",
         ],
       },
@@ -250,14 +250,14 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
 
   // Portfolio AI, text/metric-driven. This site is its own live studio demo:
   // an AI-native website that explains the work, qualifies intent, and routes
-  // visitors to the right proof.
+  // visitors to the right work.
   "2": {
     sections: [
       {
         kind: "hero",
         badge: "AI website + agent system",
         title: "Portfolio AI",
-        subtitle: "A portfolio that answers questions, routes intent, and opens proof.",
+        subtitle: "A portfolio that answers questions, routes intent, and opens the right work.",
         bullets: [
           "Design engineer",
           "AI as utility layer",
@@ -268,7 +268,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "stats",
-        eyebrow: "Proof",
+        eyebrow: "System",
         heading: "The website is the prototype",
         items: [
           { value: "Live", label: "Production site" },
@@ -280,7 +280,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "lead",
         eyebrow: "Position",
         heading: "AI should move the visitor, not perform for them",
-        body: "The assistant is a command utility: ask, route, copy, open proof.",
+        body: "The assistant is a command utility: ask, route, copy, open.",
       },
       {
         kind: "split",
@@ -293,7 +293,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
             body: "Command-K gives the site a compact control layer.",
           },
           {
-            label: "Proof",
+            label: "Routes",
             title: "Readable by people and models",
             body: "Work, resume data, tokens, and markdown stay open as routes.",
           },
@@ -316,7 +316,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "links",
         items: [
-          { label: "Design system proof", href: "/design-system" },
+          { label: "Design system", href: "/design-system" },
           { label: "Design system markdown", href: "/design-system.md" },
           { label: "Design tokens JSON", href: "/design-system/tokens.json" },
         ],
@@ -326,7 +326,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Outcome",
         heading: "A portfolio that behaves like software",
         body: [
-          "Portfolio AI is a live system: quiet UI, command layer, public proof, bounded AI.",
+          "Portfolio AI is a live system: quiet UI, command layer, public routes, bounded AI.",
         ],
       },
     ],
@@ -478,7 +478,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
 // intentionally snapshots, not full case studies.
 export function getCaseStudy(project: Project): CaseStudyData {
   const authored = CASE_STUDIES[project.id];
-  if (authored) return authored;
+  if (authored) return { ...authored, authored: true };
 
   const gallery = project.gallery ?? (project.image ? [project.image] : []);
   const sections: DetailSection[] = [
@@ -497,5 +497,5 @@ export function getCaseStudy(project: Project): CaseStudyData {
       images: gallery.map((src) => ({ src })),
     });
   }
-  return { sections, ask: [`Tell me about ${project.title}`] };
+  return { sections, ask: [`Tell me about ${project.title}`], authored: false };
 }

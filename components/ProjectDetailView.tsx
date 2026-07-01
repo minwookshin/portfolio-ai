@@ -129,7 +129,7 @@ function ProjectDetailHero({
     { label: "ownership", value: proof?.role ?? project.role },
     { label: "timeframe", value: project.timeline ?? project.date },
     { label: "stack", value: stack },
-    { label: "proof", value: getPublicProof(project, proof) },
+    { label: "public", value: getPublicProof(project, proof) },
     { label: "outcome", value: outcome },
   ].filter((item) => isVisibleBuilderValue(item.value));
 
@@ -154,7 +154,7 @@ function ProjectDetailHero({
         </p>
       )}
       {recruiterSignals.length > 0 && (
-        <dl className="studio-detail-proof-strip" aria-label="recruiter proof">
+        <dl className="studio-detail-proof-strip" aria-label="project summary">
           {recruiterSignals.map((signal) => (
             <div key={signal.label}>
               <dt>{signal.label}</dt>
@@ -190,7 +190,7 @@ function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
 
       {proof.demo && demoHref && (
         <section>
-          <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">proof</p>
+          <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]">demo</p>
           <div className="mt-[var(--space-1)] flex flex-wrap items-center gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
             <a
               href={demoHref}
@@ -210,7 +210,7 @@ function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
       )}
 
       <MetricGrid title="scope" items={proof.scope} />
-      <MetricGrid title="outcome proof" items={proof.results} />
+      <MetricGrid title="outcome" items={proof.results} />
     </section>
   );
 }
@@ -284,6 +284,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   const bodyCaseStudy = hero ? { ...caseStudy, sections: caseStudy.sections.slice(1) } : caseStudy;
   const proof = hasBuilderProof(project) ? project.builder : undefined;
   const isAtlas = hasBuilderProof(project) && project.slug === "atlas";
+  const hasAuthoredCaseStudy = Boolean(caseStudy.authored);
 
   return (
     <motion.div
@@ -310,7 +311,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
       ) : (
         <>
           <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
-          {proof && <BuilderProofSummary proof={proof} />}
+          {proof && !hasAuthoredCaseStudy && <BuilderProofSummary proof={proof} />}
           <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
         </>
       )}

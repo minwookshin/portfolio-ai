@@ -71,7 +71,7 @@ export default function WorkPage() {
   const workEntries = getWorkEntries();
   const sections: ArchiveSection[] = [
     {
-      description: "role, decisions, and working proof for selected product systems.",
+      description: "role, decisions, and working systems.",
       entries: workEntries,
       id: "case-studies",
       title: "case studies",

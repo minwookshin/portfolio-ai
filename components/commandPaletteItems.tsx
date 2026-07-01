@@ -149,15 +149,15 @@ function atlasContextCommands({
   return [
     {
       id: "atlas-proof-bento",
-      title: "jump to proof bento",
+      title: "jump to artifact grid",
       meta: "atlas artifact",
       group: "atlas",
-      keywords: ["atlas", "proof", "bento", "case study"],
+      keywords: ["atlas", "artifact", "bento", "case study"],
       icon: <Hash />,
       preview: {
-        title: "proof bento grid",
+        title: "artifact grid",
         meta: "atlas",
-        body: "Moves to the proof grid: sequence, live state, patient detail, code artifact, motion rule, and decision log.",
+        body: "Sequence, live state, patient detail, code artifact, motion rule, and decision log.",
       },
       action: () => jumpToId("atlas-proof-bento", "/work/atlas#atlas-proof-bento"),
     },
@@ -213,7 +213,7 @@ function atlasContextCommands({
       preview: {
         title: "patient detail",
         meta: "scan density",
-        body: "Moves to the dense patient data proof tile.",
+        body: "Dense patient data for command and ER intake.",
       },
       action: () => jumpToId("atlas-patient-detail", "/work/atlas#atlas-patient-detail"),
     },
@@ -227,7 +227,7 @@ function atlasContextCommands({
       preview: {
         title: "motion rule",
         meta: "live interaction",
-        body: "Moves to the proof tile for restrained emergency UI motion.",
+        body: "Restrained emergency UI motion.",
       },
       action: () => jumpToId("atlas-motion-rule", "/work/atlas#atlas-motion-rule"),
     },
@@ -520,7 +520,7 @@ export function buildCommandItems({
     {
       id: "view-work",
       title: "view work",
-      meta: "proof log",
+      meta: "project log",
       group: "navigate",
       keywords: ["projects", "archive", "work"],
       icon: <Briefcase />,
@@ -635,7 +635,7 @@ export function buildCommandItems({
       preview: {
         title: "design system",
         meta: "tokens / grammar",
-        body: "Open the portfolio design system proof: tokens, interaction grammar, and implementation notes.",
+        body: "Open the portfolio design system: tokens, interaction grammar, and implementation notes.",
       },
       action: () => push("/design-system"),
     },

@@ -36,6 +36,7 @@ type DetailOutlineHeadingProps = {
   heading: ReactNode;
   headingAs?: ElementType;
   headingClassName?: string;
+  signal?: "dot" | "none";
 };
 
 export function DetailOutlineHeading({
@@ -43,10 +44,15 @@ export function DetailOutlineHeading({
   heading,
   headingAs: Heading = "h2",
   headingClassName = "text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]",
+  signal = "dot",
 }: DetailOutlineHeadingProps) {
   return (
-    <div className="detail-outline-heading-row">
-      <OutlineSignalCell dotClassName="detail-outline-bullet detail-outline-bullet--section" />
+    <div className={`detail-outline-heading-row ${signal === "none" ? "detail-outline-heading-row--no-signal" : ""}`}>
+      {signal === "dot" ? (
+        <OutlineSignalCell dotClassName="detail-outline-bullet detail-outline-bullet--section" />
+      ) : (
+        <span className="detail-outline-bullet-cell detail-outline-bullet-cell--empty" aria-hidden="true" />
+      )}
       <div className="detail-outline-heading-copy">
         <Heading className={headingClassName}>{heading}</Heading>
         {eyebrow && (

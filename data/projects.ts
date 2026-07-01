@@ -109,8 +109,8 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       demo: { label: "Watch demo", video: "/projects/sentinel/demo.mp4" },
       scope: [
         { label: "Build time", value: "48h" },
-        { label: "Prototype proof", value: "Native iOS demo video" },
-        { label: "Source proof", value: "Public SwiftUI repository", note: "github.com/minwookshin/sentinel" },
+        { label: "Prototype", value: "Native iOS demo video" },
+        { label: "Source", value: "Public SwiftUI repository", note: "github.com/minwookshin/sentinel" },
       ],
       results: [
         { label: "Actual", value: "Winner · Google × SCAD FLUX Hackathon 2025" },
@@ -129,7 +129,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     id: "2",
     slug: "portfolio-ai",
     title: "Portfolio AI",
-    description: "An AI-native studio website that explains work, qualifies intent, and routes visitors to the right proof.",
+    description: "An AI-native studio website that explains work, qualifies intent, and routes visitors to the right project.",
     fullDescription:
       "A conversational product-studio site built with Next.js, React, and Gemini. It answers questions, runs lightweight project intake, and opens relevant case studies in real time.",
     role: "Design Engineer — designed & built solo",
@@ -149,17 +149,17 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       role: "Design Engineer — designed & built solo",
       stack: ["Next.js", "React", "TypeScript", "Gemini API", "Framer Motion"],
       status: { label: "🟢 Live", href: "https://www.minwookshin.com" },
-      oneLiner: "AI-native portfolio that answers questions, qualifies intent, and opens relevant proof.",
+      oneLiner: "AI-native portfolio that answers questions, qualifies intent, and opens relevant work.",
       pipeline: "Designed in Figma → shipped in Next.js + React → exposed AI-readable docs and design-system routes.",
       scope: [
         { label: "Build time", value: "2 weeks" },
         { label: "API integrations", value: "Gemini API, Vercel server routes" },
-        { label: "System proof", value: "Tokens, components, AI-readable docs", note: "/design-system" },
+        { label: "System", value: "Tokens, components, AI-readable docs", note: "/design-system" },
         { label: "Machine routes", value: "portfolio.md, llms.txt, resume.json" },
       ],
       results: [
         { label: "Actual", value: "Live production site" },
-        { label: "Source proof", value: "Public Next.js repository", note: "github.com/minwookshin/portfolio-ai" },
+        { label: "Source", value: "Public Next.js repository", note: "github.com/minwookshin/portfolio-ai" },
       ],
     },
     features: [
@@ -197,9 +197,9 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
         "Structured the first monochrome pass -> translated final flows into native app prototypes -> built the local TypeScript/WebSocket server for live patient-state sync.",
       scope: [
         { label: "App surfaces", value: "FR mobile, IC iPad, ER intake" },
-        { label: "Native code proof", value: "3 iOS targets, 134 Swift files" },
-        { label: "Server proof", value: "7.1k-line TypeScript REST/WebSocket server" },
-        { label: "Simulation proof", value: "47-patient mock incident stream" },
+        { label: "Native code", value: "3 iOS targets, 134 Swift files" },
+        { label: "Server", value: "7.1k-line TypeScript REST/WebSocket server" },
+        { label: "Simulation", value: "47-patient mock incident stream" },
       ],
       results: [
         { label: "Validation", value: "207 server tests passing" },
@@ -392,7 +392,7 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
       stack: ["Framer Motion", "CSS", "React"],
       status: { label: "Study" },
       oneLiner: "A small rulebook for quiet interface motion.",
-      pipeline: "Taste decision -> interactive proof -> reusable code rule.",
+      pipeline: "Taste decision -> interactive example -> reusable code rule.",
       scope: [],
       results: [],
     },
@@ -421,9 +421,9 @@ const nextStep = loop.find((step) => needsHumanJudgment(step))
           ],
         },
         {
-          heading: "native video controls as proof surface",
+          heading: "native video controls",
           body: [
-            "The player chrome should stay familiar so someone can inspect the demo without learning a custom layer first. The video stays the proof; the browser controls do the playback work.",
+            "The player chrome should stay familiar so someone can inspect the demo without learning a custom layer first. The video stays inspectable; the browser controls do the playback work.",
             "Native controls work here because they respect the operating system, keyboard behavior, and expected media affordances without competing with the work.",
           ],
         },
@@ -811,7 +811,7 @@ html.dom-cursor-enabled * {
       ],
       rules: [
         { label: "hover", value: "180ms", note: "small text and row feedback" },
-        { label: "preview", value: "250ms", note: "media and proof handoff" },
+        { label: "preview", value: "250ms", note: "media handoff" },
         { label: "route", value: "350ms", note: "larger spatial changes" },
       ],
       code: `<motion.div
@@ -920,7 +920,7 @@ html.dom-cursor-enabled * {
         { label: "Concept focus", value: "Burnout signals and team wellbeing cues" },
       ],
       results: [
-        { label: "Source proof", value: "Public prototype repository", note: "github.com/minwookshin/caret" },
+        { label: "Source", value: "Public prototype repository", note: "github.com/minwookshin/caret" },
       ],
     },
   },
