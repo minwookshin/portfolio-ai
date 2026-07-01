@@ -733,7 +733,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
                 <span>shortcuts</span>
               </div>
               <dl className="shortcuts-list">
-                <div><dt>cmd+k</dt><dd>command palette</dd></div>
+                <div><dt>cmd+K</dt><dd>command palette</dd></div>
                 <div><dt>?</dt><dd>shortcuts</dd></div>
                 <div><dt>up/down</dt><dd>move selection</dd></div>
                 <div><dt>enter</dt><dd>run command</dd></div>

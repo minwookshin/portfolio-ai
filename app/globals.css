@@ -4934,6 +4934,10 @@ button.atlas-state-dot {
   text-transform: lowercase !important;
 }
 
+.site-lowercase .site-masthead__command-hint {
+  text-transform: uppercase !important;
+}
+
 .page-transition-shell {
   min-height: 100dvh;
 }

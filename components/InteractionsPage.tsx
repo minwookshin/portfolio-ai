@@ -143,7 +143,7 @@ function CommandLensDemo() {
       <div className="interaction-command-search">
         <span aria-hidden="true">⌘</span>
         <span>search or run a command</span>
-        <kbd>k</kbd>
+        <kbd>K</kbd>
       </div>
       <div className="interaction-command-list">
         <span
