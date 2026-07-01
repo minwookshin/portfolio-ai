@@ -444,7 +444,7 @@ body::after {
 .home-doc-title-row {
   display: flex;
   align-items: center;
-  gap: var(--home-title-gap-inline);
+  gap: 3px;
   padding: 0 0 var(--home-title-padding-block-end);
 }
 
@@ -459,19 +459,29 @@ body::after {
 }
 
 .home-root-link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.root-link-group,
-.command-trigger-group {
   display: inline-flex;
   align-items: center;
-  gap: var(--home-title-gap-inline);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    color 160ms var(--motion-ease-standard),
+    transform 160ms var(--motion-ease-standard);
+}
+
+.root-link-group {
+  display: inline-flex;
   min-width: 0;
 }
 
-.root-index-hint,
+.command-trigger-group {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  transition: transform 160ms var(--motion-ease-standard);
+}
+
 .command-hint {
   display: inline-flex;
   height: 20px;
@@ -490,8 +500,26 @@ body::after {
   white-space: nowrap;
 }
 
-.root-link-group:hover .root-index-hint,
-.root-link-group:focus-within .root-index-hint,
+.home-doc-title-row:has(.home-root-link:hover) .command-trigger-group,
+.home-doc-title-row:has(.home-root-link:focus-visible) .command-trigger-group,
+.archive-root-row:has(.archive-root-link:hover) .command-trigger-group,
+.archive-root-row:has(.archive-root-link:focus-visible) .command-trigger-group,
+.detail-root-row:has(.archive-root-link:hover) .command-trigger-group,
+.detail-root-row:has(.archive-root-link:focus-visible) .command-trigger-group {
+  transform: translateX(var(--signal-nudge));
+}
+
+.home-root-link:hover,
+.home-root-link:focus-visible {
+  color: color-mix(in srgb, var(--text-primary) 88%, var(--text-muted));
+  transform: translateX(var(--signal-nudge));
+}
+
+.command-trigger-group:hover,
+.command-trigger-group:focus-within {
+  transform: translateX(var(--signal-nudge));
+}
+
 .command-trigger-group:hover .command-hint,
 .command-trigger-group:focus-within .command-hint {
   opacity: 0.62;
@@ -534,7 +562,7 @@ body::after {
   background: transparent;
   color: var(--text-primary);
   opacity: 0.72;
-  transform: translateY(1px) translateX(var(--signal-nudge));
+  transform: translateY(1px);
 }
 
 .command-layer {
@@ -2215,14 +2243,20 @@ button.home-mention {
   min-width: 0;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--home-title-gap-inline);
 }
 
 .detail-root-row {
+  gap: 3px;
   color: var(--text-primary);
 }
 
+.detail-path-row {
+  gap: var(--home-title-gap-inline);
+}
+
 .detail-root-row .archive-root-link {
+  display: inline-flex;
+  align-items: center;
   color: inherit;
   font-size: inherit;
   font-weight: 500;
@@ -2231,12 +2265,14 @@ button.home-mention {
   text-decoration: none;
   transition:
     color 160ms var(--motion-ease-standard),
-    opacity 160ms var(--motion-ease-standard);
+    opacity 160ms var(--motion-ease-standard),
+    transform 160ms var(--motion-ease-standard);
 }
 
 .detail-root-row .archive-root-link:hover,
 .detail-root-row .archive-root-link:focus-visible {
   color: color-mix(in srgb, var(--text-primary) 86%, var(--text-muted));
+  transform: translateX(var(--signal-nudge));
 }
 
 .detail-path-row {
@@ -4789,7 +4825,7 @@ button.atlas-state-dot {
 .archive-root-row {
   display: flex;
   align-items: center;
-  gap: var(--home-title-gap-inline);
+  gap: 3px;
 }
 
 .archive-nav a,
@@ -4819,12 +4855,14 @@ button.atlas-state-dot {
   text-decoration: none;
   transition:
     color 160ms var(--motion-ease-standard),
-    opacity 160ms var(--motion-ease-standard);
+    opacity 160ms var(--motion-ease-standard),
+    transform 160ms var(--motion-ease-standard);
 }
 
 .archive-nav .archive-root-link:hover,
 .archive-nav .archive-root-link:focus-visible {
   color: color-mix(in srgb, var(--text-primary) 86%, var(--text-muted));
+  transform: translateX(var(--signal-nudge));
 }
 
 .archive-nav-link {

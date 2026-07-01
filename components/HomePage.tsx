@@ -574,12 +574,11 @@ function HomeDocument({
               <Link href="/" aria-label="home" title="home" className="home-root-link micro-focus micro-focus-tight">
                 minwook shin
               </Link>
-              <span className="root-index-hint" aria-hidden="true">· index</span>
             </span>
           </h1>
           <span className="command-trigger-group">
             <CommandTriggerButton />
-            <span className="command-hint" aria-hidden="true">· ⌘K</span>
+            <span className="command-hint" aria-hidden="true">K</span>
           </span>
         </div>
 
