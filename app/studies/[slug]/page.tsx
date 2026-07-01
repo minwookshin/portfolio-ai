@@ -115,7 +115,7 @@ export default async function StudyProjectPage({ params }: StudyProjectPageProps
       className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]"
     >
       <StructuredData data={projectJsonLd(project, getLabProjectPath(project))} />
-      <div className="w-full max-w-[720px]">
+      <div className="w-full max-w-[var(--document-detail-width)]">
         <ProjectCaseStudyShell
           project={project}
           baseHref="/studies"

@@ -93,7 +93,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
-        <meta name="theme-color" content="#F7F8F9" />
+        <meta name="theme-color" content="#F3F4F6" />
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable portfolio guide" />
         <link rel="alternate" type="text/markdown" href="/hiring.md" title="Recruiter and AI hiring brief" />
         <link rel="alternate" type="text/markdown" href="/portfolio.md" title="AI-readable portfolio summary" />
