@@ -68,11 +68,16 @@ export default function ArchiveIndexPage({
       <article className="archive-page" data-archive-kind={archiveKind} aria-labelledby="archive-title">
         <nav className="archive-nav" aria-label="archive navigation">
           <div className="archive-root-row">
-            <Link href="/" aria-label="home" title="home" className="archive-root-link">
-              minwook shin
-            </Link>
-            <CommandTriggerButton />
-            <span className="root-index-hint" aria-hidden="true">· index</span>
+            <span className="root-link-group">
+              <Link href="/" aria-label="home" title="home" className="archive-root-link">
+                minwook shin
+              </Link>
+              <span className="root-index-hint" aria-hidden="true">· index</span>
+            </span>
+            <span className="command-trigger-group">
+              <CommandTriggerButton />
+              <span className="command-hint" aria-hidden="true">· ⌘K</span>
+            </span>
           </div>
         </nav>
 

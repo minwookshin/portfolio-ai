@@ -29,14 +29,15 @@ function expectNativeVideo(label: string) {
 }
 
 describe("ProjectCaseStudyShell", () => {
-  it("renders work detail navigation as a quiet back link", () => {
+  it("renders work detail navigation as a quiet document path", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("sentinel")} />);
 
     const nav = screen.getByRole("navigation", { name: "Sentinel navigation" });
     expect(within(nav).getByRole("link", { name: "back to work" })).toHaveAttribute("href", "/work");
+    expect(within(nav).getByRole("link", { name: "home" })).toHaveAttribute("href", "/");
     expect(within(nav).queryByRole("button", { name: "copy Sentinel page link" })).not.toBeInTheDocument();
     expect(within(nav).queryByRole("link", { name: "minwook shin" })).not.toBeInTheDocument();
-    expect(within(nav).queryByText("Sentinel")).not.toBeInTheDocument();
+    expect(within(nav).getByText("Sentinel")).toBeInTheDocument();
     expect(screen.getByText("ownership")).toBeInTheDocument();
     expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
     expect(screen.getByText("build path")).toBeInTheDocument();
@@ -102,7 +103,7 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("server.broadcast(event);")).toBeInTheDocument();
   });
 
-  it("renders study detail navigation as a quiet back link", () => {
+  it("renders study detail navigation as a quiet document path", () => {
     render(
       <ProjectCaseStudyShell
         project={getStudyProject("motion-taste-system")}
@@ -113,8 +114,9 @@ describe("ProjectCaseStudyShell", () => {
 
     const nav = screen.getByRole("navigation", { name: "Motion Taste System navigation" });
     expect(within(nav).getByRole("link", { name: "back to studies" })).toHaveAttribute("href", "/studies");
+    expect(within(nav).getByRole("link", { name: "home" })).toHaveAttribute("href", "/");
     expect(within(nav).queryByRole("link", { name: "minwook shin" })).not.toBeInTheDocument();
-    expect(within(nav).queryByText("Motion Taste System")).not.toBeInTheDocument();
+    expect(within(nav).getByText("Motion Taste System")).toBeInTheDocument();
     expect(within(nav).queryAllByText("studies")).toHaveLength(1);
   });
 });

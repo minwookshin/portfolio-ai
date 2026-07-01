@@ -463,7 +463,16 @@ body::after {
   text-decoration: none;
 }
 
-.root-index-hint {
+.root-link-group,
+.command-trigger-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--home-title-gap-inline);
+  min-width: 0;
+}
+
+.root-index-hint,
+.command-hint {
   display: inline-flex;
   height: 20px;
   align-items: center;
@@ -481,10 +490,10 @@ body::after {
   white-space: nowrap;
 }
 
-.home-doc-title-row:hover .root-index-hint,
-.home-doc-title-row:focus-within .root-index-hint,
-.archive-root-row:hover .root-index-hint,
-.archive-root-row:focus-within .root-index-hint {
+.root-link-group:hover .root-index-hint,
+.root-link-group:focus-within .root-index-hint,
+.command-trigger-group:hover .command-hint,
+.command-trigger-group:focus-within .command-hint {
   opacity: 0.62;
   transform: translateX(0);
 }
@@ -2192,10 +2201,79 @@ button.home-mention {
 }
 
 .studio-detail-nav {
+  display: grid;
+  gap: var(--space-2);
   margin-left: 0;
   padding-bottom: 0;
   border-bottom: 0;
   color: var(--text-muted);
+}
+
+.detail-root-row,
+.detail-path-row {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--home-title-gap-inline);
+}
+
+.detail-root-row {
+  color: var(--text-primary);
+}
+
+.detail-root-row .archive-root-link {
+  color: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: inherit;
+  text-decoration: none;
+  transition:
+    color 160ms var(--motion-ease-standard),
+    opacity 160ms var(--motion-ease-standard);
+}
+
+.detail-root-row .archive-root-link:hover,
+.detail-root-row .archive-root-link:focus-visible {
+  color: color-mix(in srgb, var(--text-primary) 86%, var(--text-muted));
+}
+
+.detail-path-row {
+  color: var(--text-muted);
+}
+
+.detail-path-link,
+.detail-path-current,
+.detail-path-trailing {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  color: inherit;
+  line-height: var(--leading-body);
+  text-decoration: none;
+}
+
+.detail-path-link {
+  transition:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.detail-path-link:hover,
+.detail-path-link:focus-visible {
+  color: var(--text-primary);
+  transform: translateX(var(--signal-nudge));
+}
+
+.detail-path-current {
+  color: color-mix(in srgb, var(--text-primary) 82%, var(--text-muted));
+}
+
+.detail-path-dot {
+  color: var(--text-muted);
+  line-height: 1;
+  opacity: var(--meta-opacity);
 }
 
 .studio-detail-nav [aria-current="page"] {
@@ -5357,7 +5435,8 @@ button.atlas-state-dot {
   }
 
   .archive-nav-link,
-  .archive-back-link {
+  .archive-back-link,
+  .detail-path-link {
     min-height: 44px;
   }
 

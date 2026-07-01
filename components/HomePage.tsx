@@ -570,12 +570,17 @@ function HomeDocument({
       <div id="profile" className="home-doc scroll-mt-28">
         <div className="home-doc-title-row">
           <h1 className="home-doc-title">
-            <Link href="/" aria-label="home" title="home" className="home-root-link micro-focus micro-focus-tight">
-              minwook shin
-            </Link>
+            <span className="root-link-group">
+              <Link href="/" aria-label="home" title="home" className="home-root-link micro-focus micro-focus-tight">
+                minwook shin
+              </Link>
+              <span className="root-index-hint" aria-hidden="true">· index</span>
+            </span>
           </h1>
-          <CommandTriggerButton />
-          <span className="root-index-hint" aria-hidden="true">· index</span>
+          <span className="command-trigger-group">
+            <CommandTriggerButton />
+            <span className="command-hint" aria-hidden="true">· ⌘K</span>
+          </span>
         </div>
 
         <div className="home-document-content document-content-boot">

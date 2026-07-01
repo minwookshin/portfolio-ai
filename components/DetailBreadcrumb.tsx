@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
+import CommandTriggerButton from "@/components/CommandTriggerButton";
 
 type DetailBreadcrumbProps = {
   className?: string;
@@ -22,17 +22,35 @@ export default function DetailBreadcrumb({
       aria-label={`${currentLabel} navigation`}
       className={`studio-detail-nav mb-[var(--space-5)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)] ${className}`}
     >
-      <span className="flex min-w-0 flex-wrap items-center justify-between gap-x-[var(--space-2)] gap-y-1">
+      <div className="detail-root-row">
+        <span className="root-link-group">
+          <Link href="/" aria-label="home" title="home" className="archive-root-link micro-focus micro-focus-tight">
+            minwook shin
+          </Link>
+          <span className="root-index-hint" aria-hidden="true">· index</span>
+        </span>
+        <span className="command-trigger-group">
+          <CommandTriggerButton />
+          <span className="command-hint" aria-hidden="true">· ⌘K</span>
+        </span>
+      </div>
+      <div className="detail-path-row">
         <Link
           href={sectionHref}
           aria-label={`back to ${sectionLabel}`}
-          className="archive-back-link micro-focus micro-pressable min-w-0 shrink-0"
+          className="detail-path-link micro-focus micro-focus-tight micro-pressable"
         >
-          <MaterialArrowForwardIcon className="site-back-icon" />
           {sectionLabel}
         </Link>
-        {trailing ? <span className="shrink-0 text-[var(--text-muted)]">{trailing}</span> : null}
-      </span>
+        <span className="detail-path-dot" aria-hidden="true">·</span>
+        <span className="detail-path-current" aria-current="page">{currentLabel}</span>
+        {trailing ? (
+          <>
+            <span className="detail-path-dot" aria-hidden="true">·</span>
+            <span className="detail-path-trailing">{trailing}</span>
+          </>
+        ) : null}
+      </div>
     </nav>
   );
 }
