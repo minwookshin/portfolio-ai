@@ -150,7 +150,7 @@ function DetailLink({ label, href }: { label: string; href: string }) {
   const children = (
     <>
       <span>{label}</span>
-      <span className="studio-detail-link-meta" aria-hidden="true">/ {meta}</span>
+      <span className="studio-detail-link-meta" aria-hidden="true">· {meta}</span>
     </>
   );
 
@@ -430,7 +430,7 @@ function renderSection(
               <DetailRow
                 key={s.title}
                 body={s.body}
-                meta={[String(si + 1).padStart(2, "0"), s.tag].filter(Boolean).join(" / ")}
+                meta={[String(si + 1).padStart(2, "0"), s.tag].filter(Boolean).join(" · ")}
                 title={s.title}
               />
             ))}

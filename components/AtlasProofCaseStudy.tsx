@@ -494,7 +494,7 @@ function AtlasCodeArtifact() {
       <div className="detail-artifact-header">
         <span>event contract</span>
         <div className="detail-artifact-header-actions">
-          <span className="detail-artifact-header-meta">case-study sketch</span>
+          <span className="detail-artifact-header-meta">system sketch</span>
         </div>
       </div>
       <div className="atlas-code-artifact__tabs" aria-label="event contract variants">
@@ -556,7 +556,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
       <section className="atlas-meta-surface" aria-labelledby="atlas-meta-title">
         <div className="atlas-meta-surface__header">
           <span id="atlas-meta-title">profile</span>
-          <span>role / constraint / decision / outcome</span>
+          <span>role · constraint · decision · outcome</span>
         </div>
         <dl className="atlas-meta-block" aria-label="role, constraint, decision, and outcome">
           {ATLAS_META.map((item) => (

@@ -46,14 +46,14 @@ function joinVisible(items: Array<string | undefined | null>) {
 
 function getPublicProof(project: Project | PortfolioProject, proof?: BuilderProof) {
   const proofTypes = [
-    "github" in project && project.github ? "public repo" : null,
+    "github" in project && project.github ? "source" : null,
     "link" in project && project.link ? "live site" : null,
-    proof?.demo?.video ? "demo video" : null,
-    proof?.demo?.href ? "live demo" : null,
-    "linkedin" in project && project.linkedin ? "public post" : null,
+    proof?.demo?.video ? "demo" : null,
+    proof?.demo?.href ? "demo" : null,
+    "linkedin" in project && project.linkedin ? "post" : null,
   ].filter(isVisibleBuilderValue);
 
-  if (proofTypes.length > 0) return proofTypes.join(" / ");
+  if (proofTypes.length > 0) return proofTypes.join(" · ");
   return proof?.status.label;
 }
 
@@ -126,11 +126,11 @@ function ProjectDetailHero({
   const eyebrow = project.studioLabel ?? hero?.badge;
   const hasHeroMedia = !hero?.hideMedia && Boolean(proof?.demo?.video || hero?.image || project.image || project.icon);
   const recruiterSignals = [
-    { label: "ownership", value: proof?.role ?? project.role },
-    { label: "timeframe", value: project.timeline ?? project.date },
+    { label: "role", value: proof?.role ?? project.role },
+    { label: "time", value: project.timeline ?? project.date },
     { label: "stack", value: stack },
     { label: "public", value: getPublicProof(project, proof) },
-    { label: "outcome", value: outcome },
+    { label: "result", value: outcome },
   ].filter((item) => isVisibleBuilderValue(item.value));
 
   return (
@@ -186,7 +186,7 @@ function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
   return (
     <section className="studio-detail-proof detail-outline-stack">
       <DetailNote eyebrow="decision" body={proof.oneLiner} />
-      {isVisibleBuilderValue(proof.pipeline) && <DetailNote eyebrow="build path" body={proof.pipeline} />}
+      {isVisibleBuilderValue(proof.pipeline) && <DetailNote eyebrow="path" body={proof.pipeline} />}
 
       {proof.demo && demoHref && (
         <section>

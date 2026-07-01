@@ -39,8 +39,8 @@ describe("ProjectCaseStudyShell", () => {
     expect(within(nav).queryByRole("button", { name: "copy Sentinel page link" })).not.toBeInTheDocument();
     expect(within(nav).queryByRole("link", { name: "minwook shin" })).not.toBeInTheDocument();
     expect(within(nav).getByText("Sentinel")).toBeInTheDocument();
-    expect(screen.getByText("ownership")).toBeInTheDocument();
-    expect(screen.getByText("public repo / demo video / public post")).toBeInTheDocument();
+    expect(screen.getByText("role")).toBeInTheDocument();
+    expect(screen.getByText("source · demo · post")).toBeInTheDocument();
     expect(screen.queryByText("build path")).not.toBeInTheDocument();
     expectNativeVideo("Sentinel demo");
   });
@@ -63,12 +63,12 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.queryByRole("link", { name: /watch demo/i })).not.toBeInTheDocument();
     expect(screen.getByText("public")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/minwookshin/caret");
-    expect(screen.getByText("/ source")).toBeInTheDocument();
+    expect(screen.getByText("· source")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
       "href",
       "https://www.linkedin.com/posts/minwookshin_nobody-quits-out-of-nowhere-they-burn-out-ugcPost-7432114646523740160-YWsz/",
     );
-    expect(screen.getByText("/ post")).toBeInTheDocument();
+    expect(screen.getByText("· post")).toBeInTheDocument();
   });
 
   it("renders small work in video-only mode", () => {
@@ -84,14 +84,14 @@ describe("ProjectCaseStudyShell", () => {
     render(<ProjectCaseStudyShell project={getWorkProject("portfolio-ai")} />);
 
     expect(screen.queryByRole("link", { name: /try live site/i })).not.toBeInTheDocument();
-    expect(screen.getByText("public repo / live site")).toBeInTheDocument();
+    expect(screen.getByText("source · live site")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /video/i })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Design system" })).toHaveAttribute("href", "/design-system");
     expect(screen.getByRole("link", { name: "Design system markdown" })).toHaveAttribute("href", "/design-system.md");
     expect(screen.getByRole("link", { name: "Design tokens JSON" })).toHaveAttribute("href", "/design-system/tokens.json");
-    expect(screen.getByText("/ page")).toBeInTheDocument();
-    expect(screen.getByText("/ markdown")).toBeInTheDocument();
-    expect(screen.getByText("/ json")).toBeInTheDocument();
+    expect(screen.getByText("· page")).toBeInTheDocument();
+    expect(screen.getByText("· markdown")).toBeInTheDocument();
+    expect(screen.getByText("· json")).toBeInTheDocument();
   });
 
   it("renders Atlas as an artifact-led case study template", () => {
@@ -105,7 +105,7 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByRole("button", { name: "advance patient row state" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
     expect(screen.getAllByText("event contract")).toHaveLength(2);
-    expect(screen.getByText("case-study sketch")).toBeInTheDocument();
+    expect(screen.getByText("system sketch")).toBeInTheDocument();
     expect(screen.getByLabelText("triage map tile")).toBeInTheDocument();
     expect(screen.getByLabelText("patient row tile")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "patient.assigned" })).toBeInTheDocument();

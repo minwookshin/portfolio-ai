@@ -26,15 +26,15 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "lead",
         eyebrow: "My contribution",
-        heading: "A portfolio page about the working prototype, not the whole design story",
+        heading: "Digital prototype layer",
         body:
-          "Atlas was a team capstone. I helped shape the first structural pass and a monochrome interface iteration, then focused on building the digital prototype system: the app surfaces, shared state, mock incident data, and live sync needed to make the concept demonstrable.",
+          "Atlas was a team capstone. My contribution was the digital layer: early structure, app surfaces, shared state, mock incident data, and live sync.",
         ask: ["What did you build?", "What was team-owned?"],
       },
       {
         kind: "stats",
-        eyebrow: "Build evidence",
-        heading: "A working system, not a static case-study deck",
+        eyebrow: "Artifact",
+        heading: "Working software across three surfaces",
         items: [
           { value: "3", label: "Native app targets" },
           { value: "134", label: "Swift files" },
@@ -47,7 +47,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         eyebrow: "System artifact",
         heading: "The demo needed one source of truth",
         title: "Prototype event contract",
-        meta: "architecture sketch",
+        meta: "system sketch",
         rows: [
           {
             label: "State",
@@ -74,11 +74,11 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
           "server.broadcast(event);",
         ].join("\n"),
         caption:
-          "This is a case-study sketch of the prototype contract, not a pasted source excerpt. It explains the system shape behind the Atlas demo.",
+          "A compact sketch of the shared event vocabulary behind the Atlas demo.",
       },
       {
         kind: "split",
-        eyebrow: "Build scope",
+        eyebrow: "Scope",
         heading: "Four pieces made the prototype feel alive",
         columns: [
           {
@@ -132,7 +132,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "flow",
-        eyebrow: "System flow",
+        eyebrow: "System",
         heading: "The prototype was built around a single shared incident state",
         steps: [
           {
@@ -166,10 +166,10 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "outcome",
         badge: "Credit boundary",
-        heading: "What this page should claim",
+        heading: "Boundary",
         body: [
-          "Atlas should be read as a team capstone where my strongest contribution was making the digital prototype work across multiple app surfaces.",
-          "I am not claiming ownership of the final visual design or physical prototype. This page focuses on the structure, early monochrome pass, native prototypes, and real-time system I helped build.",
+          "Team capstone. My strongest contribution was the connected digital prototype.",
+          "Final visual design and physical prototype were team-owned.",
         ],
       },
     ],
@@ -183,7 +183,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "hero",
         badge: "Winner / Google x SCAD FLUX 2025",
         title: "Sentinel",
-        subtitle: "A native iOS MVP that turns weather risk into one next action.",
+        subtitle: "A native iOS MVP for weather risk and one next action.",
         bullets: [
           "Design engineer",
           "Native iOS prototype",
@@ -195,8 +195,8 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "stats",
-        eyebrow: "Build",
-        heading: "Built fast, shipped real",
+        eyebrow: "Artifact",
+        heading: "48 hours to a working native surface",
         items: [
           { value: "48h", label: "Hackathon build" },
           { value: "SwiftUI", label: "Native MVP" },
@@ -205,23 +205,23 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "split",
-        eyebrow: "What mattered",
+        eyebrow: "System",
         heading: "Priority over dashboard",
         columns: [
           {
             label: "Role",
-            title: "Designed and built",
-            body: "I took the product from structure to SwiftUI in one sprint.",
+            title: "Structure to SwiftUI",
+            body: "I shaped the flow and built the native prototype.",
           },
           {
             label: "Decision",
             title: "One next action",
-            body: "The app tells homeowners what needs attention now.",
+            body: "Risk becomes a prioritized action, not another dashboard.",
           },
           {
             label: "Result",
-            title: "A public MVP",
-            body: "Demo, source, and post make the sprint verifiable.",
+            title: "Public sprint trace",
+            body: "Demo, source, and post show the working artifact.",
           },
         ],
       },
@@ -241,8 +241,8 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Outcome",
         heading: "Outcome",
         body: [
-          "Sentinel is a shipped log: native prototype, clear loop, public trace.",
-          "Next: make the risk model inspectable without turning the app into analytics software.",
+          "Sentinel is a native prototype with a clear loop and public trace.",
+          "Next: expose the risk model without turning the app into analytics software.",
         ],
       },
     ],
@@ -258,11 +258,11 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "hero",
         badge: "AI website + agent system",
         title: "Portfolio AI",
-        subtitle: "A portfolio that answers questions, routes intent, and opens the right work.",
+        subtitle: "A portfolio with command search, bounded AI, and public routes.",
         bullets: [
           "Design engineer",
           "AI as utility layer",
-          "Live site and public repo",
+          "Live site and source",
         ],
         tags: ["Next.js", "React", "TypeScript", "AI UX"],
         hideMedia: true,
@@ -270,7 +270,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "stats",
         eyebrow: "System",
-        heading: "The website is the prototype",
+        heading: "The website behaves like software",
         items: [
           { value: "Live", label: "Production site" },
           { value: "Public repo", label: "Source" },
@@ -280,29 +280,29 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "lead",
         eyebrow: "Position",
-        heading: "AI should move the visitor, not perform for them",
-        body: "The assistant is a command utility: ask, route, copy, open.",
+        heading: "AI as utility, not spectacle",
+        body: "Ask, route, copy, open. The assistant stays inside the command layer.",
       },
       {
         kind: "split",
         eyebrow: "System",
-        heading: "Small OS, not chatbot decoration",
+        heading: "Outline base, command layer",
         columns: [
           {
             label: "Command",
             title: "Search, ask, route",
-            body: "Command-K gives the site a compact control layer.",
+            body: "Command-K turns the portfolio into a small control surface.",
           },
           {
             label: "Routes",
             title: "Readable by people and models",
-            body: "Work, resume data, tokens, and markdown stay open as routes.",
+            body: "Work, resume data, tokens, and markdown stay accessible.",
           },
         ],
       },
       {
         kind: "artifact",
-        eyebrow: "Contract",
+        eyebrow: "System artifact",
         heading: "The AI layer is bounded",
         title: "Portfolio command",
         meta: "system sketch",
@@ -312,7 +312,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
           "  | { intent: 'copy.email' }",
           "  | { intent: 'ask.portfolio'; query: string };",
         ].join("\n"),
-        caption: "A sketch of the interaction contract behind the command surface.",
+        caption: "A compact contract for the command surface.",
       },
       {
         kind: "links",
@@ -327,7 +327,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Outcome",
         heading: "A portfolio that behaves like software",
         body: [
-          "Portfolio AI is a live system: quiet UI, command layer, public routes, bounded AI.",
+          "Quiet UI, command layer, public routes, bounded AI.",
         ],
       },
     ],
@@ -339,11 +339,11 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
     sections: [
       {
         kind: "hero",
-        badge: "Product design / UX research",
+        badge: "Behavioral AI concept",
         title: "Mindline",
         subtitle: "A behavioral AI concept for awareness before restriction.",
         bullets: [
-          "Product designer and UX researcher",
+          "Product reasoning",
           "6 interviews",
           "Concept prototype",
         ],
@@ -356,11 +356,11 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         eyebrow: "Loop",
         heading: "Notice, reflect, intervene",
         steps: [
-          { tag: "01", title: "Name the state", body: "The user logs the emotion before it becomes an action." },
-          { tag: "02", title: "Find the pattern", body: "The system looks for repeated context: social pressure, stress, timing." },
-          { tag: "03", title: "Offer one next step", body: "The product suggests a pause, reflection, or support action." },
+          { tag: "01", title: "Name the state", body: "Log emotion before it becomes action." },
+          { tag: "02", title: "Find the pattern", body: "Track context: pressure, stress, timing." },
+          { tag: "03", title: "Offer one next step", body: "Suggest a pause, reflection, or support action." },
         ],
-        note: "Awareness first. Blocking is useful, but not the whole product.",
+        note: "Awareness first. Blocking is not the whole product.",
       },
       {
         kind: "gallery",
@@ -376,10 +376,10 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "outcome",
         badge: "Reflection",
-        heading: "Reasoning over polish",
+        heading: "Reasoning first",
         body: [
           "Mindline is product thinking: emotion, context, intervention timing.",
-          "It stays honest about the boundary: concept, not clinical claim.",
+          "Concept prototype, not a clinical claim.",
         ],
       },
     ],
@@ -392,7 +392,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "FLUX Website",
-        subtitle: "An event website built around grid navigation and small interactions.",
+        subtitle: "An event website built around grid navigation and small motion.",
         bullets: [
           "Website Officer",
           "Vanilla HTML, CSS & JavaScript",
@@ -412,7 +412,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "lead",
         eyebrow: "Overview",
         heading: "Interaction-led, framework-free",
-        body: "A framework-free event site with circular navigation, responsive grids, and light motion.",
+        body: "Circular navigation, responsive grids, light motion.",
         ask: ["Why vanilla JS over a framework?", "How did you do the animations?"],
       },
     ],

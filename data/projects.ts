@@ -191,7 +191,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     builder: {
       role: "Digital Prototype Engineer - apps and real-time system",
       stack: ["SwiftUI", "TypeScript", "WebSocket", "Mapbox", "Design tokens"],
-      status: { label: "Prototype case study" },
+      status: { label: "Prototype system" },
       oneLiner: "Connected FR mobile, incident-command iPad, and ER intake prototypes for a mass-casualty triage demo.",
       pipeline:
         "Structured the first monochrome pass -> translated final flows into native app prototypes -> built the local TypeScript/WebSocket server for live patient-state sync.",

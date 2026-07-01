@@ -2428,19 +2428,11 @@ button.home-mention {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0 10px;
-  padding: 2px 8px 2px 30px;
+  padding: 2px 8px 2px 0;
 }
 
 .studio-detail-proof-strip > div::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 0.82em;
-  width: var(--signal-dot-size);
-  height: var(--signal-dot-size);
-  border-radius: var(--md-shape-full);
-  background: var(--text-primary);
-  opacity: var(--signal-opacity-rest);
+  content: none;
 }
 
 .studio-detail-proof-strip dt {
@@ -2921,7 +2913,7 @@ button.home-mention {
 
 .detail-artifact-caption {
   max-width: var(--measure);
-  margin: 0 0 0 30px;
+  margin: 0;
   color: var(--text-muted);
   font-size: var(--type-caption-tight);
   line-height: var(--leading-body);
@@ -2994,8 +2986,8 @@ button.home-mention {
 
 .atlas-meta-block > div {
   display: grid;
-  grid-template-columns: var(--signal-cell-inline) minmax(0, 1fr);
-  column-gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 0;
   align-items: baseline;
   padding: 11px 12px;
   border-bottom: 1px solid var(--code-border);
@@ -3010,13 +3002,7 @@ button.home-mention {
 }
 
 .atlas-meta-block > div::before {
-  content: "";
-  justify-self: center;
-  width: var(--signal-dot-size);
-  height: var(--signal-dot-size);
-  border-radius: var(--md-shape-full);
-  background: var(--text-primary);
-  opacity: var(--signal-opacity-rest);
+  content: none;
 }
 
 .atlas-meta-block dt,
@@ -3025,7 +3011,7 @@ button.home-mention {
 }
 
 .atlas-meta-block dt {
-  grid-column: 2;
+  grid-column: 1;
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: var(--type-caption);
@@ -3034,7 +3020,7 @@ button.home-mention {
 }
 
 .atlas-meta-block dd {
-  grid-column: 2;
+  grid-column: 1;
   color: var(--text-primary);
   font-size: var(--type-0);
   line-height: var(--leading-body);

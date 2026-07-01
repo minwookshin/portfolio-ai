@@ -17,7 +17,7 @@ export type AtlasDecisionItem = {
 export const ATLAS_INTRO = {
   title: "atlas / 2026 / ai triage prototype system",
   body:
-    "Atlas is a connected triage prototype for mass-casualty emergency response. I built the digital layer so field response, incident command, and ER intake could read the same patient state as working software.",
+    "Connected triage software for field response, incident command, and ER intake. My focus was the digital layer: interfaces, state, and prototype behavior.",
 } as const;
 
 export const ATLAS_META: AtlasMetaItem[] = [
@@ -94,7 +94,7 @@ export const ATLAS_EVENT_CONTRACTS: AtlasEventContract[] = [
   },
   {
     label: "capacity.changed",
-    note: "hospital load changes routing without making the operator parse a dashboard.",
+    note: "hospital load changes routing without asking the operator to parse a dashboard.",
     code: [
       "type CapacityChanged = {",
       "  type: 'capacity.changed';",
@@ -114,11 +114,10 @@ export const ATLAS_DECISION_LOG: AtlasDecisionItem[] = [
   { label: "state model", value: "patients, responders, hospitals, assignments" },
   { label: "routing", value: "role-specific surfaces over one shared event stream" },
   { label: "motion", value: "confirm state changes without slowing emergency scanning" },
-  { label: "boundary", value: "case-study sketch, not pasted production source" },
+  { label: "boundary", value: "system sketch, not pasted source" },
 ];
 
 export const ATLAS_REFLECTION = [
   "The next version should make the system log inspectable.",
   "Every assignment, capacity change, and patient update should show why it moved.",
-  "That would turn the demo from a believable flow into a stronger operational design tool.",
 ];
