@@ -5230,6 +5230,11 @@ button.atlas-state-dot {
     transform var(--motion-duration-instant) var(--motion-ease-standard);
 }
 
+.archive-row--plain {
+  gap: 0 8px;
+  padding-right: 0;
+}
+
 .archive-row-title {
   min-width: 0;
   color: var(--text-primary);
@@ -5311,6 +5316,15 @@ button.atlas-state-dot {
   .archive-row--quiet:focus-visible .archive-row-description,
   .archive-row--quiet:hover .archive-row-meta,
   .archive-row--quiet:focus-visible .archive-row-meta {
+    transform: translateX(var(--signal-nudge));
+  }
+
+  .archive-row--plain:hover .archive-row-title,
+  .archive-row--plain:focus-visible .archive-row-title,
+  .archive-row--plain:hover .archive-row-description,
+  .archive-row--plain:focus-visible .archive-row-description,
+  .archive-row--plain:hover .archive-row-meta,
+  .archive-row--plain:focus-visible .archive-row-meta {
     transform: translateX(var(--signal-nudge));
   }
 
@@ -5527,6 +5541,12 @@ button.atlas-state-dot {
   .archive-row--quiet:active .archive-row-title,
   .archive-row--quiet:active .archive-row-description,
   .archive-row--quiet:active .archive-row-meta {
+    transform: translateX(var(--signal-nudge));
+  }
+
+  .archive-row--plain:active .archive-row-title,
+  .archive-row--plain:active .archive-row-description,
+  .archive-row--plain:active .archive-row-meta {
     transform: translateX(var(--signal-nudge));
   }
 }

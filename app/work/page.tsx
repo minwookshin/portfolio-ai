@@ -28,6 +28,18 @@ const WORK_ARCHIVE_ORDER_INDEX: ReadonlyMap<string, number> = new Map(
   WORK_ARCHIVE_ORDER.map((slug, index) => [slug, index]),
 );
 
+const WORK_ARCHIVE_DESCRIPTIONS: Readonly<Record<string, string>> = {
+  atlas: "ai triage system",
+  sentinel: "ios weather mvp",
+  "portfolio-ai": "portfolio os",
+  flux: "event website",
+  caret: "wellbeing prototype",
+  mindline: "behavioral ai concept",
+  capexplorer: "cap demo",
+  tomo: "product demo",
+  nameme: "naming concept",
+};
+
 export const metadata: Metadata = {
   title: "work",
   description,
@@ -59,7 +71,7 @@ function getWorkEntries(): ArchiveEntry[] {
       return orderA - orderB || projectA.index - projectB.index;
     })
     .map(({ project }) => ({
-      description: project.studioLabel,
+      description: WORK_ARCHIVE_DESCRIPTIONS[project.slug] ?? project.studioLabel,
       href: getProjectPath(project),
       id: project.id,
       title: project.title,
