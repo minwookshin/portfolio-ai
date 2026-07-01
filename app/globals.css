@@ -11,18 +11,6 @@
   --theme-light-rule: rgba(28, 30, 34, 0.08);
   --theme-light-tint: rgba(28, 30, 34, 0.05);
   --theme-light-row-focus: rgba(95, 111, 128, 0.08);
-  --document-canvas: #F3F4F6;
-  --document-paper: color-mix(in srgb, #FFFFFF 97%, var(--document-canvas));
-  --document-paper-border: color-mix(in srgb, var(--theme-light-ink) 4.5%, transparent);
-  --document-paper-shadow:
-    0 1px 0 color-mix(in srgb, #FFFFFF 82%, transparent) inset,
-    0 22px 64px -58px color-mix(in srgb, var(--theme-light-ink) 22%, transparent);
-  --document-page-width: 840px;
-  --document-detail-width: 960px;
-  --document-paper-padding-block: 34px;
-  --document-paper-padding-inline: 40px;
-  --document-paper-radius: 10px;
-
   --theme-dark-bg: #0F0F10;
   --theme-dark-surface: #18181B;
   --theme-dark-element: #1C1C1F;
@@ -34,7 +22,7 @@
   --theme-dark-tint: rgba(255, 255, 255, 0.05);
 
   /* Public site tokens stay fixed to the light Cretu.dev-inspired canvas. */
-  --bg-base: var(--document-canvas);
+  --bg-base: var(--theme-light-bg);
   --bg-surface: var(--theme-light-surface);
   --bg-element: var(--theme-light-element);
   --border-light: var(--theme-light-rule);
@@ -127,7 +115,7 @@
   --btn-secondary-text: var(--text-primary);
   --btn-secondary-border: var(--border-light);
   --accent: var(--system-accent);
-  --gradient-fade: rgba(243, 244, 246, 0);
+  --gradient-fade: rgba(247, 248, 249, 0);
 
   /* Material-role bridge for the existing component API. */
   --md-surface: var(--bg-base);
@@ -440,24 +428,19 @@ body::after {
   display: flex;
   justify-content: center;
   width: 100%;
-  max-width: none;
+  max-width: 1180px;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: 104px 32px;
-  background: var(--document-canvas);
+  padding: 132px 32px;
+  background: var(--bg-base);
 }
 
 .home-doc {
   display: flex;
-  min-height: min(760px, calc(100dvh - 208px));
+  min-height: calc(100dvh - 264px);
   flex-direction: column;
   width: 100%;
-  max-width: var(--document-page-width);
-  padding: var(--document-paper-padding-block) var(--document-paper-padding-inline);
-  border: 1px solid var(--document-paper-border);
-  border-radius: var(--document-paper-radius);
-  background: var(--document-paper);
-  box-shadow: var(--document-paper-shadow);
+  max-width: 720px;
   text-align: left;
 }
 
@@ -518,8 +501,8 @@ body::after {
 .site-masthead__command {
   position: relative;
   display: inline-flex;
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -531,12 +514,12 @@ body::after {
   top: 50%;
   left: calc(100% + 1px);
   display: inline-flex;
-  height: 22px;
+  height: 28px;
   align-items: center;
   color: var(--text-muted);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 22px;
+  line-height: 28px;
   opacity: 0;
   pointer-events: none;
   transform: translate(-1px, -50%);
@@ -561,8 +544,8 @@ body::after {
 .command-trigger {
   position: relative;
   display: inline-grid;
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   flex: 0 0 auto;
   place-items: center;
   border: 0;
@@ -580,13 +563,13 @@ body::after {
 .command-trigger::before {
   content: "";
   position: absolute;
-  inset: -12px;
+  inset: -10px;
 }
 
 .command-trigger svg {
-  width: 15px;
-  height: 15px;
-  stroke-width: 1.8;
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.75;
 }
 
 .command-trigger:hover,
@@ -4982,19 +4965,14 @@ button.atlas-state-dot {
   align-items: center;
   width: 100%;
   min-height: 100dvh;
-  padding: 104px 32px 200px;
-  background: var(--document-canvas);
+  padding: 132px 32px 200px;
+  background: var(--bg-base);
   color: var(--text-primary);
 }
 
 .archive-page {
   width: 100%;
-  max-width: var(--document-page-width);
-  padding: var(--document-paper-padding-block) var(--document-paper-padding-inline);
-  border: 1px solid var(--document-paper-border);
-  border-radius: var(--document-paper-radius);
-  background: var(--document-paper);
-  box-shadow: var(--document-paper-shadow);
+  max-width: 720px;
 }
 
 .archive-document-content {
@@ -5657,21 +5635,12 @@ button.atlas-state-dot {
 
 @media (max-width: 720px) {
   .home-doc-shell {
-    padding: 88px 14px 140px;
+    padding: 108px 24px 160px;
   }
 
   .archive-page-shell,
   .detail-page-shell {
-    padding: 88px 14px 160px;
-  }
-
-  .home-doc,
-  .archive-page,
-  .project-readable,
-  .article-readable,
-  .interaction-os {
-    padding: 24px 22px;
-    border-radius: 9px;
+    padding: 108px 24px 160px;
   }
 
   .archive-nav-link,
@@ -5779,23 +5748,13 @@ button.atlas-state-dot {
 
 .project-readable {
   width: 100%;
-  max-width: var(--document-detail-width);
-  padding: var(--document-paper-padding-block) var(--document-paper-padding-inline);
-  border: 1px solid var(--document-paper-border);
-  border-radius: var(--document-paper-radius);
-  background: var(--document-paper);
-  box-shadow: var(--document-paper-shadow);
+  max-width: var(--measure);
 }
 
 .article-readable,
 .interaction-os {
   width: 100%;
-  max-width: var(--document-detail-width);
-  padding: var(--document-paper-padding-block) var(--document-paper-padding-inline);
-  border: 1px solid var(--document-paper-border);
-  border-radius: var(--document-paper-radius);
-  background: var(--document-paper);
-  box-shadow: var(--document-paper-shadow);
+  max-width: 720px;
 }
 
 .project-readable :is(p, li, figcaption) {
