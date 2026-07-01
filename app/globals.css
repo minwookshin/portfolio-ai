@@ -5023,7 +5023,7 @@ button.atlas-state-dot {
 
 .archive-year-details {
   display: grid;
-  gap: 8px;
+  gap: var(--home-section-gap);
 }
 
 .archive-year-details:not([open]) {
