@@ -21,9 +21,9 @@ export default function ProjectVideoOnlyView({ project }: { project: PortfolioPr
     <motion.section
       aria-labelledby={`${project.slug}-video-title`}
       className="studio-video-only-detail"
-      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 3 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={reduceMotion ? tweens.none : tweens.base}
+      transition={reduceMotion ? tweens.none : tweens.fast}
     >
       <h1 id={`${project.slug}-video-title`} className="sr-only">
         {project.title}

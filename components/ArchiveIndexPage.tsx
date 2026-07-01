@@ -1,6 +1,6 @@
 import Link from "next/link";
-import CommandTriggerButton from "@/components/CommandTriggerButton";
 import { OutlineSignalCell } from "@/components/Outline";
+import SiteMasthead from "@/components/SiteMasthead";
 
 export type ArchiveEntry = {
   description?: string;
@@ -67,17 +67,7 @@ export default function ArchiveIndexPage({
     <main className="site-lowercase archive-page-shell">
       <article className="archive-page" data-archive-kind={archiveKind} aria-labelledby="archive-title">
         <nav className="archive-nav" aria-label="archive navigation">
-          <div className="archive-root-row">
-            <span className="root-link-group">
-              <Link href="/" aria-label="home" title="home" className="archive-root-link">
-                minwook shin
-              </Link>
-            </span>
-            <span className="command-trigger-group">
-              <CommandTriggerButton />
-              <span className="command-hint" aria-hidden="true">K</span>
-            </span>
-          </div>
+          <SiteMasthead className="archive-root-row" />
         </nav>
 
         <div className="archive-document-content document-content-boot">

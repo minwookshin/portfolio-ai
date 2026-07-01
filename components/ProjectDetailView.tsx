@@ -135,9 +135,9 @@ function ProjectDetailHero({
 
   return (
     <motion.section
-      initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 3 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={reduceMotion ? tweens.none : tweens.base}
+      transition={reduceMotion ? tweens.none : tweens.fast}
       className="studio-detail-hero"
     >
       {eyebrow && (
@@ -167,9 +167,9 @@ function ProjectDetailHero({
       )}
       {hasHeroMedia && (
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 3 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={reduceMotion ? tweens.none : { ...tweens.base, delay: 0.08 }}
+          transition={reduceMotion ? tweens.none : { ...tweens.fast, delay: 0.04 }}
           className="mt-[var(--space-4)]"
         >
           <ProjectHeroMedia hero={hero} project={project} proof={proof} reduceMotion={reduceMotion} />

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import CommandTriggerButton from "@/components/CommandTriggerButton";
+import SiteMasthead from "@/components/SiteMasthead";
 
 type DetailBreadcrumbProps = {
   className?: string;
@@ -22,17 +22,7 @@ export default function DetailBreadcrumb({
       aria-label={`${currentLabel} navigation`}
       className={`studio-detail-nav mb-[var(--space-5)] text-left text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-primary)] ${className}`}
     >
-      <div className="detail-root-row">
-        <span className="root-link-group">
-          <Link href="/" aria-label="home" title="home" className="archive-root-link micro-focus micro-focus-tight">
-            minwook shin
-          </Link>
-        </span>
-        <span className="command-trigger-group">
-          <CommandTriggerButton />
-          <span className="command-hint" aria-hidden="true">K</span>
-        </span>
-      </div>
+      <SiteMasthead className="detail-root-row" />
       <div className="detail-path-row">
         <Link
           href={sectionHref}

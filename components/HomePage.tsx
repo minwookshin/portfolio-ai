@@ -4,10 +4,10 @@ import { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
-import CommandTriggerButton from "@/components/CommandTriggerButton";
 import { useCopyFeedback } from "@/components/CopyFeedback";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import type { Project } from "@/components/ProjectCard";
+import SiteMasthead from "@/components/SiteMasthead";
 import { Check, Copy } from "lucide-react";
 import { glassLensTransition } from "@/lib/material/motion";
 import { formatWritingDate } from "@/lib/writingDisplay";
@@ -568,19 +568,7 @@ function HomeDocument({
   return (
     <section id="top" className="home-doc-shell">
       <div id="profile" className="home-doc scroll-mt-28">
-        <div className="home-doc-title-row">
-          <h1 className="home-doc-title">
-            <span className="root-link-group">
-              <Link href="/" aria-label="home" title="home" className="home-root-link micro-focus micro-focus-tight">
-                minwook shin
-              </Link>
-            </span>
-          </h1>
-          <span className="command-trigger-group">
-            <CommandTriggerButton />
-            <span className="command-hint" aria-hidden="true">K</span>
-          </span>
-        </div>
+        <SiteMasthead heading className="home-doc-title-row" />
 
         <div className="home-document-content document-content-boot">
           <HomeLeafRow intro>

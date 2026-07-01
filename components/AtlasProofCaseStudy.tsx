@@ -542,9 +542,9 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
 
   return (
     <motion.article
-      initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 3 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={reduceMotion ? tweens.none : tweens.base}
+      transition={reduceMotion ? tweens.none : tweens.fast}
       className="atlas-case detail-outline-stack"
       aria-labelledby="atlas-proof-title"
     >

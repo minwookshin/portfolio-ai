@@ -69,9 +69,9 @@ export default function LabProjectDetailView({ project }: { project: PortfolioPr
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 3 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={reduceMotion ? tweens.none : tweens.base}
+      transition={reduceMotion ? tweens.none : tweens.fast}
       className="studio-lab-detail detail-outline-stack"
     >
       {videoSrc ? (

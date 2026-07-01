@@ -23,27 +23,30 @@ export default function ProjectCaseStudyShell({
 }) {
   const reduceMotion = useReducedMotion();
   const sectionLabel = variant === "lab" ? "studies" : "work";
+  const content = mode === "video-only" ? (
+    <ProjectVideoOnlyView project={project} />
+  ) : variant === "lab" ? (
+    <LabProjectDetailView project={project} />
+  ) : (
+    <ProjectDetailView project={project} hideBack onAsk={undefined} />
+  );
 
   return (
-    <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -4 }}
-      transition={reduceMotion ? tweens.none : tweens.base}
-      className={`project-readable studio-detail w-full ${className}`}
-    >
+    <div className={`project-readable studio-detail w-full ${className}`}>
       <DetailBreadcrumb
         currentLabel={project.title}
         sectionHref={baseHref}
         sectionLabel={sectionLabel}
       />
-      {mode === "video-only" ? (
-        <ProjectVideoOnlyView project={project} />
-      ) : variant === "lab" ? (
-        <LabProjectDetailView project={project} />
-      ) : (
-        <ProjectDetailView project={project} hideBack onAsk={undefined} />
-      )}
-    </motion.div>
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 3 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -2 }}
+        transition={reduceMotion ? tweens.none : tweens.fast}
+        className="detail-document-content"
+      >
+        {content}
+      </motion.div>
+    </div>
   );
 }
