@@ -270,7 +270,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
 
       <section className="atlas-meta-surface" aria-labelledby="atlas-meta-title">
         <div className="atlas-meta-surface__header">
-          <span id="atlas-meta-title">artifact profile</span>
+          <span id="atlas-meta-title">profile</span>
           <span>role / constraint / decision / outcome</span>
         </div>
         <dl className="atlas-meta-block" aria-label="role, constraint, decision, and outcome">
@@ -291,7 +291,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             title="triage map"
             label="incident command flow"
             artifactType="sequence"
-            caption="A screenshot sequence showing how field, command, and receiving surfaces shared the same emergency picture."
+            caption="one emergency picture across field, command, and receiving."
             className="atlas-proof-tile--wide"
           >
             <AtlasImageSequence images={ATLAS_TRIAGE_SEQUENCE} />
@@ -302,7 +302,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             title="capacity state"
             label="live interaction"
             artifactType="live"
-            caption="A small state model for hospital load, available beds, priority, and routing action."
+            caption="hospital load changes beds, priority, and routing action."
             className="atlas-proof-tile--live"
           >
             <AtlasCapacityTile />
@@ -313,7 +313,8 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             title="patient detail"
             label="scan density"
             artifactType="scan"
-            caption="Dense patient data is grouped by role so responders and ER staff can scan different slices of the same state."
+            caption="same patient state, different operational views."
+            className="atlas-proof-tile--patient"
           >
             <AtlasPatientDetail />
           </AtlasTile>
@@ -323,7 +324,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             title="event contract"
             label="code artifact"
             artifactType="code"
-            caption="The prototype needed a shared vocabulary before the app surfaces could feel connected."
+            caption="the shared vocabulary behind the connected prototype."
             className="atlas-proof-tile--code"
           >
             <AtlasCodeArtifact />
@@ -334,7 +335,8 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             title="motion rule"
             label="live interaction"
             artifactType="live"
-            caption="Emergency UI motion should confirm change, then get out of the way."
+            caption="confirm change, then get out of the way."
+            className="atlas-proof-tile--motion"
           >
             <AtlasMotionRuleTile />
           </AtlasTile>
@@ -344,7 +346,8 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
             title="decision log"
             label="context"
             artifactType="context"
-            caption="The hiring-readable layer: role, constraint, decision, and result without turning the page into a long essay."
+            caption="role, constraint, decision, result."
+            className="atlas-proof-tile--log"
           >
             <AtlasDecisionLog />
           </AtlasTile>

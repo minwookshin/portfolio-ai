@@ -17,7 +17,7 @@ export type AtlasDecisionItem = {
 export const ATLAS_INTRO = {
   title: "atlas / 2026 / ai triage prototype system",
   body:
-    "Atlas is a connected triage prototype system for a mass-casualty emergency workflow. I built the digital layer that let field response, incident command, and ER intake read from one shared patient state, so the concept could be tested as software instead of a static deck.",
+    "Atlas is a connected triage prototype for mass-casualty emergency response. I built the digital layer so field response, incident command, and ER intake could read the same patient state as working software.",
 } as const;
 
 export const ATLAS_META: AtlasMetaItem[] = [
