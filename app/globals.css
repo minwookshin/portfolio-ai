@@ -240,12 +240,12 @@
 
 ::selection {
   color: var(--text-primary);
-  background-color: rgba(55, 60, 70, 0.10);
+  background-color: rgba(95, 111, 128, 0.16);
 }
 
 ::-moz-selection {
   color: var(--text-primary);
-  background-color: rgba(55, 60, 70, 0.10);
+  background-color: rgba(95, 111, 128, 0.16);
 }
 
 .dom-cursor {
