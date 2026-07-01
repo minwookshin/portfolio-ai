@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import DetailBreadcrumb from "@/components/DetailBreadcrumb";
+import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import StructuredData from "@/components/StructuredData";
 import {
   DESIGN_SYSTEM_ACCESSIBILITY_RULES,
@@ -27,16 +29,15 @@ export const metadata: Metadata = {
   },
 };
 
-const sectionClass = "space-y-[var(--space-2)]";
-const mutedText = "text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]";
-const primaryText = "text-[length:var(--type-0)] font-normal leading-[var(--leading-body)] text-[var(--text-primary)]";
 const smallMuted = "text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]";
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="space-y-[var(--space-2)]">
-      <h2 className={primaryText}>{title}</h2>
-      {children}
+    <section className="detail-outline-section">
+      <DetailOutlineHeading heading={title} />
+      <div className="detail-outline-list">
+        {children}
+      </div>
     </section>
   );
 }
@@ -47,16 +48,14 @@ function TokenList({
   items: ReadonlyArray<{ role: string; cssVariable?: string; value: string; usage?: string }>;
 }) {
   return (
-    <div className="space-y-[var(--space-2)]">
+    <div className="detail-outline-list">
       {items.map((item) => (
-        <div key={`${item.role}-${item.value}`} className="grid gap-[var(--space-1)] sm:grid-cols-[minmax(0,0.75fr)_minmax(0,1fr)]">
-          <p className={primaryText}>{item.role}</p>
-          <p className={mutedText}>
-            {item.cssVariable ? `${item.cssVariable} / ` : ""}
-            {item.value}
-            {item.usage ? ` / ${item.usage}` : ""}
-          </p>
-        </div>
+        <DetailOutlineRow
+          key={`${item.role}-${item.value}`}
+          title={item.role}
+          meta={item.cssVariable}
+          body={[item.value, item.usage].filter(Boolean).join(" · ")}
+        />
       ))}
     </div>
   );
@@ -64,20 +63,17 @@ function TokenList({
 
 function RuleList({ items }: { items: readonly string[] }) {
   return (
-    <ul className="space-y-[var(--space-2)]">
+    <div className="detail-outline-list">
       {items.map((item) => (
-        <li key={item} className="flex items-start gap-[var(--space-1)]">
-          <span className="mt-[0.72em] h-1 w-1 shrink-0 rounded-full bg-[var(--text-muted)]" aria-hidden="true" />
-          <span className={mutedText}>{item}</span>
-        </li>
+        <DetailOutlineRow key={item} body={item} />
       ))}
-    </ul>
+    </div>
   );
 }
 
 function TextLink({ href, children }: { href: string; children: ReactNode }) {
   const isRouteHandlerLink = /\.(json|md|txt)$/.test(href);
-  const className = "studio-lateral-link micro-focus micro-pressable inline-flex text-[length:var(--type-0)]";
+  const className = "home-mention micro-focus micro-focus-tight micro-pressable inline-flex w-fit text-[length:var(--type-0)] leading-[var(--leading-body)]";
 
   if (isRouteHandlerLink) {
     return (
@@ -109,91 +105,95 @@ export default function DesignSystemPage() {
   return (
     <main className="site-lowercase detail-page-shell text-[length:var(--type-0)] text-[var(--text-primary)]">
       <StructuredData data={jsonLd} />
-      <article className="flex w-full max-w-[720px] flex-1 flex-col gap-[var(--space-6)]">
-        <nav aria-label="breadcrumb" className="flex flex-wrap items-center gap-x-[var(--space-1)] gap-y-1">
-          <TextLink href="/work">work</TextLink>
-          <span className="text-[var(--text-muted)]" aria-hidden="true">/</span>
-          <TextLink href={DESIGN_SYSTEM_PATHS.portfolioAi}>portfolio ai</TextLink>
-          <span className="text-[var(--text-muted)]" aria-hidden="true">/</span>
-          <span className={mutedText}>design system proof</span>
-        </nav>
+      <article className="project-readable studio-detail w-full max-w-[720px]">
+        <DetailBreadcrumb
+          currentLabel="design system proof"
+          sectionHref={DESIGN_SYSTEM_PATHS.portfolioAi}
+          sectionLabel="portfolio ai"
+        />
 
-        <header className={sectionClass}>
-          <p className={smallMuted}>{DESIGN_SYSTEM_PROOF.audience}</p>
-          <h1 className={primaryText}>{DESIGN_SYSTEM_PROOF.name}</h1>
-          <p className={mutedText}>{DESIGN_SYSTEM_PROOF.description}</p>
-        </header>
-
-        <Section title="machine-readable routes">
-          <div className="flex flex-wrap gap-x-[var(--space-2)] gap-y-[var(--space-1)]">
-            <TextLink href={DESIGN_SYSTEM_PATHS.markdown}>design-system.md</TextLink>
-            <TextLink href={DESIGN_SYSTEM_PATHS.tokens}>tokens.json</TextLink>
-            <TextLink href="/portfolio.md">portfolio.md</TextLink>
-            <TextLink href="/llms.txt">llms.txt</TextLink>
-          </div>
-        </Section>
-
-        <Section title="tokens">
-          <div className="space-y-[var(--space-4)]">
-            <div>
-              <p className={`${smallMuted} mb-[var(--space-2)]`}>color roles</p>
-              <TokenList items={DESIGN_SYSTEM_TOKENS.colors} />
+        <div className="detail-document-content document-content-boot">
+          <header className="detail-outline-section">
+            <DetailOutlineHeading
+              eyebrow={DESIGN_SYSTEM_PROOF.audience}
+              heading={DESIGN_SYSTEM_PROOF.name}
+              headingAs="h1"
+            />
+            <div className="detail-outline-list">
+              <DetailOutlineRow body={DESIGN_SYSTEM_PROOF.description} />
             </div>
-            <div>
-              <p className={`${smallMuted} mb-[var(--space-2)]`}>type and spacing</p>
-              <TokenList
-                items={[
-                  ...DESIGN_SYSTEM_TOKENS.typography.families,
-                  ...DESIGN_SYSTEM_TOKENS.typography.scale,
-                  ...DESIGN_SYSTEM_TOKENS.spacing,
-                ]}
-              />
-            </div>
-            <div>
-              <p className={`${smallMuted} mb-[var(--space-2)]`}>signals and motion</p>
-              <TokenList
-                items={[
-                  ...DESIGN_SYSTEM_TOKENS.signals,
-                  ...DESIGN_SYSTEM_TOKENS.motion.durations,
-                  ...DESIGN_SYSTEM_TOKENS.motion.easing,
-                ]}
-              />
-            </div>
-          </div>
-        </Section>
+          </header>
 
-        <Section title="component primitives">
-          <div className="space-y-[var(--space-3)]">
-            {DESIGN_SYSTEM_COMPONENTS.map((component) => (
-              <div key={component.name} className="space-y-[var(--space-1)]">
-                <h3 className={primaryText}>{component.name}</h3>
-                <p className={mutedText}>{component.description}</p>
-                <p className={smallMuted}>{component.primitives.join(" / ")}</p>
+          <Section title="machine-readable routes">
+            <div className="flex flex-wrap gap-x-[var(--space-1)] gap-y-[var(--space-1)]">
+              <TextLink href={DESIGN_SYSTEM_PATHS.markdown}>design-system.md</TextLink>
+              <TextLink href={DESIGN_SYSTEM_PATHS.tokens}>tokens.json</TextLink>
+              <TextLink href="/portfolio.md">portfolio.md</TextLink>
+              <TextLink href="/llms.txt">llms.txt</TextLink>
+            </div>
+          </Section>
+
+          <Section title="tokens">
+            <div className="space-y-[var(--space-4)]">
+              <div>
+                <p className={`${smallMuted} mb-[var(--space-2)]`}>color roles</p>
+                <TokenList items={DESIGN_SYSTEM_TOKENS.colors} />
               </div>
+              <div>
+                <p className={`${smallMuted} mb-[var(--space-2)]`}>type and spacing</p>
+                <TokenList
+                  items={[
+                    ...DESIGN_SYSTEM_TOKENS.typography.families,
+                    ...DESIGN_SYSTEM_TOKENS.typography.scale,
+                    ...DESIGN_SYSTEM_TOKENS.spacing,
+                  ]}
+                />
+              </div>
+              <div>
+                <p className={`${smallMuted} mb-[var(--space-2)]`}>signals and motion</p>
+                <TokenList
+                  items={[
+                    ...DESIGN_SYSTEM_TOKENS.signals,
+                    ...DESIGN_SYSTEM_TOKENS.motion.durations,
+                    ...DESIGN_SYSTEM_TOKENS.motion.easing,
+                  ]}
+                />
+              </div>
+            </div>
+          </Section>
+
+          <Section title="component primitives">
+            {DESIGN_SYSTEM_COMPONENTS.map((component) => (
+              <DetailOutlineRow
+                key={component.name}
+                title={component.name}
+                meta={component.primitives.join(" · ")}
+                body={component.description}
+              />
             ))}
-          </div>
-        </Section>
+          </Section>
 
-        <Section title="interaction rules">
-          <RuleList items={DESIGN_SYSTEM_INTERACTION_RULES} />
-        </Section>
+          <Section title="interaction rules">
+            <RuleList items={DESIGN_SYSTEM_INTERACTION_RULES} />
+          </Section>
 
-        <Section title="accessibility rules">
-          <RuleList items={DESIGN_SYSTEM_ACCESSIBILITY_RULES} />
-        </Section>
+          <Section title="accessibility rules">
+            <RuleList items={DESIGN_SYSTEM_ACCESSIBILITY_RULES} />
+          </Section>
 
-        <Section title="ai-readable contract">
-          <div className="grid gap-[var(--space-4)] sm:grid-cols-2">
-            <div>
-              <p className={`${smallMuted} mb-[var(--space-2)]`}>use</p>
-              <RuleList items={DESIGN_SYSTEM_AI_CONTRACT.use} />
+          <Section title="ai-readable contract">
+            <div className="grid gap-[var(--space-4)] sm:grid-cols-2">
+              <div>
+                <p className={`${smallMuted} mb-[var(--space-2)]`}>use</p>
+                <RuleList items={DESIGN_SYSTEM_AI_CONTRACT.use} />
+              </div>
+              <div>
+                <p className={`${smallMuted} mb-[var(--space-2)]`}>avoid</p>
+                <RuleList items={DESIGN_SYSTEM_AI_CONTRACT.avoid} />
+              </div>
             </div>
-            <div>
-              <p className={`${smallMuted} mb-[var(--space-2)]`}>avoid</p>
-              <RuleList items={DESIGN_SYSTEM_AI_CONTRACT.avoid} />
-            </div>
-          </div>
-        </Section>
+          </Section>
+        </div>
       </article>
     </main>
   );

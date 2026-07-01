@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { DetailOutlineHeading, DetailOutlineRow, OutlineSignalCell } from "@/components/Outline";
+import SiteMasthead from "@/components/SiteMasthead";
 import { springs, tweens } from "@/lib/material/motion";
 
 type CapacityState = {
@@ -312,16 +312,20 @@ export default function InteractionsPage() {
         className="interaction-os studio-detail w-full"
       >
         <nav className="archive-nav" aria-label="interaction navigation">
-          <Link href="/" className="archive-nav-link">
-            <MaterialArrowForwardIcon className="site-back-icon" />
-            index
-          </Link>
+          <SiteMasthead className="archive-root-row" />
         </nav>
 
-        <header className="interaction-os__header">
-          <h1>interactions, draft system proof</h1>
-          <p>private live proofs for the small state language that makes this portfolio feel like an outline operating system.</p>
-        </header>
+        <div className="detail-document-content document-content-boot">
+          <header className="interaction-os__header detail-outline-section">
+            <DetailOutlineHeading
+              eyebrow="private system proof"
+              heading="interactions"
+              headingAs="h1"
+            />
+            <div className="detail-outline-list">
+              <DetailOutlineRow body="live proofs for the small state language that makes this portfolio feel like an outline operating system." />
+            </div>
+          </header>
 
         <section className="detail-outline-section interaction-os__rules">
           <DetailOutlineHeading heading="release path" eyebrow="not public yet" />
@@ -413,6 +417,7 @@ export default function InteractionsPage() {
             </InteractionTile>
           </div>
         </section>
+        </div>
       </motion.article>
     </main>
   );
