@@ -498,8 +498,8 @@ body::after {
 .site-masthead__command {
   position: relative;
   display: inline-flex;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -511,12 +511,12 @@ body::after {
   top: 50%;
   left: calc(100% + 1px);
   display: inline-flex;
-  height: 20px;
+  height: 22px;
   align-items: center;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 22px;
   opacity: 0;
   pointer-events: none;
   transform: translate(-1px, -50%);
@@ -541,8 +541,8 @@ body::after {
 .command-trigger {
   position: relative;
   display: inline-grid;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   flex: 0 0 auto;
   place-items: center;
   border: 0;
@@ -564,8 +564,8 @@ body::after {
 }
 
 .command-trigger svg {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   stroke-width: 1.8;
 }
 
