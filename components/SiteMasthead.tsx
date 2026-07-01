@@ -4,9 +4,10 @@ import CommandTriggerButton from "@/components/CommandTriggerButton";
 type SiteMastheadProps = {
   className?: string;
   heading?: boolean;
+  home?: boolean;
 };
 
-export default function SiteMasthead({ className = "", heading = false }: SiteMastheadProps) {
+export default function SiteMasthead({ className = "", heading = false, home = false }: SiteMastheadProps) {
   const homeLink = (
     <Link
       href="/"
@@ -18,8 +19,14 @@ export default function SiteMasthead({ className = "", heading = false }: SiteMa
     </Link>
   );
 
+  const mastheadClassName = [
+    "site-masthead",
+    home ? "site-masthead--home" : "",
+    className,
+  ].filter(Boolean).join(" ");
+
   return (
-    <div className={`site-masthead${className ? ` ${className}` : ""}`}>
+    <div className={mastheadClassName}>
       {heading ? (
         <h1 className="site-masthead__title">{homeLink}</h1>
       ) : (

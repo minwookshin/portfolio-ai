@@ -473,14 +473,26 @@ body::after {
   letter-spacing: inherit;
   line-height: inherit;
   text-decoration: none;
+  transform: translateX(0);
   transition:
     color 160ms var(--motion-ease-standard),
-    opacity 160ms var(--motion-ease-standard);
+    opacity 160ms var(--motion-ease-standard),
+    transform 160ms var(--motion-ease-standard);
 }
 
 .site-masthead .site-masthead__home:hover,
 .site-masthead .site-masthead__home:focus-visible {
   color: color-mix(in srgb, var(--text-primary) 88%, var(--text-muted));
+}
+
+.site-masthead:not(.site-masthead--home) .site-masthead__home:hover,
+.site-masthead:not(.site-masthead--home) .site-masthead__home:focus-visible {
+  transform: translateX(var(--signal-nudge));
+}
+
+.site-masthead:not(.site-masthead--home):has(.site-masthead__home:hover) .site-masthead__command,
+.site-masthead:not(.site-masthead--home):has(.site-masthead__home:focus-visible) .site-masthead__command {
+  transform: translateX(var(--signal-nudge));
 }
 
 .site-masthead__command {
@@ -4916,7 +4928,7 @@ button.atlas-state-dot {
 
 .archive-year-list {
   display: grid;
-  gap: 22px;
+  gap: 14px;
   margin: 0;
   padding: 0 0 0 var(--home-children-indent);
   list-style: none;

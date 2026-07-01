@@ -568,7 +568,7 @@ function HomeDocument({
   return (
     <section id="top" className="home-doc-shell">
       <div id="profile" className="home-doc scroll-mt-28">
-        <SiteMasthead heading className="home-doc-title-row" />
+        <SiteMasthead heading home className="home-doc-title-row" />
 
         <div className="home-document-content document-content-boot">
           <HomeLeafRow intro>
