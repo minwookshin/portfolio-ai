@@ -4126,6 +4126,29 @@ button.home-mention {
   min-height: 100dvh;
 }
 
+.document-content-boot {
+  animation: documentContentBoot 180ms var(--motion-ease-standard) 40ms both;
+  transform-origin: 50% 0;
+  will-change: opacity, transform;
+}
+
+.home-document-content {
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes documentContentBoot {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .archive-page-shell,
 .detail-page-shell {
   display: flex;
@@ -4141,6 +4164,10 @@ button.home-mention {
 .archive-page {
   width: 100%;
   max-width: 720px;
+}
+
+.archive-document-content {
+  width: 100%;
 }
 
 .archive-nav {
@@ -6009,6 +6036,10 @@ button.home-mention {
 @media (prefers-reduced-motion: reduce) {
   body {
     transition: none !important;
+  }
+
+  .document-content-boot {
+    animation: none !important;
   }
 
   .section-flash {

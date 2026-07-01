@@ -75,71 +75,73 @@ export default function ArchiveIndexPage({
           </div>
         </nav>
 
-        <header className="archive-header">
-          <div className="archive-section-row">
-            <OutlineSignalCell
-              cellClassName="archive-bullet-cell"
-              dotClassName="archive-section-bullet"
-            />
-            <div className="archive-section-copy">
-              <h1 id="archive-title" className="archive-title">
-                {title}
-                <span className="sr-only">, {totalCount} {itemLabel}</span>
-              </h1>
-              {description && <p className="archive-description">{description}</p>}
+        <div className="archive-document-content document-content-boot">
+          <header className="archive-header">
+            <div className="archive-section-row">
+              <OutlineSignalCell
+                cellClassName="archive-bullet-cell"
+                dotClassName="archive-section-bullet"
+              />
+              <div className="archive-section-copy">
+                <h1 id="archive-title" className="archive-title">
+                  {title}
+                  <span className="sr-only">, {totalCount} {itemLabel}</span>
+                </h1>
+                {description && <p className="archive-description">{description}</p>}
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        <ol className="archive-year-list">
-          {groupByYear(entries).map(([year, yearEntries]) => {
-            const yearId = getYearAnchorId(year);
+          <ol className="archive-year-list">
+            {groupByYear(entries).map(([year, yearEntries]) => {
+              const yearId = getYearAnchorId(year);
 
-            return (
-              <li key={year} id={yearId} className="archive-year-group">
-                <details className="archive-year-details" open>
-                  <summary
-                    aria-label={`${year}, ${yearEntries.length} ${itemLabel}`}
-                    className="archive-year micro-focus micro-focus-tight"
-                  >
-                    <OutlineSignalCell
-                      arrow="both"
-                      arrowClassName="archive-caret"
-                      cellClassName="archive-bullet-cell"
-                      dotClassName="archive-year-bullet"
-                    />
-                    <span className="archive-year-label">{year}</span>
-                    <span className="archive-count">{yearEntries.length}</span>
-                  </summary>
+              return (
+                <li key={year} id={yearId} className="archive-year-group">
+                  <details className="archive-year-details" open>
+                    <summary
+                      aria-label={`${year}, ${yearEntries.length} ${itemLabel}`}
+                      className="archive-year micro-focus micro-focus-tight"
+                    >
+                      <OutlineSignalCell
+                        arrow="both"
+                        arrowClassName="archive-caret"
+                        cellClassName="archive-bullet-cell"
+                        dotClassName="archive-year-bullet"
+                      />
+                      <span className="archive-year-label">{year}</span>
+                      <span className="archive-count">{yearEntries.length}</span>
+                    </summary>
 
-                  <ul className="archive-list">
-                    {yearEntries.map((entry) => (
-                      <li key={entry.id} className="archive-item">
-                        <Link
-                          href={entry.href}
-                          className={`archive-row${rowUsesSignal ? "" : " archive-row--quiet"} micro-focus micro-focus-tight`}
-                        >
-                          <OutlineSignalCell
-                            arrow={rowUsesSignal ? "right" : undefined}
-                            arrowClassName="archive-row-signal"
-                            cellClassName="archive-bullet-cell"
-                            dotClassName="archive-row-bullet"
-                            rightArrowClassName="site-signal-icon"
-                          />
-                          <span className="archive-row-title">{entry.title}</span>
-                          {entry.description && (
-                            <span className="archive-row-description">{entry.description}</span>
-                          )}
-                          {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </li>
-            );
-          })}
-        </ol>
+                    <ul className="archive-list">
+                      {yearEntries.map((entry) => (
+                        <li key={entry.id} className="archive-item">
+                          <Link
+                            href={entry.href}
+                            className={`archive-row${rowUsesSignal ? "" : " archive-row--quiet"} micro-focus micro-focus-tight`}
+                          >
+                            <OutlineSignalCell
+                              arrow={rowUsesSignal ? "right" : undefined}
+                              arrowClassName="archive-row-signal"
+                              cellClassName="archive-bullet-cell"
+                              dotClassName="archive-row-bullet"
+                              rightArrowClassName="site-signal-icon"
+                            />
+                            <span className="archive-row-title">{entry.title}</span>
+                            {entry.description && (
+                              <span className="archive-row-description">{entry.description}</span>
+                            )}
+                            {entry.meta && <span className="archive-row-meta">{entry.meta}</span>}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       </article>
     </main>
   );

@@ -4,7 +4,6 @@ import { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
-import type { Variants } from "framer-motion";
 import CommandTriggerButton from "@/components/CommandTriggerButton";
 import { useCopyFeedback } from "@/components/CopyFeedback";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
@@ -30,11 +29,6 @@ type HomePageProps = {
 };
 
 const DOCUMENT_BOOT_EASE = [0.22, 1, 0.36, 1] as const;
-const DOCUMENT_BOOT_DELAY = 0.02;
-const DOCUMENT_BOOT_STAGGER = 0.012;
-const DOCUMENT_BOOT_Y = 1.5;
-const DOCUMENT_BOOT_OPACITY_DURATION = 0.16;
-const DOCUMENT_BOOT_Y_DURATION = 0.18;
 
 function unavailableFeedbackAnimation() {
   return {
@@ -49,51 +43,6 @@ function unavailableFeedbackAnimation() {
     },
   };
 }
-
-const landingPageVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0,
-      staggerChildren: 0,
-    },
-  },
-};
-
-const landingIntroVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: DOCUMENT_BOOT_DELAY,
-      staggerChildren: DOCUMENT_BOOT_STAGGER,
-    },
-  },
-};
-
-const landingExploreVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0,
-      staggerChildren: 0,
-    },
-  },
-};
-
-const landingRevealItem: Variants = {
-  hidden: {
-    opacity: 0,
-    y: DOCUMENT_BOOT_Y,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      opacity: { type: "tween", duration: DOCUMENT_BOOT_OPACITY_DURATION, ease: DOCUMENT_BOOT_EASE },
-      y: { type: "tween", duration: DOCUMENT_BOOT_Y_DURATION, ease: DOCUMENT_BOOT_EASE },
-    },
-  },
-};
 
 type StudyItem =
   | {
@@ -425,13 +374,12 @@ function HomeOutlineSection({
   const [isOpen, setIsOpen] = useState(() => defaultOpen);
 
   return (
-    <motion.details
+    <details
       className="home-node home-node--section"
       data-active={active ? "true" : "false"}
       id={sectionId}
       onToggle={(event) => setIsOpen(event.currentTarget.open)}
       open={isOpen}
-      variants={landingRevealItem}
     >
       <summary className="home-row home-row--summary micro-focus micro-focus-tight">
         <HomeBulletCell section />
@@ -441,7 +389,7 @@ function HomeOutlineSection({
         </span>
       </summary>
       <div className="home-children">{children}</div>
-    </motion.details>
+    </details>
   );
 }
 
@@ -618,78 +566,67 @@ function HomeDocument({
   projects: PortfolioProject[];
 }) {
   return (
-    <motion.section
-      id="top"
-      variants={landingExploreVariants}
-      className="home-doc-shell"
-    >
-      <motion.div id="profile" variants={landingIntroVariants} className="home-doc scroll-mt-28">
-        <motion.div variants={landingRevealItem} className="home-doc-title-row">
+    <section id="top" className="home-doc-shell">
+      <div id="profile" className="home-doc scroll-mt-28">
+        <div className="home-doc-title-row">
           <h1 className="home-doc-title">
             minwook shin
           </h1>
           <CommandTriggerButton />
-        </motion.div>
+        </div>
 
-        <motion.div variants={landingRevealItem}>
+        <div className="home-document-content document-content-boot">
           <HomeLeafRow intro>
             I design and build interfaces for AI native products.
           </HomeLeafRow>
-        </motion.div>
 
-        <HomeOutlineSection count={3} defaultOpen title="today">
-          <HomeLeafRow>editing this website</HomeLeafRow>
-          <HomeLeafRow>building proof-led product interfaces</HomeLeafRow>
-          <HomeLeafRow>keeping motion, code, and AI behavior in one system</HomeLeafRow>
-        </HomeOutlineSection>
+          <HomeOutlineSection count={3} defaultOpen title="today">
+            <HomeLeafRow>editing this website</HomeLeafRow>
+            <HomeLeafRow>building proof-led product interfaces</HomeLeafRow>
+            <HomeLeafRow>keeping motion, code, and AI behavior in one system</HomeLeafRow>
+          </HomeOutlineSection>
 
-        <HomeOutlineSection
-          active={activeSection === "work" || activeSection === "studies"}
-          count={projects.length}
-          defaultOpen={activeSection === "work"}
-          sectionId="work"
-          title="work"
-        >
-          <WorkSection projects={projects} />
-          <HomeLeafRow signal>
-            <HomeMetaLink href="/work">all work</HomeMetaLink>
-          </HomeLeafRow>
-        </HomeOutlineSection>
+          <HomeOutlineSection
+            active={activeSection === "work" || activeSection === "studies"}
+            count={projects.length}
+            defaultOpen={activeSection === "work"}
+            sectionId="work"
+            title="work"
+          >
+            <WorkSection projects={projects} />
+            <HomeLeafRow signal>
+              <HomeMetaLink href="/work">all work</HomeMetaLink>
+            </HomeLeafRow>
+          </HomeOutlineSection>
 
-        <HomeOutlineSection
-          active={activeSection === "studies"}
-          count={noteItems.length}
-          defaultOpen
-          sectionId="studies"
-          title="notes"
-        >
-          <OutlineListSection emptyLabel="notes are coming soon." items={noteItems} />
-          <HomeLeafRow signal>
-            <HomeMetaLink href="/notes">all notes</HomeMetaLink>
-          </HomeLeafRow>
-        </HomeOutlineSection>
+          <HomeOutlineSection
+            active={activeSection === "studies"}
+            count={noteItems.length}
+            defaultOpen
+            sectionId="studies"
+            title="notes"
+          >
+            <OutlineListSection emptyLabel="notes are coming soon." items={noteItems} />
+            <HomeLeafRow signal>
+              <HomeMetaLink href="/notes">all notes</HomeMetaLink>
+            </HomeLeafRow>
+          </HomeOutlineSection>
 
-        <HomeOutlineSection count={5} defaultOpen sectionId="contact" title="contact">
-          <ContactLensList onCopy={onCopy} />
-        </HomeOutlineSection>
+          <HomeOutlineSection count={5} defaultOpen sectionId="contact" title="contact">
+            <ContactLensList onCopy={onCopy} />
+          </HomeOutlineSection>
+        </div>
 
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 }
 
 export default function HomePage({ activeSection = "work", writingPosts }: HomePageProps) {
-  const reduceMotion = useReducedMotion();
   const currentSection = activeSection;
   const { copyText } = useCopyFeedback();
-  const [introReady, setIntroReady] = useState(false);
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS);
   const noteItems = buildNoteItems(writingPosts);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIntroReady(true), 80);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <main
@@ -725,12 +662,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
         </p>
       </section>
 
-      <motion.div
-        initial={reduceMotion ? false : "hidden"}
-        animate={introReady || reduceMotion ? "visible" : "hidden"}
-        variants={reduceMotion ? undefined : landingPageVariants}
-        className="flex-1"
-      >
+      <div className="flex-1">
         <div className="light-cursor-dark bg-[var(--bg-base)] text-[var(--text-primary)]">
           <HomeDocument
             activeSection={currentSection}
@@ -739,7 +671,7 @@ export default function HomePage({ activeSection = "work", writingPosts }: HomeP
             projects={featuredProjects}
           />
         </div>
-      </motion.div>
+      </div>
     </main>
   );
 }
