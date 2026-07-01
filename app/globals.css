@@ -48,6 +48,7 @@
   --system-accent-hover: color-mix(in srgb, var(--system-accent) 78%, var(--text-primary));
   --system-accent-soft: rgba(95, 111, 128, 0.16);
   --system-accent-faint: rgba(95, 111, 128, 0.08);
+  --selection-bg: rgba(95, 111, 128, 0.11);
   --accent-indigo: var(--system-accent);
   --accent-indigo-hover: var(--system-accent-hover);
   --accent-mono: var(--system-accent);
@@ -237,12 +238,12 @@
 
 ::selection {
   color: var(--text-primary);
-  background-color: var(--system-accent-soft);
+  background-color: var(--selection-bg);
 }
 
 ::-moz-selection {
   color: var(--text-primary);
-  background-color: var(--system-accent-soft);
+  background-color: var(--selection-bg);
 }
 
 .dom-cursor {
