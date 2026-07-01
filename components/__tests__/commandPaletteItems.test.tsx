@@ -24,16 +24,15 @@ describe("command palette items", () => {
     expect(items.slice(0, 4).map((item) => item.id)).toEqual([
       "view-work",
       "view-notes",
-      "copy-email",
       "ask-portfolio",
+      "copy-email",
     ]);
     expect(items.filter((item) => item.defaultVisible).map((item) => item.id)).toEqual([
       "view-work",
       "view-notes",
-      "copy-email",
       "ask-portfolio",
-      "jump-today",
-      "jump-contact",
+      "copy-email",
+      "open-design-system",
       "copy-current-link",
     ]);
   });
@@ -61,7 +60,7 @@ describe("command palette items", () => {
     });
 
     expect(getCurrentContext("/notes/learned-to-code-first", null, writingPosts)).toBe("note");
-    expect(getCommandSearchPlaceholder("/notes/learned-to-code-first", null, writingPosts)).toBe("search note commands");
+    expect(getCommandSearchPlaceholder("/notes/learned-to-code-first", null, writingPosts)).toBe("search note");
     expect(items.filter((item) => item.defaultVisible).map((item) => item.id)).toEqual([
       "copy-current-link",
       "view-notes",
@@ -100,8 +99,8 @@ describe("command palette items", () => {
       "atlas-capacity-state",
       "atlas-event-contract",
       "atlas-decision-log",
+      "open-design-system",
       "view-work",
-      "view-index",
     ]);
   });
 });

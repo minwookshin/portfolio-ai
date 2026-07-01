@@ -10,15 +10,18 @@ import {
   buildCommandItems,
   getCommandSearchPlaceholder,
   getCurrentContext,
+  getCurrentNote,
   getCurrentProject,
   normalizeCommandText,
 } from "@/components/commandPaletteItems";
+import type { RecentCommandItem } from "@/components/commandPaletteItems";
 import { glassLensTransition, springs, tweens } from "@/lib/material/motion";
 import type { WritingPostMeta } from "@/lib/writingTypes";
 
 const OPEN_COMMAND_EVENT = "portfolio-command:open";
 const FOLLOWUP_SENTINEL = "<<<FOLLOWUPS>>>";
 const SHOW_SENTINEL = "<<<SHOW>>>";
+const RECENT_COMMAND_STORAGE_KEY = "portfolio:recent-command";
 
 type GlobalCommandPaletteProps = {
   writingPosts: WritingPostMeta[];
@@ -56,6 +59,30 @@ function getCommandActionHint(item: CommandItem) {
   if (item.id === "ask-portfolio") return "ask";
   if (item.id === "show-shortcuts") return "?";
   return "enter";
+}
+
+function readRecentCommand(pathname: string): RecentCommandItem | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem(RECENT_COMMAND_STORAGE_KEY);
+    if (!raw) return null;
+    const item = JSON.parse(raw) as RecentCommandItem;
+    if (!item.href || !item.title || item.href === pathname) return null;
+    return item;
+  } catch {
+    return null;
+  }
+}
+
+function writeRecentCommand(item: RecentCommandItem | null) {
+  if (typeof window === "undefined" || !item) return;
+
+  try {
+    window.localStorage.setItem(RECENT_COMMAND_STORAGE_KEY, JSON.stringify(item));
+  } catch {
+    // localStorage can be unavailable in private contexts; the command surface still works without recents.
+  }
 }
 
 function formatCommandAssistantMessage(content: string) {
@@ -115,6 +142,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
   const [askMessages, setAskMessages] = useState<CommandChatMessage[]>([]);
   const [isAsking, setIsAsking] = useState(false);
   const [lensRect, setLensRect] = useState<{ height: number; left: number; top: number; width: number } | null>(null);
+  const [recentItem, setRecentItem] = useState<RecentCommandItem | null>(null);
   const { copyText, toast } = useCopyFeedback();
 
   const currentProject = useMemo(() => getCurrentProject(pathname), [pathname]);
@@ -126,6 +154,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     () => getCommandSearchPlaceholder(pathname, currentProject, writingPosts),
     [currentProject, pathname, writingPosts],
   );
+  const currentNote = useMemo(() => getCurrentNote(pathname, writingPosts), [pathname, writingPosts]);
 
   const push = useCallback((href: string) => {
     router.push(href);
@@ -167,8 +196,9 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     openShortcuts,
     pathname,
     push,
+    recentItem,
     writingPosts,
-  }), [askAboutPortfolio, contextLabel, copyText, currentProject, jumpToId, openShortcuts, pathname, push, writingPosts]);
+  }), [askAboutPortfolio, contextLabel, copyText, currentProject, jumpToId, openShortcuts, pathname, push, recentItem, writingPosts]);
 
   const visibleItems = useMemo(() => {
     const normalizedQuery = normalizeCommandText(query);
@@ -219,6 +249,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
     const onKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
+        setRecentItem(readRecentCommand(pathname));
         setIsOpen(true);
         setMode("commands");
         return;
@@ -230,6 +261,7 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
       }
     };
     const onOpenCommand = () => {
+      setRecentItem(readRecentCommand(pathname));
       setIsOpen(true);
       setMode("commands");
     };
@@ -240,7 +272,37 @@ export default function GlobalCommandPalette({ writingPosts }: GlobalCommandPale
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener(OPEN_COMMAND_EVENT, onOpenCommand);
     };
-  }, []);
+  }, [pathname]);
+
+  useEffect(() => {
+    const currentRecentItem = currentProject
+      ? {
+          href: pathname,
+          meta: "project",
+          title: currentProject.title.toLowerCase(),
+        }
+      : currentNote
+        ? {
+            href: pathname,
+            meta: "note",
+            title: currentNote.title.toLowerCase(),
+          }
+        : pathname === "/work"
+          ? {
+              href: pathname,
+              meta: "archive",
+              title: "work",
+            }
+          : pathname === "/notes"
+            ? {
+                href: pathname,
+                meta: "archive",
+                title: "notes",
+              }
+            : null;
+
+    writeRecentCommand(currentRecentItem);
+  }, [currentNote, currentProject, pathname]);
 
   useEffect(() => {
     if (!isOpen) return;

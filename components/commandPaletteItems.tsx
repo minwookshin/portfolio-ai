@@ -44,6 +44,12 @@ export type CommandItem = {
   title: string;
 };
 
+export type RecentCommandItem = {
+  href: string;
+  meta?: string;
+  title: string;
+};
+
 type BuildCommandItemsOptions = {
   askAboutPortfolio: () => void;
   contextLabel: string;
@@ -53,6 +59,7 @@ type BuildCommandItemsOptions = {
   openShortcuts: () => void;
   pathname: string;
   push: (href: string) => void;
+  recentItem?: RecentCommandItem | null;
   writingPosts: WritingPostMeta[];
 };
 
@@ -66,7 +73,7 @@ export function getCurrentProject(pathname: string) {
   return getProjectBySlug(decodeURIComponent(match[1])) ?? null;
 }
 
-function getCurrentNote(pathname: string, writingPosts: WritingPostMeta[]) {
+export function getCurrentNote(pathname: string, writingPosts: WritingPostMeta[]) {
   const match = pathname.match(/^\/(?:notes|writing)\/([^/?#]+)/);
   if (!match?.[1]) return null;
   const slug = decodeURIComponent(match[1]);
@@ -98,9 +105,11 @@ export function getCommandSearchPlaceholder(
   writingPosts: WritingPostMeta[] = [],
 ) {
   const note = getCurrentNote(pathname, writingPosts);
-  if (project) return `search ${project.title.toLowerCase()} commands`;
-  if (note) return "search note commands";
-  return `search ${getCurrentContext(pathname, project, writingPosts)} commands`;
+  if (project) return `search ${project.title.toLowerCase()}`;
+  if (note) return "search note";
+  if (pathname === "/work") return "search projects";
+  if (pathname === "/notes") return "search notes";
+  return `search ${getCurrentContext(pathname, project, writingPosts)}`;
 }
 
 function projectDescriptor(project: PortfolioProject) {
@@ -276,20 +285,22 @@ function getPreferredCommandIds({
   latestNote,
   orderedProjects,
   pathname,
+  recentItem,
 }: {
   currentProject: PortfolioProject | null;
   latestNote?: WritingPostMeta;
   orderedProjects: PortfolioProject[];
   pathname: string;
+  recentItem?: RecentCommandItem | null;
 }) {
   if (pathname === "/") {
     return [
       "view-work",
       "view-notes",
-      "copy-email",
       "ask-portfolio",
-      "jump-today",
-      "jump-contact",
+      recentItem ? "recent-command" : "",
+      "copy-email",
+      "open-design-system",
       "copy-current-link",
     ];
   }
@@ -297,6 +308,7 @@ function getPreferredCommandIds({
   if (pathname === "/work") {
     return [
       ...orderedProjects.slice(0, 4).map(getProjectCommandId),
+      recentItem ? "recent-command" : "",
       "copy-current-link",
       "jump-work-2026",
       "jump-work-2025",
@@ -307,6 +319,7 @@ function getPreferredCommandIds({
   if (pathname === "/notes") {
     return [
       latestNote ? `note-${latestNote.slug}` : "",
+      recentItem ? "recent-command" : "",
       "copy-current-link",
       "view-index",
       "view-work",
@@ -316,6 +329,7 @@ function getPreferredCommandIds({
   if (pathname.startsWith("/notes/") || pathname.startsWith("/writing/")) {
     return [
       "copy-current-link",
+      recentItem ? "recent-command" : "",
       "view-notes",
       "view-index",
       "view-work",
@@ -328,6 +342,7 @@ function getPreferredCommandIds({
       "atlas-capacity-state",
       "atlas-event-contract",
       "atlas-decision-log",
+      "open-design-system",
       "view-work",
       "view-index",
     ];
@@ -339,6 +354,7 @@ function getPreferredCommandIds({
       "view-index",
       "view-notes",
       "ask-portfolio",
+      "open-design-system",
     ];
   }
 
@@ -356,6 +372,7 @@ function getPreferredCommandIds({
     "copy-current-link",
     "view-work",
     "view-notes",
+    "open-design-system",
   ];
 }
 
@@ -368,6 +385,7 @@ export function buildCommandItems({
   openShortcuts,
   pathname,
   push,
+  recentItem,
   writingPosts,
 }: BuildCommandItemsOptions): CommandItem[] {
   const featuredProjects = orderProjects(MAIN_PROJECTS, FEATURED_PROJECT_IDS).filter((project) => !project.comingSoon);
@@ -481,6 +499,24 @@ export function buildCommandItems({
 
   const commandItems: CommandItem[] = [
     ...contextCommands,
+    ...(recentItem
+      ? [
+          {
+            id: "recent-command",
+            title: `recent · ${recentItem.title}`,
+            meta: recentItem.meta ?? "last opened",
+            group: "recent",
+            keywords: ["recent", "last", recentItem.title, recentItem.meta ?? ""],
+            icon: <ArrowDown />,
+            preview: {
+              title: recentItem.title,
+              meta: recentItem.meta ?? "recent",
+              body: recentItem.href,
+            },
+            action: () => push(recentItem.href),
+          },
+        ]
+      : []),
     {
       id: "view-work",
       title: "view work",
@@ -590,6 +626,20 @@ export function buildCommandItems({
       action: () => void copyText(getCommandLink(PERSONAL_INFO.resume), "resume link"),
     },
     {
+      id: "open-design-system",
+      title: "open design system",
+      meta: "tokens / grammar",
+      group: "system",
+      keywords: ["design", "system", "tokens", "grammar", "motion", "outline"],
+      icon: <FileText />,
+      preview: {
+        title: "design system",
+        meta: "tokens / grammar",
+        body: "Open the portfolio design system proof: tokens, interaction grammar, and implementation notes.",
+      },
+      action: () => push("/design-system"),
+    },
+    {
       id: "open-resume",
       title: "resume",
       meta: "pdf",
@@ -638,5 +688,6 @@ export function buildCommandItems({
     latestNote,
     orderedProjects,
     pathname,
+    recentItem,
   }));
 }
