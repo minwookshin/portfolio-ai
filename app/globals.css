@@ -1,9 +1,9 @@
 /* Industrial minimalist design tokens */
 :root {
   color-scheme: light;
-  --theme-light-bg: #FAFAFA;
+  --theme-light-bg: #F7F8F9;
   --theme-light-surface: #FFFFFF;
-  --theme-light-element: #F4F4F5;
+  --theme-light-element: #F1F2F4;
   --theme-light-ink: #1C1E22;
   --theme-light-muted: #4C4F56;
   --theme-light-faint: #70737A;
@@ -118,7 +118,7 @@
   --btn-secondary-text: var(--text-primary);
   --btn-secondary-border: var(--border-light);
   --accent: var(--text-primary);
-  --gradient-fade: rgba(250, 250, 250, 0);
+  --gradient-fade: rgba(247, 248, 249, 0);
 
   /* Material-role bridge for the existing component API. */
   --md-surface: var(--bg-base);
