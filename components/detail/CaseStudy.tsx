@@ -93,25 +93,23 @@ function SectionHead({ eyebrow, heading }: { eyebrow?: string; heading: string }
   return <DetailOutlineHeading eyebrow={eyebrow} heading={heading} headingClassName={h2Cls} />;
 }
 
-function Dot() {
-  return <span className="mt-[0.7em] h-1 w-1 shrink-0 rounded-full bg-[var(--text-muted)]" />;
-}
-
 function DetailRow({
   body,
   children,
   className = "",
   meta,
+  signal = "none",
   title,
 }: {
   body?: ReactNode;
   children?: ReactNode;
   className?: string;
   meta?: ReactNode;
+  signal?: "dot" | "none";
   title?: ReactNode;
 }) {
   return (
-    <DetailOutlineRow body={body} className={className} meta={meta} title={title}>
+    <DetailOutlineRow body={body} className={className} meta={meta} signal={signal} title={title}>
       {children}
     </DetailOutlineRow>
   );
@@ -235,14 +233,12 @@ function renderSection(
             </motion.p>
           )}
           {bullets.length > 0 && (
-            <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-3)] space-y-[var(--space-2)]">
-              {bullets.map((b) => (
-                <div key={b} className="flex items-start gap-[var(--space-1)]">
-                  <Dot />
-                  <p className="text-[length:var(--type-0)] leading-[var(--leading-body)] text-[var(--text-muted)]">{b}</p>
-                </div>
-              ))}
-            </motion.div>
+            <motion.p
+              {...(reduceMotion ? {} : { variants: heroItem })}
+              className="mt-[var(--space-2)] max-w-[var(--measure)] text-[length:calc(var(--type-0)_-_2px)] leading-[1.2] text-[var(--text-muted)]"
+            >
+              {bullets.join(" · ")}
+            </motion.p>
           )}
           {tags.length > 0 && <motion.div {...(reduceMotion ? {} : { variants: heroItem })} className="mt-[var(--space-3)]"><Tags tags={tags} /></motion.div>}
           {section.image && (
@@ -302,10 +298,7 @@ function renderSection(
               <DetailRow meta={section.persona.role} title={section.persona.name}>
                 <div className="detail-outline-nested-list">
                   {section.persona.points.map((p) => (
-                    <div key={p} className="flex items-start gap-[var(--space-1)]">
-                      <Dot />
-                      <p className="text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-primary)]">{p}</p>
-                    </div>
+                    <p key={p} className="text-[length:calc(var(--type-0)_-_2px)] leading-[var(--leading-body)] text-[var(--text-primary)]">{p}</p>
                   ))}
                 </div>
               </DetailRow>

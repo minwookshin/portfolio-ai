@@ -676,7 +676,7 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
         <DetailOutlineHeading heading="short reflection" />
         <div className="detail-outline-list">
           {ATLAS_REFLECTION.map((line) => (
-            <DetailOutlineRow key={line} body={line} />
+            <DetailOutlineRow key={line} body={line} signal="none" />
           ))}
         </div>
       </section>

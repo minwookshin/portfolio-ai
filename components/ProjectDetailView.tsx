@@ -218,7 +218,7 @@ function BuilderProofSummary({ proof }: { proof: BuilderProof }) {
 function DetailNote({ eyebrow, body }: { eyebrow: string; body: ReactNode }) {
   return (
     <section className="detail-outline-section detail-outline-section--compact">
-      <DetailOutlineRow body={body} bodyClassName="detail-outline-row-body--primary" title={eyebrow} />
+      <DetailOutlineRow body={body} bodyClassName="detail-outline-row-body--primary" signal="none" title={eyebrow} />
     </section>
   );
 }
@@ -237,6 +237,7 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
             key={`${title}-${item.label}`}
             body={isVisibleBuilderValue(item.note) ? item.note : undefined}
             meta={item.label}
+            signal="none"
             title={item.value}
           />
         ))}

@@ -65,6 +65,7 @@ type DetailOutlineRowProps = {
   children?: ReactNode;
   className?: string;
   meta?: ReactNode;
+  signal?: "dot" | "none";
   title?: ReactNode;
 };
 
@@ -74,11 +75,16 @@ export function DetailOutlineRow({
   children,
   className = "",
   meta,
+  signal = "dot",
   title,
 }: DetailOutlineRowProps) {
   return (
-    <div className={`detail-outline-row ${className}`}>
-      <OutlineSignalCell />
+    <div className={`detail-outline-row ${signal === "none" ? "detail-outline-row--no-signal" : ""} ${className}`}>
+      {signal === "dot" ? (
+        <OutlineSignalCell />
+      ) : (
+        <span className="detail-outline-bullet-cell detail-outline-bullet-cell--empty" aria-hidden="true" />
+      )}
       <div className="detail-outline-row-copy">
         {(title || meta) && (
           <p className="detail-outline-row-line">

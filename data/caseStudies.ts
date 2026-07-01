@@ -183,11 +183,11 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "hero",
         badge: "Winner / Google x SCAD FLUX 2025",
         title: "Sentinel",
-        subtitle: "A 48-hour SwiftUI MVP that turns weather risk into prioritized homeowner actions.",
+        subtitle: "A native iOS MVP that turns weather risk into one next action.",
         bullets: [
-          "Design engineer, solo build",
+          "Design engineer",
           "Native iOS prototype",
-          "Shipped in one weekend",
+          "48-hour build",
         ],
         tags: ["SwiftUI", "iOS", "Climate Risk"],
         image: "/projects/sentinel/main.png",
@@ -196,7 +196,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "stats",
         eyebrow: "Proof",
-        heading: "Fast enough to be real",
+        heading: "Built fast, shipped real",
         items: [
           { value: "48h", label: "Hackathon build" },
           { value: "SwiftUI", label: "Native MVP" },
@@ -206,22 +206,22 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "split",
         eyebrow: "What mattered",
-        heading: "Priority over dashboards",
+        heading: "Priority over dashboard",
         columns: [
           {
             label: "Role",
             title: "Designed and built",
-            body: "I moved from interface structure to native SwiftUI implementation inside the same sprint.",
+            body: "I took the product from structure to SwiftUI in one sprint.",
           },
           {
             label: "Decision",
             title: "One next action",
-            body: "The app does not ask homeowners to read a dashboard. It tells them what needs attention.",
+            body: "The app tells homeowners what needs attention now.",
           },
           {
             label: "Result",
             title: "A public MVP",
-            body: "Demo, source, and public post make the sprint verifiable without overexplaining it.",
+            body: "Demo, source, and post make the sprint verifiable.",
           },
         ],
       },
@@ -240,8 +240,8 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Outcome",
         heading: "Outcome",
         body: [
-          "Sentinel is strongest as a shipped log: a native prototype, built fast, with a clear risk-to-action loop.",
-          "The next version would make the risk model more inspectable without turning the app into analytics software.",
+          "Sentinel is a shipped log: native prototype, clear loop, public proof.",
+          "Next: make the risk model inspectable without turning the app into analytics software.",
         ],
       },
     ],
@@ -257,9 +257,9 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "hero",
         badge: "AI website + agent system",
         title: "Portfolio AI",
-        subtitle: "A live portfolio system that answers questions, routes intent, and exposes public proof.",
+        subtitle: "A portfolio that answers questions, routes intent, and opens proof.",
         bullets: [
-          "Design engineer, solo build",
+          "Design engineer",
           "AI as utility layer",
           "Live site and public repo",
         ],
@@ -280,7 +280,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "lead",
         eyebrow: "Position",
         heading: "AI should move the visitor, not perform for them",
-        body: "The assistant is not the homepage. It is a command utility inside the portfolio: ask, route, copy, open proof.",
+        body: "The assistant is a command utility: ask, route, copy, open proof.",
       },
       {
         kind: "split",
@@ -290,12 +290,12 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
           {
             label: "Command",
             title: "Search, ask, route",
-            body: "Command-K stays compact, but it gives the site a control layer.",
+            body: "Command-K gives the site a compact control layer.",
           },
           {
             label: "Proof",
             title: "Readable by people and models",
-            body: "The site exposes work, resume data, tokens, and markdown as public routes.",
+            body: "Work, resume data, tokens, and markdown stay open as routes.",
           },
         ],
       },
@@ -326,7 +326,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Outcome",
         heading: "A portfolio that behaves like software",
         body: [
-          "Portfolio AI is strongest as a live system: quiet UI, command layer, public proof, and AI kept in its place.",
+          "Portfolio AI is a live system: quiet UI, command layer, public proof, bounded AI.",
         ],
       },
     ],
@@ -340,7 +340,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "hero",
         badge: "Product design / UX research",
         title: "Mindline",
-        subtitle: "A behavioral AI concept about awareness before restriction.",
+        subtitle: "A behavioral AI concept for awareness before restriction.",
         bullets: [
           "Product designer and UX researcher",
           "6 interviews",
@@ -359,7 +359,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
           { tag: "02", title: "Find the pattern", body: "The system looks for repeated context: social pressure, stress, timing." },
           { tag: "03", title: "Offer one next step", body: "The product suggests a pause, reflection, or support action." },
         ],
-        note: "The direction is awareness first. Blocking can be useful, but it cannot be the whole product.",
+        note: "Awareness first. Blocking is useful, but not the whole product.",
       },
       {
         kind: "gallery",
@@ -377,8 +377,8 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         badge: "Reflection",
         heading: "Reasoning over polish",
         body: [
-          "Mindline is strongest as product thinking: a careful loop around emotion, context, and intervention timing.",
-          "It should stay honest about its boundary. This is a concept, not a clinical claim.",
+          "Mindline is product thinking: emotion, context, intervention timing.",
+          "It stays honest about the boundary: concept, not clinical claim.",
         ],
       },
     ],
@@ -391,7 +391,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "FLUX Website",
-        subtitle: "An interactive event platform built around a grid-based layout and bespoke micro-interactions.",
+        subtitle: "An event website built around grid navigation and small interactions.",
         bullets: [
           "Website Officer",
           "Vanilla HTML, CSS & JavaScript",
@@ -411,8 +411,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "lead",
         eyebrow: "Overview",
         heading: "Interaction-led, framework-free",
-        body:
-          "FLUX is a creative web project showcasing innovative UI/UX through an interactive grid-based layout. Built without heavy frameworks, it leans on a unique circular navigation system, smooth animations, and responsive design to make browsing feel playful.",
+        body: "A framework-free event site with circular navigation, responsive grids, and light motion.",
         ask: ["Why vanilla JS over a framework?", "How did you do the animations?"],
       },
     ],
@@ -424,7 +423,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "CapExplorer",
-        subtitle: "A website for exploring caps.",
+        subtitle: "A small product demo for exploring caps.",
         tags: ["Web", "UI/UX Design"],
       },
       {
@@ -442,7 +441,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "Tomo",
-        subtitle: "Interactive demo.",
+        subtitle: "A small interactive product demo.",
         tags: ["Product Design"],
       },
       {
@@ -460,7 +459,7 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       {
         kind: "hero",
         title: "Caret",
-        subtitle: "An iOS-style team wellbeing app concept exploring burnout signals, presented through a public web prototype.",
+        subtitle: "An iOS-style team wellbeing concept for burnout signals.",
         tags: ["Team Wellbeing", "iOS-style UX", "Web Prototype"],
       },
       {
