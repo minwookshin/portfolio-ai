@@ -61,7 +61,6 @@ export default function ArchiveIndexPage({
   const totalCount = sections.reduce((count, section) => count + section.entries.length, 0);
   const entries = sections.flatMap((section) => section.entries);
   const archiveKind = itemLabel === "notes" ? "notes" : itemLabel === "systems" ? "systems" : "work";
-  const rowIsPlain = archiveKind === "work";
   const rowUsesSignal = archiveKind !== "notes";
 
   return (
@@ -114,17 +113,15 @@ export default function ArchiveIndexPage({
                         <li key={entry.id} className="archive-item">
                           <Link
                             href={entry.href}
-                            className={`archive-row${rowIsPlain ? " archive-row--plain" : rowUsesSignal ? "" : " archive-row--quiet"} micro-focus micro-focus-tight`}
+                            className={`archive-row${rowUsesSignal ? "" : " archive-row--quiet"} micro-focus micro-focus-tight`}
                           >
-                            {!rowIsPlain && (
-                              <OutlineSignalCell
-                                arrow={rowUsesSignal ? "right" : undefined}
-                                arrowClassName="archive-row-signal"
-                                cellClassName="archive-bullet-cell"
-                                dotClassName="archive-row-bullet"
-                                rightArrowClassName="site-signal-icon"
-                              />
-                            )}
+                            <OutlineSignalCell
+                              arrow={rowUsesSignal ? "right" : undefined}
+                              arrowClassName="archive-row-signal"
+                              cellClassName="archive-bullet-cell"
+                              dotClassName="archive-row-bullet"
+                              rightArrowClassName="site-signal-icon"
+                            />
                             <span className="archive-row-title">{entry.title}</span>
                             {entry.description && (
                               <span className="archive-row-description">{entry.description}</span>
