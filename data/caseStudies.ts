@@ -181,106 +181,71 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
     sections: [
       {
         kind: "hero",
-        badge: "Winner · Google × SCAD FLUX 2025",
+        badge: "Winner / Google x SCAD FLUX 2025",
         title: "Sentinel",
-        subtitle: "Predictive home maintenance powered by climate-risk AI.",
+        subtitle: "A 48-hour SwiftUI MVP that turns weather risk into prioritized homeowner actions.",
         bullets: [
-          "Design Engineer — designed & built",
-          "48-hour hackathon sprint",
-          "Native iOS (Swift + SwiftUI)",
+          "Design engineer, solo build",
+          "Native iOS prototype",
+          "Shipped in one weekend",
         ],
-        tags: ["Swift", "SwiftUI", "Climate Data", "Predictive ML"],
+        tags: ["SwiftUI", "iOS", "Climate Risk"],
         image: "/projects/sentinel/main.png",
         imageStyle: "phone",
       },
       {
         kind: "stats",
-        eyebrow: "Recruiter proof",
-        heading: "Built fast, shipped native, publicly verifiable",
+        eyebrow: "Proof",
+        heading: "Fast enough to be real",
         items: [
           { value: "48h", label: "Hackathon build" },
-          { value: "SwiftUI", label: "Native iOS MVP" },
-          { value: "Public repo", label: "Source-code proof" },
+          { value: "SwiftUI", label: "Native MVP" },
+          { value: "1st", label: "Place" },
         ],
-      },
-      {
-        kind: "problem",
-        eyebrow: "The problem",
-        heading: "Homeowners manage their biggest asset on gut feeling",
-        body:
-          "Climate volatility is the new normal, and invisible risks get ignored until they become $200,000 disasters. A $100 inspection skipped today becomes catastrophic failure tomorrow, reactive crisis management instead of prevention.",
-        stats: [
-          { value: "$200K+", label: "Storm damage ignored" },
-          { value: "$100", label: "Basic inspection" },
-        ],
-        persona: {
-          name: "Alex, 35",
-          role: "Doctor · New homeowner",
-          points: [
-            "Moved into a 2010 home",
-            "Worries about hidden storm damage",
-            "Wants to stop guessing and start preventing",
-          ],
-        },
-        ask: ["Who is Sentinel built for?", "How big is the risk really?"],
       },
       {
         kind: "split",
-        eyebrow: "The build",
-        heading: "From design to code, by one person",
+        eyebrow: "What mattered",
+        heading: "Priority over dashboards",
         columns: [
           {
-            label: "Designed in Figma",
-            title: "Rapid visual prototyping",
-            body:
-              "Risk-visualization interfaces designed under extreme time constraints, clarity and emotional weight for high-stakes decisions.",
+            label: "Role",
+            title: "Designed and built",
+            body: "I moved from interface structure to native SwiftUI implementation inside the same sprint.",
           },
           {
-            label: "Engineered in Swift",
-            title: "Native iOS implementation",
-            body:
-              "A vulnerability-scoring engine in Swift + SwiftUI, fed by historical weather data to compute predictive risk scores in real time.",
+            label: "Decision",
+            title: "One next action",
+            body: "The app does not ask homeowners to read a dashboard. It tells them what needs attention.",
+          },
+          {
+            label: "Result",
+            title: "A public MVP",
+            body: "Demo, source, and public post make the sprint verifiable without overexplaining it.",
           },
         ],
-        ask: ["Why native Swift over React Native?", "How do you go from Figma to code?"],
       },
       {
-        kind: "features",
-        eyebrow: "The work",
-        heading: "Three pillars of predictive maintenance",
-        items: [
-          {
-            title: "Historical risk timeline",
-            description:
-              "Visualize past weather events and their financial impact on the property, so risk feels concrete instead of abstract.",
-            image: "/projects/sentinel/historical-timeline.png",
-          },
-          {
-            title: "Weather alerts & forecasting",
-            description:
-              "Real-time alerts and climate forecasting to prepare for incoming storms and extreme-weather events before they hit.",
-            image: "/projects/sentinel/weather-alerts.png",
-          },
-          {
-            title: "Actionable maintenance tasks",
-            description:
-              "A prioritized checklist of preventive actions ranked by risk severity and urgency, guesswork replaced with a plan.",
-            image: "/projects/sentinel/recommended-actions.png",
-          },
+        kind: "gallery",
+        eyebrow: "Screens",
+        heading: "Risk, alerts, actions",
+        images: [
+          { src: "/projects/sentinel/historical-timeline.png", caption: "Historical risk timeline" },
+          { src: "/projects/sentinel/weather-alerts.png", caption: "Weather alerts" },
+          { src: "/projects/sentinel/recommended-actions.png", caption: "Recommended actions" },
         ],
-        ask: ["How does the risk scoring work?"],
       },
       {
         kind: "outcome",
-        badge: "Winner · 1st place",
+        badge: "Outcome",
         heading: "Outcome",
         body: [
-          "Shipped a fully functional iOS MVP in a 48-hour sprint, validating predictive maintenance through real climate-data integration and user testing.",
-          "Won 1st place at the Google × SCAD FLUX Hackathon 2025, proof that climate-risk analytics can be turned into a usable, native homeowner tool, fast.",
+          "Sentinel is strongest as a shipped log: a native prototype, built fast, with a clear risk-to-action loop.",
+          "The next version would make the risk model more inspectable without turning the app into analytics software.",
         ],
       },
     ],
-    ask: ["What did 48 hours teach you?", "Why did you build this?", "What would you add next?"],
+    ask: ["What did 48 hours teach you?", "What would you add next?"],
   },
 
   // Portfolio AI, text/metric-driven. This site is its own live studio demo:
@@ -292,96 +257,61 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
         kind: "hero",
         badge: "AI website + agent system",
         title: "Portfolio AI",
-        subtitle: "An AI-native studio site that turns passive browsing into a live project briefing.",
+        subtitle: "A live portfolio system that answers questions, routes intent, and exposes public proof.",
         bullets: [
-          "Design Engineer — designed & built solo",
-          "Token-by-token streaming responses",
-          "Project-intake flow wired to real case studies",
+          "Design engineer, solo build",
+          "AI as utility layer",
+          "Live site and public repo",
         ],
-        tags: ["Next.js", "React", "Gemini API", "TypeScript", "AI UX"],
+        tags: ["Next.js", "React", "TypeScript", "AI UX"],
         hideMedia: true,
       },
       {
         kind: "stats",
-        eyebrow: "Recruiter proof",
-        heading: "A live portfolio, source repo, and AI-readable system",
+        eyebrow: "Proof",
+        heading: "The website is the prototype",
         items: [
           { value: "Live", label: "Production site" },
-          { value: "Public repo", label: "Source-code proof" },
-          { value: "3", label: "AI-readable routes" },
+          { value: "Public repo", label: "Source" },
+          { value: "Docs", label: "AI-readable routes" },
         ],
       },
       {
         kind: "lead",
-        eyebrow: "The problem",
-        heading: "Static portfolios do not qualify intent",
-        body:
-          "Most portfolio sites make visitors do the work: skim thumbnails, guess relevance, and hunt for proof. Portfolio AI behaves more like a studio strategist, answering questions, identifying what someone wants to build, and opening the most relevant project evidence.",
-        ask: ["Why make the site conversational?"],
+        eyebrow: "Position",
+        heading: "AI should move the visitor, not perform for them",
+        body: "The assistant is not the homepage. It is a command utility inside the portfolio: ask, route, copy, open proof.",
       },
       {
         kind: "split",
-        eyebrow: "Product proof",
-        heading: "The site behaves like a small product system",
+        eyebrow: "System",
+        heading: "Small OS, not chatbot decoration",
         columns: [
           {
-            label: "Intake",
-            title: "Conversation qualifies the visitor's intent",
-            body:
-              "Visitors can ask for an AI website, UX audit, product prototype, or case study. The response stays conversational, but it is backed by a clear intake path.",
+            label: "Command",
+            title: "Search, ask, route",
+            body: "Command-K stays compact, but it gives the site a control layer.",
           },
           {
-            label: "Routing",
-            title: "Project evidence opens deterministically",
-            body:
-              "The chat can route people to the right case study without exposing implementation details. It feels like a dialogue, while navigation remains predictable.",
-          },
-        ],
-        ask: ["How does the intake flow work?", "How do you keep the API key safe?"],
-      },
-      {
-        kind: "flow",
-        eyebrow: "What it demonstrates",
-        heading: "Taste, system thinking, and applied AI in one surface",
-        steps: [
-          {
-            title: "Live AI interface",
-            body: "Streaming responses, scoped system prompts, and guarded project routing are part of the actual portfolio experience.",
-          },
-          {
-            title: "Evidence-first navigation",
-            body: "The interface points recruiters and collaborators to concrete work instead of making the AI the whole product.",
-          },
-          {
-            title: "Machine-readable system",
-            body: "Portfolio content, resume data, LLM instructions, design tokens, and interaction rules are exposed as public routes.",
+            label: "Proof",
+            title: "Readable by people and models",
+            body: "The site exposes work, resume data, tokens, and markdown as public routes.",
           },
         ],
       },
       {
-        kind: "gallery",
-        eyebrow: "Under the hood",
-        heading: "System architecture",
-        images: [{ src: "/projects/portfolio-ai/architecture.png", caption: "Client → Next.js API route → Gemini, streamed back over SSE" }],
-      },
-      {
-        kind: "split",
-        eyebrow: "System proof",
-        heading: "AI-readable interface primitives, not just a page",
-        columns: [
-          {
-            label: "Design tokens",
-            title: "Roles instead of decoration",
-            body:
-              "Color, type, spacing, radius, and motion roles are documented so new UI can be generated from the same quiet system.",
-          },
-          {
-            label: "Interaction contract",
-            title: "Rules an LLM can follow",
-            body:
-              "Component primitives, accessibility rules, reduced-motion behavior, and AI usage limits are exposed as public docs.",
-          },
-        ],
+        kind: "artifact",
+        eyebrow: "Contract",
+        heading: "The AI layer is bounded",
+        title: "Portfolio command",
+        meta: "system sketch",
+        code: [
+          "type PortfolioCommand =",
+          "  | { intent: 'view.work'; target: ProjectSlug }",
+          "  | { intent: 'copy.email' }",
+          "  | { intent: 'ask.portfolio'; query: string };",
+        ].join("\n"),
+        caption: "A sketch of the interaction contract behind the command surface.",
       },
       {
         kind: "links",
@@ -393,15 +323,14 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
       },
       {
         kind: "outcome",
-        badge: "Impact",
-        heading: "Turning a portfolio into an agency-style lead flow",
+        badge: "Outcome",
+        heading: "A portfolio that behaves like software",
         body: [
-          "Delivered a streaming AI interface that shows design taste, frontend craft, and applied AI in one live product.",
-          "Reframed the portfolio as a working studio demo: visitors can explore the work, ask about capabilities, and start a project brief from the same surface.",
+          "Portfolio AI is strongest as a live system: quiet UI, command layer, public proof, and AI kept in its place.",
         ],
       },
     ],
-    ask: ["What model runs this?", "How do you stop it hallucinating?", "What was the hardest part?"],
+    ask: ["How does the command layer work?", "How do you keep AI bounded?"],
   },
 
   // Mindline
@@ -409,97 +338,51 @@ export const CASE_STUDIES: Record<string, CaseStudyData> = {
     sections: [
       {
         kind: "hero",
-        badge: "Product Design · UX Research",
+        badge: "Product design / UX research",
         title: "Mindline",
-        subtitle: "Breaking the cycle, AI-powered intervention for betting addiction.",
+        subtitle: "A behavioral AI concept about awareness before restriction.",
         bullets: [
-          "Product Designer & UX Researcher",
-          "10-week research & design sprint",
-          "Target: young adults, 18–26",
+          "Product designer and UX researcher",
+          "6 interviews",
+          "Concept prototype",
         ],
-        tags: ["AI Chatbot", "Behavioral Psychology", "Real-time Intervention"],
+        tags: ["AI UX", "Product Thinking", "Behavioral Design"],
         image: "/projects/mindline/log.png",
         imageStyle: "phone",
       },
       {
-        kind: "problem",
-        eyebrow: "The problem",
-        heading: "A silent epidemic among young adults",
-        body:
-          "Young adults (18–26) face betting addiction fueled by mobile accessibility and aggressive marketing. The blocking tools meant to help are ineffective, users bypass them within minutes.",
-        stats: [
-          { value: "6", label: "In-depth interviews" },
-          { value: "18–26", label: "Target age range" },
-        ],
-        ask: ["Why focus on awareness, not blocking?"],
-      },
-      {
-        kind: "quote",
-        text:
-          "Social environments and peer pressure are the primary triggers for relapse. We need real-time intervention, not reactive restriction.",
-        attribution: "Dr. Kristen Adams, Clinical Psychologist",
-      },
-      {
-        kind: "features",
-        eyebrow: "The solution",
-        heading: "Three pillars of intervention",
-        items: [
-          {
-            title: "Personalized AI suggestions",
-            description:
-              "When high-risk triggers surface, the AI offers contextual strategies, set a pause timer, mute bet triggers during social events, reflect on past patterns, tailored to the user's emotional state.",
-            image: "/projects/mindline/suggestion.png",
-          },
-          {
-            title: "Emotional reflection journaling",
-            description:
-              "After an urge or relapse, users document the emotional journey through guided reflection, building a history that feeds the AI's pattern recognition.",
-            image: "/projects/mindline/emotionalreflection.png",
-          },
-          {
-            title: "AI-powered pattern insights",
-            description:
-              "Machine learning surfaces recurring triggers, 'high-energy social settings', 'post-work stress', so users recognize warning signs before they escalate.",
-            image: "/projects/mindline/insight.png",
-          },
-        ],
-        ask: ["How does the AI detect triggers?"],
-      },
-      {
         kind: "flow",
-        eyebrow: "How it works",
-        heading: "Emotion → analysis → action",
+        eyebrow: "Loop",
+        heading: "Notice, reflect, intervene",
         steps: [
-          { tag: "User action", title: "Emotion input", body: "The user logs an emotional state, 'anxious' or 'excited', in the moment." },
-          { tag: "Pattern recognition", title: "AI analysis", body: "The system cross-references past patterns and detects a high-risk signal like a social betting trigger." },
-          { tag: "Real-time action", title: "Intervention", body: "It suggests a concrete step, activate a pause timer or reach a support line, before the impulse acts." },
+          { tag: "01", title: "Name the state", body: "The user logs the emotion before it becomes an action." },
+          { tag: "02", title: "Find the pattern", body: "The system looks for repeated context: social pressure, stress, timing." },
+          { tag: "03", title: "Offer one next step", body: "The product suggests a pause, reflection, or support action." },
         ],
-        note:
-          "Unlike blockers that users bypass within minutes, Mindline uses behavioral psychology and real-time pattern recognition to interrupt the dopamine loop before impulsive action occurs.",
-        ask: ["What did the research uncover?"],
+        note: "The direction is awareness first. Blocking can be useful, but it cannot be the whole product.",
       },
       {
         kind: "gallery",
-        eyebrow: "More of the product",
-        heading: "Supporting tools",
+        eyebrow: "Screens",
+        heading: "The concept in four surfaces",
         images: [
-          { src: "/projects/mindline/ai.png", caption: "AI conversational support" },
-          { src: "/projects/mindline/calendar.png", caption: "Progress calendar of emotional states" },
-          { src: "/projects/mindline/shorts.png", caption: "Social context awareness with photo logging" },
-          { src: "/projects/mindline/main.png", caption: "Supportive onboarding, 'bet on yourself'" },
+          { src: "/projects/mindline/suggestion.png", caption: "Personalized suggestion" },
+          { src: "/projects/mindline/emotionalreflection.png", caption: "Emotional reflection" },
+          { src: "/projects/mindline/insight.png", caption: "Pattern insight" },
+          { src: "/projects/mindline/calendar.png", caption: "Progress calendar" },
         ],
       },
       {
         kind: "outcome",
-        badge: "Project impact",
-        heading: "Outcome & reflection",
+        badge: "Reflection",
+        heading: "Reasoning over polish",
         body: [
-          "Mindline shifts the paradigm from restriction to awareness. 6 research interviews surfaced trigger patterns around emotional states, social pressure, and relapse timing.",
-          "Rather than blocking access, which users bypass within minutes, it builds self-awareness, real-time emotional analysis, and proactive intervention: the foundation for sustainable behavioral change.",
+          "Mindline is strongest as product thinking: a careful loop around emotion, context, and intervention timing.",
+          "It should stay honest about its boundary. This is a concept, not a clinical claim.",
         ],
       },
     ],
-    ask: ["What was your exact role?", "How did you validate it?", "What would you change?"],
+    ask: ["What did the research change?", "What would you build next?"],
   },
 
   // FLUX Website, concise snapshot (limited authored content for now)
