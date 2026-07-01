@@ -72,6 +72,7 @@ export default function ArchiveIndexPage({
               minwook shin
             </Link>
             <CommandTriggerButton />
+            <span className="root-index-hint" aria-hidden="true">· index</span>
           </div>
         </nav>
 
