@@ -9613,6 +9613,11 @@ button.atlas-state-dot {
   text-transform: none !important;
 }
 
+.site-lowercase .project-ui-artifact,
+.site-lowercase .project-ui-artifact :is(p, h1, h2, h3, h4, h5, h6, a, button, span, input, textarea, li, figcaption, code, pre, blockquote, label, text) {
+  text-transform: none !important;
+}
+
 @media (hover: hover) and (pointer: fine) {
   html.dom-cursor-enabled,
   html.dom-cursor-enabled body,
