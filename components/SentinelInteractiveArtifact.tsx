@@ -10,6 +10,7 @@ import {
   Clock3,
   Home,
   House,
+  ListChecks,
   Plus,
   RefreshCw,
   Search,
@@ -23,9 +24,9 @@ import { tweens } from "@/lib/material/motion";
 type TaskFilter = "all" | "active" | "completed";
 
 const riskStats = [
-  { icon: House, label: "Property", tone: "green", value: 48 },
-  { icon: Clock3, label: "History", tone: "orange", value: 100 },
-  { icon: Zap, label: "Forecast", tone: "red", value: 60 },
+  { icon: House, label: "Property Risk", tone: "green", value: 48 },
+  { icon: Clock3, label: "Historical Exposure", tone: "orange", value: 100 },
+  { icon: Zap, label: "Forecast Severity", tone: "red", value: 60 },
 ] as const;
 
 const recommendedActions: Array<{
@@ -89,18 +90,29 @@ function SentinelStatusBar({ time }: { time: string }) {
 }
 
 function SentinelTabbar({ active }: { active: "Dashboard" | "Tasks" | "History" | "Profile" }) {
+  const items = [
+    { icon: Home, label: "Dashboard" },
+    { icon: ListChecks, label: "Tasks" },
+    { icon: Clock3, label: "History" },
+    { icon: House, label: "Profile" },
+  ] as const;
+
   return (
     <nav className="sentinel-ui-tabbar" aria-label="Sentinel tabs">
-      {["Dashboard", "Tasks", "History", "Profile"].map((item) => (
+      {items.map((item) => {
+        const Icon = item.icon;
+        return (
         <button
-          key={item}
+          key={item.label}
           type="button"
           className="micro-focus micro-pressable"
-          data-active={active === item ? "true" : undefined}
+          data-active={active === item.label ? "true" : undefined}
         >
-          {item}
+          <Icon size={18} />
+          <span>{item.label}</span>
         </button>
-      ))}
+        );
+      })}
     </nav>
   );
 }
@@ -166,7 +178,10 @@ function DashboardScene({
         onClick={onToggleAlert}
       >
         <AlertTriangle size={26} />
-        <span>Detailed mitigation plan for 516 Drayton St.</span>
+        <span>
+          <strong>Here is a detailed, actionable mitigation plan for your property at 516 Drayton St.</strong>
+          <em>Savannah, GA 31401</em>
+        </span>
         <strong aria-hidden="true">›</strong>
       </button>
 
@@ -323,7 +338,14 @@ function WeatherTimelineScene() {
         <span aria-hidden="true" />
         <div>
           <strong>Heavy rainfall</strong>
-          <p>Flash flooding increased risk near the property.</p>
+          <p>Heavy rainfall led to flash flooding.</p>
+        </div>
+      </div>
+      <div className="sentinel-ui-timeline sentinel-ui-timeline--green">
+        <span aria-hidden="true" />
+        <div>
+          <strong>Hailstorm</strong>
+          <p>Severe thunderstorm with golf ball-sized hail.</p>
         </div>
       </div>
       <div className="sentinel-ui-weather-card sentinel-ui-weather-card--alert">
