@@ -92,7 +92,7 @@ export function PortfolioAiInteractiveArtifact() {
               {activeCommand.label}
             </div>
             <div className="portfolio-chat-ui__bubble">
-              i route visitors to the right proof instead of turning the site into a chatbot.
+              i route visitors to the right project instead of turning the site into a chatbot.
             </div>
             <label className="portfolio-chat-ui__input">
               <span>ask about this portfolio</span>
