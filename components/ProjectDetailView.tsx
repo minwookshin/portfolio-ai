@@ -245,7 +245,7 @@ function MetricGrid({ title, items }: { title: string; items: BuilderProof["scop
 
   return (
     <section className="detail-outline-section detail-outline-section--compact">
-      <DetailOutlineHeading heading={title} />
+      <DetailOutlineHeading heading={title} signal="none" />
       <div className="detail-outline-list detail-outline-list--grid">
         {visibleItems.map((item) => (
           <DetailOutlineRow
