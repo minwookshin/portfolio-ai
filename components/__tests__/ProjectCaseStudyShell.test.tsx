@@ -94,20 +94,26 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("· json")).toBeInTheDocument();
   });
 
-  it("renders Atlas as an artifact-led case study template", () => {
+  it("renders Atlas as an artifact-led case study template", async () => {
+    const user = userEvent.setup();
     render(<ProjectCaseStudyShell project={getWorkProject("atlas")} />);
 
     expect(screen.getByRole("heading", { name: "atlas / 2026 / ai triage prototype system" })).toBeInTheDocument();
-    expect(screen.getByText("artifact grid")).toBeInTheDocument();
+    expect(screen.queryByText("artifact grid")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Atlas interface board")).toBeInTheDocument();
+    expect(screen.getByLabelText("Atlas incident command interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Atlas emergency room interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Atlas field responder interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Atlas instruction interface")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance hospital load" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "toggle Atlas rail" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "show Hospitals" }));
     expect(screen.getByRole("button", { name: "assign selected hospital" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance patient row state" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
-    expect(screen.getAllByText("event contract")).toHaveLength(2);
-    expect(screen.getByText("system sketch")).toBeInTheDocument();
-    expect(screen.getByLabelText("triage map tile")).toBeInTheDocument();
-    expect(screen.getByLabelText("patient row tile")).toBeInTheDocument();
+    expect(screen.getAllByText("event contract")).toHaveLength(1);
+    expect(screen.getAllByText("system sketch")).toHaveLength(2);
+    expect(screen.queryByLabelText("triage map tile")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("patient row tile")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "patient.assigned" })).toBeInTheDocument();
     expect(screen.queryByLabelText("triage map tile, selected")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "copy capacity state section link" })).not.toBeInTheDocument();

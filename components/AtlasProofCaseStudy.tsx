@@ -9,10 +9,7 @@ import {
   ATLAS_EVENT_CONTRACTS,
   ATLAS_INTRO,
   ATLAS_META,
-  ATLAS_PATIENT_IMAGES,
   ATLAS_REFLECTION,
-  ATLAS_TRIAGE_SEQUENCE,
-  type AtlasImageItem,
 } from "@/data/atlasProof";
 import type { PortfolioProject } from "@/data/projects";
 import { tweens } from "@/lib/material/motion";
@@ -153,24 +150,6 @@ const patientRowStates = [
   },
 ] as const;
 
-const incidentFrames = [
-  {
-    alt: "Incident command hospital assignment screen from Atlas",
-    label: "assign",
-    src: "/projects/atlas/ic-map.png",
-  },
-  {
-    alt: "Incident command quick send instruction screen from Atlas",
-    label: "quick send",
-    src: "/projects/atlas/ic-quick-send.png",
-  },
-  {
-    alt: "Incident command patient status screen from Atlas",
-    label: "patient status",
-    src: "/projects/atlas/ic-patient-detail.png",
-  },
-] as const;
-
 function getCapacityState(load: number): CapacityState {
   if (load >= 82) {
     return {
@@ -201,178 +180,84 @@ function getCapacityState(load: number): CapacityState {
   };
 }
 
-function AtlasTile({
-  artifactType,
-  caption,
+function AtlasVisualTile({
   children,
   className = "",
   id,
   label,
-  title,
 }: {
-  artifactType: "code" | "context" | "live" | "scan" | "sequence";
-  caption: string;
   children: React.ReactNode;
   className?: string;
   id?: string;
-  label?: string;
-  title: string;
+  label: string;
 }) {
   return (
     <article
       id={id}
       className={`atlas-proof-tile ${className}`}
-      aria-label={`${title} tile`}
+      aria-label={label}
     >
       <div className="atlas-proof-tile__body">{children}</div>
-      <div className="atlas-proof-tile__copy">
-        <div className="atlas-proof-tile__title-row">
-          <p className="atlas-proof-tile__title">
-            {title}
-            {label && <span>{label}</span>}
-          </p>
-          <span className="atlas-proof-tile__type">{artifactType}</span>
-        </div>
-        <p className="atlas-proof-tile__caption">{caption}</p>
-      </div>
     </article>
   );
 }
 
-function AtlasImageSequence({ images }: { images: AtlasImageItem[] }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const frames = incidentFrames.length ? incidentFrames : images;
-  const active = frames[activeIndex] ?? frames[0];
-
+function AtlasTriagePill({ tone, label }: { tone: "green" | "orange" | "red"; label: string }) {
   return (
-    <div className="atlas-command-reel" aria-label="triage map sequence">
-      <figure className="atlas-command-reel__screen">
-        <img src={active.src} alt={active.alt} draggable={false} loading="lazy" decoding="async" />
-        <div className="atlas-command-reel__glass" aria-hidden="true">
-          <span>MCI · Shooting</span>
-          <span>00:18:57</span>
-        </div>
-      </figure>
-      <div className="atlas-command-reel__tabs" aria-label="sequence frames">
-        {frames.map((image, index) => (
-          <button
-            key={image.src}
-            type="button"
-            className="micro-focus micro-pressable"
-            data-active={index === activeIndex ? "true" : undefined}
-            onClick={() => setActiveIndex(index)}
-          >
-            {image.label}
-          </button>
-        ))}
-      </div>
-    </div>
+    <span className="atlas-ui-triage" data-tone={tone}>
+      {label}
+      <span aria-hidden="true" />
+    </span>
   );
 }
 
-function AtlasPatientDetail() {
+function AtlasGripDots() {
   return (
-    <div className="atlas-patient-proof-v2">
-      <figure className="atlas-patient-proof-v2__screen">
-        <img
-          src={ATLAS_PATIENT_IMAGES[0].src}
-          alt={ATLAS_PATIENT_IMAGES[0].alt}
-          draggable={false}
-          loading="eager"
-          decoding="async"
-        />
-      </figure>
-      <div className="atlas-patient-proof-v2__body" aria-label="patient status summary">
-        <div>
-          <span>Patient 03</span>
-          <strong>GSW Chest</strong>
-        </div>
-        <div className="atlas-patient-proof-v2__metrics">
-          <span>132 HR</span>
-          <span>84% SpO2</span>
-          <span>82/54 BP</span>
-        </div>
-        <ol>
-          <li>14:32 · triaged minor</li>
-          <li>14:58 · triaged delayed</li>
-          <li>15:02 · SpO2 alert</li>
-        </ol>
-      </div>
-    </div>
+    <span className="atlas-ui-grip" aria-hidden="true">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <span key={index} />
+      ))}
+    </span>
   );
 }
 
-function AtlasIncidentRailTile() {
-  const [isExpanded, setIsExpanded] = useState(false);
+function AtlasPatientRow({
+  active,
+  patient,
+  onSelect,
+}: {
+  active?: boolean;
+  patient: (typeof patientRowStates)[number];
+  onSelect?: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="atlas-ui-patient-row micro-focus micro-pressable"
+      data-active={active ? "true" : undefined}
+      aria-label={`select ${patient.note}`}
+      onClick={onSelect}
+    >
+      <AtlasGripDots />
+      <span className="atlas-ui-patient-row__content">
+        <span className="atlas-ui-patient-row__top">
+          <strong>{patient.note}</strong>
+          <em>{patient.age}</em>
+          <AtlasTriagePill tone={patient.triage === "orange" ? "orange" : "red"} label={patient.triage} />
+        </span>
+        <span className="atlas-ui-patient-row__bottom">
+          <span>At: {patient.sector}</span>
+          <span>{patient.vitals}</span>
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function AtlasIncidentCommandScene() {
   const [activeItem, setActiveItem] = useState<(typeof railItems)[number]["id"]>("patients");
-
-  const activeCopy = {
-    hospitals: {
-      eyebrow: "Assign to Hospital - 02",
-      rows: ["Memorial Health", "County General", "St Mary's"],
-    },
-    instructions: {
-      eyebrow: "Instruction",
-      rows: quickSendActions.slice(0, 3),
-    },
-    patients: {
-      eyebrow: "Patient Status - 03",
-      rows: ["132 HR", "84% SpO2", "82/54 BP"],
-    },
-  }[activeItem];
-
-  return (
-    <div className="atlas-rail-demo-v2" data-expanded={isExpanded ? "true" : undefined}>
-      <div className="atlas-rail-v2" aria-label="Atlas incident command rail">
-        <button
-          type="button"
-          className="atlas-rail-v2__header micro-focus micro-pressable"
-          aria-expanded={isExpanded}
-          aria-label="toggle Atlas rail"
-          onClick={() => setIsExpanded((value) => !value)}
-        >
-          <span className="atlas-rail-v2__icon-cell">
-            <img src="/projects/atlas/ui/atlaslogo_ic.png" alt="" draggable={false} />
-          </span>
-          <span className="atlas-rail-v2__label">ATLAS</span>
-        </button>
-        <div className="atlas-rail-v2__items">
-          {railItems.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="atlas-rail-v2__item micro-focus micro-pressable"
-              data-active={activeItem === item.id ? "true" : undefined}
-              onClick={() => setActiveItem(item.id)}
-            >
-              <span className="atlas-rail-v2__icon-cell">
-                <img src={item.icon} alt="" draggable={false} />
-              </span>
-              <span className="atlas-rail-v2__label">{item.label}</span>
-            </button>
-          ))}
-        </div>
-        <div className="atlas-rail-v2__footer">
-          <span className="atlas-rail-v2__live-dot" aria-hidden="true" />
-          <span className="atlas-rail-v2__label">LIVE</span>
-        </div>
-      </div>
-      <div className="atlas-rail-preview" aria-live="polite">
-        <span>{activeCopy.eyebrow}</span>
-        <div>
-          {activeCopy.rows.map((row) => (
-            <p key={row}>{row}</p>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AtlasAssignControlTile() {
   const [selectedHospital, setSelectedHospital] = useState<(typeof assignmentHospitals)[number]["id"]>("grady");
   const [assignmentState, setAssignmentState] = useState<AssignmentState>("ready");
-  const copy = assignmentStateCopy[assignmentState];
   const assignmentSteps: AssignmentState[] = ["ready", "assigning", "sent"];
 
   useEffect(() => {
@@ -389,160 +274,240 @@ function AtlasAssignControlTile() {
     return undefined;
   }, [assignmentState]);
 
-  const isReady = assignmentState === "ready";
-
   return (
-    <div className="atlas-assign-v2" data-state={assignmentState}>
-      <div className="atlas-assign-v2__header">
-        <span>Assign to Hospital - 02</span>
-        <span>14:47</span>
+    <div className="atlas-visual-stage atlas-visual-stage--command">
+      <div className="atlas-ic-ui" data-panel={activeItem}>
+        <aside className="atlas-ic-ui__rail" aria-label="Atlas incident command rail">
+          <div className="atlas-ic-ui__brand">
+            <img src="/projects/atlas/ui/atlaslogo_ic.png" alt="" draggable={false} />
+          </div>
+          <div className="atlas-ic-ui__tabs">
+            {railItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className="micro-focus micro-pressable"
+                data-active={activeItem === item.id ? "true" : undefined}
+                aria-label={`show ${item.label}`}
+                onClick={() => setActiveItem(item.id)}
+              >
+                <img src={item.icon} alt="" draggable={false} />
+              </button>
+            ))}
+          </div>
+          <span className="atlas-ic-ui__live" aria-hidden="true" />
+        </aside>
+
+        <main className="atlas-ic-ui__map" aria-label="incident command interface">
+          <div className="atlas-map-buildings" aria-hidden="true">
+            {Array.from({ length: 14 }).map((_, index) => (
+              <span key={index} />
+            ))}
+          </div>
+          <span className="atlas-map-route atlas-map-route--one" aria-hidden="true" />
+          <span className="atlas-map-route atlas-map-route--two" aria-hidden="true" />
+          <span className="atlas-map-pin atlas-map-pin--red" aria-hidden="true" />
+          <span className="atlas-map-pin atlas-map-pin--blue" aria-hidden="true" />
+          <span className="atlas-map-pin atlas-map-pin--green" aria-hidden="true" />
+
+          <section className="atlas-ic-ui__sheet" aria-live="polite">
+            {activeItem === "hospitals" ? (
+              <>
+                <div className="atlas-ui-sheet-header">
+                  <span>Assign to Hospital - 02</span>
+                  <span>14:47</span>
+                </div>
+                <div className="atlas-ui-hospital-list">
+                  {assignmentHospitals.map((hospital) => (
+                    <button
+                      key={hospital.id}
+                      type="button"
+                      className="atlas-ui-hospital-card micro-focus micro-pressable"
+                      data-active={selectedHospital === hospital.id ? "true" : undefined}
+                      onClick={() => {
+                        setSelectedHospital(hospital.id);
+                        setAssignmentState("ready");
+                      }}
+                    >
+                      <span>
+                        <strong>{hospital.label}</strong>
+                        <small>{hospital.address}</small>
+                        {hospital.suggested && <em>AI Suggested</em>}
+                      </span>
+                      <span>
+                        <b>{hospital.eta}</b>
+                        <small>{hospital.load}</small>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className="atlas-ui-confirm micro-focus micro-pressable"
+                  aria-label="assign selected hospital"
+                  disabled={assignmentState === "assigning"}
+                  onClick={() => setAssignmentState("assigning")}
+                >
+                  {assignmentState === "assigning" && <span className="atlas-ui-spinner" aria-hidden="true" />}
+                  {assignmentStateCopy[assignmentState].button}
+                </button>
+                <div className="atlas-state-rail atlas-state-rail--compact" aria-label="assignment states">
+                  {assignmentSteps.map((step) => (
+                    <span
+                      key={step}
+                      className="atlas-state-dot"
+                      data-active={assignmentState === step ? "true" : undefined}
+                      aria-label={step}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : activeItem === "instructions" ? (
+              <>
+                <div className="atlas-ui-sheet-header">
+                  <span>Instruction</span>
+                  <span>02</span>
+                </div>
+                <div className="atlas-ui-action-list">
+                  {quickSendActions.map((action, index) => (
+                    <button
+                      key={action}
+                      type="button"
+                      className="atlas-ui-action micro-focus micro-pressable"
+                      data-active={index === 1 ? "true" : undefined}
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="atlas-ui-sheet-header">
+                  <span>Patient Status - 03</span>
+                  <span>14:52</span>
+                </div>
+                <AtlasPatientRow patient={patientRowStates[0]} active />
+                <div className="atlas-ui-vitals-grid">
+                  <span>132 HR</span>
+                  <span>84% SpO2</span>
+                  <span>82/54 BP</span>
+                </div>
+              </>
+            )}
+          </section>
+        </main>
       </div>
-      <div className="atlas-assign-v2__cards" aria-label="hospital options">
-        {assignmentHospitals.map((hospital) => (
-          <button
-            key={hospital.id}
-            type="button"
-            className="atlas-assign-card-v2 micro-focus micro-pressable"
-            data-active={selectedHospital === hospital.id ? "true" : undefined}
-            onClick={() => {
-              setSelectedHospital(hospital.id);
-              setAssignmentState("ready");
-            }}
-          >
-            <span className="atlas-assign-card-v2__copy">
-              <strong>{hospital.label}</strong>
-              <small>{hospital.address}</small>
-              {hospital.suggested && <em>AI suggested</em>}
-            </span>
-            <span className="atlas-assign-card-v2__meta">
-              <b>{hospital.eta}</b>
-              <small>{hospital.load}</small>
-            </span>
-          </button>
-        ))}
-      </div>
-      <button
-        type="button"
-        className="atlas-assign-v2__confirm micro-focus micro-pressable"
-        aria-label="assign selected hospital"
-        disabled={assignmentState === "assigning"}
-        onClick={() => setAssignmentState("assigning")}
-      >
-        {assignmentState === "assigning" && <span className="atlas-assign-v2__spinner" aria-hidden="true" />}
-        {copy.button}
-      </button>
-      <div className="atlas-state-rail atlas-state-rail--compact" aria-label="assignment states">
-        {assignmentSteps.map((step) => (
-          <span
-            key={step}
-            className="atlas-state-dot"
-            data-active={assignmentState === step ? "true" : undefined}
-            aria-label={step}
-          />
-        ))}
-      </div>
-      <p className="atlas-assign-v2__status" aria-live="polite">
-        {isReady ? "select hospital and confirm route" : copy.status}
-      </p>
     </div>
   );
 }
 
-function AtlasCapacityTile() {
+function AtlasEmergencyRoomScene() {
   const [stepIndex, setStepIndex] = useState(1);
+  const [patientIndex, setPatientIndex] = useState(0);
   const step = capacitySteps[stepIndex] ?? capacitySteps[0];
   const state = useMemo(() => getCapacityState(step.load), [step.load]);
+  const selectedPatient = patientRowStates[patientIndex] ?? patientRowStates[0];
 
   return (
-    <div className="atlas-capacity-v2" data-tone={state.tone}>
-      <div className="atlas-capacity-v2__header">
-        <span>County General</span>
-        <output aria-live="polite">{step.load}%</output>
+    <div className="atlas-visual-stage atlas-visual-stage--er">
+      <div className="atlas-er-ui" data-tone={state.tone}>
+        <aside className="atlas-er-ui__rail" aria-hidden="true">
+          <span />
+          <span />
+        </aside>
+        <section className="atlas-er-ui__content" aria-label="emergency room interface">
+          <div className="atlas-er-ui__list">
+            <header>
+              <span>COUNTY GENERAL</span>
+              <button
+                type="button"
+                className="micro-focus micro-pressable"
+                aria-label="advance hospital load"
+                onClick={() => setStepIndex((index) => (index + 1) % capacitySteps.length)}
+              >
+                {step.load}%
+              </button>
+            </header>
+            <div className="atlas-er-ui__meter" aria-hidden="true">
+              <span style={{ width: `${step.load}%` }} />
+            </div>
+            <div className="atlas-er-ui__rows">
+              {patientRowStates.map((patient, index) => (
+                <AtlasPatientRow
+                  key={patient.label}
+                  patient={patient}
+                  active={index === patientIndex}
+                  onSelect={() => setPatientIndex(index)}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="atlas-er-ui__detail" aria-live="polite">
+            <div className="atlas-er-ui__stat-row">
+              <span>
+                <b>{state.priority}</b>
+                incoming
+              </span>
+              <span>
+                <b>{state.beds}</b>
+                open beds
+              </span>
+              <span>
+                <b>{selectedPatient.eta}</b>
+                eta
+              </span>
+            </div>
+            <div className="atlas-er-ui__chart" aria-hidden="true">
+              {Array.from({ length: 18 }).map((_, index) => (
+                <span key={index} />
+              ))}
+            </div>
+            <div className="atlas-er-ui__note">
+              <strong>{selectedPatient.injury}</strong>
+              <span>{state.action}</span>
+            </div>
+          </div>
+        </section>
       </div>
-      <div className="atlas-capacity-v2__meter" aria-hidden="true">
-        <span style={{ width: `${step.load}%` }} />
-      </div>
-      <div className="atlas-capacity-v2__rows">
-        <div>
-          <span>incoming</span>
-          <strong>{state.priority}</strong>
-        </div>
-        <div>
-          <span>beds</span>
-          <strong>{state.beds} open</strong>
-        </div>
-        <div>
-          <span>next</span>
-          <strong>{state.action}</strong>
-        </div>
-      </div>
-      <div className="atlas-state-rail atlas-state-rail--controls" aria-label="hospital load states">
-        {capacitySteps.map((item, index) => (
-          <button
-            key={item.label}
-            type="button"
-            className="atlas-state-dot micro-focus micro-pressable"
-            data-active={index === stepIndex ? "true" : undefined}
-            aria-label={`set hospital load to ${item.label}`}
-            onClick={() => setStepIndex(index)}
-          />
-        ))}
-      </div>
-      <button
-        type="button"
-        className="atlas-progress-control atlas-progress-control--v2 micro-focus micro-pressable"
-        aria-label="advance hospital load"
-        onClick={() => setStepIndex((index) => (index + 1) % capacitySteps.length)}
-      >
-        {state.label}
-      </button>
     </div>
   );
 }
 
-function AtlasPatientRowTile() {
+function AtlasResponderScene() {
   const [patientIndex, setPatientIndex] = useState(0);
   const patient = patientRowStates[patientIndex] ?? patientRowStates[0];
 
   return (
-    <div className="atlas-patient-row-demo-v2" data-state={patient.label}>
-      <button
-        type="button"
-        className="atlas-patient-row-card-v2 micro-focus micro-pressable"
-        aria-label="advance patient row state"
-        onClick={() => setPatientIndex((index) => (index + 1) % patientRowStates.length)}
-      >
-        <span className="atlas-patient-row-card-v2__header">
-          <strong>{patient.note}</strong>
-          <em>{patient.age}</em>
-        </span>
-        <span className="atlas-patient-row-card-v2__body">
-          <span>{patient.vitals}</span>
-          <span>{patient.injury}</span>
-        </span>
-        <span className="atlas-patient-row-card-v2__footer">
-          <span>{patient.eta}</span>
-          <span>{patient.sector}</span>
-        </span>
-        <span className="atlas-patient-row-card-v2__triage">{patient.triage}</span>
-      </button>
-      <div className="atlas-state-rail atlas-state-rail--controls" aria-label="patient row states">
-        {patientRowStates.map((item, index) => (
-          <button
-            key={item.label}
-            type="button"
-            className="atlas-state-dot micro-focus micro-pressable"
-            data-active={index === patientIndex ? "true" : undefined}
-            aria-label={`set patient row to ${item.label}`}
-            onClick={() => setPatientIndex(index)}
+    <div className="atlas-visual-stage atlas-visual-stage--phone">
+      <div className="atlas-phone-ui" aria-label="field responder interface">
+        <div className="atlas-phone-ui__notch" aria-hidden="true" />
+        <div className="atlas-phone-ui__map" aria-hidden="true">
+          <span className="atlas-map-route atlas-map-route--phone" />
+          <span className="atlas-map-pin atlas-map-pin--red" />
+          <span className="atlas-map-pin atlas-map-pin--green" />
+        </div>
+        <div className="atlas-phone-ui__sheet">
+          <AtlasPatientRow
+            patient={patient}
+            active
+            onSelect={() => setPatientIndex((index) => (index + 1) % patientRowStates.length)}
           />
-        ))}
+          <button
+            type="button"
+            className="atlas-phone-ui__cta micro-focus micro-pressable"
+            aria-label="advance patient row state"
+            onClick={() => setPatientIndex((index) => (index + 1) % patientRowStates.length)}
+          >
+            Update Status
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-function AtlasMotionRuleTile() {
+function AtlasInstructionScene() {
   const [stateIndex, setStateIndex] = useState(0);
   const reduceMotion = useReducedMotion();
   const state = motionStates[stateIndex] ?? motionStates[0];
@@ -558,26 +523,34 @@ function AtlasMotionRuleTile() {
   }, [reduceMotion]);
 
   return (
-    <div className="atlas-motion-rule-v2" data-state={state.label}>
-      <div className="atlas-motion-rule-v2__notification" aria-live="polite">
-        <div>
+    <div className="atlas-visual-stage atlas-visual-stage--instruction">
+      <div className="atlas-instruction-ui" data-state={state.label} aria-label="instruction interface">
+        <div className="atlas-instruction-ui__toast" aria-live="polite">
           <span>14:47</span>
           <strong>Patient 02</strong>
         </div>
-        <p>{state.caption}</p>
+        <div className="atlas-ui-action-list">
+          {quickSendActions.slice(0, 4).map((action, index) => (
+            <button
+              key={action}
+              type="button"
+              className="atlas-ui-action micro-focus micro-pressable"
+              data-active={index === stateIndex ? "true" : undefined}
+              onClick={() => setStateIndex(index)}
+            >
+              {action}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          className="atlas-instruction-ui__send micro-focus micro-pressable"
+          aria-label="advance state"
+          onClick={() => setStateIndex((index) => (index + 1) % motionStates.length)}
+        >
+          {state.label}
+        </button>
       </div>
-      <div className="atlas-motion-rule-v2__row">
-        <span className="atlas-motion-rule-v2__dot" />
-        <span>patient 18</span>
-        <strong>{state.label}</strong>
-      </div>
-      <button
-        type="button"
-        className="atlas-motion-rule-v2__button micro-focus micro-pressable"
-        onClick={() => setStateIndex((index) => (index + 1) % motionStates.length)}
-      >
-        advance state
-      </button>
     </div>
   );
 }
@@ -634,7 +607,7 @@ function AtlasDecisionLog() {
   );
 }
 
-export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProps) {
+export default function AtlasProofCaseStudy(_props: AtlasProofCaseStudyProps) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -651,106 +624,38 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
       </section>
 
       <section id="atlas-proof-bento" className="atlas-proof-section">
-        <DetailOutlineHeading heading="artifact grid" eyebrow={project.builder.status.label} signal="none" />
-        <div className="atlas-proof-grid">
-          <AtlasTile
+        <div className="atlas-proof-grid" aria-label="Atlas interface board">
+          <AtlasVisualTile
             id="atlas-triage-map"
-            title="triage map"
-            label="incident command flow"
-            artifactType="sequence"
-            caption="one emergency picture across field, command, and receiving."
-            className="atlas-proof-tile--wide"
+            label="Atlas incident command interface"
+            className="atlas-proof-tile--command"
           >
-            <AtlasImageSequence images={ATLAS_TRIAGE_SEQUENCE} />
-          </AtlasTile>
+            <AtlasIncidentCommandScene />
+          </AtlasVisualTile>
 
-          <AtlasTile
+          <AtlasVisualTile
             id="atlas-capacity-state"
-            title="capacity state"
-            label="routing state"
-            artifactType="live"
-            caption="hospital load changes beds, priority, and routing action."
-            className="atlas-proof-tile--live"
+            label="Atlas emergency room interface"
+            className="atlas-proof-tile--er"
           >
-            <AtlasCapacityTile />
-          </AtlasTile>
+            <AtlasEmergencyRoomScene />
+          </AtlasVisualTile>
 
-          <AtlasTile
-            id="atlas-incident-rail"
-            title="incident rail"
-            label="xcode rail"
-            artifactType="live"
-            caption="the iPad rail widens first; labels arrive a beat later."
-            className="atlas-proof-tile--rail"
-          >
-            <AtlasIncidentRailTile />
-          </AtlasTile>
-
-          <AtlasTile
-            id="atlas-assign-control"
-            title="assign control"
-            label="assignment state"
-            artifactType="live"
-            caption="hospital choice, confirm, and sent feedback stay in one control loop."
-            className="atlas-proof-tile--assign"
-          >
-            <AtlasAssignControlTile />
-          </AtlasTile>
-
-          <AtlasTile
+          <AtlasVisualTile
             id="atlas-patient-row"
-            title="patient row"
-            label="row contract"
-            artifactType="live"
-            caption="one row carries triage, location, vitals, and confirmation."
-            className="atlas-proof-tile--patient-row"
+            label="Atlas field responder interface"
+            className="atlas-proof-tile--phone"
           >
-            <AtlasPatientRowTile />
-          </AtlasTile>
+            <AtlasResponderScene />
+          </AtlasVisualTile>
 
-          <AtlasTile
-            id="atlas-patient-detail"
-            title="patient detail"
-            label="scan density"
-            artifactType="scan"
-            caption="same patient state, different operational views."
-            className="atlas-proof-tile--patient"
-          >
-            <AtlasPatientDetail />
-          </AtlasTile>
-
-          <AtlasTile
-            id="atlas-event-contract"
-            title="event contract"
-            label="code artifact"
-            artifactType="code"
-            caption="the shared vocabulary behind the connected prototype."
-            className="atlas-proof-tile--code"
-          >
-            <AtlasCodeArtifact />
-          </AtlasTile>
-
-          <AtlasTile
+          <AtlasVisualTile
             id="atlas-motion-rule"
-            title="motion rule"
-            label="motion grammar"
-            artifactType="live"
-            caption="confirm change, then get out of the way."
-            className="atlas-proof-tile--motion"
+            label="Atlas instruction interface"
+            className="atlas-proof-tile--instruction"
           >
-            <AtlasMotionRuleTile />
-          </AtlasTile>
-
-          <AtlasTile
-            id="atlas-decision-log"
-            title="decision log"
-            label="context"
-            artifactType="context"
-            caption="role, constraint, decision, result."
-            className="atlas-proof-tile--log"
-          >
-            <AtlasDecisionLog />
-          </AtlasTile>
+            <AtlasInstructionScene />
+          </AtlasVisualTile>
         </div>
       </section>
 
@@ -768,6 +673,16 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
               </div>
             ))}
           </dl>
+        </section>
+
+        <section id="atlas-event-contract" className="detail-outline-section">
+          <DetailOutlineHeading heading="system sketch" signal="none" />
+          <AtlasCodeArtifact />
+        </section>
+
+        <section id="atlas-decision-log" className="detail-outline-section">
+          <DetailOutlineHeading heading="decision log" signal="none" />
+          <AtlasDecisionLog />
         </section>
 
         <section id="atlas-reflection" className="detail-outline-section">
