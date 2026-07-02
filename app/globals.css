@@ -147,7 +147,7 @@
 
   /* Homepage outline layout: final-pass numbers, intentionally modest. */
   --home-title-gap-inline: 5px;
-  --home-title-padding-block-end: 16px;
+  --home-title-padding-block-end: 14px;
   --home-list-gap: 4px;
   --home-row-column-gap: 12px;
   --home-row-padding-block: 4px;
@@ -155,7 +155,7 @@
   --home-row-line-height: 1.62;
   --home-section-gap: 4px;
   --home-section-pause: 6px;
-  --home-children-pause: 2px;
+  --home-children-pause: 0px;
   --home-children-indent: 26px;
   --home-focus-bar-offset-inline: -14px;
   --home-focus-bar-width: 2px;
