@@ -3362,6 +3362,7 @@ button.home-mention {
 
 .sentinel-ui-stage {
   display: grid;
+  position: relative;
   min-height: 100%;
   place-items: center;
   overflow: hidden;
@@ -3383,7 +3384,9 @@ button.home-mention {
 }
 
 .sentinel-phone-scene {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: grid;
   align-content: start;
   width: 344px;
@@ -3396,14 +3399,14 @@ button.home-mention {
     inset 0 0 0 1px rgb(255 255 255 / 0.52),
     0 30px 84px -58px rgb(16 18 22 / 0.72);
   padding: 31px 24px 86px;
-  transform: scale(0.76);
+  transform: translate(-50%, -50%) scale(var(--sentinel-phone-scale, 0.76));
   transform-origin: center;
 }
 
 .sentinel-ui-tile--tasks .sentinel-phone-scene,
 .sentinel-ui-tile--recommendations .sentinel-phone-scene,
 .sentinel-ui-tile--timeline .sentinel-phone-scene {
-  transform: scale(0.72);
+  --sentinel-phone-scale: 0.72;
 }
 
 .sentinel-panel-scene {
@@ -5893,7 +5896,7 @@ button.home-mention {
   }
 
   .sentinel-phone-scene {
-    transform: scale(0.54);
+    --sentinel-phone-scale: 0.54;
   }
 
   .sentinel-panel-scene {
