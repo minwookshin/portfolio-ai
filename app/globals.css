@@ -1199,6 +1199,15 @@ button.home-row {
   opacity: var(--signal-opacity-open);
 }
 
+.home-row--bulletless .home-bullet {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.home-row--restless-signal .home-bullet {
+  opacity: 0;
+}
+
 .home-bullet--system {
   width: var(--signal-dot-size-hollow);
   height: var(--signal-dot-size-hollow);
@@ -1604,6 +1613,16 @@ button.home-mention {
 
   .home-row:not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-label {
     transform: translateX(var(--signal-nudge));
+  }
+
+  .home-row--bulletless:hover .home-bullet {
+    opacity: 0;
+    transform: none;
+    visibility: hidden;
+  }
+
+  .home-row--bulletless:hover .home-label {
+    transform: none;
   }
 
   .home-row:has(.home-mention):not(.home-row--link):not(.home-row--signal):not(.home-row--summary):hover .home-bullet,

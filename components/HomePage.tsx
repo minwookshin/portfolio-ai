@@ -129,6 +129,7 @@ function HomeLeafRow({
   const rowClassName = [
     "home-row",
     intro ? "home-row--intro" : "",
+    intro ? "home-row--bulletless" : "",
     signal ? "home-row--signal" : "",
   ].filter(Boolean).join(" ");
 
@@ -503,6 +504,15 @@ function StudyTextRow({
 }: {
   item: StudyItem;
 }) {
+  const rowClassName = [
+    "home-row",
+    "home-row--link",
+    item.kind === "writing" ? "home-row--restless-signal" : "",
+    "micro-focus",
+    "micro-focus-tight",
+    "micro-pressable",
+  ].filter(Boolean).join(" ");
+
   return (
     <motion.li
       key={item.id}
@@ -512,7 +522,7 @@ function StudyTextRow({
       <div className="block max-w-full transform-gpu">
         <Link
           href={item.href}
-          className="home-row home-row--link micro-focus micro-focus-tight micro-pressable"
+          className={rowClassName}
         >
           <HomeBulletCell signal variant={item.kind === "lab" ? "system" : "note"} />
           <span className="home-label project-row-copy">
