@@ -129,7 +129,6 @@ function HomeLeafRow({
   const rowClassName = [
     "home-row",
     intro ? "home-row--intro" : "",
-    intro ? "home-row--bulletless" : "",
     signal ? "home-row--signal" : "",
   ].filter(Boolean).join(" ");
 
