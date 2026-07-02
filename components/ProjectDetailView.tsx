@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { motionDurations, springs, tweens } from "@/lib/material/motion";
 import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import AtlasProofCaseStudy from "@/components/AtlasProofCaseStudy";
+import CaretInteractiveArtifact from "@/components/CaretInteractiveArtifact";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import ProjectCaseStudyEntry from "@/components/ProjectCaseStudyEntry";
@@ -301,7 +302,8 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   const isSentinel = hasBuilderProof(project) && project.slug === "sentinel";
   const isPortfolioAi = hasBuilderProof(project) && project.slug === "portfolio-ai";
   const isMindline = hasBuilderProof(project) && project.slug === "mindline";
-  const artifactBoardReplacesHeroMedia = isSentinel || isPortfolioAi || isMindline;
+  const isCaretArtifact = hasBuilderProof(project) && project.slug === "caret";
+  const artifactBoardReplacesHeroMedia = isSentinel || isPortfolioAi || isMindline || isCaretArtifact;
   const separatesCaseStudy = hasSeparatedCaseStudy(project);
   const hasAuthoredCaseStudy = Boolean(caseStudy.authored);
 
@@ -338,7 +340,8 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           />
           {proof && !hasAuthoredCaseStudy && <BuilderProofSummary proof={proof} />}
           {isSentinel && <SentinelInteractiveArtifact />}
-          {isSentinel && proof?.demo?.video && (
+          {isCaretArtifact && <CaretInteractiveArtifact />}
+          {(isSentinel || isCaretArtifact) && proof?.demo?.video && (
             <motion.section
               initial={reduceMotion ? false : { opacity: 0, y: 3 }}
               animate={{ opacity: 1, y: 0 }}

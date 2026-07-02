@@ -57,10 +57,19 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("Weather alerts")).toBeInTheDocument();
   });
 
-  it("does not duplicate video-only demos in detail links", () => {
+  it("renders Caret as a DOM app artifact before the video proof", async () => {
+    const user = userEvent.setup();
     render(<ProjectCaseStudyShell project={getWorkProject("caret")} />);
 
     expect(screen.queryByRole("link", { name: /watch demo/i })).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Caret interface board")).toBeInTheDocument();
+    expect(screen.getByLabelText("Caret team wellbeing interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Caret teammate care interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Caret send care interface")).toBeInTheDocument();
+    await user.click(screen.getAllByRole("button", { name: "Send" }).at(-1)!);
+    expect(screen.getByRole("button", { name: "Sent" })).toBeInTheDocument();
+    expect(screen.getByText("Feeling better already")).toBeInTheDocument();
+    expectNativeVideo("Caret demo");
     expect(screen.getByText("public")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "GitHub" })).toHaveAttribute("href", "https://github.com/minwookshin/caret");
     expect(screen.getByText("· source")).toBeInTheDocument();

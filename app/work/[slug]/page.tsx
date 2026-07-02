@@ -86,7 +86,7 @@ export default async function WorkProjectPage({ params }: WorkPageProps) {
   if (!project || project.comingSoon) notFound();
 
   const relatedWriting = getWritingPostsForWork(project.slug);
-  const videoOnly = isSmallProject(project);
+  const videoOnly = isSmallProject(project) && project.slug !== "caret";
 
   return (
     <main
