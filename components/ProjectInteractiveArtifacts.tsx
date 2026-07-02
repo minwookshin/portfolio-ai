@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
+  Briefcase,
   CalendarDays,
   Calculator,
   ChevronDown,
@@ -15,6 +16,7 @@ import {
   Info,
   Mail,
   MessageCircle,
+  NotebookText,
   Plus,
   Search,
   User,
@@ -38,15 +40,15 @@ function ProjectUiTile({
 }
 
 const portfolioCommands = [
-  { icon: Search, label: "view work", meta: "enter" },
-  { icon: MessageCircle, label: "ask about this portfolio", meta: "ai" },
-  { icon: Mail, label: "copy email", meta: "copy" },
-  { icon: Copy, label: "copy current link", meta: "url" },
+  { icon: Briefcase, label: "view work", meta: "project log" },
+  { icon: NotebookText, label: "view notes", meta: "thinking log" },
+  { icon: Mail, label: "copy email", meta: "copy utility" },
+  { icon: MessageCircle, label: "ask about this portfolio", meta: "ai utility" },
 ] as const;
 
 export function PortfolioAiInteractiveArtifact() {
   const reduceMotion = useReducedMotion();
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(3);
   const activeCommand = portfolioCommands[activeIndex] ?? portfolioCommands[0];
 
   return (
