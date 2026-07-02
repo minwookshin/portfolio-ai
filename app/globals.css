@@ -2578,7 +2578,9 @@ button.home-mention {
 }
 
 .studio-detail-secondary-media .studio-detail-hero-media {
-  max-width: min(720px, 100%);
+  width: 100%;
+  max-width: min(560px, 100%);
+  margin-inline: auto;
 }
 
 .studio-detail-proof {
