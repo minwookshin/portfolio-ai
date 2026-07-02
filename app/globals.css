@@ -1196,7 +1196,9 @@ button.home-row {
 }
 
 .home-row--intro .home-bullet--leaf {
-  opacity: var(--signal-opacity-open);
+  width: var(--signal-dot-size-work);
+  height: var(--signal-dot-size-work);
+  opacity: var(--signal-opacity-strong);
 }
 
 .home-row--bulletless .home-bullet {
