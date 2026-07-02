@@ -5312,6 +5312,434 @@ button.home-mention {
   line-height: 1.25;
 }
 
+.portfolio-ui-tile--command {
+  grid-column: span 7;
+  min-height: 350px;
+}
+
+.portfolio-ui-tile--chat {
+  grid-column: span 5;
+  min-height: 350px;
+}
+
+.portfolio-ui-tile--routes,
+.portfolio-ui-tile--system {
+  grid-column: span 6;
+  min-height: 260px;
+}
+
+.portfolio-command-ui,
+.portfolio-chat-ui,
+.portfolio-routes-ui,
+.portfolio-system-ui,
+.mindline-phone-ui,
+.mindline-suggestion-ui,
+.mindline-insight-ui,
+.mindline-calendar-ui {
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+.portfolio-command-ui,
+.portfolio-chat-ui,
+.portfolio-routes-ui,
+.portfolio-system-ui {
+  display: grid;
+  width: min(100%, 500px);
+  align-content: start;
+  border-radius: 24px;
+  background: rgb(255 255 255 / 0.78);
+  box-shadow: 0 26px 80px -58px rgb(16 18 22 / 0.45);
+  padding: 14px;
+}
+
+.portfolio-command-ui,
+.portfolio-chat-ui {
+  align-self: center;
+  justify-self: center;
+}
+
+.portfolio-command-ui__search {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  color: var(--text-muted);
+  padding: 0 2px 8px;
+}
+
+.portfolio-command-ui__search input {
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--type-0);
+  outline: 0;
+}
+
+.portfolio-command-ui__search span,
+.portfolio-command-ui__rows em {
+  color: var(--text-muted);
+  font-size: var(--type-caption);
+  font-style: normal;
+  line-height: 1;
+}
+
+.portfolio-command-ui__rows {
+  display: grid;
+  gap: 4px;
+}
+
+.portfolio-command-ui__rows button {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  border-radius: 12px;
+  color: var(--text-primary);
+  padding: 0 10px;
+  text-align: left;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.portfolio-command-ui__rows button:hover,
+.portfolio-command-ui__rows button:focus-visible,
+.portfolio-command-ui__rows button[data-active="true"] {
+  background: rgb(255 255 255 / 0.78);
+  transform: translateX(2px);
+}
+
+.portfolio-command-ui__rows svg {
+  color: var(--text-muted);
+}
+
+.portfolio-chat-ui {
+  gap: 12px;
+  width: min(100%, 360px);
+}
+
+.portfolio-chat-ui__bubble {
+  max-width: 88%;
+  border: 1px solid rgb(0 0 0 / 0.055);
+  border-radius: 16px;
+  background: white;
+  padding: 12px 14px;
+  color: var(--text-primary);
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
+}
+
+.portfolio-chat-ui__bubble--user {
+  justify-self: end;
+  background: var(--text-primary);
+  color: var(--bg-base);
+}
+
+.portfolio-chat-ui__input {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgb(0 0 0 / 0.06);
+  border-radius: 999px;
+  background: white;
+  padding: 0 14px;
+  color: var(--text-muted);
+}
+
+.portfolio-routes-ui {
+  gap: 4px;
+  width: min(100%, 420px);
+}
+
+.portfolio-routes-ui button {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-radius: 12px;
+  color: var(--text-primary);
+  padding: 0 10px;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.portfolio-routes-ui button:hover,
+.portfolio-routes-ui button:focus-visible {
+  background: white;
+  transform: translateX(2px);
+}
+
+.portfolio-system-ui {
+  gap: 10px;
+  width: min(100%, 380px);
+}
+
+.portfolio-system-ui svg {
+  color: var(--text-muted);
+}
+
+.portfolio-system-ui code {
+  border-radius: 12px;
+  background: white;
+  padding: 10px 12px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-caption);
+  line-height: 1.2;
+}
+
+.mindline-ui-tile--log {
+  grid-column: span 4;
+  min-height: 430px;
+}
+
+.mindline-ui-tile--suggestion {
+  grid-column: span 8;
+  min-height: 230px;
+}
+
+.mindline-ui-tile--insight {
+  grid-column: span 5;
+  min-height: 260px;
+}
+
+.mindline-ui-tile--calendar {
+  grid-column: span 7;
+  min-height: 260px;
+}
+
+.mindline-phone-ui {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  width: 250px;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 34px;
+  background: #111;
+  box-shadow: 0 28px 76px -56px rgb(16 18 22 / 0.72);
+  padding: 22px;
+  transform: scale(0.72);
+  transform-origin: center;
+}
+
+.mindline-phone-ui header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+
+.mindline-phone-ui header span {
+  font-size: 18px;
+}
+
+.mindline-log-card {
+  display: grid;
+  gap: 7px;
+  border-radius: 22px;
+  background: #f5f5f6;
+  padding: 18px;
+}
+
+.mindline-log-card span,
+.mindline-log-card em {
+  color: var(--text-muted);
+  font-size: var(--type-caption);
+  font-style: normal;
+}
+
+.mindline-log-card strong {
+  color: var(--text-primary);
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.mindline-state-row {
+  display: grid;
+  gap: 8px;
+}
+
+.mindline-state-row button {
+  min-height: 42px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.08);
+  color: rgb(255 255 255 / 0.66);
+  padding: 0 12px;
+  text-align: left;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.mindline-state-row button:hover,
+.mindline-state-row button:focus-visible,
+.mindline-state-row button[data-active="true"] {
+  background: rgb(255 255 255 / 0.16);
+  color: white;
+  transform: translateX(2px);
+}
+
+.mindline-suggestion-ui,
+.mindline-insight-ui,
+.mindline-calendar-ui {
+  display: grid;
+  width: min(100%, 520px);
+  align-content: center;
+  gap: 12px;
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 26px 80px -58px rgb(16 18 22 / 0.42);
+  padding: 24px;
+}
+
+.mindline-suggestion-ui strong {
+  color: var(--text-primary);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.mindline-suggestion-ui span,
+.mindline-insight-ui p {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--text-muted);
+  font-size: var(--type-0);
+  line-height: var(--leading-body);
+}
+
+.mindline-suggestion-ui button {
+  justify-self: start;
+  min-height: 38px;
+  border-radius: 12px;
+  background: var(--text-primary);
+  color: var(--bg-base);
+  padding: 0 14px;
+  transition:
+    opacity var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.mindline-suggestion-ui button:hover,
+.mindline-suggestion-ui button:focus-visible {
+  opacity: 0.86;
+  transform: translateX(2px);
+}
+
+.mindline-insight-ui {
+  width: min(100%, 340px);
+}
+
+.mindline-insight-ui__bars {
+  display: flex;
+  height: 120px;
+  align-items: end;
+  gap: 7px;
+}
+
+.mindline-insight-ui__bars span {
+  flex: 1;
+  min-width: 0;
+  border-radius: 999px 999px 0 0;
+  background: color-mix(in srgb, var(--text-primary) 26%, #dce2ea);
+}
+
+.mindline-insight-ui__bars span:nth-child(3n + 1) { height: 36%; }
+.mindline-insight-ui__bars span:nth-child(3n + 2) { height: 62%; }
+.mindline-insight-ui__bars span:nth-child(3n) { height: 88%; }
+
+.mindline-calendar-ui {
+  width: min(100%, 430px);
+}
+
+.mindline-calendar-ui > div {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mindline-calendar-ui span {
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-primary) 7%, transparent);
+}
+
+.mindline-calendar-ui span[data-active="true"] {
+  background: color-mix(in srgb, var(--selection-bg) 42%, var(--text-primary) 12%);
+}
+
+@media (max-width: 980px) {
+  .project-ui-artifact {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .project-ui-board {
+    grid-template-columns: 1fr;
+  }
+
+  .sentinel-ui-tile--dashboard,
+  .sentinel-ui-tile--tasks,
+  .sentinel-ui-tile--recommendations,
+  .sentinel-ui-tile--timeline,
+  .portfolio-ui-tile--command,
+  .portfolio-ui-tile--chat,
+  .portfolio-ui-tile--routes,
+  .portfolio-ui-tile--system,
+  .mindline-ui-tile--log,
+  .mindline-ui-tile--suggestion,
+  .mindline-ui-tile--insight,
+  .mindline-ui-tile--calendar {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .project-ui-tile {
+    min-height: 300px;
+    border-radius: 16px;
+  }
+
+  .sentinel-ui-stage {
+    padding: 12px;
+  }
+
+  .sentinel-phone-scene {
+    transform: scale(0.54);
+  }
+
+  .sentinel-panel-scene {
+    transform: scale(0.68);
+  }
+
+  .portfolio-command-ui,
+  .portfolio-chat-ui,
+  .portfolio-routes-ui,
+  .portfolio-system-ui,
+  .mindline-suggestion-ui,
+  .mindline-insight-ui,
+  .mindline-calendar-ui {
+    transform: scale(0.86);
+  }
+
+  .mindline-phone-ui {
+    transform: scale(0.62);
+  }
+}
+
 .atlas-sequence {
   display: grid;
   min-height: 100%;

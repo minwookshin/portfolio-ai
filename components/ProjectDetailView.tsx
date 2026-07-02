@@ -9,6 +9,10 @@ import AtlasProofCaseStudy from "@/components/AtlasProofCaseStudy";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
 import ProjectCaseStudyEntry from "@/components/ProjectCaseStudyEntry";
+import {
+  MindlineInteractiveArtifact,
+  PortfolioAiInteractiveArtifact,
+} from "@/components/ProjectInteractiveArtifacts";
 import SentinelInteractiveArtifact from "@/components/SentinelInteractiveArtifact";
 import { Project } from "./ProjectCard";
 import StudioVideoPlayer from "./StudioVideoPlayer";
@@ -293,6 +297,8 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   const proof = hasBuilderProof(project) ? project.builder : undefined;
   const isAtlas = hasBuilderProof(project) && project.slug === "atlas";
   const isSentinel = hasBuilderProof(project) && project.slug === "sentinel";
+  const isPortfolioAi = hasBuilderProof(project) && project.slug === "portfolio-ai";
+  const isMindline = hasBuilderProof(project) && project.slug === "mindline";
   const separatesCaseStudy = hasSeparatedCaseStudy(project);
   const hasAuthoredCaseStudy = Boolean(caseStudy.authored);
 
@@ -323,6 +329,8 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
           <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
           {proof && !hasAuthoredCaseStudy && <BuilderProofSummary proof={proof} />}
           {isSentinel && <SentinelInteractiveArtifact />}
+          {isPortfolioAi && <PortfolioAiInteractiveArtifact />}
+          {isMindline && <MindlineInteractiveArtifact />}
           {separatesCaseStudy ? (
             <ProjectCaseStudyEntry>
               <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />

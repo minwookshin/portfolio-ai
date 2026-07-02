@@ -85,6 +85,9 @@ describe("ProjectCaseStudyShell", () => {
 
     expect(screen.queryByRole("link", { name: /try live site/i })).not.toBeInTheDocument();
     expect(screen.getByText("source · live site")).toBeInTheDocument();
+    expect(screen.getByLabelText("Portfolio AI interface board")).toBeInTheDocument();
+    expect(screen.getByLabelText("Portfolio command interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Portfolio AI chat interface")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /video/i })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Design system" })).toHaveAttribute("href", "/design-system");
     expect(screen.getByRole("link", { name: "Design system markdown" })).toHaveAttribute("href", "/design-system.md");
@@ -92,6 +95,16 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByText("· page")).toBeInTheDocument();
     expect(screen.getByText("· markdown")).toBeInTheDocument();
     expect(screen.getByText("· json")).toBeInTheDocument();
+  });
+
+  it("renders Mindline as a compact interaction board", () => {
+    render(<ProjectCaseStudyShell project={getWorkProject("mindline")} />);
+
+    expect(screen.getByLabelText("Mindline interface board")).toBeInTheDocument();
+    expect(screen.getByLabelText("Mindline log interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Mindline suggestion interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Mindline insight interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Mindline calendar interface")).toBeInTheDocument();
   });
 
   it("renders Atlas as an artifact-led case study template", async () => {
