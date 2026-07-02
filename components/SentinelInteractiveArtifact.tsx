@@ -8,30 +8,19 @@ import {
   CalendarDays,
   CheckCircle2,
   Clock3,
-  Gauge,
-  History,
   Home,
   House,
-  ListChecks,
   Plus,
   RefreshCw,
   Search,
-  User,
+  ShieldCheck,
   Waves,
   Wind,
   Zap,
 } from "lucide-react";
 import { tweens } from "@/lib/material/motion";
 
-type SentinelScreen = "dashboard" | "tasks" | "history" | "profile";
 type TaskFilter = "all" | "active" | "completed";
-
-const screenTabs: Array<{ id: SentinelScreen; icon: ComponentType<{ size?: number }>; label: string }> = [
-  { id: "dashboard", icon: Gauge, label: "Dashboard" },
-  { id: "tasks", icon: ListChecks, label: "Tasks" },
-  { id: "history", icon: History, label: "History" },
-  { id: "profile", icon: User, label: "Profile" },
-];
 
 const riskStats = [
   { icon: House, label: "Property", tone: "green", value: 48 },
@@ -39,74 +28,18 @@ const riskStats = [
   { icon: Zap, label: "Forecast", tone: "red", value: 60 },
 ];
 
-const recommendedActions = [
+const recommendedActions: Array<{
+  icon: ComponentType<{ size?: number }>;
+  title: string;
+  tag: string;
+  due: string;
+  body: string;
+  tone: "orange" | "blue" | "purple";
+}> = [
   { icon: Wind, title: "Hurricane Preparedness", tag: "High Priority", due: "1 month", body: "Area has high hurricane risk (85/100)", tone: "orange" },
   { icon: Waves, title: "Flood Protection", tag: "Urgent", due: "2 weeks", body: "Area has flood risk (68/100)", tone: "blue" },
   { icon: Home, title: "Roof Inspection & Repair", tag: "Urgent", due: "1 month", body: "Roof is 15 years old", tone: "purple" },
-  { icon: AlertTriangle, title: "Emergency Kit & Plan", tag: "High Priority", due: "1 week", body: "Active weather alerts in your area", tone: "orange" },
 ];
-
-function StatusBar({ time }: { time: string }) {
-  return (
-    <div className="sentinel-phone-status" aria-hidden="true">
-      <span>{time}</span>
-      <span className="sentinel-dynamic-island" />
-      <span className="sentinel-status-icons">•••• wifi</span>
-    </div>
-  );
-}
-
-function DashboardScreen({ isRefreshing, onRefresh }: { isRefreshing: boolean; onRefresh: () => void }) {
-  return (
-    <div className="sentinel-ios-screen sentinel-ios-screen--dashboard">
-      <StatusBar time="8:31" />
-      <div className="sentinel-ios-heading-row">
-        <h3>Sentinel</h3>
-        <button
-          type="button"
-          className="sentinel-ios-float-button micro-focus micro-pressable"
-          aria-label="Refresh Sentinel dashboard"
-          onClick={onRefresh}
-          data-active={isRefreshing ? "true" : undefined}
-        >
-          <RefreshCw size={26} />
-        </button>
-      </div>
-
-      <button type="button" className="sentinel-ios-alert micro-focus micro-pressable">
-        <AlertTriangle size={24} />
-        <span>Here is a detailed, actionable mitigation plan for your property at 516 Drayton St, Savannah, GA 31401:</span>
-        <strong aria-hidden="true">›</strong>
-      </button>
-
-      <section className="sentinel-hvs-card" aria-label="Home Vulnerability Score">
-        <h4>Home Vulnerability Score</h4>
-        <div className="sentinel-hvs-gauge" aria-label="HVS 28 High Risk">
-          <div>
-            <strong>28</strong>
-            <span>HVS</span>
-            <em>High Risk</em>
-          </div>
-        </div>
-        <p>Your home has significant vulnerabilities (score: 28). Immediate action is recommended.</p>
-      </section>
-
-      <h4 className="sentinel-section-title">Risk Breakdown</h4>
-      <div className="sentinel-risk-grid" aria-label="Risk Breakdown">
-        {riskStats.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div key={item.label} className="sentinel-risk-card" data-tone={item.tone}>
-              <Icon size={27} />
-              <strong>{item.value}</strong>
-              <span>{item.label}</span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 function FilterChip({
   active,
@@ -122,7 +55,7 @@ function FilterChip({
   return (
     <button
       type="button"
-      className="sentinel-filter-chip micro-focus micro-pressable"
+      className="sentinel-mini-chip micro-focus micro-pressable"
       data-active={active ? "true" : undefined}
       onClick={onClick}
     >
@@ -132,133 +65,188 @@ function FilterChip({
   );
 }
 
-function TasksScreen({ filter, onFilterChange }: { filter: TaskFilter; onFilterChange: (filter: TaskFilter) => void }) {
-  const isCompleted = filter === "completed";
-
+function AlertTile({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   return (
-    <div className="sentinel-ios-screen sentinel-ios-screen--tasks">
-      <StatusBar time="9:29" />
-      <div className="sentinel-ios-heading-row">
-        <h3>Action Plan</h3>
-        <button type="button" className="sentinel-ios-float-button micro-focus micro-pressable" aria-label="Add task">
-          <Plus size={28} />
+    <article className="sentinel-bento-tile sentinel-bento-tile--wide sentinel-bento-tile--alert" aria-label="Sentinel mitigation alert">
+      <div className="sentinel-bento-topline">
+        <span>mitigation plan</span>
+        <span>savannah, ga</span>
+      </div>
+      <button
+        type="button"
+        className="sentinel-alert-surface micro-focus micro-pressable"
+        data-expanded={expanded ? "true" : undefined}
+        onClick={onToggle}
+        aria-expanded={expanded}
+      >
+        <AlertTriangle size={22} />
+        <span>Detailed mitigation plan for 516 Drayton St.</span>
+        <strong aria-hidden="true">›</strong>
+      </button>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            className="sentinel-alert-detail"
+            initial={{ opacity: 0, y: 5, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -2, height: 0 }}
+            transition={tweens.commandLens}
+          >
+            <span>
+              <Wind size={18} />
+              hurricane exposure moved above the action threshold
+            </span>
+            <button type="button" className="sentinel-ios-button micro-focus micro-pressable">
+              generate plan
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </article>
+  );
+}
+
+function ScoreTile({ score, onRefresh, refreshing }: { score: number; onRefresh: () => void; refreshing: boolean }) {
+  return (
+    <article className="sentinel-bento-tile" aria-label="Home vulnerability score">
+      <div className="sentinel-bento-topline">
+        <span>home score</span>
+        <button
+          type="button"
+          className="sentinel-icon-button micro-focus micro-pressable"
+          data-active={refreshing ? "true" : undefined}
+          onClick={onRefresh}
+          aria-label="Refresh home vulnerability score"
+        >
+          <RefreshCw size={18} />
         </button>
       </div>
+      <div className="sentinel-hvs-mini" aria-label={`HVS ${score} High Risk`}>
+        <strong>{score}</strong>
+        <span>HVS</span>
+        <em>High Risk</em>
+      </div>
+      <p>Risk surfaced as one score before the user sees the breakdown.</p>
+    </article>
+  );
+}
 
-      <div className="sentinel-filter-row" aria-label="Task filters">
+function TaskTile({ filter, onFilterChange }: { filter: TaskFilter; onFilterChange: (filter: TaskFilter) => void }) {
+  const completed = filter === "completed";
+
+  return (
+    <article className="sentinel-bento-tile sentinel-bento-tile--wide sentinel-bento-tile--task" aria-label="Action plan task state">
+      <div className="sentinel-ios-heading-mini">
+        <h3>Action Plan</h3>
+        <button type="button" className="sentinel-icon-button micro-focus micro-pressable" aria-label="Add task">
+          <Plus size={18} />
+        </button>
+      </div>
+      <div className="sentinel-mini-filter-row" aria-label="Task filters">
         <FilterChip active={filter === "all"} label="All" onClick={() => onFilterChange("all")} />
         <FilterChip active={filter === "active"} count={1} label="Active" onClick={() => onFilterChange("active")} />
-        <FilterChip active={filter === "completed"} count={0} label="Completed" onClick={() => onFilterChange("completed")} />
+        <FilterChip active={filter === "completed"} count={completed ? 1 : 0} label="Completed" onClick={() => onFilterChange("completed")} />
       </div>
-
-      <label className="sentinel-search-pill">
-        <Search size={21} />
+      <label className="sentinel-mini-search">
+        <Search size={16} />
         <input aria-label="Search tasks" placeholder="Search tasks..." readOnly value="" />
       </label>
-
-      <div className="sentinel-task-stats" aria-label="Task statistics">
-        <div>
-          <strong>1</strong>
-          <span>Total</span>
-        </div>
-        <div>
-          <strong>1</strong>
-          <span>Active</span>
-        </div>
-        <div>
-          <strong>{isCompleted ? "1" : "0"}</strong>
-          <span>Done</span>
-        </div>
-      </div>
-
-      <button type="button" className="sentinel-task-row micro-focus micro-pressable" data-completed={isCompleted ? "true" : undefined}>
-        <span className="sentinel-task-circle">
-          {isCompleted && <CheckCircle2 size={20} />}
-        </span>
-        <span className="sentinel-task-copy">
+      <button type="button" className="sentinel-mini-task micro-focus micro-pressable" data-completed={completed ? "true" : undefined}>
+        <span className="sentinel-mini-task__circle">{completed && <CheckCircle2 size={18} />}</span>
+        <span className="sentinel-mini-task__copy">
           <strong>Heavy Rain: Check your drains</strong>
           <em>
-            <CalendarDays size={16} />
+            <CalendarDays size={14} />
             Maintenance
           </em>
         </span>
         <i aria-hidden="true" />
       </button>
-    </div>
+    </article>
   );
 }
 
-function HistoryScreen() {
+function RiskTile() {
   return (
-    <div className="sentinel-ios-screen sentinel-ios-screen--history">
-      <StatusBar time="10:52" />
-      <h3 className="sentinel-centered-title">Historical Timeline</h3>
-      <section className="sentinel-recommend-card">
-        <div className="sentinel-recommend-heading">
-          <CalendarDays size={24} />
-          <h4>Recommended Actions &amp; Deadlines</h4>
-        </div>
-        <div className="sentinel-recommend-list">
-          {recommendedActions.map((action) => {
-            const Icon = action.icon;
-            return (
-              <button key={action.title} type="button" className="sentinel-recommend-row micro-focus micro-pressable" data-tone={action.tone}>
-                <span>
-                  <Icon size={25} />
-                </span>
-                <span className="sentinel-recommend-copy">
-                  <strong>{action.title}</strong>
-                  <em>
-                    <b>{action.tag}</b>
-                    <i>Complete within {action.due}</i>
-                  </em>
-                  <small>{action.body}</small>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-    </div>
+    <article className="sentinel-bento-tile" aria-label="Risk breakdown">
+      <div className="sentinel-bento-topline">
+        <span>risk breakdown</span>
+        <span>3 signals</span>
+      </div>
+      <div className="sentinel-mini-risk-grid">
+        {riskStats.map((item) => {
+          const Icon = item.icon;
+          return (
+            <div key={item.label} className="sentinel-mini-risk-card" data-tone={item.tone}>
+              <Icon size={22} />
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </article>
   );
 }
 
-function ProfileScreen() {
+function RecommendationsTile({ activeIndex, onSelect }: { activeIndex: number; onSelect: (index: number) => void }) {
   return (
-    <div className="sentinel-ios-screen sentinel-ios-screen--profile">
-      <StatusBar time="8:46" />
-      <h3>Your Property</h3>
-      <section className="sentinel-profile-card">
-        <p>516 Drayton St</p>
-        <span>Savannah, GA 31401</span>
-        <dl>
-          <div>
-            <dt>roof age</dt>
-            <dd>15 years</dd>
-          </div>
-          <div>
-            <dt>foundation</dt>
-            <dd>slab</dd>
-          </div>
-          <div>
-            <dt>monitoring</dt>
-            <dd>enabled</dd>
-          </div>
-        </dl>
-      </section>
-    </div>
+    <article className="sentinel-bento-tile sentinel-bento-tile--wide sentinel-bento-tile--recommendations" aria-label="Recommended actions">
+      <div className="sentinel-recommend-mini-heading">
+        <ShieldCheck size={19} />
+        <h3>Recommended Actions &amp; Deadlines</h3>
+      </div>
+      <div className="sentinel-recommend-mini-list">
+        {recommendedActions.map((action, index) => {
+          const Icon = action.icon;
+          return (
+            <button
+              key={action.title}
+              type="button"
+              className="sentinel-recommend-mini-row micro-focus micro-pressable"
+              data-active={activeIndex === index ? "true" : undefined}
+              data-tone={action.tone}
+              onClick={() => onSelect(index)}
+            >
+              <span>
+                <Icon size={20} />
+              </span>
+              <span>
+                <strong>{action.title}</strong>
+                <em>{action.tag} · {action.due}</em>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <AnimatePresence mode="wait">
+        <motion.p
+          key={recommendedActions[activeIndex].body}
+          className="sentinel-recommend-mini-detail"
+          initial={{ opacity: 0, y: 3 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -2 }}
+          transition={tweens.fast}
+        >
+          {recommendedActions[activeIndex].body}
+        </motion.p>
+      </AnimatePresence>
+    </article>
   );
 }
 
 export default function SentinelInteractiveArtifact() {
   const reduceMotion = useReducedMotion();
-  const [activeScreen, setActiveScreen] = useState<SentinelScreen>("dashboard");
+  const [alertOpen, setAlertOpen] = useState(true);
   const [filter, setFilter] = useState<TaskFilter>("all");
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [score, setScore] = useState(28);
+  const [refreshing, setRefreshing] = useState(false);
+  const [activeRecommendation, setActiveRecommendation] = useState(0);
 
-  function refreshDashboard() {
-    setIsRefreshing(true);
-    window.setTimeout(() => setIsRefreshing(false), 650);
+  function refreshScore() {
+    setRefreshing(true);
+    setScore((current) => (current === 28 ? 34 : 28));
+    window.setTimeout(() => setRefreshing(false), 600);
   }
 
   return (
@@ -275,40 +263,12 @@ export default function SentinelInteractiveArtifact() {
       </div>
 
       <div className="sentinel-live-surface">
-        <div className="sentinel-phone-shell">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeScreen}
-              initial={reduceMotion ? false : { opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -3 }}
-              transition={reduceMotion ? tweens.none : tweens.commandLens}
-              className="sentinel-phone-screen-wrap"
-            >
-              {activeScreen === "dashboard" && <DashboardScreen isRefreshing={isRefreshing} onRefresh={refreshDashboard} />}
-              {activeScreen === "tasks" && <TasksScreen filter={filter} onFilterChange={setFilter} />}
-              {activeScreen === "history" && <HistoryScreen />}
-              {activeScreen === "profile" && <ProfileScreen />}
-            </motion.div>
-          </AnimatePresence>
-
-          <nav className="sentinel-tabbar" aria-label="Sentinel app tabs">
-            {screenTabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  className="micro-focus micro-pressable"
-                  data-active={activeScreen === tab.id ? "true" : undefined}
-                  onClick={() => setActiveScreen(tab.id)}
-                >
-                  <Icon size={24} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
+        <div className="sentinel-bento-grid">
+          <AlertTile expanded={alertOpen} onToggle={() => setAlertOpen((value) => !value)} />
+          <ScoreTile score={score} onRefresh={refreshScore} refreshing={refreshing} />
+          <TaskTile filter={filter} onFilterChange={setFilter} />
+          <RiskTile />
+          <RecommendationsTile activeIndex={activeRecommendation} onSelect={setActiveRecommendation} />
         </div>
       </div>
     </motion.section>
