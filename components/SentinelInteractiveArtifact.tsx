@@ -14,7 +14,6 @@ import {
   Plus,
   RefreshCw,
   Search,
-  ShieldCheck,
   Waves,
   Wind,
   Zap,
@@ -24,7 +23,7 @@ import { tweens } from "@/lib/material/motion";
 type TaskFilter = "all" | "active" | "completed";
 
 const riskStats = [
-  { icon: House, label: "Property Risk", tone: "green", value: 48 },
+  { icon: House, label: "Property Resilience", tone: "green", value: 48 },
   { icon: Clock3, label: "Historical Exposure", tone: "orange", value: 100 },
   { icon: Zap, label: "Forecast Severity", tone: "red", value: 60 },
 ] as const;
@@ -60,6 +59,14 @@ const recommendedActions: Array<{
     due: "1 month",
     body: "Roof is 15 years old",
     tone: "purple",
+  },
+  {
+    icon: AlertTriangle,
+    title: "Emergency Kit & Plan",
+    tag: "High Priority",
+    due: "1 week",
+    body: "Active weather alerts in your area",
+    tone: "orange",
   },
 ];
 
@@ -197,7 +204,7 @@ function DashboardScene({
           <span>HVS</span>
           <em>High Risk</em>
         </div>
-        <p>Your home has significant vulnerabilities. Immediate action is recommended.</p>
+        <p>Your home has significant vulnerabilities (score: {score}). Immediate action is recommended.</p>
       </section>
 
       <h4 className="sentinel-ui-section-title">Risk Breakdown</h4>
@@ -294,7 +301,7 @@ function RecommendationScene({
       <h3 className="sentinel-ui-centered-title">Historical Timeline</h3>
       <div className="sentinel-ui-recommend-card">
         <div className="sentinel-ui-recommend-heading">
-          <ShieldCheck size={24} />
+          <CalendarDays size={24} />
           <h3>Recommended Actions &amp; Deadlines</h3>
         </div>
         <div className="sentinel-ui-recommend-list">
