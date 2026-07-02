@@ -572,7 +572,7 @@ function HomeDocument({
 
         <div className="home-document-content document-content-boot">
           <HomeLeafRow intro>
-            I design and build interfaces for AI native products.
+            I make things.
           </HomeLeafRow>
 
           <HomeOutlineSection count={3} defaultOpen title="today">

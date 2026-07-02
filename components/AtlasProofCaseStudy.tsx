@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
+import ProjectCaseStudyEntry from "@/components/ProjectCaseStudyEntry";
 import {
   ATLAS_DECISION_LOG,
   ATLAS_EVENT_CONTRACTS,
@@ -553,21 +554,6 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
         <p>{ATLAS_INTRO.body}</p>
       </section>
 
-      <section className="atlas-meta-surface" aria-labelledby="atlas-meta-title">
-        <div className="atlas-meta-surface__header">
-          <span id="atlas-meta-title">profile</span>
-          <span>role · constraint · decision · outcome</span>
-        </div>
-        <dl className="atlas-meta-block" aria-label="role, constraint, decision, and outcome">
-          {ATLAS_META.map((item) => (
-            <div key={item.label}>
-              <dt>{item.label}</dt>
-              <dd>{item.value}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
       <section id="atlas-proof-bento" className="atlas-proof-section">
         <DetailOutlineHeading heading="artifact grid" eyebrow={project.builder.status.label} signal="none" />
         <div className="atlas-proof-grid">
@@ -672,14 +658,31 @@ export default function AtlasProofCaseStudy({ project }: AtlasProofCaseStudyProp
         </div>
       </section>
 
-      <section id="atlas-reflection" className="detail-outline-section">
-        <DetailOutlineHeading heading="short reflection" signal="none" />
-        <div className="detail-outline-list">
-          {ATLAS_REFLECTION.map((line) => (
-            <DetailOutlineRow key={line} body={line} signal="none" />
-          ))}
-        </div>
-      </section>
+      <ProjectCaseStudyEntry>
+        <section className="atlas-meta-surface" aria-labelledby="atlas-meta-title">
+          <div className="atlas-meta-surface__header">
+            <span id="atlas-meta-title">profile</span>
+            <span>role · constraint · decision · outcome</span>
+          </div>
+          <dl className="atlas-meta-block" aria-label="role, constraint, decision, and outcome">
+            {ATLAS_META.map((item) => (
+              <div key={item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section id="atlas-reflection" className="detail-outline-section">
+          <DetailOutlineHeading heading="short reflection" signal="none" />
+          <div className="detail-outline-list">
+            {ATLAS_REFLECTION.map((line) => (
+              <DetailOutlineRow key={line} body={line} signal="none" />
+            ))}
+          </div>
+        </section>
+      </ProjectCaseStudyEntry>
     </motion.article>
   );
 }

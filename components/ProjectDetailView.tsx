@@ -8,6 +8,7 @@ import { makeVideoPosterDataUrl } from "@/lib/mediaPlaceholders";
 import AtlasProofCaseStudy from "@/components/AtlasProofCaseStudy";
 import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { DetailOutlineHeading, DetailOutlineRow } from "@/components/Outline";
+import ProjectCaseStudyEntry from "@/components/ProjectCaseStudyEntry";
 import { Project } from "./ProjectCard";
 import StudioVideoPlayer from "./StudioVideoPlayer";
 import { CaseStudy } from "./detail/CaseStudy";
@@ -30,8 +31,14 @@ const FOCUS_STOPWORDS = new Set([
   "is", "it", "are", "have", "more", "give", "into", "from", "they", "their", "the",
 ]);
 
+const SEPARATED_CASE_STUDY_SLUGS = ["atlas", "sentinel", "portfolio-ai", "mindline"] as const;
+
 function hasBuilderProof(project: Project | PortfolioProject): project is PortfolioProject {
   return "builder" in project;
+}
+
+function hasSeparatedCaseStudy(project: Project | PortfolioProject): project is PortfolioProject {
+  return hasBuilderProof(project) && SEPARATED_CASE_STUDY_SLUGS.includes(project.slug as typeof SEPARATED_CASE_STUDY_SLUGS[number]);
 }
 
 type HeroSection = Extract<DetailSection, { kind: "hero" }>;
@@ -284,6 +291,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   const bodyCaseStudy = hero ? { ...caseStudy, sections: caseStudy.sections.slice(1) } : caseStudy;
   const proof = hasBuilderProof(project) ? project.builder : undefined;
   const isAtlas = hasBuilderProof(project) && project.slug === "atlas";
+  const separatesCaseStudy = hasSeparatedCaseStudy(project);
   const hasAuthoredCaseStudy = Boolean(caseStudy.authored);
 
   return (
@@ -312,7 +320,13 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
         <>
           <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
           {proof && !hasAuthoredCaseStudy && <BuilderProofSummary proof={proof} />}
-          <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
+          {separatesCaseStudy ? (
+            <ProjectCaseStudyEntry>
+              <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
+            </ProjectCaseStudyEntry>
+          ) : (
+            <CaseStudy data={bodyCaseStudy} onAsk={onAsk} />
+          )}
         </>
       )}
     </motion.div>
