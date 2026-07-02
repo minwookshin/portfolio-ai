@@ -5002,22 +5002,26 @@ button.home-mention {
 
 .mindline-ui-tile--log {
   grid-column: span 5;
-  min-height: 720px;
+  height: 620px;
+  min-height: 620px;
 }
 
 .mindline-ui-tile--suggestion {
   grid-column: span 7;
-  min-height: 720px;
+  height: 620px;
+  min-height: 620px;
 }
 
 .mindline-ui-tile--insight {
   grid-column: span 7;
-  min-height: 720px;
+  height: 620px;
+  min-height: 620px;
 }
 
 .mindline-ui-tile--calendar {
   grid-column: span 5;
-  min-height: 720px;
+  height: 620px;
+  min-height: 620px;
 }
 
 .mindline-app-frame {
@@ -5044,6 +5048,8 @@ button.home-mention {
   box-shadow: 0 26px 72px -56px rgb(16 18 22 / 0.58);
   color: var(--mindline-ink);
   padding: 18px 18px 92px;
+  transform: scale(var(--mindline-frame-scale, 0.79));
+  transform-origin: center;
 }
 
 .mindline-statusbar {
@@ -5911,6 +5917,18 @@ button.home-mention {
   .mindline-insight-ui,
   .mindline-calendar-ui {
     transform: scale(0.86);
+  }
+
+  .mindline-app-frame {
+    --mindline-frame-scale: 1;
+  }
+
+  .mindline-ui-tile--log,
+  .mindline-ui-tile--suggestion,
+  .mindline-ui-tile--insight,
+  .mindline-ui-tile--calendar {
+    height: 720px;
+    min-height: 720px;
   }
 
   .mindline-phone-ui {
