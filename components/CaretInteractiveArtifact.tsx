@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Bell, Check, ChevronLeft, Send, UserRound } from "lucide-react";
+import { Bell, Check, ChevronLeft, Send, ShoppingBag, UserRound } from "lucide-react";
 import { tweens } from "@/lib/material/motion";
 
 const ASSET_ROOT = "/projects/caret/ui";
@@ -108,6 +108,9 @@ function CaretTopBar({ unread = 4 }: { unread?: number }) {
       </button>
       <button type="button" className="caret-circle-button micro-focus micro-pressable" aria-label="profile">
         <UserRound size={19} strokeWidth={2.1} />
+      </button>
+      <button type="button" className="caret-circle-button micro-focus micro-pressable" aria-label="market">
+        <ShoppingBag size={18} strokeWidth={2.1} />
       </button>
     </header>
   );
