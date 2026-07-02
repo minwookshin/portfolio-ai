@@ -143,7 +143,8 @@ function ProjectDetailHero({
   const recruiterSignals = [
     { label: "role", value: proof?.role ?? project.role },
     { label: "time", value: project.timeline ?? project.date },
-    { label: "stack", value: stack },
+    { label: "team", value: project.team },
+    { label: "tools", value: stack },
     { label: "public", value: getPublicProof(project, proof) },
     { label: "result", value: outcome },
   ].filter((item) => isVisibleBuilderValue(item.value));
