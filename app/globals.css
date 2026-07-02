@@ -2528,6 +2528,14 @@ button.home-mention {
   transform: translateZ(0);
 }
 
+.studio-detail-secondary-media {
+  margin-top: var(--space-2);
+}
+
+.studio-detail-secondary-media .studio-detail-hero-media {
+  max-width: min(720px, 100%);
+}
+
 .studio-detail-proof {
   position: relative;
 }
@@ -4540,6 +4548,11 @@ button.home-mention {
   gap: 10px;
 }
 
+.project-ui-board--sentinel {
+  width: min(980px, calc(100vw - 56px));
+  gap: 12px;
+}
+
 .project-ui-tile {
   display: grid;
   position: relative;
@@ -4557,22 +4570,22 @@ button.home-mention {
 
 .sentinel-ui-tile--dashboard {
   grid-column: span 5;
-  min-height: 560px;
+  min-height: 620px;
 }
 
 .sentinel-ui-tile--tasks {
   grid-column: span 7;
-  min-height: 352px;
+  min-height: 512px;
 }
 
 .sentinel-ui-tile--recommendations {
   grid-column: span 7;
-  min-height: 358px;
+  min-height: 512px;
 }
 
 .sentinel-ui-tile--timeline {
   grid-column: span 5;
-  min-height: 358px;
+  min-height: 512px;
 }
 
 .sentinel-ui-stage {
@@ -4611,8 +4624,14 @@ button.home-mention {
     inset 0 0 0 1px rgb(255 255 255 / 0.52),
     0 30px 84px -58px rgb(16 18 22 / 0.72);
   padding: 31px 24px 86px;
-  transform: scale(0.68);
+  transform: scale(0.76);
   transform-origin: center;
+}
+
+.sentinel-ui-tile--tasks .sentinel-phone-scene,
+.sentinel-ui-tile--recommendations .sentinel-phone-scene,
+.sentinel-ui-tile--timeline .sentinel-phone-scene {
+  transform: scale(0.72);
 }
 
 .sentinel-panel-scene {
@@ -4656,8 +4675,28 @@ button.home-mention {
 }
 
 .sentinel-ui-status-icons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
   justify-self: end;
-  font-size: 12px;
+}
+
+.sentinel-ui-status-icons i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #c8c8cc;
+}
+
+.sentinel-ui-status-icons b {
+  display: block;
+  width: 22px;
+  height: 12px;
+  margin-left: 3px;
+  border: 2px solid #111;
+  border-radius: 4px;
 }
 
 .sentinel-ui-title-row {
@@ -4678,6 +4717,21 @@ button.home-mention {
 
 .sentinel-panel-scene .sentinel-ui-title-row h3 {
   font-size: 40px;
+}
+
+.sentinel-phone-scene--tasks .sentinel-ui-title-row h3,
+.sentinel-phone-scene--timeline .sentinel-ui-title-row h3 {
+  font-size: 38px;
+}
+
+.sentinel-ui-centered-title {
+  margin: 0;
+  color: #050505;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  text-align: center;
 }
 
 .sentinel-ui-floating-action {
@@ -4932,6 +4986,10 @@ button.home-mention {
   overflow: hidden;
 }
 
+.sentinel-phone-scene--tasks .sentinel-ui-filter-row {
+  margin-top: 26px;
+}
+
 .sentinel-ui-filter-chip {
   display: inline-flex;
   min-height: 40px;
@@ -4984,6 +5042,7 @@ button.home-mention {
   min-height: 54px;
   align-items: center;
   gap: 12px;
+  margin-top: 22px;
   border: 1px solid #d8d8dc;
   border-radius: 999px;
   background: #f7f7f8;
@@ -5008,6 +5067,7 @@ button.home-mention {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 13px;
+  margin-top: 28px;
 }
 
 .sentinel-ui-task-stats span {
@@ -5047,6 +5107,7 @@ button.home-mention {
   align-items: center;
   gap: 17px;
   width: 100%;
+  margin-top: 42px;
   border-top: 1px solid #e4e4e6;
   border-bottom: 1px solid #e4e4e6;
   padding: 22px 0;
@@ -5116,6 +5177,10 @@ button.home-mention {
   background: #fff;
   padding: 24px;
   box-shadow: 0 16px 34px rgb(15 23 42 / 0.08);
+}
+
+.sentinel-phone-scene--recommendations .sentinel-ui-recommend-card {
+  margin-top: 26px;
 }
 
 .sentinel-ui-recommend-heading {
@@ -5243,6 +5308,56 @@ button.home-mention {
   background: #fff;
   padding: 15px;
   box-shadow: 0 16px 34px rgb(15 23 42 / 0.08);
+}
+
+.sentinel-ui-timeline-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px 22px;
+  margin-top: 28px;
+  border-radius: 20px;
+  background: #fff;
+  padding: 18px;
+  box-shadow: 0 16px 34px rgb(15 23 42 / 0.08);
+}
+
+.sentinel-ui-timeline-summary span {
+  display: grid;
+  gap: 8px;
+}
+
+.sentinel-ui-timeline-summary span:nth-child(2) {
+  justify-items: end;
+  text-align: right;
+}
+
+.sentinel-ui-timeline-summary em {
+  color: #8a8a92;
+  font-size: 14px;
+  font-style: normal;
+  line-height: 1.2;
+}
+
+.sentinel-ui-timeline-summary strong {
+  color: #111;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sentinel-ui-timeline-summary span:nth-child(2) strong {
+  color: #ff8a1c;
+  font-size: 25px;
+}
+
+.sentinel-ui-timeline-summary i {
+  grid-column: 1 / -1;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, #ff8a1c 0 68%, transparent 68%),
+    #e4e4e6;
 }
 
 .sentinel-ui-weather-icon {

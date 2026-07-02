@@ -84,7 +84,12 @@ function SentinelStatusBar({ time }: { time: string }) {
     <div className="sentinel-ui-status">
       <span>{time}</span>
       <span className="sentinel-ui-island" aria-hidden="true" />
-      <span className="sentinel-ui-status-icons">5G</span>
+      <span className="sentinel-ui-status-icons" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+        <b />
+      </span>
     </div>
   );
 }
@@ -224,7 +229,8 @@ function ActionPlanScene({
   const completed = filter === "completed";
 
   return (
-    <div className="sentinel-panel-scene sentinel-panel-scene--tasks">
+    <div className="sentinel-phone-scene sentinel-phone-scene--tasks">
+      <SentinelStatusBar time="9:29" />
       <header className="sentinel-ui-title-row">
         <h3>Action Plan</h3>
         <button type="button" className="sentinel-ui-floating-action micro-focus micro-pressable" aria-label="Add task">
@@ -283,7 +289,9 @@ function RecommendationScene({
   onSelect: (index: number) => void;
 }) {
   return (
-    <div className="sentinel-panel-scene sentinel-panel-scene--recommendations">
+    <div className="sentinel-phone-scene sentinel-phone-scene--recommendations">
+      <SentinelStatusBar time="10:52" />
+      <h3 className="sentinel-ui-centered-title">Historical Timeline</h3>
       <div className="sentinel-ui-recommend-card">
         <div className="sentinel-ui-recommend-heading">
           <ShieldCheck size={24} />
@@ -317,13 +325,30 @@ function RecommendationScene({
           })}
         </div>
       </div>
+      <SentinelTabbar active="History" />
     </div>
   );
 }
 
 function WeatherTimelineScene() {
   return (
-    <div className="sentinel-panel-scene sentinel-panel-scene--timeline">
+    <div className="sentinel-phone-scene sentinel-phone-scene--timeline">
+      <SentinelStatusBar time="9:03" />
+      <header className="sentinel-ui-title-row">
+        <h3>Historical Timeline</h3>
+      </header>
+      <section className="sentinel-ui-timeline-summary" aria-label="Historical exposure summary">
+        <span>
+          <em>Total Events (15 years)</em>
+          <strong>8</strong>
+        </span>
+        <span>
+          <em>Exposure Level</em>
+          <strong>High</strong>
+        </span>
+        <i aria-hidden="true" />
+      </section>
+      <h4 className="sentinel-ui-section-title">Historical Events</h4>
       <div className="sentinel-ui-weather-card">
         <span className="sentinel-ui-weather-icon">
           <Waves size={25} />
@@ -353,11 +378,12 @@ function WeatherTimelineScene() {
           <Wind size={25} />
         </span>
         <span>
-          <strong>Wind Advisory</strong>
-          <em>Active weather alert</em>
+          <strong>Hurricane</strong>
+          <em>October 24, 2023</em>
         </span>
-        <b>High</b>
+        <b>Severe</b>
       </div>
+      <SentinelTabbar active="History" />
     </div>
   );
 }
