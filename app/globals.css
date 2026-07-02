@@ -3321,8 +3321,8 @@ button.home-mention {
 }
 
 .project-ui-board--sentinel {
-  width: min(980px, calc(100vw - 56px));
-  gap: 12px;
+  width: min(920px, calc(100vw - 64px));
+  gap: 10px;
 }
 
 .project-ui-tile {
