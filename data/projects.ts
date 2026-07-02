@@ -84,7 +84,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     id: "1",
     slug: "sentinel",
     title: "Sentinel",
-    description: "Predictive Home Maintenance iOS App",
+    description: "Predictive home maintenance iOS app.",
     fullDescription:
       "A native iOS app built in 48 hours that transforms home maintenance from reactive crisis management to proactive risk mitigation. Winner of Google x SCAD FLUX Hackathon 2025.",
     role: "Design Engineer — designed & built",
@@ -99,21 +99,21 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     icon: "/projects/sentinellogo.png",
     studioLabel: "iOS weather MVP",
     themeColor: "#F59E0B",
-    overview: "From Idea to Native iOS App in 48 Hours. Sentinel is a predictive home maintenance app that helps homeowners move from gut feeling to data-driven decision making, preventing invisible risks before they become $200,000 disasters.",
+    overview: "A 48-hour native iOS MVP that turns weather risk into prioritized home maintenance.",
     builder: {
       role: "Design Engineer — designed & built",
       stack: ["Figma", "Swift", "SwiftUI", "weather data"],
       status: { label: "Shipped in 48h" },
-      oneLiner: "Predictive iOS maintenance app that turns weather risk into prioritized homeowner actions.",
-      pipeline: "Designed in Figma → built a native SwiftUI MVP → presented as a working hackathon prototype.",
+      oneLiner: "Weather risk, translated into one next homeowner action.",
+      pipeline: "Figma system -> native SwiftUI MVP -> working hackathon demo.",
       demo: { label: "Watch demo", video: "/projects/sentinel/demo.mp4" },
       scope: [
         { label: "Build time", value: "48h" },
-        { label: "Prototype", value: "Native iOS demo video" },
-        { label: "Source", value: "Public SwiftUI repository", note: "github.com/minwookshin/sentinel" },
+        { label: "Prototype", value: "Native iOS demo" },
+        { label: "Source", value: "Public SwiftUI repo", note: "github.com/minwookshin/sentinel" },
       ],
       results: [
-        { label: "Actual", value: "Winner · Google × SCAD FLUX Hackathon 2025" },
+        { label: "Actual", value: "Google × SCAD FLUX Hackathon winner" },
       ],
     },
     contentSections: [
@@ -129,7 +129,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     id: "2",
     slug: "portfolio-ai",
     title: "Portfolio AI",
-    description: "An AI-native studio website that explains work, qualifies intent, and routes visitors to the right project.",
+    description: "AI native portfolio and command surface.",
     fullDescription:
       "A conversational product-studio site built with Next.js, React, and Gemini. It answers questions, runs lightweight project intake, and opens relevant case studies in real time.",
     role: "Design Engineer — designed & built solo",
@@ -144,17 +144,17 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     icon: "/icon.png",
     studioLabel: "AI intake website",
     themeColor: "#8B5CF6",
-    overview: "An AI-native studio site that turns passive browsing into a live project briefing.",
+    overview: "A portfolio that behaves like software: command surface, AI ask mode, and public machine-readable routes.",
     builder: {
       role: "Design Engineer — designed & built solo",
       stack: ["Next.js", "React", "TypeScript", "Gemini API", "Framer Motion"],
       status: { label: "🟢 Live", href: "https://www.minwookshin.com" },
-      oneLiner: "AI-native portfolio that answers questions, qualifies intent, and opens relevant work.",
-      pipeline: "Designed in Figma → shipped in Next.js + React → exposed AI-readable docs and design-system routes.",
+      oneLiner: "A portfolio that answers, routes, and opens the right work.",
+      pipeline: "Designed in Figma -> shipped in Next.js -> exposed AI-readable docs and system routes.",
       scope: [
         { label: "Build time", value: "2 weeks" },
-        { label: "API integrations", value: "Gemini API, Vercel server routes" },
-        { label: "System", value: "Tokens, components, AI-readable docs", note: "/design-system" },
+        { label: "AI layer", value: "Gemini API, Vercel routes" },
+        { label: "System", value: "Tokens, components, AI docs", note: "/design-system" },
         { label: "Machine routes", value: "portfolio.md, llms.txt, resume.json" },
       ],
       results: [
@@ -174,7 +174,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     id: "11",
     slug: "atlas",
     title: "Atlas",
-    description: "Connected digital prototype system for mass-casualty triage.",
+    description: "Connected triage prototype system.",
     fullDescription:
       "A Team Atlas capstone where my contribution was the first structure, an early monochrome iteration, and the working FR/IC/ER app prototypes tied together by a local real-time server.",
     role: "Digital Prototype Engineer - apps and real-time system",
@@ -192,9 +192,9 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
       role: "Digital Prototype Engineer - apps and real-time system",
       stack: ["SwiftUI", "TypeScript", "WebSocket", "Mapbox", "Design tokens"],
       status: { label: "Prototype system" },
-      oneLiner: "Connected FR mobile, incident-command iPad, and ER intake prototypes for a mass-casualty triage demo.",
+      oneLiner: "Three connected triage surfaces sharing live patient state.",
       pipeline:
-        "Structured the first monochrome pass -> translated final flows into native app prototypes -> built the local TypeScript/WebSocket server for live patient-state sync.",
+        "Structured the first monochrome pass -> built native app prototypes -> connected them through a local WebSocket server.",
       scope: [
         { label: "App surfaces", value: "FR mobile, IC iPad, ER intake" },
         { label: "Native code", value: "3 iOS targets, 134 Swift files" },
@@ -247,7 +247,7 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     id: "3",
     slug: "mindline",
     title: "Mindline",
-    description: "AI-Powered Gambling Addiction Recovery Tool",
+    description: "Behavioral AI product for betting recovery.",
     fullDescription:
       "An AI-powered support system designed to help young adults overcome betting addiction through real-time intervention, smart journaling, and behavioral pattern recognition.",
     role: "Product Designer & UX Researcher",
@@ -260,15 +260,15 @@ export const MAIN_PROJECTS: PortfolioProject[] = [
     icon: "/projects/mindline/icon.png",
     studioLabel: "Behavioral AI product",
     themeColor: "#3B82F6",
-    overview: "Mindline shifts the focus from 'restriction' to 'awareness'. An AI-powered tool that helps young adults (18-26) combat betting addiction through real-time emotional analysis, smart journaling, and behavioral interventions.",
+    overview: "Mindline reframes betting recovery around awareness, emotional logging, and timely intervention.",
     metadataDescription:
       "Behavioral AI product that turns emotional triggers into real-time intervention — a 10-week research and design sprint targeting young adults.",
     builder: {
       role: "Product Designer & UX Researcher",
       stack: ["Figma", "AI UX flows"],
       status: { label: "Prototype" },
-      oneLiner: "Behavioral AI product that turns emotional triggers into real-time intervention.",
-      pipeline: "Designed in Figma → prototyped as a research-backed AI UX concept.",
+      oneLiner: "Emotional triggers, turned into a clearer next step.",
+      pipeline: "Research interviews -> Figma flows -> AI UX concept prototype.",
       scope: [
         { label: "Build time", value: "10 weeks" },
       ],
