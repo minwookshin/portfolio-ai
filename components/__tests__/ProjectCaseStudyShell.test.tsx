@@ -105,9 +105,12 @@ describe("ProjectCaseStudyShell", () => {
     expect(screen.getByLabelText("Atlas emergency room interface")).toBeInTheDocument();
     expect(screen.getByLabelText("Atlas field responder interface")).toBeInTheDocument();
     expect(screen.getByLabelText("Atlas instruction interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Atlas quick send interface")).toBeInTheDocument();
+    expect(screen.getByLabelText("Atlas hospital assignment interface")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance hospital load" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "show Hospitals" }));
     expect(screen.getByRole("button", { name: "assign selected hospital" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "confirm hospital assignment" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance patient row state" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "advance state" })).toBeInTheDocument();
     expect(screen.getAllByText("event contract")).toHaveLength(1);

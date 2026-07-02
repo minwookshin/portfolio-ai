@@ -9097,6 +9097,16 @@ button.atlas-state-dot {
   min-height: 292px;
 }
 
+.atlas-proof-tile--actions {
+  grid-column: span 5;
+  min-height: 292px;
+}
+
+.atlas-proof-tile--hospital {
+  grid-column: span 7;
+  min-height: 292px;
+}
+
 .atlas-visual-stage {
   position: relative;
   display: grid;
@@ -9845,6 +9855,41 @@ button.atlas-state-dot {
   font-weight: 400;
 }
 
+.atlas-visual-stage--mini {
+  padding: 18px;
+}
+
+.atlas-mini-panel {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 420px);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 24px 72px -56px rgb(28 30 34 / 0.56);
+  padding: 16px;
+}
+
+.atlas-mini-panel--actions {
+  width: min(100%, 360px);
+}
+
+.atlas-mini-panel--hospital {
+  width: min(100%, 520px);
+}
+
+.atlas-mini-panel .atlas-ui-action-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.atlas-mini-panel--actions .atlas-ui-action:last-child {
+  grid-column: 1 / -1;
+}
+
+.atlas-mini-panel .atlas-ui-hospital-list {
+  max-height: 180px;
+  overflow: hidden;
+}
+
 @media (max-width: 980px) {
   .atlas-case .atlas-proof-section {
     width: 100%;
@@ -9871,7 +9916,9 @@ button.atlas-state-dot {
   .atlas-proof-tile--command,
   .atlas-proof-tile--er,
   .atlas-proof-tile--phone,
-  .atlas-proof-tile--instruction {
+  .atlas-proof-tile--instruction,
+  .atlas-proof-tile--actions,
+  .atlas-proof-tile--hospital {
     grid-column: auto;
   }
 

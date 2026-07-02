@@ -555,6 +555,91 @@ function AtlasInstructionScene() {
   );
 }
 
+function AtlasQuickActionScene() {
+  const [activeIndex, setActiveIndex] = useState(1);
+
+  return (
+    <div className="atlas-visual-stage atlas-visual-stage--mini">
+      <div className="atlas-mini-panel atlas-mini-panel--actions" aria-label="quick send interface">
+        <div className="atlas-ui-sheet-header">
+          <span>Instruction</span>
+          <span>02</span>
+        </div>
+        <div className="atlas-ui-action-list">
+          {quickSendActions.map((action, index) => (
+            <button
+              key={action}
+              type="button"
+              className="atlas-ui-action micro-focus micro-pressable"
+              data-active={activeIndex === index ? "true" : undefined}
+              onClick={() => setActiveIndex(index)}
+            >
+              {action}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AtlasHospitalStackScene() {
+  const [selectedHospital, setSelectedHospital] = useState<(typeof assignmentHospitals)[number]["id"]>("grady");
+  const [assignmentState, setAssignmentState] = useState<AssignmentState>("ready");
+
+  useEffect(() => {
+    if (assignmentState !== "assigning") return undefined;
+
+    const timer = window.setTimeout(() => setAssignmentState("sent"), 520);
+    return () => window.clearTimeout(timer);
+  }, [assignmentState]);
+
+  return (
+    <div className="atlas-visual-stage atlas-visual-stage--mini">
+      <div className="atlas-mini-panel atlas-mini-panel--hospital" aria-label="hospital assignment interface">
+        <div className="atlas-ui-sheet-header">
+          <span>Assign to Hospital - 02</span>
+          <span>14:47</span>
+        </div>
+        <div className="atlas-ui-hospital-list">
+          {assignmentHospitals.map((hospital) => (
+            <button
+              key={hospital.id}
+              type="button"
+              className="atlas-ui-hospital-card micro-focus micro-pressable"
+              data-active={selectedHospital === hospital.id ? "true" : undefined}
+              onClick={() => {
+                setSelectedHospital(hospital.id);
+                setAssignmentState("ready");
+              }}
+            >
+              <span>
+                <strong>{hospital.label}</strong>
+                <small>{hospital.address}</small>
+                {hospital.suggested && <em>AI Suggested</em>}
+              </span>
+              <span>
+                <b>{hospital.eta}</b>
+                <small>{hospital.load}</small>
+              </span>
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          className="atlas-ui-confirm micro-focus micro-pressable"
+          aria-label="confirm hospital assignment"
+          disabled={assignmentState === "assigning"}
+          onClick={() => setAssignmentState("assigning")}
+        >
+          {assignmentState === "assigning" && <span className="atlas-ui-spinner" aria-hidden="true" />}
+          {assignmentStateCopy[assignmentState].button}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function AtlasCodeArtifact() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeContract = ATLAS_EVENT_CONTRACTS[activeIndex] ?? ATLAS_EVENT_CONTRACTS[0];
@@ -655,6 +740,22 @@ export default function AtlasProofCaseStudy(_props: AtlasProofCaseStudyProps) {
             className="atlas-proof-tile--instruction"
           >
             <AtlasInstructionScene />
+          </AtlasVisualTile>
+
+          <AtlasVisualTile
+            id="atlas-quick-actions"
+            label="Atlas quick send interface"
+            className="atlas-proof-tile--actions"
+          >
+            <AtlasQuickActionScene />
+          </AtlasVisualTile>
+
+          <AtlasVisualTile
+            id="atlas-hospital-stack"
+            label="Atlas hospital assignment interface"
+            className="atlas-proof-tile--hospital"
+          >
+            <AtlasHospitalStackScene />
           </AtlasVisualTile>
         </div>
       </section>
