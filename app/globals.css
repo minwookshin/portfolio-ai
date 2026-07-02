@@ -4527,13 +4527,15 @@ button.home-mention {
 
 .project-ui-artifact {
   display: grid;
-  width: min(920px, calc(50vw + 328px));
-  max-width: calc(100vw - 64px);
-  justify-self: center;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  justify-items: center;
 }
 
 .project-ui-board {
   display: grid;
+  width: min(920px, calc(100vw - 64px));
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 10px;
 }
@@ -5685,9 +5687,12 @@ button.home-mention {
   .project-ui-artifact {
     width: 100%;
     max-width: 100%;
+    margin-left: 0;
+    justify-items: stretch;
   }
 
   .project-ui-board {
+    width: 100%;
     grid-template-columns: 1fr;
   }
 
@@ -9480,8 +9485,10 @@ button.atlas-state-dot {
 }
 
 .atlas-case .atlas-proof-section {
-  width: min(920px, calc(50vw + 328px));
-  max-width: calc(100vw - 64px);
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  justify-items: center;
 }
 
 .atlas-proof-tile__body {
@@ -9489,6 +9496,7 @@ button.atlas-state-dot {
 }
 
 .atlas-case .atlas-proof-grid {
+  width: min(920px, calc(100vw - 64px));
   gap: 10px;
 }
 
@@ -10322,9 +10330,12 @@ button.atlas-state-dot {
   .atlas-case .atlas-proof-section {
     width: 100%;
     max-width: 100%;
+    margin-left: 0;
+    justify-items: stretch;
   }
 
   .atlas-proof-grid {
+    width: 100%;
     grid-template-columns: 1fr;
   }
 
