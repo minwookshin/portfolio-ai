@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import MaterialArrowForwardIcon from "@/components/MaterialArrowForwardIcon";
 import { tweens } from "@/lib/material/motion";
 
 type ProjectCaseStudyEntryProps = {
@@ -20,7 +21,10 @@ export default function ProjectCaseStudyEntry({
   return (
     <details className="project-case-study-details" id={id}>
       <summary className="home-mention project-case-study-summary micro-focus micro-focus-tight micro-pressable">
-        <span>{label}</span>
+        <span className="project-case-study-summary-label">{label}</span>
+        <span className="project-case-study-summary-icon" aria-hidden="true">
+          <MaterialArrowForwardIcon className="project-case-study-summary-arrow" />
+        </span>
       </summary>
       <motion.div
         initial={reduceMotion ? false : { opacity: 0, y: 3 }}
