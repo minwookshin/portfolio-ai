@@ -125,18 +125,20 @@ function ProjectDetailHero({
   project,
   proof,
   reduceMotion,
+  hideMedia = false,
 }: {
   hero: HeroSection | null;
   project: Project | PortfolioProject;
   proof?: BuilderProof;
   reduceMotion: boolean;
+  hideMedia?: boolean;
 }) {
   const stack = joinVisible(proof?.stack.slice(0, 4) ?? project.tags.slice(0, 4));
   const outcome = proof?.results.find((item) => isVisibleBuilderValue(item.value))?.value ?? proof?.status.label;
   const title = hero?.title ?? project.title;
   const subtitle = hero?.subtitle ?? project.overview ?? proof?.oneLiner ?? project.fullDescription;
   const eyebrow = project.studioLabel ?? hero?.badge;
-  const hasHeroMedia = !hero?.hideMedia && Boolean(proof?.demo?.video || hero?.image || project.image || project.icon);
+  const hasHeroMedia = !hideMedia && !hero?.hideMedia && Boolean(proof?.demo?.video || hero?.image || project.image || project.icon);
   const recruiterSignals = [
     { label: "role", value: proof?.role ?? project.role },
     { label: "time", value: project.timeline ?? project.date },
@@ -299,6 +301,7 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
   const isSentinel = hasBuilderProof(project) && project.slug === "sentinel";
   const isPortfolioAi = hasBuilderProof(project) && project.slug === "portfolio-ai";
   const isMindline = hasBuilderProof(project) && project.slug === "mindline";
+  const artifactBoardReplacesHeroMedia = isPortfolioAi || isMindline;
   const separatesCaseStudy = hasSeparatedCaseStudy(project);
   const hasAuthoredCaseStudy = Boolean(caseStudy.authored);
 
@@ -326,7 +329,13 @@ export default function ProjectDetailView({ project, onBack, hideBack = false, f
         <AtlasProofCaseStudy project={project} />
       ) : (
         <>
-          <ProjectDetailHero hero={hero} project={project} proof={proof} reduceMotion={Boolean(reduceMotion)} />
+          <ProjectDetailHero
+            hero={hero}
+            project={project}
+            proof={proof}
+            reduceMotion={Boolean(reduceMotion)}
+            hideMedia={artifactBoardReplacesHeroMedia}
+          />
           {proof && !hasAuthoredCaseStudy && <BuilderProofSummary proof={proof} />}
           {isSentinel && <SentinelInteractiveArtifact />}
           {isPortfolioAi && <PortfolioAiInteractiveArtifact />}
