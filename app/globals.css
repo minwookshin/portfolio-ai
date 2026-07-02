@@ -2441,31 +2441,9 @@ button.home-mention {
 
 .project-case-study-summary {
   width: fit-content;
-}
-
-.project-case-study-details[open] > .project-case-study-summary .detail-path-bullet {
-  width: var(--signal-dot-size);
-  height: var(--signal-dot-size);
-  border-radius: var(--md-shape-full);
-  opacity: 0;
-  transform: none;
-  visibility: hidden;
-}
-
-.project-case-study-details[open] > .project-case-study-summary .detail-path-signal {
-  opacity: var(--signal-opacity-arrow);
-  transform: translateX(var(--signal-nudge)) scale(1);
-  visibility: visible;
-}
-
-.project-case-study-details[open] > .project-case-study-summary .site-signal-icon {
-  transform: rotate(90deg);
-}
-
-.project-case-study-details[open] > .project-case-study-summary .site-signal-tail,
-.project-case-study-details[open] > .project-case-study-summary .site-signal-head {
-  opacity: 1;
-  stroke-dashoffset: 0;
+  max-width: 100%;
+  padding: 0;
+  color: var(--text-primary);
 }
 
 .project-case-study-content {
